@@ -183,6 +183,12 @@
                                 player.setVolume(1.0);
                             }
                         });
+
+                        // Habilitar som automaticamente em dispositivos móveis
+                        document.querySelector('html').addEventListener('click', () => {
+                            player.setMuted(false);
+                            player.setVolume(1.0);
+                        });
                     }
                 </script>
             </div>
@@ -236,6 +242,27 @@
         document.addEventListener('contextmenu', function(event) {
             event.preventDefault();
         });
+
+        // Evitar a inspeção de elementos
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+                event.returnValue = false;
+                return false;
+            }
+        });
+
+        // Proteção adicional contra inspeção de elementos
+        setInterval(function () {
+            (function () {
+                function logNop() { return false; }
+                console.log = logNop;
+                console.warn = logNop;
+                console.error = logNop;
+                console.info = logNop;
+                console.debug = logNop;
+                console.table = logNop;
+            })();
+        }, 1000);
     </script>
 
 </body>
