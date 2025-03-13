@@ -216,7 +216,7 @@
                                     <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                                 </video>
                                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                                    <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE</p>
+                                    <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
                                 </div>
                             `;
                         });
@@ -229,7 +229,7 @@
                                         <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                                     </video>
                                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE</p>
+                                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
                                     </div>
                                 `;
                             }
@@ -282,6 +282,7 @@
             // Desabilitar F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+                    alert("Acesso ao código-fonte não é permitido 😢");
                     event.preventDefault();
                     return false;
                 }
@@ -289,6 +290,7 @@
 
             // Desabilitar o botão direito do mouse sobre o documento todo
             document.addEventListener('contextmenu', function(event) {
+                alert("Acesso ao código-fonte não é permitido 😢");
                 event.preventDefault();
                 return false;
             });
@@ -296,7 +298,7 @@
             // Proteção adicional contra inspeção de elementos
             setInterval(function () {
                 (function () {
-                    function logNop() { return false; }
+                    function logNop() { alert("Acesso ao código-fonte não é permitido 😢"); return false; }
                     console.log = logNop;
                     console.warn = logNop;
                     console.error = logNop;
@@ -309,6 +311,7 @@
             // Desabilitando o botão direito do mouse sobre o player
             const playerContainer = document.getElementById('player-container');
             playerContainer.addEventListener('contextmenu', function(event) {
+                alert("Acesso ao código-fonte não é permitido 😢");
                 event.preventDefault();
                 return false;
             });
