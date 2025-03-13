@@ -168,12 +168,21 @@
                 <script src="https://player.twitch.tv/js/embed/v1.js"></script>
                 <script>
                     function createTwitchPlayer() {
-                        new Twitch.Player("twitch-embed", {
+                        const player = new Twitch.Player("twitch-embed", {
                             channel: "lourimarcos",
                             width: "100%",
                             height: "100%",
                             controls: false
-                        }).setFullscreen(true);
+                        });
+                        player.setVolume(1.0); // Volume em 100%
+                        player.setFullscreen(true); // Iniciar em tela cheia
+
+                        // Manter o volume em 100%
+                        player.addEventListener(Twitch.Player.VOLUME, () => {
+                            if (player.getVolume() !== 1.0) {
+                                player.setVolume(1.0);
+                            }
+                        });
                     }
                 </script>
             </div>
@@ -216,6 +225,17 @@
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
+
+        // Desabilitar F12 e botão direito do mouse
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F12') {
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
     </script>
 
 </body>
