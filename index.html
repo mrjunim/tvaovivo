@@ -192,16 +192,11 @@
     <script>
         let player;
 
-        // Função para iniciar a reprodução do vídeo de fundo em dispositivos móveis
-        function playBackgroundVideo() {
-            const bgVideo = document.getElementById('background-video');
-            bgVideo.play().catch(error => {
-                console.log('Erro ao reproduzir o vídeo de fundo:', error);
+        function playVideo(videoElement) {
+            videoElement.play().catch(error => {
+                console.log('Erro ao reproduzir o vídeo:', error);
             });
         }
-
-        // Adicionar evento de toque para iniciar a reprodução do vídeo de fundo em dispositivos móveis
-        document.addEventListener('click', playBackgroundVideo);
 
         function createTwitchPlayer() {
             player = new Twitch.Player("twitch-embed", {
@@ -238,11 +233,9 @@
                     </div>
                 `;
                 // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
-                document.getElementById('offline-video').addEventListener('click', function() {
-                    this.play().catch(error => {
-                        console.log('Erro ao reproduzir o vídeo offline:', error);
-                    });
-                });
+                const offlineVideo = document.getElementById('offline-video');
+                offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                playVideo(offlineVideo);
             });
 
             // Verificar o status do canal periodicamente
@@ -262,11 +255,9 @@
                         </div>
                     `;
                     // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
-                    document.getElementById('offline-video').addEventListener('click', function() {
-                        this.play().catch(error => {
-                            console.log('Erro ao reproduzir o vídeo offline:', error);
-                        });
-                    });
+                    const offlineVideo = document.getElementById('offline-video');
+                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                    playVideo(offlineVideo);
                 }
             }, 60000); // Verificar a cada minuto
         }
@@ -337,6 +328,9 @@
                 console.table = logNop;
             })();
         }, 1000);
+
+        // Reproduzir o vídeo de fundo em dispositivos móveis
+        playVideo(document.getElementById('background-video'));
     </script>
 
 </body>
