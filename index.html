@@ -207,6 +207,19 @@
                             player.setMuted(false);
                             player.setVolume(1.0);
                         });
+
+                        // Verificar se o canal está offline e substituir o vídeo
+                        player.addEventListener(Twitch.Player.OFFLINE, () => {
+                            const playerContainer = document.getElementById('player-container');
+                            playerContainer.innerHTML = `
+                                <video autoplay loop muted width="100%" height="100%">
+                                    <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                                </video>
+                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                                    <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARTE</p>
+                                </div>
+                            `;
+                        });
                     }
                 </script>
             </div>
