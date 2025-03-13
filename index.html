@@ -17,6 +17,7 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            overflow: hidden; /* Evita rolagem para esconder a interface de debug */
         }
 
         /* Estilização da Tela de Login */
@@ -95,6 +96,8 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
             background: linear-gradient(45deg, #141414, #222222);
             padding: 20px;
+            display: flex;
+            justify-content: center;
         }
 
         .container {
@@ -103,6 +106,7 @@
             justify-content: center;
             flex-wrap: wrap;
             padding: 30px;
+            position: relative;
         }
 
         .player {
@@ -120,6 +124,16 @@
             height: 600px;
             border: none;
             border-radius: 12px;
+        }
+
+        /* Spinner de Carregamento */
+        #loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: white;
         }
 
         /* Animação */
@@ -180,8 +194,14 @@
         </div>
     </div>
 
+    <!-- Spinner de Carregamento -->
+    <div id="loading-spinner">Carregando chaves...</div>
+
     <script>
         let validKeys = [];
+
+        // Esconde o spinner ao carregar as chaves
+        document.getElementById('loading-spinner').style.display = 'block';
 
         // Carregar as chaves do arquivo remoto
         fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
@@ -190,9 +210,13 @@
                 // Dividir o texto em chaves
                 validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
                 console.log('Chaves carregadas:', validKeys); // Para depuração
+
+                // Esconde o spinner depois de carregar as chaves
+                document.getElementById('loading-spinner').style.display = 'none';
             })
             .catch(error => {
                 console.error('Erro ao carregar as chaves:', error);
+                document.getElementById('loading-spinner').textContent = 'Erro ao carregar as chaves.';
             });
 
         function verifyKey() {
@@ -215,6 +239,17 @@
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
+
+        // Bloquear o botão direito e o F12
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
     </script>
 
 </body>
