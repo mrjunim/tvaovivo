@@ -166,7 +166,7 @@
 <body>
 
     <!-- Vídeo de Fundo -->
-    <video autoplay muted loop class="background-video">
+    <video autoplay muted loop class="background-video" id="background-video">
         <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
     </video>
 
@@ -191,6 +191,17 @@
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         let player;
+
+        // Função para iniciar a reprodução do vídeo de fundo em dispositivos móveis
+        function playBackgroundVideo() {
+            const bgVideo = document.getElementById('background-video');
+            bgVideo.play().catch(error => {
+                console.log('Erro ao reproduzir o vídeo de fundo:', error);
+            });
+        }
+
+        // Adicionar evento de toque para iniciar a reprodução do vídeo de fundo em dispositivos móveis
+        document.addEventListener('click', playBackgroundVideo);
 
         function createTwitchPlayer() {
             player = new Twitch.Player("twitch-embed", {
@@ -219,26 +230,43 @@
             // Verificar se o canal está offline e substituir o vídeo
             player.addEventListener(Twitch.Player.OFFLINE, () => {
                 document.getElementById('player-container').innerHTML = ` 
-                    <video autoplay loop muted width="100%" height="100%">
+                    <video autoplay loop muted width="100%" height="100%" id="offline-video">
                         <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                     </video>
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
                         <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
                     </div>
                 `;
+                // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
+                document.getElementById('offline-video').addEventListener('click', function() {
+                    this.play().catch(error => {
+                        console.log('Erro ao reproduzir o vídeo offline:', error);
+                    });
+                });
             });
 
             // Verificar o status do canal periodicamente
             setInterval(() => {
-                if (!player.isLive()) {
+                if (player.isLive()) {
                     document.getElementById('player-container').innerHTML = `
-                        <video autoplay loop muted width="100%" height="100%">
+                        <div id="twitch-embed"></div>
+                    `;
+                    createTwitchPlayer();
+                } else {
+                    document.getElementById('player-container').innerHTML = `
+                        <video autoplay loop muted width="100%" height="100%" id="offline-video">
                             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                         </video>
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
                             <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
                         </div>
                     `;
+                    // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
+                    document.getElementById('offline-video').addEventListener('click', function() {
+                        this.play().catch(error => {
+                            console.log('Erro ao reproduzir o vídeo offline:', error);
+                        });
+                    });
                 }
             }, 60000); // Verificar a cada minuto
         }
