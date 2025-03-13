@@ -17,7 +17,7 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            overflow: hidden; /* Impede rolagem */
+            overflow: hidden; /* Evita a barra de rolagem na página */
         }
 
         /* Estilização da Tela de Login */
@@ -30,7 +30,6 @@
             width: 100%;
             max-width: 400px;
             animation: fadeIn 1s ease-in-out;
-            z-index: 1000;
         }
 
         h1 {
@@ -98,11 +97,6 @@
             background: linear-gradient(45deg, #141414, #222222);
             padding: 20px;
             position: relative;
-            z-index: 1000;
-            height: 100vh; /* Ajusta a altura para a tela inteira */
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .container {
@@ -125,26 +119,28 @@
         /* Estilos do player */
         iframe {
             width: 100%;
-            height: 100%;
+            height: 600px;
             border: none;
             border-radius: 12px;
         }
 
-        /* Estilo do botão Tela Grande */
-        .fullscreen-button {
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border: none;
-            color: white;
+        /* Botão de tela cheia */
+        #fullscreen-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             padding: 10px 15px;
-            font-size: 14px;
+            background-color: #e50914;
+            color: white;
+            font-size: 16px;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background-color 0.3s;
         }
 
-        .fullscreen-button:hover {
-            background-color: rgba(255, 255, 255, 0.8);
+        #fullscreen-btn:hover {
+            background-color: #b20710;
         }
 
         /* Animação */
@@ -173,10 +169,6 @@
                 font-size: 2em;
                 margin-bottom: 15px;
             }
-
-            .fullscreen-button {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -194,6 +186,7 @@
     <!-- Player -->
     <div id="player-container">
         <h1>Assistir ao Canal ao Vivo</h1>
+        <button id="fullscreen-btn" onclick="toggleFullscreen()">Tela Grande</button>
         <div class="container">
             <div class="player">
                 <div id="twitch-embed"></div>
@@ -202,14 +195,13 @@
                     const player = new Twitch.Player("twitch-embed", {
                         channel: "lourimarcos",
                         width: "100%",
-                        height: "100%",
-                        controls: false // Remover controles internos
+                        height: "600px",
+                        muted: true,
+                        controls: false // Desabilita os controles
                     });
                 </script>
             </div>
         </div>
-        <!-- Botão de Tela Grande -->
-        <button class="fullscreen-button" onclick="toggleFullscreen()">TELA GRANDE</button>
     </div>
 
     <script>
@@ -239,16 +231,15 @@
 
             // Verifica se a chave está na lista
             if (validKeys.includes(keyInput)) {
-                // Se a chave for válida, esconde a tela de login e exibe o player
+                // Se a chave for válida, exibe o player
                 document.getElementById('login-container').style.display = 'none';
-                document.getElementById('player-container').style.display = 'flex';
+                document.getElementById('player-container').style.display = 'block';
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
 
-        // Função para alternar a tela cheia
         function toggleFullscreen() {
             const playerContainer = document.getElementById('player-container');
             if (playerContainer.requestFullscreen) {
