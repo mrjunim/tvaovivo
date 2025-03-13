@@ -236,7 +236,6 @@
             });
             player.setVolume(1.0); // Volume em 100%
             player.setMuted(false); // Desmutar o som
-            player.setFullscreen(true); // Iniciar em tela cheia
 
             // Custom controls
             const playPauseButton = document.getElementById('play-pause');
@@ -261,7 +260,11 @@
             });
 
             fullscreenButton.addEventListener('click', () => {
-                player.setFullscreen(true);
+                if (player.isFullscreen()) {
+                    player.setFullscreen(false);
+                } else {
+                    player.setFullscreen(true);
+                }
             });
 
             // Verificar se o canal está offline e substituir o vídeo
