@@ -134,12 +134,12 @@
             border: none;
         }
 
-        /* Ocultar o nome "twitch" */
-        .twitch-player {
+        /* Ocultar o nome "twitch" e o nome do canal */
+        .twitch-player iframe {
             position: relative;
         }
 
-        .twitch-player::after {
+        .twitch-player iframe::before {
             content: '';
             position: absolute;
             top: 0;
@@ -148,6 +148,15 @@
             height: 100%;
             background: none;
             pointer-events: none;
+        }
+
+        /* Adicional para garantir que os elementos sejam escondidos */
+        .twitch-player iframe {
+            pointer-events: none;
+        }
+
+        .twitch-player iframe * {
+            pointer-events: auto;
         }
 
         /* Animação */
