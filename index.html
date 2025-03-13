@@ -209,8 +209,10 @@
 
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
+        let player;
+
         function createTwitchPlayer() {
-            const player = new Twitch.Player("twitch-embed", {
+            player = new Twitch.Player("twitch-embed", {
                 channel: "lourimarcos",
                 width: "100%",
                 height: "100%",
