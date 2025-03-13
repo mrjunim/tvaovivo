@@ -211,7 +211,7 @@
 
                         // Verificar se o canal está offline e substituir o vídeo
                         player.addEventListener(Twitch.Player.OFFLINE, () => {
-                            playerContainer.innerHTML = `
+                            playerContainer.innerHTML = ` 
                                 <video autoplay loop muted width="100%" height="100%">
                                     <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                                 </video>
@@ -277,7 +277,7 @@
             }
         }
 
-        // Desabilitar F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
+        // Bloquear F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F12' || 
                 (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
@@ -288,7 +288,7 @@
             }
         });
 
-        // Desabilitar o botão direito do mouse sobre o documento todo
+        // Bloquear o botão direito do mouse
         document.addEventListener('contextmenu', function(event) {
             alert("Acesso ao código-fonte não é permitido 😢");
             event.preventDefault();
