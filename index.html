@@ -271,7 +271,6 @@
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('player-container').style.display = 'flex';
                 createTwitchPlayer();
-                disableInspect();
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
@@ -280,20 +279,20 @@
 
         function disableInspect() {
             // Desabilitar F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+            document.onkeydown = function(event) {
+                if (event.key === 'F12' || 
+                    (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+                    (event.ctrlKey && event.key === 'U')) {
                     alert("Acesso ao código-fonte não é permitido 😢");
-                    event.preventDefault();
                     return false;
                 }
-            });
+            };
 
             // Desabilitar o botão direito do mouse sobre o documento todo
-            document.addEventListener('contextmenu', function(event) {
+            document.oncontextmenu = function(event) {
                 alert("Acesso ao código-fonte não é permitido 😢");
-                event.preventDefault();
                 return false;
-            });
+            };
 
             // Proteção adicional contra inspeção de elementos
             setInterval(function () {
@@ -307,18 +306,10 @@
                     console.table = logNop;
                 })();
             }, 1000);
-
-            // Desabilitando o botão direito do mouse sobre o player
-            const playerContainer = document.getElementById('player-container');
-            playerContainer.addEventListener('contextmenu', function(event) {
-                alert("Acesso ao código-fonte não é permitido 😢");
-                event.preventDefault();
-                return false;
-            });
         }
 
         // Chamar a função disableInspect quando a página carregar
-        disableInspect();
+        window.onload = disableInspect;
     </script>
 
 </body>
