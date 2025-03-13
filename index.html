@@ -210,7 +210,12 @@
                         });
 
                         // Verificar se o canal está offline e substituir o vídeo
+                        player.addEventListener(Twitch.Player.ONLINE, () => {
+                            console.log('Canal está online');
+                        });
+
                         player.addEventListener(Twitch.Player.OFFLINE, () => {
+                            console.log('Canal está offline');
                             playerContainer.innerHTML = `
                                 <video autoplay loop muted width="100%" height="100%">
                                     <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
@@ -284,6 +289,7 @@
                     (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
                     (event.ctrlKey && event.key === 'U')) {
                     alert("Acesso ao código-fonte não é permitido 😢");
+                    event.preventDefault();
                     return false;
                 }
             };
@@ -291,6 +297,7 @@
             // Desabilitar o botão direito do mouse sobre o documento todo
             document.oncontextmenu = function(event) {
                 alert("Acesso ao código-fonte não é permitido 😢");
+                event.preventDefault();
                 return false;
             };
 
