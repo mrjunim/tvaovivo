@@ -17,11 +17,23 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Vídeo de Fundo */
+        .background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
         }
 
         /* Estilização da Tela de Login */
         .login-container {
-            background: rgba(20, 20, 20, 0.95);
+            background: rgba(20, 20, 20, 0.8);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
@@ -29,6 +41,7 @@
             width: 100%;
             max-width: 400px;
             animation: fadeIn 1s ease-in-out;
+            z-index: 1;
         }
 
         h1 {
@@ -150,6 +163,11 @@
     </style>
 </head>
 <body>
+
+    <!-- Vídeo de Fundo -->
+    <video autoplay muted loop class="background-video">
+        <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
+    </video>
 
     <!-- Tela de Login -->
     <div class="login-container" id="login-container">
