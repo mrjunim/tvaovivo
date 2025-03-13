@@ -260,11 +260,21 @@
             });
 
             fullscreenButton.addEventListener('click', () => {
-                if (player.isFullscreen()) {
-                    player.setFullscreen(false);
+                if (!document.fullscreenElement) {
+                    player.getIframe().requestFullscreen().catch(err => {
+                        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
                 } else {
-                    player.setFullscreen(true);
+                    document.exitFullscreen().catch(err => {
+                        alert(`Error attempting to disable full-screen mode: ${err.message} (${err.name})`);
+                    });
                 }
+            });
+
+            // Habilitar som automaticamente em dispositivos móveis
+            document.querySelector('html').addEventListener('click', () => {
+                player.setMuted(false);
+                player.setVolume(1.0);
             });
 
             // Verificar se o canal está offline e substituir o vídeo
