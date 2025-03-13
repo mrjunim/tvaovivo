@@ -199,13 +199,20 @@
                 height: "100%",
                 controls: false
             });
-            player.setVolume(1.0); // Volume em 100%
-            player.setMuted(false); // Desmutar o som
 
-            // Habilitar som automaticamente em dispositivos móveis
-            document.querySelector('html').addEventListener('click', () => {
-                player.setMuted(false);
-                player.setVolume(1.0);
+            player.addEventListener(Twitch.Player.READY, () => {
+                player.setVolume(1.0); // Volume em 100%
+                player.setMuted(false); // Desmutar o som
+
+                // Tentar iniciar a reprodução automaticamente
+                player.play();
+
+                // Habilitar som automaticamente em dispositivos móveis
+                document.querySelector('html').addEventListener('click', () => {
+                    player.setMuted(false);
+                    player.setVolume(1.0);
+                    player.play();
+                });
             });
 
             // Verificar se o canal está offline e substituir o vídeo
@@ -264,7 +271,7 @@
                 // Se a chave for válida, exibe o player e cria o jogador do Twitch
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('player-container').style.display = 'flex';
-                createTwitchPlayer();
+                createTitchPlayer();
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
