@@ -166,7 +166,7 @@
 <body>
 
     <!-- Vídeo de Fundo -->
-    <video autoplay muted loop class="background-video" id="background-video">
+    <video autoplay muted loop playsinline class="background-video" id="background-video">
         <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
     </video>
 
@@ -225,7 +225,7 @@
             // Verificar se o canal está offline e substituir o vídeo
             player.addEventListener(Twitch.Player.OFFLINE, () => {
                 document.getElementById('player-container').innerHTML = ` 
-                    <video autoplay loop muted width="100%" height="100%" id="offline-video">
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
                         <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                     </video>
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
@@ -247,7 +247,7 @@
                     createTwitchPlayer();
                 } else {
                     document.getElementById('player-container').innerHTML = `
-                        <video autoplay loop muted width="100%" height="100%" id="offline-video">
+                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
                             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                         </video>
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
