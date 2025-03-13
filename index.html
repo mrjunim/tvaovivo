@@ -134,6 +134,7 @@
             transform: translate(-50%, -50%);
             font-size: 20px;
             color: white;
+            display: none;
         }
 
         /* Animação */
@@ -200,7 +201,7 @@
     <script>
         let validKeys = [];
 
-        // Esconde o spinner ao carregar as chaves
+        // Exibe o spinner de carregamento ao buscar as chaves
         document.getElementById('loading-spinner').style.display = 'block';
 
         // Carregar as chaves do arquivo remoto
@@ -233,7 +234,7 @@
             if (validKeys.includes(keyInput)) {
                 // Se a chave for válida, esconde a tela de login e exibe o player
                 document.getElementById('login-container').style.display = 'none';
-                document.getElementById('player-container').style.display = 'flex'; // Agora o player usa flex
+                document.getElementById('player-container').style.display = 'flex'; // Exibe o player
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
