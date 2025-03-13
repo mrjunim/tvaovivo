@@ -117,6 +117,7 @@
             justify-content: center;
             align-items: center;
             padding: 0;
+            position: relative;
         }
 
         .player {
@@ -124,6 +125,23 @@
             height: 100vh;
             position: relative;
             overflow: hidden;
+        }
+
+        .volume-control {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .volume-control input[type="range"] {
+            width: 150px;
+            margin-left: 10px;
         }
 
         /* Estilos do player */
@@ -183,65 +201,75 @@
         <div class="container">
             <div class="player">
                 <div id="twitch-embed"></div>
-                <script src="https://player.twitch.tv/js/embed/v1.js"></script>
-                <script>
-                    function createTwitchPlayer() {
-                        const playerContainer = document.getElementById('player-container');
-                        const player = new Twitch.Player("twitch-embed", {
-                            channel: "lourimarcos",
-                            width: "100%",
-                            height: "100%",
-                            controls: true
-                        });
-                        player.setVolume(1.0); // Volume em 100%
-                        player.setMuted(false); // Desmutar o som
-                        player.setFullscreen(true); // Iniciar em tela cheia
-
-                        // Manter o volume em 100%
-                        player.addEventListener(Twitch.Player.VOLUME, () => {
-                            if (player.getVolume() !== 1.0) {
-                                player.setVolume(1.0);
-                            }
-                        });
-
-                        // Habilitar som automaticamente em dispositivos móveis
-                        document.querySelector('html').addEventListener('click', () => {
-                            player.setMuted(false);
-                            player.setVolume(1.0);
-                        });
-
-                        // Verificar se o canal está offline e substituir o vídeo
-                        player.addEventListener(Twitch.Player.OFFLINE, () => {
-                            playerContainer.innerHTML = ` 
-                                <video autoplay loop muted width="100%" height="100%">
-                                    <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                                </video>
-                                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                                    <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
-                                </div>
-                            `;
-                        });
-
-                        // Verificar o status do canal periodicamente
-                        setInterval(() => {
-                            if (!player.isLive()) {
-                                playerContainer.innerHTML = `
-                                    <video autoplay loop muted width="100%" height="100%">
-                                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                                    </video>
-                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
-                                    </div>
-                                `;
-                            }
-                        }, 60000); // Verificar a cada minuto
-                    }
-                </script>
+            </div>
+            <div class="volume-control">
+                <label for="volume">Volume:</label>
+                <input type="range" id="volume" name="volume" min="0" max="100" value="100">
             </div>
         </div>
     </div>
 
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
+        function createTwitchPlayer() {
+            const player = new Twitch.Player("twitch-embed", {
+                channel: "lourimarcos",
+                width: "100%",
+                height: "100%",
+                controls: false
+            });
+            player.setVolume(1.0); // Volume em 100%
+            player.setMuted(false); // Desmutar o som
+            player.setFullscreen(true); // Iniciar em tela cheia
+
+            // Manter o volume em 100%
+            player.addEventListener(Twitch.Player.VOLUME, () => {
+                if (player.getVolume() !== 1.0) {
+                    player.setVolume(1.0);
+                }
+            });
+
+            // Habilitar som automaticamente em dispositivos móveis
+            document.querySelector('html').addEventListener('click', () => {
+                player.setMuted(false);
+                player.setVolume(1.0);
+            });
+
+            // Controle de volume externo
+            const volumeControl = document.getElementById('volume');
+            volumeControl.addEventListener('input', (event) => {
+                const volume = event.target.value / 100;
+                player.setVolume(volume);
+                player.setMuted(volume === 0);
+            });
+
+            // Verificar se o canal está offline e substituir o vídeo
+            player.addEventListener(Twitch.Player.OFFLINE, () => {
+                playerContainer.innerHTML = ` 
+                    <video autoplay loop muted width="100%" height="100%">
+                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                    </video>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
+                    </div>
+                `;
+            });
+
+            // Verificar o status do canal periodicamente
+            setInterval(() => {
+                if (!player.isLive()) {
+                    playerContainer.innerHTML = `
+                        <video autoplay loop muted width="100%" height="100%">
+                            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                        </video>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                            <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
+                        </div>
+                    `;
+                }
+            }, 60000); // Verificar a cada minuto
+        }
+
         let validKeys = [];
 
         // Carregar as chaves do arquivo remoto
