@@ -6,21 +6,20 @@
     <title>Streaming ao Vivo - TV de Canal</title>
     <style>
         /* Estilo Geral */
-        body, html {
+        body {
             margin: 0;
             padding: 0;
-            width: 100vw;
-            height: 100vh;
             font-family: 'Arial', sans-serif;
-            background: black;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            height: 100vh;
+            flex-direction: column;
         }
 
-        /* Tela de Login */
+        /* Estilização da Tela de Login */
         .login-container {
             background: rgba(20, 20, 20, 0.95);
             padding: 30px;
@@ -29,6 +28,7 @@
             text-align: center;
             width: 100%;
             max-width: 400px;
+            animation: fadeIn 1s ease-in-out;
         }
 
         h1 {
@@ -73,33 +73,82 @@
             margin-top: 10px;
         }
 
+        .whatsapp-info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        .whatsapp-info strong {
+            color: #1db954;
+        }
+
         /* Player */
         #player-container {
             display: none;
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 30px;
             text-align: center;
-            background: black;
-            position: absolute;
-            top: 0;
-            left: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            background: linear-gradient(45deg, #141414, #222222);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 30px;
         }
 
         .player {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
+            flex: 1 1 100%;
+            max-width: 100%;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
         }
 
+        /* Estilos do player */
         iframe {
             width: 100%;
-            height: 100%;
+            height: 600px;
             border: none;
+            border-radius: 12px;
         }
 
+        /* Animação */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .player iframe {
+                height: 400px;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -115,12 +164,22 @@
 
     <!-- Player -->
     <div id="player-container">
-        <div class="player" id="player">
-            <div id="twitch-embed"></div>
+        <h1>Assistir ao Canal ao Vivo</h1>
+        <div class="container">
+            <div class="player">
+                <div id="twitch-embed"></div>
+                <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+                <script>
+                    new Twitch.Player("twitch-embed", {
+                        channel: "lourimarcos",
+                        width: "100%",
+                        height: "600px"
+                    });
+                </script>
+            </div>
         </div>
     </div>
 
-    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         let validKeys = [];
 
@@ -128,8 +187,9 @@
         fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
             .then(response => response.text())
             .then(data => {
+                // Dividir o texto em chaves
                 validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
-                console.log('Chaves carregadas:', validKeys);
+                console.log('Chaves carregadas:', validKeys); // Para depuração
             })
             .catch(error => {
                 console.error('Erro ao carregar as chaves:', error);
@@ -139,23 +199,19 @@
             const keyInput = document.getElementById('key-input').value;
             const errorMessage = document.getElementById('error-message');
 
+            // Verifica se a chave tem 25 caracteres
             if (keyInput.length !== 25) {
                 errorMessage.textContent = "A chave deve ter 25 caracteres.";
                 return;
             }
 
+            // Verifica se a chave está na lista
             if (validKeys.includes(keyInput)) {
+                // Se a chave for válida, exibe o player
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('player-container').style.display = 'block';
-
-                // Criar player do Twitch
-                new Twitch.Player("twitch-embed", {
-                    channel: "lourimarcos",
-                    width: "100%",
-                    height: "100%",
-                    parent: ["www.example.com"] // Substituir pelo domínio correto
-                });
             } else {
+                // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
