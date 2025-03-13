@@ -86,7 +86,7 @@
 
         /* Player */
         #player-container {
-            display: none;
+            display: none; /* Player invisível inicialmente */
             width: 100%;
             max-width: 1200px;
             margin-top: 30px;
@@ -231,9 +231,9 @@
 
             // Verifica se a chave está na lista
             if (validKeys.includes(keyInput)) {
-                // Se a chave for válida, exibe o player
+                // Se a chave for válida, esconde a tela de login e exibe o player
                 document.getElementById('login-container').style.display = 'none';
-                document.getElementById('player-container').style.display = 'block';
+                document.getElementById('player-container').style.display = 'flex'; // Agora o player usa flex
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
