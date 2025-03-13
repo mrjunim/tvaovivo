@@ -117,13 +117,22 @@
 <body>
 
     <!-- Tela de Login-->
-    <div class="login-container" id="login-container">
-        <h1>Bem-vindo ao Streaming ao Vivo</h1>
-        <h1>Para conseguir uma chave solicite Whatsapp 64 9 9671-8993</h1>
-        <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" />
-        <button onclick="verifyKey()">Entrar</button>
-        <div class="error-message" id="error-message"></div>
-    </div>
+   <div class="login-container" id="login-container">
+    <h1>Bem-vindo ao Streaming ao Vivo</h1>
+    <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" />
+    <button onclick="verifyKey()">Entrar</button>
+    <div class="error-message" id="error-message"></div>
+    <p class="whatsapp-info">Para conseguir uma chave, solicite via WhatsApp: <strong>64 9 9671-8993</strong></p>
+</div>
+
+<style>
+    .whatsapp-info {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #bbb;
+        text-align: center;
+    }
+</style>
 
     <!-- Player -->
     <div id="player-container">
