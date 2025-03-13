@@ -244,37 +244,50 @@
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('player-container').style.display = 'flex';
                 createTwitchPlayer();
+                disableInspect();
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
 
-        // Desabilitar F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+        function disableInspect() {
+            // Desabilitar F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
+            document.addEventListener('contextmenu', function(event) {
                 event.preventDefault();
                 return false;
-            }
-        });
+            });
 
-        document.addEventListener('contextmenu', function(event) {
-            event.preventDefault();
-            return false;
-        });
+            // Proteção adicional contra inspeção de elementos
+            setInterval(function () {
+                (function () {
+                    function logNop() { return false; }
+                    console.log = logNop;
+                    console.warn = logNop;
+                    console.error = logNop;
+                    console.info = logNop;
+                    console.debug = logNop;
+                    console.table = logNop;
+                })();
+            }, 1000);
 
-        // Proteção adicional contra inspeção de elementos
-        setInterval(function () {
-            (function () {
-                function logNop() { return false; }
-                console.log = logNop;
-                console.warn = logNop;
-                console.error = logNop;
-                console.info = logNop;
-                console.debug = logNop;
-                console.table = logNop;
-            })();
-        }, 1000);
+            // Desabilitando o botão direito do mouse sobre o player
+            const playerContainer = document.getElementById('player-container');
+            playerContainer.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+                return false;
+            });
+        }
+
+        // Chamar a função disableInspect quando a página carregar
+        disableInspect();
     </script>
 
 </body>
