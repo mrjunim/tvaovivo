@@ -17,7 +17,7 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            overflow: hidden; /* Evita a barra de rolagem na página */
+            overflow: auto; /* Permite a barra de rolagem */
         }
 
         /* Estilização da Tela de Login */
@@ -126,9 +126,6 @@
 
         /* Botão de tela cheia */
         #fullscreen-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
             padding: 10px 15px;
             background-color: #e50914;
             color: white;
@@ -137,6 +134,9 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            display: block;
+            margin-top: 15px;
+            width: 100%;
         }
 
         #fullscreen-btn:hover {
@@ -186,9 +186,8 @@
     <!-- Player -->
     <div id="player-container">
         <h1>Assistir ao Canal ao Vivo</h1>
-        <button id="fullscreen-btn" onclick="toggleFullscreen()">Tela Grande</button>
         <div class="container">
-            <div class="player">
+            <div class="player" ondblclick="toggleFullscreen()">
                 <div id="twitch-embed"></div>
                 <script src="https://player.twitch.tv/js/embed/v1.js"></script>
                 <script>
@@ -202,6 +201,7 @@
                 </script>
             </div>
         </div>
+        <button id="fullscreen-btn" onclick="toggleFullscreen()">Tela Grande</button>
     </div>
 
     <script>
