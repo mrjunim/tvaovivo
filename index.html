@@ -123,26 +123,6 @@
             border-radius: 0;
         }
 
-        /* Botão de tela cheia */
-        .fullscreen-button {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            padding: 10px 20px;
-            background-color: #e50914;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .fullscreen-button:hover {
-            background-color: #b20710;
-        }
-
         /* Animação */
         @keyframes fadeIn {
             from {
@@ -182,35 +162,15 @@
                 <div id="twitch-embed"></div>
                 <script src="https://player.twitch.tv/js/embed/v1.js"></script>
                 <script>
-                    const player = new Twitch.Player("twitch-embed", {
+                    new Twitch.Player("twitch-embed", {
                         channel: "lourimarcos",
                         width: "100%",
                         height: "100%",
                         controls: false // Remover os controles do player
                     });
-
-                    // Função para exibir o player em tela cheia
-                    function toggleFullScreen() {
-                        const playerElement = document.getElementById("twitch-embed");
-                        if (playerElement.requestFullscreen) {
-                            playerElement.requestFullscreen();
-                        } else if (playerElement.mozRequestFullScreen) { // Firefox
-                            playerElement.mozRequestFullScreen();
-                        } else if (playerElement.webkitRequestFullscreen) { // Chrome, Safari e Opera
-                            playerElement.webkitRequestFullscreen();
-                        } else if (playerElement.msRequestFullscreen) { // IE/Edge
-                            playerElement.msRequestFullscreen();
-                        }
-                    }
-
-                    // Atribuir a função ao duplo clique e ao botão
-                    document.getElementById("player").addEventListener("dblclick", toggleFullScreen);
-                    document.getElementById("fullscreen-button").addEventListener("click", toggleFullScreen);
                 </script>
             </div>
         </div>
-        <!-- Botão para exibir em tela cheia -->
-        <button id="fullscreen-button" class="fullscreen-button">EXIBIR EM TELA CHEIA</button>
     </div>
 
     <script>
