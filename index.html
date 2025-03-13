@@ -182,7 +182,7 @@
     <!-- Player -->
     <div id="player-container">
         <div class="container">
-            <div class="player">
+            <div class="player" id="player">
                 <div id="twitch-embed"></div>
             </div>
         </div>
@@ -203,12 +203,13 @@
             player.addEventListener(Twitch.Player.READY, () => {
                 player.setVolume(1.0); // Volume em 100%
                 player.setMuted(false); // Desmutar o som
-
+                
                 // Tentar iniciar a reprodução automaticamente
                 player.play();
 
                 // Habilitar som automaticamente em dispositivos móveis
-                document.querySelector('html').addEventListener('click', () => {
+                const playerElement = document.getElementById('player');
+                playerElement.addEventListener('click', () => {
                     player.setMuted(false);
                     player.setVolume(1.0);
                     player.play();
