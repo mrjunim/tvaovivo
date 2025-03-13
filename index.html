@@ -213,13 +213,14 @@
                 // Tentar iniciar a reprodução automaticamente
                 player.play();
 
-                // Habilitar som automaticamente em dispositivos móveis
-                const playerElement = document.getElementById('player');
-                playerElement.addEventListener('click', () => {
-                    player.setMuted(false);
-                    player.setVolume(1.0);
-                    player.play();
+                // Simular clique para ativar o áudio em dispositivos móveis
+                const playerElement = player.getIframe();
+                const clickEvent = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
                 });
+                playerElement.dispatchEvent(clickEvent);
             });
 
             // Verificar se o canal está offline e substituir o vídeo
