@@ -186,6 +186,7 @@
                 <script src="https://player.twitch.tv/js/embed/v1.js"></script>
                 <script>
                     function createTwitchPlayer() {
+                        const playerContainer = document.getElementById('player-container');
                         const player = new Twitch.Player("twitch-embed", {
                             channel: "lourimarcos",
                             width: "100%",
@@ -210,13 +211,12 @@
 
                         // Verificar se o canal está offline e substituir o vídeo
                         player.addEventListener(Twitch.Player.OFFLINE, () => {
-                            const playerContainer = document.getElementById('player-container');
                             playerContainer.innerHTML = `
                                 <video autoplay loop muted width="100%" height="100%">
                                     <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                                 </video>
                                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                                    <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARTE</p>
+                                    <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE</p>
                                 </div>
                             `;
                         });
@@ -229,7 +229,7 @@
                                         <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                                     </video>
                                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARTE</p>
+                                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE</p>
                                     </div>
                                 `;
                             }
