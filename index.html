@@ -17,7 +17,6 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
-            overflow: hidden;
         }
 
         /* Estilização da Tela de Login */
@@ -86,7 +85,7 @@
 
         /* Player */
         #player-container {
-            display: none; /* Player invisível inicialmente */
+            display: none;
             width: 100%;
             max-width: 1200px;
             margin-top: 30px;
@@ -96,8 +95,7 @@
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
             background: linear-gradient(45deg, #141414, #222222);
             padding: 20px;
-            display: flex;
-            justify-content: center;
+            position: relative;
         }
 
         .container {
@@ -106,7 +104,6 @@
             justify-content: center;
             flex-wrap: wrap;
             padding: 30px;
-            position: relative;
         }
 
         .player {
@@ -126,15 +123,21 @@
             border-radius: 12px;
         }
 
-        /* Spinner de Carregamento */
-        #loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
+        /* Estilo do botão Tela Grande */
+        .fullscreen-button {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
             color: white;
-            display: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .fullscreen-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
         }
 
         /* Animação */
@@ -177,9 +180,6 @@
         <p class="whatsapp-info">Para conseguir uma chave, solicite via WhatsApp: <strong>64 9 9671-8993</strong></p>
     </div>
 
-    <!-- Spinner de Carregamento -->
-    <div id="loading-spinner">Carregando chaves...</div>
-
     <!-- Player -->
     <div id="player-container">
         <h1>Assistir ao Canal ao Vivo</h1>
@@ -188,21 +188,21 @@
                 <div id="twitch-embed"></div>
                 <script src="https://player.twitch.tv/js/embed/v1.js"></script>
                 <script>
-                    new Twitch.Player("twitch-embed", {
+                    const player = new Twitch.Player("twitch-embed", {
                         channel: "lourimarcos",
                         width: "100%",
-                        height: "600px"
+                        height: "600px",
+                        controls: false // Remover controles internos
                     });
                 </script>
             </div>
         </div>
+        <!-- Botão de Tela Grande -->
+        <button class="fullscreen-button" onclick="toggleFullscreen()">TELA GRANDE</button>
     </div>
 
     <script>
         let validKeys = [];
-
-        // Exibe o spinner de carregamento enquanto as chaves estão sendo buscadas
-        document.getElementById('loading-spinner').style.display = 'block';
 
         // Carregar as chaves do arquivo remoto
         fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
@@ -211,13 +211,9 @@
                 // Dividir o texto em chaves
                 validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
                 console.log('Chaves carregadas:', validKeys); // Para depuração
-
-                // Esconde o spinner depois de carregar as chaves
-                document.getElementById('loading-spinner').style.display = 'none';
             })
             .catch(error => {
                 console.error('Erro ao carregar as chaves:', error);
-                document.getElementById('loading-spinner').textContent = 'Erro ao carregar as chaves.';
             });
 
         function verifyKey() {
@@ -234,23 +230,26 @@
             if (validKeys.includes(keyInput)) {
                 // Se a chave for válida, esconde a tela de login e exibe o player
                 document.getElementById('login-container').style.display = 'none';
-                document.getElementById('player-container').style.display = 'flex'; // Exibe o player
+                document.getElementById('player-container').style.display = 'block';
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
 
-        // Bloquear o botão direito e o F12
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-        
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
-                e.preventDefault();
+        // Função para alternar a tela cheia
+        function toggleFullscreen() {
+            const playerContainer = document.getElementById('player-container');
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.mozRequestFullScreen) { // Firefox
+                playerContainer.mozRequestFullScreen();
+            } else if (playerContainer.webkitRequestFullscreen) { // Chrome, Safari e Opera
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { // IE/Edge
+                playerContainer.msRequestFullscreen();
             }
-        });
+        }
     </script>
 
 </body>
