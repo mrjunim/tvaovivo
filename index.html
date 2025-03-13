@@ -282,7 +282,7 @@
             if (event.key === 'F12' || 
                 (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
                 (event.ctrlKey && event.key === 'U')) {
-                alert("Acesso ao código-fonte não é permitido 😢");
+                alert("isso não é permitido 😢");
                 event.preventDefault();
                 return false;
             }
@@ -290,7 +290,7 @@
 
         // Bloquear o botão direito do mouse
         document.addEventListener('contextmenu', function(event) {
-            alert("Acesso ao código-fonte não é permitido 😢");
+            alert("isso não é permitido 😢");
             event.preventDefault();
             return false;
         });
@@ -298,7 +298,7 @@
         // Proteção adicional contra inspeção de elementos
         setInterval(function () {
             (function () {
-                function logNop() { alert("Acesso ao código-fonte não é permitido 😢"); return false; }
+                function logNop() { alert("isso não é permitido 😢"); return false; }
                 console.log = logNop;
                 console.warn = logNop;
                 console.error = logNop;
