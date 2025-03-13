@@ -226,9 +226,9 @@
             }
         }
 
-        // Desabilitar F12 e botão direito do mouse
+        // Desabilitar F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'F12') {
+            if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
                 event.preventDefault();
             }
         });
