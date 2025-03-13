@@ -127,21 +127,20 @@
             overflow: hidden;
         }
 
-        .volume-control {
+        .volume-toggle {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            align-items: center;
             background: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 5px;
+            cursor: pointer;
         }
 
-        .volume-control input[type="range"] {
-            width: 150px;
-            margin-left: 10px;
+        .volume-toggle img {
+            width: 30px;
+            height: 30px;
         }
 
         /* Estilos do player */
@@ -202,9 +201,8 @@
             <div class="player">
                 <div id="twitch-embed"></div>
             </div>
-            <div class="volume-control">
-                <label for="volume">Volume:</label>
-                <input type="range" id="volume" name="volume" min="0" max="100" value="100">
+            <div class="volume-toggle" id="volume-toggle">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/high-volume.png" alt="Volume Toggle">
             </div>
         </div>
     </div>
@@ -235,12 +233,17 @@
                 player.setVolume(1.0);
             });
 
-            // Controle de volume externo
-            const volumeControl = document.getElementById('volume');
-            volumeControl.addEventListener('input', (event) => {
-                const volume = event.target.value / 100;
-                player.setVolume(volume);
-                player.setMuted(volume === 0);
+            // Botão de ativar/desativar som
+            const volumeToggle = document.getElementById('volume-toggle');
+            volumeToggle.addEventListener('click', () => {
+                if (player.getMuted()) {
+                    player.setMuted(false);
+                    player.setVolume(1.0);
+                    volumeToggle.querySelector('img').src = 'https://img.icons8.com/ios-filled/50/ffffff/high-volume.png';
+                } else {
+                    player.setMuted(true);
+                    volumeToggle.querySelector('img').src = 'https://img.icons8.com/ios-filled/50/ffffff/mute.png';
+                }
             });
 
             // Verificar se o canal está offline e substituir o vídeo
