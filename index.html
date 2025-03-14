@@ -156,8 +156,13 @@
         }
 
         /* Estilos adicionais para esconder todos os controles exceto volume e tela cheia */
-        .player .player-controls__button:not(.player-controls__volume-button):not(.player-controls__fullscreen-button) {
+        .player .player-controls__button {
             display: none !important;
+        }
+
+        .player .player-controls__volume-button,
+        .player .player-controls__fullscreen-button {
+            display: block !important;
         }
 
         /* Animação */
@@ -283,6 +288,8 @@
                         if (!control.classList.contains('player-controls__volume-button') &&
                             !control.classList.contains('player-controls__fullscreen-button')) {
                             control.style.display = 'none';
+                        } else {
+                            control.style.display = 'block';
                         }
                     });
                 }, 1000); // Ajuste o tempo conforme necessário
