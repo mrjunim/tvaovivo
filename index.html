@@ -394,6 +394,22 @@
 
         // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
+
+        // Remover elementos indesejados ao carregar a página
+        window.addEventListener('load', function() {
+            // Remover o link do canal
+            const channelLink = document.querySelector('a[data-test-selector="stream-info-card-component__title-link"]');
+            if (channelLink) {
+                channelLink.style.display = 'none';
+            }
+
+            // Remover o botão "Assista na Twitch"
+            const watchOnTwitchButton = document.querySelector('div[aria-describedby]');
+            if (watchOnTwitchButton) {
+                watchOnTwitchButton.style.display = 'none';
+            }
+        });
+
     </script>
 
 </body>
