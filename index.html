@@ -134,6 +134,29 @@
             border: none;
         }
 
+        /* Ocultar o nome "twitch" e o nome do canal */
+        .twitch-player iframe {
+            position: relative;
+        }
+
+        .twitch-player iframe::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: none;
+            pointer-events: none;
+        }
+
+        /* Estilos adicionais para esconder nomes */
+        .player .player-overlays__player-nameplate,
+        .player .player-controls__right-control-group a,
+        .player .player-controls__left-control-group .player-controls__channel-info {
+            display: none !important;
+        }
+
         /* Animação */
         @keyframes fadeIn {
             from {
@@ -182,14 +205,87 @@
     <!-- Player -->
     <div id="player-container">
         <div class="container">
-            <div class="player" id="player">
-                <iframe src="https://player.twitch.tv/?channel=lourimarcos&parent=yourwebsite.com" frameborder="0" allowfullscreen="true" scrolling="no"></iframe>
-                <div class="error-message" id="player-error-message"></div>
+            <div class="player twitch-player" id="player">
+                <div id="twitch-embed"></div>
             </div>
         </div>
     </div>
 
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
+        let player;
+
+        function playVideo(videoElement) {
+            videoElement.play().catch(error => {
+                console.log('Erro ao reproduzir o vídeo:', error);
+            });
+        }
+
+        function createTwitchPlayer() {
+            player = new Twitch.Player("twitch-embed", {
+                channel: "lourimarcos",
+                width: "100%",
+                height: "100%",
+                controls: true
+            });
+
+            player.addEventListener(Twitch.Player.READY, () => {
+                player.setVolume(1.0); // Volume em 100%
+                player.setMuted(false); // Desmutar o som
+                
+                // Tentar iniciar a reprodução automaticamente
+                player.play();
+
+                // Simular clique para ativar o áudio em dispositivos móveis
+                const playerElement = player.getIframe();
+                const clickEvent = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                playerElement.dispatchEvent(clickEvent);
+            });
+
+            // Verificar se o canal está offline e substituir o vídeo
+            player.addEventListener(Twitch.Player.OFFLINE, () => {
+                document.getElementById('player-container').innerHTML = ` 
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                    </video>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
+                    </div>
+                `;
+                // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
+                const offlineVideo = document.getElementById('offline-video');
+                offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                playVideo(offlineVideo);
+            });
+
+            // Verificar o status do canal periodicamente
+            setInterval(() => {
+                if (player.isLive()) {
+                    document.getElementById('player-container').innerHTML = `
+                        <div id="twitch-embed"></div>
+                    `;
+                    createTwitchPlayer();
+                } else {
+                    document.getElementById('player-container').innerHTML = `
+                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                        </video>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                            <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
+                        </div>
+                    `;
+                    // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
+                    const offlineVideo = document.getElementById('offline-video');
+                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                    playVideo(offlineVideo);
+                }
+            }, 60000); // Verificar a cada minuto
+        }
+
         let validKeys = [];
 
         // Carregar as chaves do arquivo remoto
@@ -216,9 +312,10 @@
 
             // Verifica se a chave está na lista
             if (validKeys.includes(keyInput)) {
-                // Se a chave for válida, exibe o player
+                // Se a chave for válida, exibe o player e cria o jogador do Twitch
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('player-container').style.display = 'flex';
+                createTwitchPlayer();
             } else {
                 // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
@@ -257,17 +354,7 @@
         }, 1000);
 
         // Reproduzir o vídeo de fundo em dispositivos móveis
-        document.getElementById('background-video').play().catch(error => {
-            console.log('Erro ao reproduzir o vídeo:', error);
-        });
-
-        // Verificar se o iframe foi carregado corretamente
-        document.querySelector('iframe').addEventListener('load', function() {
-            const iframeDocument = this.contentDocument || this.contentWindow.document;
-            if (!iframeDocument.body.innerHTML.includes('Twitch')) {
-                document.getElementById('player-error-message').textContent = "Ops! Esta incorporação foi configurada incorretamente. (Desenvolvedores: verifiquem o console do seu navegador para obterem mais informações)";
-            }
-        });
+        playVideo(document.getElementById('background-video'));
     </script>
 
 </body>
