@@ -155,15 +155,8 @@
             pointer-events: none;
         }
 
-        /* Estilos adicionais para esconder nomes e outros controles */
-        .player .player-overlays__player-nameplate,
-        .player .player-controls__right-control-group a,
-        .player .player-controls__left-control-group .player-controls__channel-info,
-        .player .player-controls__left-control-group .player-controls__playback-button,
-        .player .player-controls__left-control-group .player-controls__progress-bar,
-        .player .player-controls__left-control-group .player-controls__current-time,
-        .player .player-controls__right-control-group .player-controls__settings-button,
-        .player .player-controls__right-control-group .player-controls__live-indicator {
+        /* Estilos adicionais para esconder todos os controles exceto volume e tela cheia */
+        .player .player-controls__button:not(.player-controls__volume-button):not(.player-controls__fullscreen-button) {
             display: none !important;
         }
 
