@@ -268,8 +268,8 @@
                 });
                 playerElement.dispatchEvent(clickEvent);
 
-                // Remover elementos indesejados após o carregamento do player
-                setTimeout(() => {
+                // Esperar o carregamento para remover os elementos
+                const removeUnwantedElements = () => {
                     // Remover o link do canal
                     const channelLink = playerElement.contentDocument.querySelector('a[data-test-selector="stream-info-card-component__title-link"]');
                     if (channelLink) {
@@ -292,7 +292,16 @@
                             control.style.display = 'block';
                         }
                     });
-                }, 1000); // Ajuste o tempo conforme necessário
+                };
+
+                // Tentar remover os elementos indesejados repetidas vezes até que sejam encontrados
+                const intervalId = setInterval(() => {
+                    removeUnwantedElements();
+                    if (!playerElement.contentDocument.querySelector('a[data-test-selector="stream-info-card-component__title-link"]') &&
+                        !playerElement.contentDocument.querySelector('div[aria-describedby]')) {
+                        clearInterval(intervalId);
+                    }
+                }, 1000); // Tentar a cada segundo
             });
 
             // Verificar se o canal está offline e substituir o vídeo
