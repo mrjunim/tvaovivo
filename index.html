@@ -250,7 +250,7 @@
             player.addEventListener(Twitch.Player.READY, () => {
                 player.setVolume(1.0); // Volume em 100%
                 player.setMuted(false); // Desmutar o som
-                
+
                 // Tentar iniciar a reprodução automaticamente
                 player.play();
 
@@ -262,6 +262,30 @@
                     cancelable: true
                 });
                 playerElement.dispatchEvent(clickEvent);
+
+                // Remover elementos indesejados após o carregamento do player
+                setTimeout(() => {
+                    // Remover o link do canal
+                    const channelLink = playerElement.contentDocument.querySelector('a[data-test-selector="stream-info-card-component__title-link"]');
+                    if (channelLink) {
+                        channelLink.remove();
+                    }
+
+                    // Remover o botão "Assista na Twitch"
+                    const watchOnTwitchButton = playerElement.contentDocument.querySelector('div[aria-describedby]');
+                    if (watchOnTwitchButton) {
+                        watchOnTwitchButton.remove();
+                    }
+
+                    // Ocultar controles adicionais, exceto volume e tela cheia
+                    const controls = playerElement.contentDocument.querySelectorAll('.player-controls__button');
+                    controls.forEach(control => {
+                        if (!control.classList.contains('player-controls__volume-button') &&
+                            !control.classList.contains('player-controls__fullscreen-button')) {
+                            control.style.display = 'none';
+                        }
+                    });
+                }, 1000); // Ajuste o tempo conforme necessário
             });
 
             // Verificar se o canal está offline e substituir o vídeo
@@ -394,22 +418,6 @@
 
         // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
-
-        // Remover elementos indesejados ao carregar a página
-        window.addEventListener('load', function() {
-            // Remover o link do canal
-            const channelLink = document.querySelector('a[data-test-selector="stream-info-card-component__title-link"]');
-            if (channelLink) {
-                channelLink.style.display = 'none';
-            }
-
-            // Remover o botão "Assista na Twitch"
-            const watchOnTwitchButton = document.querySelector('div[aria-describedby]');
-            if (watchOnTwitchButton) {
-                watchOnTwitchButton.style.display = 'none';
-            }
-        });
-
     </script>
 
 </body>
