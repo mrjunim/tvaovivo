@@ -80,10 +80,15 @@
             background: #b20710;
         }
 
+        button:active {
+            transform: scale(0.95);
+        }
+
         .error-message {
             color: #ff3b3b;
             font-size: 14px;
             margin-top: 10px;
+            animation: shake 0.3s;
         }
 
         .whatsapp-info {
@@ -166,6 +171,21 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+            75% {
+                transform: translateX(-5px);
             }
         }
 
@@ -315,6 +335,27 @@
                 // Se a chave for válida, exibe o player e cria o jogador do Twitch
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('player-container').style.display = 'flex';
+
+                // Adicionar mensagem de boas-vindas
+                const welcomeMessage = document.createElement('div');
+                welcomeMessage.textContent = "Bem-vindo ao streaming!";
+                welcomeMessage.style.position = "absolute";
+                welcomeMessage.style.top = "20px";
+                welcomeMessage.style.left = "50%";
+                welcomeMessage.style.transform = "translateX(-50%)";
+                welcomeMessage.style.color = "white";
+                welcomeMessage.style.fontSize = "18px";
+                welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+                welcomeMessage.style.padding = "10px";
+                welcomeMessage.style.borderRadius = "8px";
+                welcomeMessage.style.zIndex = "2";
+                document.body.appendChild(welcomeMessage);
+
+                // Remover mensagem de boas-vindas após 3 segundos
+                setTimeout(() => {
+                    welcomeMessage.remove();
+                }, 3000);
+
                 createTwitchPlayer();
             } else {
                 // Se a chave não for válida, exibe erro
