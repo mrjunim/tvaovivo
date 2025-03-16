@@ -50,6 +50,11 @@
             color: #f1f1f1;
         }
 
+        .subtitle {
+            margin-bottom: 20px;
+            color: #bbb;
+        }
+
         input {
             width: 100%;
             padding: 12px;
@@ -219,6 +224,7 @@
     <!-- Tela de Login -->
     <div class="login-container" id="login-container">
         <h1>Bem-vindo</h1>
+        <p class="subtitle" id="current-title">Carregando título...</p>
         <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
         <button onclick="verifyKey()">Entrar</button>
         <div class="error-message" id="error-message" role="alert"></div>
@@ -434,6 +440,20 @@
 
         // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
+
+        // Obter o título do vídeo atual do canal
+        fetch('https://www.twitch.tv/lourimarcos')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const title = doc.querySelector('meta[property="og:description"]').getAttribute('content');
+                document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
+            })
+            .catch(error => {
+                console.error('Erro ao obter o título do vídeo:', error);
+                document.getElementById('current-title').textContent = 'Erro ao carregar título';
+            });
     </script>
 
 </body>
