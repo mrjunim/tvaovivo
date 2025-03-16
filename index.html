@@ -442,11 +442,11 @@
         playVideo(document.getElementById('background-video'));
 
         // Obter o título do vídeo atual do canal
-        fetch('https://cors-anywhere.herokuapp.com/https://www.twitch.tv/lourimarcos')
-            .then(response => response.text())
-            .then(html => {
+        fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.twitch.tv/lourimarcos'))
+            .then(response => response.json())
+            .then(data => {
                 const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+                const doc = parser.parseFromString(data.contents, 'text/html');
                 const titleElement = doc.querySelector('meta[property="og:description"]');
                 const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
                 document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
