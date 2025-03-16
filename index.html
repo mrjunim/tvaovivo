@@ -449,7 +449,7 @@
                 const doc = parser.parseFromString(data.contents, 'text/html');
                 const titleElement = doc.querySelector('meta[property="og:description"]');
                 const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
-                document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
+                document.getElementById('current-title').textContent = `🔴 Atualmente reproduzindo: ${title}`;
             })
             .catch(error => {
                 console.error('Erro ao obter o título do vídeo:', error);
