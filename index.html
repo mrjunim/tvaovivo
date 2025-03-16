@@ -382,7 +382,7 @@
 
                 // Adicionar mensagem de boas-vindas
                 const welcomeMessage = document.createElement('div');
-                welcomeMessage.textContent = " 🔴 Seja Bem vindo ao Nosso Canal!!! 🔴";
+                welcomeMessage.textContent = "Bem-vindo ao streaming!";
                 welcomeMessage.style.position = "absolute";
                 welcomeMessage.style.top = "20px";
                 welcomeMessage.style.left = "50%";
@@ -447,9 +447,9 @@
             .then(data => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data.contents, 'text/html');
-                const titleElement = doc.querySelector('meta[property="og:description"]');
+                const titleElement = doc.querySelector('meta[property="og:title"]');
                 const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
-                document.getElementById('current-title').textContent = `🔴 Atualmente reproduzindo: ${title}`;
+                document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
             })
             .catch(error => {
                 console.error('Erro ao obter o título do vídeo:', error);
