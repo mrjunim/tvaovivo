@@ -447,7 +447,7 @@
             .then(html => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                const titleElement = doc.querySelector('meta[property="og:title"]');
+                const titleElement = doc.querySelector('meta[property="og:description"]');
                 const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
                 document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
             })
