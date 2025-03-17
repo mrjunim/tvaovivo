@@ -1,3 +1,28 @@
+<?php
+$servername = "sql106.ezyro.com";
+$username = "ezyro_38418489";
+$password = "4305e8784edd62c2";
+$dbname = "ezyro_38418489_tvaovivo";
+
+// Criação da conexão
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verifica a conexão
+if ($conn->connect_error) {
+    die("Conexão falhou: " . $conn->connect_error);
+}
+
+function verifyKey($key, $conn) {
+    $stmt = $conn->prepare("SELECT * FROM Chaves WHERE chave = ?");
+    $stmt->bind_param("s", $key);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result->num_rows > 0;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -436,18 +461,6 @@
             setInterval(reloadLivePlayer, 30000);
         }
 
-        let validKeys = [];
-
-        fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
-            .then(response => response.text())
-            .then(data => {
-                validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
-                console.log('Chaves carregadas:', validKeys);
-            })
-            .catch(error => {
-                console.error('Erro ao carregar as chaves:', error);
-            });
-
         function verifyKey() {
             const keyInput = document.getElementById('key-input').value;
             const errorMessage = document.getElementById('error-message');
@@ -457,32 +470,46 @@
                 return;
             }
 
-            if (validKeys.includes(keyInput)) {
-                document.getElementById('login-container').style.display = 'none';
-                document.getElementById('player-container').style.display = 'flex';
+            fetch('index.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'chave=' + encodeURIComponent(keyInput)
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes('Nova chave inserida com sucesso') || data.includes('Tabela Chaves criada com sucesso')) {
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('player-container').style.display = 'flex';
 
-                const welcomeMessage = document.createElement('div');
-                welcomeMessage.textContent = "Seja Bem vindo!!!";
-                welcomeMessage.style.position = "absolute";
-                welcomeMessage.style.top = "20px";
-                welcomeMessage.style.left = "50%";
-                welcomeMessage.style.transform = "translateX(-50%)";
-                welcomeMessage.style.color = "white";
-                welcomeMessage.style.fontSize = "18px";
-                welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-                welcomeMessage.style.padding = "10px";
-                welcomeMessage.style.borderRadius = "8px";
-                welcomeMessage.style.zIndex = "3";
-                document.body.appendChild(welcomeMessage);
+                    const welcomeMessage = document.createElement('div');
+                    welcomeMessage.textContent = "Seja Bem vindo!!!";
+                    welcomeMessage.style.position = "absolute";
+                    welcomeMessage.style.top = "20px";
+                    welcomeMessage.style.left = "50%";
+                    welcomeMessage.style.transform = "translateX(-50%)";
+                    welcomeMessage.style.color = "white";
+                    welcomeMessage.style.fontSize = "18px";
+                    welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+                    welcomeMessage.style.padding = "10px";
+                    welcomeMessage.style.borderRadius = "8px";
+                    welcomeMessage.style.zIndex = "3";
+                    document.body.appendChild(welcomeMessage);
 
-                setTimeout(() => {
-                    welcomeMessage.remove();
-                }, 6000);
+                    setTimeout(() => {
+                        welcomeMessage.remove();
+                    }, 6000);
 
-                createTwitchPlayer();
-            } else {
-                errorMessage.textContent = "Chave inválida. Tente novamente.";
-            }
+                    createTwitchPlayer();
+                } else {
+                    errorMessage.textContent = "Chave inválida. Tente novamente.";
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                errorMessage.textContent = "Erro ao verificar a chave. Tente novamente.";
+            });
         }
 
         document.addEventListener('keydown', function(event) {
