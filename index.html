@@ -232,10 +232,11 @@
         }
 
         .live-notification .player {
-            width: 320px;
-            height: 180px;
+            width: 640px;
+            height: 360px;
             border-radius: 8px;
             overflow: hidden;
+            pointer-events: none; /* Desabilitar cliques */
         }
     </style>
 </head>
@@ -346,15 +347,25 @@
             // Crie o player da Twitch na pequena tela
             livePlayer = new Twitch.Player("live-player", {
                 channel: "lourimarcos",
-                height: "320",
+                height: "360",
                 width: "640",
                 muted: true,
+                autoplay: true,
+                controls: false,
                 parent: ["localhost"]
+            });
+
+            // Desabilitar todos os controles do player
+            livePlayer.addEventListener(Twitch.Player.READY, () => {
+                const iframe = livePlayer.getIframe();
+                iframe.style.pointerEvents = "none"; // Desabilitar cliques
             });
 
             // Função para reiniciar o player a cada 30 segundos
             function reloadLivePlayer() {
+                livePlayer.pause();
                 livePlayer.seek(0);
+                livePlayer.play();
             }
 
             // Recarregue o player a cada 30 segundos
