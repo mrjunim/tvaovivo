@@ -447,8 +447,9 @@
             .then(data => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data.contents, 'text/html');
-                const titleElement = doc.querySelector('h2[data-a-target="stream-title"]');
-                const title = titleElement ? titleElement.textContent : 'Título não encontrado';
+                // Procurar pelo título da live na página
+                const titleElement = doc.querySelector('p[data-a-target="stream-title"]');
+                const title = titleElement ? titleElement.getAttribute('title') : 'Título não encontrado';
                 document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
             })
             .catch(error => {
