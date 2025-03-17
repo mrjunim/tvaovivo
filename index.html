@@ -34,11 +34,11 @@
         /* Estilização da Tela de Login */
         .login-container {
             background: rgba(20, 20, 20, 0.8);
-            padding: 30px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
             text-align: center;
-            width: 100%;
+            width: 90%;
             max-width: 400px;
             animation: fadeIn 1s ease-in-out;
             z-index: 1;
@@ -56,6 +56,7 @@
         .subtitle {
             margin-bottom: 20px;
             color: #bbb;
+            font-size: 1em;
         }
 
         input {
@@ -66,7 +67,7 @@
             border-radius: 8px;
             background: #222;
             color: white;
-            font-size: 16px;
+            font-size: 1em;
             outline: none;
         }
 
@@ -78,7 +79,7 @@
             border-radius: 8px;
             background: #e50914;
             color: white;
-            font-size: 16px;
+            font-size: 1em;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
@@ -94,14 +95,14 @@
 
         .error-message {
             color: #ff3b3b;
-            font-size: 14px;
+            font-size: 0.9em;
             margin-top: 10px;
             animation: shake 0.3s;
         }
 
         .whatsapp-info {
             margin-top: 15px;
-            font-size: 14px;
+            font-size: 0.9em;
             color: #bbb;
         }
 
@@ -200,43 +201,78 @@
 
         /* Responsividade */
         @media (max-width: 768px) {
-            .player iframe {
-                height: 100vh;
-            }
-
-            .container {
-                flex-direction: column;
+            .login-container {
+                padding: 15px;
+                width: 90%;
             }
 
             h1 {
-                font-size: 2em;
+                font-size: 1.5em;
                 margin-bottom: 15px;
+            }
+
+            .subtitle {
+                font-size: 0.9em;
+                margin-bottom: 15px;
+            }
+
+            input {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+
+            .error-message {
+                font-size: 0.8em;
+            }
+
+            .whatsapp-info {
+                font-size: 0.8em;
+            }
+
+            .live-notification .player {
+                width: 100%;
+                height: auto;
             }
         }
 
-        /* Notificação de Live */
-        .live-notification {
-            margin-top: 20px;
-            background: rgba(20, 20, 20, 0.9);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            z-index: 2;
-        }
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 10px;
+                width: 100%;
+            }
 
-        .live-notification h2 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            color: #f1f1f1;
-        }
+            h1 {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
 
-        .live-notification .player {
-            width: 640px;
-            height: 360px;
-            border-radius: 8px;
-            overflow: hidden;
-            pointer-events: none; /* Desabilitar cliques */
+            .subtitle {
+                font-size: 0.8em;
+                margin-bottom: 10px;
+            }
+
+            input {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+
+            button {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+
+            .error-message {
+                font-size: 0.7em;
+            }
+
+            .whatsapp-info {
+                font-size: 0.7em;
+            }
         }
     </style>
 </head>
@@ -363,9 +399,7 @@
 
             // Função para reiniciar o player a cada 30 segundos
             function reloadLivePlayer() {
-                livePlayer.pause();
                 livePlayer.seek(0);
-                livePlayer.play();
             }
 
             // Recarregue o player a cada 30 segundos
