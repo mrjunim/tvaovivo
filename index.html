@@ -56,11 +56,11 @@
         }
 
         .login-container {
-            max-width: 300px; /* Reduzida a largura máxima */
+            max-width: 300px;
         }
 
         .live-notification {
-            max-width: 630px; /* Ajustada a largura máxima */
+            max-width: 630px;
         }
 
         h1 {
@@ -350,7 +350,10 @@
                 channel: "lourimarcos",
                 width: "100%",
                 height: "100%",
-                controls: true
+                controls: true,
+                autoplay: true,
+                muted: false,
+                parent: ["localhost"]
             });
 
             player.addEventListener(Twitch.Player.READY, () => {
