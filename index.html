@@ -273,6 +273,7 @@
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         let player;
+        let livePlayer;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -343,27 +344,24 @@
             const livePlayerContainer = document.getElementById("live-player");
 
             // Crie o player da Twitch na pequena tela
-            new Twitch.Player("live-player", {
+            livePlayer = new Twitch.Player("live-player", {
                 channel: "lourimarcos",
                 height: "180",
                 width: "320",
                 muted: true,
                 autoplay: true,
-                parent: ["localhost"]
+                parent: ["mrjunim.github.io/tvaovivo/"]
             });
 
+            // Função para reiniciar o player a cada 30 segundos
+            function reloadLivePlayer() {
+                livePlayer.pause();
+                livePlayer.seek(0);
+                livePlayer.play();
+            }
+
             // Recarregue o player a cada 30 segundos
-            setInterval(() => {
-                livePlayerContainer.innerHTML = "";
-                new Twitch.Player("live-player", {
-                    channel: "lourimarcos",
-                    height: "180",
-                    width: "320",
-                    muted: true,
-                    autoplay: true,
-                    parent: ["localhost"]
-                });
-            }, 30000);
+            setInterval(reloadLivePlayer, 30000);
         }
 
         let validKeys = [];
