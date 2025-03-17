@@ -212,6 +212,32 @@
                 margin-bottom: 15px;
             }
         }
+
+        /* Notificação de Live */
+        .live-notification {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(20, 20, 20, 0.9);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            z-index: 2;
+        }
+
+        .live-notification h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #f1f1f1;
+        }
+
+        .live-notification .player {
+            width: 320px;
+            height: 180px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -224,11 +250,17 @@
     <!-- Tela de Login -->
     <div class="login-container" id="login-container">
         <h1>Bem-vindo</h1>
-        <p class="subtitle" id="current-title">Carregando título...</p>
+        <p class="subtitle">Digite a chave de acesso para entrar</p>
         <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
         <button onclick="verifyKey()">Entrar</button>
         <div class="error-message" id="error-message" role="alert"></div>
         <p class="whatsapp-info">Para conseguir uma chave, solicite via WhatsApp: <strong>64 9 9671-8993</strong></p>
+    </div>
+
+    <!-- Notificação de Live -->
+    <div class="live-notification">
+        <h2>O QUE ESTÁ PASSANDO AGORA</h2>
+        <div class="player" id="live-player"></div>
     </div>
 
     <!-- Player -->
@@ -240,13 +272,9 @@
         </div>
     </div>
 
-    <!-- Player Oculto -->
-    <div id="hidden-player" style="display: none;"></div>
-
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         let player;
-        let hiddenPlayer;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -354,22 +382,17 @@
             }, 60000); // Verificar a cada minuto
         }
 
-        function createHiddenTwitchPlayer() {
-            hiddenPlayer = new Twitch.Player("hidden-player", {
+        function createLiveNotificationPlayer() {
+            const livePlayer = new Twitch.Player("live-player", {
                 channel: "lourimarcos",
-                width: "100%",
-                height: "100%",
+                width: "320",
+                height: "180",
                 controls: false
             });
 
-            hiddenPlayer.addEventListener(Twitch.Player.READY, () => {
-                // Esperar um pouco para garantir que o player foi carregado corretamente
-                setTimeout(() => {
-                    const playerElement = hiddenPlayer.getIframe();
-                    const titleElement = playerElement.contentDocument.querySelector('p[data-a-target="stream-title"]');
-                    const title = titleElement ? titleElement.getAttribute('title') : 'Título não encontrado';
-                    document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
-                }, 3000);
+            livePlayer.addEventListener(Twitch.Player.READY, () => {
+                livePlayer.setVolume(0); // Mudo
+                livePlayer.play();
             });
         }
 
@@ -464,8 +487,8 @@
         // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
 
-        // Criar o player oculto ao carregar a página
-        createHiddenTwitchPlayer();
+        // Criar o player de notificação ao carregar a página
+        createLiveNotificationPlayer();
     </script>
 
 </body>
