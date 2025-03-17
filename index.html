@@ -134,10 +134,21 @@
 
         .live-notification .player {
             width: 100%;
-            height: 480px; /* Ajustada a altura */
+            height: 0;
+            padding-bottom: 76.19%; /* Aspect ratio 4:3 (480 / 630 * 100) */
+            position: relative;
             border-radius: 8px;
             overflow: hidden;
             pointer-events: none;
+        }
+
+        .live-notification .player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         /* Player */
@@ -396,8 +407,8 @@
             // Crie o player da Twitch na pequena tela
             livePlayer = new Twitch.Player("live-player", {
                 channel: "lourimarcos",
-                height: "480",
-                width: "630",
+                height: "100%",
+                width: "100%",
                 muted: true,
                 autoplay: true,
                 controls: false,
