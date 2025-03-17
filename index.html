@@ -260,7 +260,9 @@
     <!-- Notificação de Live -->
     <div class="live-notification">
         <h2>O QUE ESTÁ PASSANDO AGORA</h2>
-        <div class="player" id="live-player"></div>
+        <video autoplay muted loop playsinline class="player">
+            <source src="https://seed128.bitchute.com/jGs5mLAXFlSu/LGhx23m4VMc5.mp4" type="video/mp4">
+        </video>
     </div>
 
     <!-- Player -->
@@ -382,20 +384,6 @@
             }, 60000); // Verificar a cada minuto
         }
 
-        function createLiveNotificationPlayer() {
-            const livePlayer = new Twitch.Player("live-player", {
-                channel: "lourimarcos",
-                width: "320",
-                height: "180",
-                controls: false
-            });
-
-            livePlayer.addEventListener(Twitch.Player.READY, () => {
-                livePlayer.setVolume(0); // Mudo
-                livePlayer.play();
-            });
-        }
-
         let validKeys = [];
 
         // Carregar as chaves do arquivo remoto
@@ -486,9 +474,6 @@
 
         // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
-
-        // Criar o player de notificação ao carregar a página
-        createLiveNotificationPlayer();
     </script>
 
 </body>
