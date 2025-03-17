@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streaming ao Vivo - TV de Canal</title>
+    <title>Streaming ao Vivo 📺 </title>
     <style>
         /* Estilo Geral */
         body {
@@ -299,7 +299,7 @@
     <div class="container">
         <!-- Tela de Login -->
         <div class="login-container" id="login-container">
-            <h1>Bem-vindo</h1>
+            <h1> 📺 Bem-vindo 🎬 </h1>
             <p class="subtitle">Digite a chave de acesso para entrar</p>
             <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
             <button onclick="verifyKey()">Entrar</button>
@@ -309,7 +309,7 @@
 
         <!-- Notificação de Live -->
         <div class="live-notification">
-            <h2>O QUE ESTÁ PASSANDO AGORA</h2>
+            <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
             <div class="player" id="live-player"></div>
         </div>
     </div>
@@ -361,7 +361,7 @@
                         <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                     </video>
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                        <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
+                        <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
                     </div>
                 `;
                 const offlineVideo = document.getElementById('offline-video');
@@ -381,7 +381,7 @@
                             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                         </video>
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                            <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
+                            <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
                         </div>
                     `;
                     const offlineVideo = document.getElementById('offline-video');
@@ -446,7 +446,7 @@
                 document.getElementById('player-container').style.display = 'flex';
 
                 const welcomeMessage = document.createElement('div');
-                welcomeMessage.textContent = "Bem-vindo ao streaming!";
+                welcomeMessage.textContent = "Seja Bem vindo!!!";
                 welcomeMessage.style.position = "absolute";
                 welcomeMessage.style.top = "20px";
                 welcomeMessage.style.left = "50%";
@@ -461,7 +461,7 @@
 
                 setTimeout(() => {
                     welcomeMessage.remove();
-                }, 3000);
+                }, 6000);
 
                 createTwitchPlayer();
             } else {
