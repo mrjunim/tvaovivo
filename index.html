@@ -274,7 +274,7 @@
                 });
                 playerElement.dispatchEvent(clickEvent);
 
-                // Esperar o carregamento para remover os elementos
+                // Esperar o carregamento para remover os elementos indesejados
                 const removeUnwantedElements = () => {
                     // Remover o link do canal
                     const channelLink = playerElement.contentDocument.querySelector('a[data-test-selector="stream-info-card-component__title-link"]');
@@ -447,8 +447,8 @@
             .then(data => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data.contents, 'text/html');
-                const titleElement = doc.querySelector('meta[property="og:title"]');
-                const title = titleElement ? titleElement.getAttribute('content') : 'Título não encontrado';
+                const titleElement = doc.querySelector('h2[data-a-target="stream-title"]');
+                const title = titleElement ? titleElement.textContent : 'Título não encontrado';
                 document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
             })
             .catch(error => {
