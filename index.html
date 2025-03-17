@@ -349,15 +349,12 @@
                 height: "180",
                 width: "320",
                 muted: true,
-                autoplay: true,
-                parent: ["mrjunim.github.io/tvaovivo/"]
+                parent: ["localhost"]
             });
 
             // Função para reiniciar o player a cada 30 segundos
             function reloadLivePlayer() {
-                livePlayer.pause();
                 livePlayer.seek(0);
-                livePlayer.play();
             }
 
             // Recarregue o player a cada 30 segundos
