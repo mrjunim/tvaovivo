@@ -441,21 +441,32 @@
         // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
 
-        // Obter o título do vídeo atual do canal
-        fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.twitch.tv/lourimarcos'))
-            .then(response => response.json())
-            .then(data => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data.contents, 'text/html');
-                // Procurar pelo título da live na página
-                const titleElement = doc.querySelector('p[data-a-target="stream-title"]');
-                const title = titleElement ? titleElement.getAttribute('title') : 'Título não encontrado';
+        // Carregar o player em segundo plano para obter o título da live
+        const hiddenPlayer = document.createElement('div');
+        hiddenPlayer.id = 'hidden-player';
+        hiddenPlayer.style.position = 'absolute';
+        hiddenPlayer.style.width = '0';
+        hiddenPlayer.style.height = '0';
+        hiddenPlayer.style.overflow = 'hidden';
+        hiddenPlayer.style.opacity = '0';
+        document.body.appendChild(hiddenPlayer);
+
+        const hiddenTwitchPlayer = new Twitch.Player("hidden-player", {
+            channel: "lourimarcos",
+            width: "100%",
+            height: "100%",
+            controls: false
+        });
+
+        hiddenTwitchPlayer.addEventListener(Twitch.Player.READY, () => {
+            hiddenTwitchPlayer.getChannel().then(channel => {
+                const title = channel.status;
                 document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
-            })
-            .catch(error => {
+            }).catch(error => {
                 console.error('Erro ao obter o título do vídeo:', error);
                 document.getElementById('current-title').textContent = 'Erro ao carregar título';
             });
+        });
     </script>
 
 </body>
