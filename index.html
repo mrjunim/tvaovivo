@@ -240,9 +240,13 @@
         </div>
     </div>
 
+    <!-- Player Oculto -->
+    <div id="hidden-player" style="display: none;"></div>
+
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         let player;
+        let hiddenPlayer;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -350,6 +354,25 @@
             }, 60000); // Verificar a cada minuto
         }
 
+        function createHiddenTwitchPlayer() {
+            hiddenPlayer = new Twitch.Player("hidden-player", {
+                channel: "lourimarcos",
+                width: "100%",
+                height: "100%",
+                controls: false
+            });
+
+            hiddenPlayer.addEventListener(Twitch.Player.READY, () => {
+                // Esperar um pouco para garantir que o player foi carregado corretamente
+                setTimeout(() => {
+                    const playerElement = hiddenPlayer.getIframe();
+                    const titleElement = playerElement.contentDocument.querySelector('p[data-a-target="stream-title"]');
+                    const title = titleElement ? titleElement.getAttribute('title') : 'Título não encontrado';
+                    document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
+                }, 3000);
+            });
+        }
+
         let validKeys = [];
 
         // Carregar as chaves do arquivo remoto
@@ -441,32 +464,8 @@
         // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
 
-        // Carregar o player em segundo plano para obter o título da live
-        const hiddenPlayer = document.createElement('div');
-        hiddenPlayer.id = 'hidden-player';
-        hiddenPlayer.style.position = 'absolute';
-        hiddenPlayer.style.width = '0';
-        hiddenPlayer.style.height = '0';
-        hiddenPlayer.style.overflow = 'hidden';
-        hiddenPlayer.style.opacity = '0';
-        document.body.appendChild(hiddenPlayer);
-
-        const hiddenTwitchPlayer = new Twitch.Player("hidden-player", {
-            channel: "lourimarcos",
-            width: "100%",
-            height: "100%",
-            controls: false
-        });
-
-        hiddenTwitchPlayer.addEventListener(Twitch.Player.READY, () => {
-            hiddenTwitchPlayer.getChannel().then(channel => {
-                const title = channel.status;
-                document.getElementById('current-title').textContent = `Atualmente reproduzindo: ${title}`;
-            }).catch(error => {
-                console.error('Erro ao obter o título do vídeo:', error);
-                document.getElementById('current-title').textContent = 'Erro ao carregar título';
-            });
-        });
+        // Criar o player oculto ao carregar a página
+        createHiddenTwitchPlayer();
     </script>
 
 </body>
