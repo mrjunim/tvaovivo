@@ -42,6 +42,9 @@
             max-width: 400px;
             animation: fadeIn 1s ease-in-out;
             z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
@@ -144,7 +147,6 @@
             border: none;
         }
 
-        /* Ocultar o nome "twitch" e o nome do canal */
         .twitch-player iframe {
             position: relative;
         }
@@ -160,7 +162,6 @@
             pointer-events: none;
         }
 
-        /* Estilos adicionais para esconder todos os controles exceto volume e tela cheia */
         .player .player-controls__button {
             display: none !important;
         }
@@ -215,9 +216,7 @@
 
         /* Notificação de Live */
         .live-notification {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+            margin-top: 20px;
             background: rgba(20, 20, 20, 0.9);
             padding: 20px;
             border-radius: 12px;
@@ -255,12 +254,11 @@
         <button onclick="verifyKey()">Entrar</button>
         <div class="error-message" id="error-message" role="alert"></div>
         <p class="whatsapp-info">Para conseguir uma chave, solicite via WhatsApp: <strong>64 9 9671-8993</strong></p>
-    </div>
-
-    <!-- Notificação de Live -->
-    <div class="live-notification">
-        <h2>O QUE ESTÁ PASSANDO AGORA</h2>
-        <div class="player" id="live-player"></div>
+        <!-- Notificação de Live -->
+        <div class="live-notification">
+            <h2>O QUE ESTÁ PASSANDO AGORA</h2>
+            <div class="player" id="live-player"></div>
+        </div>
     </div>
 
     <!-- Player -->
@@ -294,10 +292,8 @@
                 player.setVolume(1.0); // Volume em 100%
                 player.setMuted(false); // Desmutar o som
 
-                // Tentar iniciar a reprodução automaticamente
                 player.play();
 
-                // Simular clique para ativar o áudio em dispositivos móveis
                 const playerElement = player.getIframe();
                 const clickEvent = new MouseEvent('click', {
                     view: window,
@@ -305,44 +301,8 @@
                     cancelable: true
                 });
                 playerElement.dispatchEvent(clickEvent);
-
-                // Esperar o carregamento para remover os elementos indesejados
-                const removeUnwantedElements = () => {
-                    // Remover o link do canal
-                    const channelLink = playerElement.contentDocument.querySelector('a[data-test-selector="stream-info-card-component__title-link"]');
-                    if (channelLink) {
-                        channelLink.remove();
-                    }
-
-                    // Remover o botão "Assista na Twitch"
-                    const watchOnTwitchButton = playerElement.contentDocument.querySelector('div[aria-describedby]');
-                    if (watchOnTwitchButton) {
-                        watchOnTwitchButton.remove();
-                    }
-
-                    // Ocultar controles adicionais, exceto volume e tela cheia
-                    const controls = playerElement.contentDocument.querySelectorAll('.player-controls__button');
-                    controls.forEach(control => {
-                        if (!control.classList.contains('player-controls__volume-button') &&
-                            !control.classList.contains('player-controls__fullscreen-button')) {
-                            control.style.display = 'none';
-                        } else {
-                            control.style.display = 'block';
-                        }
-                    });
-                };
-
-                // Tentar remover os elementos indesejados repetidas vezes até que sejam encontrados
-                const intervalId = setInterval(() => {
-                    removeUnwantedElements();
-                    if (!playerElement.contentDocument.querySelector('a[data-test-selector="stream-info-card-component__title-link"]') &&
-                        !playerElement.contentDocument.querySelector('div[aria-describedby]')) {
-                        clearInterval(intervalId);
-                    }
-                }, 1000); // Tentar a cada segundo
             });
 
-            // Verificar se o canal está offline e substituir o vídeo
             player.addEventListener(Twitch.Player.OFFLINE, () => {
                 document.getElementById('player-container').innerHTML = ` 
                     <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
@@ -352,13 +312,11 @@
                         <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
                     </div>
                 `;
-                // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
                 const offlineVideo = document.getElementById('offline-video');
                 offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
                 playVideo(offlineVideo);
             });
 
-            // Verificar o status do canal periodicamente
             setInterval(() => {
                 if (player.isLive()) {
                     document.getElementById('player-container').innerHTML = `
@@ -374,7 +332,6 @@
                             <p>ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢</p>
                         </div>
                     `;
-                    // Adicionar evento de toque para iniciar a reprodução do vídeo offline em dispositivos móveis
                     const offlineVideo = document.getElementById('offline-video');
                     offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
                     playVideo(offlineVideo);
@@ -384,30 +341,28 @@
 
         function createLiveNotificationPlayer() {
             const livePlayerContainer = document.getElementById("live-player");
-            const livePlayer = document.createElement("iframe");
-            livePlayer.src = "https://player.twitch.tv/?channel=lourimarcos&parent=mrjunim.github.io/tvaovivo/";
-            livePlayer.width = "320";
-            livePlayer.height = "180";
-            livePlayer.frameBorder = "0";
-            livePlayer.allowFullscreen = true;
-            livePlayer.muted = true;
-            livePlayerContainer.appendChild(livePlayer);
-
-            // Recarregar o vídeo a cada 30 segundos para simular um loop
+            livePlayerContainer.innerHTML = `
+                <iframe
+                    src="https://player.twitch.tv/?channel=lourimarcos&parent=mrjunim.github.io/tvaovivo/"
+                    height="180"
+                    width="320"
+                    frameborder="0"
+                    scrolling="no"
+                    allowfullscreen="true">
+                </iframe>
+            `;
             setInterval(() => {
-                livePlayer.src = livePlayer.src;
+                livePlayerContainer.innerHTML = livePlayerContainer.innerHTML;
             }, 30000);
         }
 
         let validKeys = [];
 
-        // Carregar as chaves do arquivo remoto
         fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
             .then(response => response.text())
             .then(data => {
-                // Dividir o texto em chaves
                 validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
-                console.log('Chaves carregadas:', validKeys); // Para depuração
+                console.log('Chaves carregadas:', validKeys);
             })
             .catch(error => {
                 console.error('Erro ao carregar as chaves:', error);
@@ -417,19 +372,15 @@
             const keyInput = document.getElementById('key-input').value;
             const errorMessage = document.getElementById('error-message');
 
-            // Verifica se a chave tem 25 caracteres
             if (keyInput.length !== 25) {
                 errorMessage.textContent = "A chave deve ter 25 caracteres.";
                 return;
             }
 
-            // Verifica se a chave está na lista
             if (validKeys.includes(keyInput)) {
-                // Se a chave for válida, exibe o player e cria o jogador do Twitch
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('player-container').style.display = 'flex';
 
-                // Adicionar mensagem de boas-vindas
                 const welcomeMessage = document.createElement('div');
                 welcomeMessage.textContent = "Bem-vindo ao streaming!";
                 welcomeMessage.style.position = "absolute";
@@ -444,19 +395,16 @@
                 welcomeMessage.style.zIndex = "2";
                 document.body.appendChild(welcomeMessage);
 
-                // Remover mensagem de boas-vindas após 3 segundos
                 setTimeout(() => {
                     welcomeMessage.remove();
                 }, 3000);
 
                 createTwitchPlayer();
             } else {
-                // Se a chave não for válida, exibe erro
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
 
-        // Bloquear F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U e botão direito do mouse
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F12' || 
                 (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
@@ -467,14 +415,12 @@
             }
         });
 
-        // Bloquear o botão direito do mouse
         document.addEventListener('contextmenu', function(event) {
             alert("isso não é permitido 😢");
             event.preventDefault();
             return false;
         });
 
-        // Proteção adicional contra inspeção de elementos
         setInterval(function () {
             (function () {
                 function logNop() { alert("isso não é permitido 😢"); return false; }
@@ -487,10 +433,8 @@
             })();
         }, 1000);
 
-        // Reproduzir o vídeo de fundo em dispositivos móveis
         playVideo(document.getElementById('background-video'));
 
-        // Criar o player de notificação ao carregar a página
         createLiveNotificationPlayer();
     </script>
 
