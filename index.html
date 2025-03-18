@@ -176,37 +176,14 @@
             border-radius: 0;
         }
 
-        #player-container iframe {
+        #player-container video {
             width: 100%;
             height: 100%;
             border: none;
             position: absolute;
             top: 0;
             left: 0;
-        }
-
-        .twitch-player iframe {
-            position: relative;
-        }
-
-        .twitch-player iframe::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: none;
-            pointer-events: none;
-        }
-
-        .player .player-controls__button {
-            display: none !important;
-        }
-
-        .player .player-controls__volume-button,
-        .player .player-controls__fullscreen-button {
-            display: block !important;
+            object-fit: cover;
         }
 
         /* Modal Estilo */
@@ -354,6 +331,7 @@
             <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
             <button onclick="verifyKey()">Entrar</button>
             <div class="error-message" id="error-message" role="alert"></div>
+            <p class="whatsapp-info">Para conseguir uma chave, solicite via WhatsApp: <strong>64 9 9671-8993</strong></p>
             <button onclick="openModal()">CRIAR CHAVE AGORA</button>
         </div>
 
@@ -366,8 +344,11 @@
 
     <!-- Player -->
     <div id="player-container">
-        <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
+        <div class="player" id="player">
+            <video id="main-video" controls autoplay muted>
+                <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                Seu navegador não suporta o elemento de vídeo.
+            </video>
         </div>
     </div>
 
@@ -377,9 +358,8 @@
             <span class="close" onclick="closeModal()">&times;</span>
             <h2>Adquirir Chave para Acesso</h2>
             <p>Para obter uma chave, preencha seu nome e telefone abaixo.</p>
-            <p><strong>Valor Simbólico da chave: R$ 2,00</strong></p>
+            <p><strong>Valor da chave: R$ 2,00</strong></p>
             <p>Faça um Pix para: <strong>lourimarcos@outlook.com</strong></p>
-            <p>uma Chave tem duração de <strong>15 Dias</strong></p>
             <p>Após o pagamento, envie o comprovante para o WhatsApp.</p>
             <input type="text" id="user-name" placeholder="Seu Nome" />
             <input type="text" id="user-phone" placeholder="Seu Telefone" />
@@ -399,32 +379,14 @@
         }
 
         function createTwitchPlayer() {
-            player = new Twitch.Player("twitch-embed", {
-                channel: "lourimarcos",
-                width: "100%",
-                height: "100%",
-                controls: true,
-                autoplay: true,
-                muted: false,
-                parent: ["localhost"]
-            });
+            const mainVideo = document.getElementById('main-video');
+            mainVideo.src = "https://www.twitch.tv/lourimarcos";
+            mainVideo.load();
+            mainVideo.play();
 
-            player.addEventListener(Twitch.Player.READY, () => {
-                player.setVolume(1.0); // Volume em 100%
-                player.setMuted(false);
-                player.play();
-                const playerElement = player.getIframe();
-                const clickEvent = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true
-                });
-                playerElement.dispatchEvent(clickEvent);
-            });
-
-            player.addEventListener(Twitch.Player.OFFLINE, () => {
+            mainVideo.addEventListener('error', () => {
                 document.getElementById('player-container').innerHTML = ` 
-                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
                         <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                     </video>
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
@@ -437,14 +399,9 @@
             });
 
             setInterval(() => {
-                if (player.isLive()) {
+                if (mainVideo.networkState === mainVideo.NETWORK_NO_SOURCE) {
                     document.getElementById('player-container').innerHTML = `
-                        <div id="twitch-embed"></div>
-                    `;
-                    createTwitchPlayer();
-                } else {
-                    document.getElementById('player-container').innerHTML = `
-                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
                             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                         </video>
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
