@@ -23,20 +23,36 @@
     #guide-container {
       width: 100%;
       overflow: hidden;
-      white-space: nowrap;
-      background: #222; /* tema de fundo - altere conforme necessário */
+      background: #222;
       color: #fff;
       padding: 8px 0;
       margin-bottom: 15px;
+      position: relative;
     }
-    #guide-container span {
+    #guide-text {
       display: inline-block;
+      white-space: nowrap;
       padding-left: 100%;
-      animation: scroll-text 25s linear infinite;
+      /* Diminua a duration para aumentar a velocidade */
+      animation: scroll-text 30s linear infinite;
+      -webkit-animation: scroll-text 30s linear infinite;
     }
     @keyframes scroll-text {
       0% { transform: translateX(0); }
       100% { transform: translateX(-100%); }
+    }
+    @-webkit-keyframes scroll-text {
+      0% { -webkit-transform: translateX(0); }
+      100% { -webkit-transform: translateX(-100%); }
+    }
+    
+    /* Ajuste para dispositivos móveis se necessário */
+    @media (max-width: 480px) {
+      #guide-text {
+        /* Se desejar uma velocidade diferente em mobile, ajuste a duração aqui */
+        animation-duration: 25s;
+        -webkit-animation-duration: 25s;
+      }
     }
 
     .container {
@@ -220,7 +236,7 @@
       pointer-events: none;
     }
 
-    /* Esconde botões nativos, exceto fullscreen (o volume será custom) */
+    /* Esconde botões nativos, exceto fullscreen */
     .player .player-controls__button {
       display: none !important;
     }
@@ -242,7 +258,7 @@
       border-radius: 8px;
     }
 
-    /* Modal Estilo - mais elegante e profissional */
+    /* Modal Estilo */
     .modal {
       display: none;
       position: fixed;
@@ -352,7 +368,6 @@
         height: auto;
       }
     }
-
     @media (max-width: 480px) {
       .login-container,
       .live-notification {
@@ -462,7 +477,6 @@
       volumeControl.value = playerInstance.getVolume();
       volumeControl.id = 'volume-control';
 
-      // Aplica os estilos definidos via CSS
       volumeControl.style.position = 'absolute';
       volumeControl.style.bottom = '20px';
       volumeControl.style.left = '20px';
@@ -474,7 +488,6 @@
       volumeControl.style.border = 'none';
       volumeControl.style.borderRadius = '8px';
 
-      // Adiciona o controle dentro do contêiner do player (div#player)
       const playerContainer = document.getElementById('player');
       const existingControl = document.getElementById('volume-control');
       if (existingControl) {
@@ -482,7 +495,6 @@
       }
       playerContainer.appendChild(volumeControl);
 
-      // Atualiza o volume quando o controle é ajustado
       volumeControl.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         playerInstance.setVolume(val);
@@ -494,7 +506,7 @@
         channel: "lourimarcos",
         width: "100%",
         height: "100%",
-        controls: false, // Remove os controles nativos
+        controls: false,
         autoplay: true,
         muted: false,
         parent: ["localhost"]
@@ -508,7 +520,6 @@
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
-        // Apenas cria o controle de volume se o dispositivo for móvel
         if (/Mobi|Android/i.test(navigator.userAgent)) {
           createVolumeControl(player);
         }
@@ -568,7 +579,7 @@
       }
       setInterval(reloadLivePlayer, 30000);
     }
-    
+
     // Carrega guia de programação do arquivo de texto
     fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
       .then(response => response.text())
