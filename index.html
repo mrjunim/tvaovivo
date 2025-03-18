@@ -200,7 +200,7 @@
       pointer-events: none;
     }
 
-    /* Esconde botões nativos, exceto fullscreen (já que control de volume será custom) */
+    /* Esconde botões nativos, exceto fullscreen (o volume será custom) */
     .player .player-controls__button {
       display: none !important;
     }
@@ -378,7 +378,7 @@
       <p>Para obter uma chave, preencha seu nome e telefone abaixo.</p>
       <p><strong>Valor Simbólico da chave: R$ 2,00</strong></p>
       <p>Faça um Pix para: <strong>lourimarcos@outlook.com</strong></p>
-      <p>uma Chave tem duração de <strong>15 Dias</strong></p>
+      <p>Uma chave tem duração de <strong>15 Dias</strong></p>
       <p>Após o pagamento, envie o comprovante para o WhatsApp.</p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
       <input type="text" id="user-phone" placeholder="Seu Telefone" />
@@ -403,21 +403,22 @@
       volumeControl.min = 0;
       volumeControl.max = 1;
       volumeControl.step = 0.01;
-      volumeControl.value = playerInstance.getVolume(); // volume atual
+      volumeControl.value = playerInstance.getVolume();
       volumeControl.id = 'volume-control';
       volumeControl.style.position = 'absolute';
       volumeControl.style.bottom = '10px';
       volumeControl.style.right = '10px';
       volumeControl.style.width = '100px';
       volumeControl.style.opacity = '0.8';
-      volumeControl.style.zIndex = '10';
+      volumeControl.style.zIndex = '1000';
       volumeControl.style.pointerEvents = 'auto';
-      volumeControl.style.background = 'transparent';
-      volumeControl.style.cursor = 'pointer';
+      volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
+      volumeControl.style.border = 'none';
+      volumeControl.style.borderRadius = '4px';
 
-      // Adiciona o controle ao contêiner do player
-      const playerContainer = document.getElementById('player-container');
-      // Remove eventual volume control duplicado
+      // Adiciona o controle dentro do contêiner do player (div#player)
+      const playerContainer = document.getElementById('player');
+      // Remove eventual controle duplicado
       const existingControl = document.getElementById('volume-control');
       if (existingControl) {
         existingControl.parentNode.removeChild(existingControl);
@@ -442,9 +443,10 @@
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
-        player.setVolume(1.0); // Volume em 100%
+        player.setVolume(1.0);
         player.setMuted(false);
         player.play();
+        // Simula um clique para garantir a reprodução em alguns browsers
         const playerElement = player.getIframe();
         const clickEvent = new MouseEvent('click', {
           view: window,
@@ -452,8 +454,7 @@
           cancelable: true
         });
         playerElement.dispatchEvent(clickEvent);
-
-        // Cria o controle de volume customizado
+        // Cria o controle de volume customizado dentro do contêiner "player"
         createVolumeControl(player);
       });
 
@@ -473,9 +474,7 @@
 
       setInterval(() => {
         if (player.isLive()) {
-          document.getElementById('player-container').innerHTML = `
-            <div id="twitch-embed"></div>
-          `;
+          document.getElementById('player-container').innerHTML = `<div id="twitch-embed"></div>`;
           createTwitchPlayer();
         } else {
           document.getElementById('player-container').innerHTML = `
