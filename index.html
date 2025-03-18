@@ -135,7 +135,7 @@
     .live-notification .player {
       width: 100%;
       height: 0;
-      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+      padding-bottom: 56.25%;
       position: relative;
       border-radius: 8px;
       overflow: hidden;
@@ -222,7 +222,24 @@
       border-radius: 8px;
     }
 
-    /* Modal Estilo */
+    /* Estilo para o overlay de som (dispositivos móveis) */
+    #sound-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 1.5em;
+      z-index: 1100;
+      cursor: pointer;
+    }
+
+    /* Modal Estilo - mais elegante e profissional */
     .modal {
       display: none;
       position: fixed;
@@ -230,60 +247,89 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.7);
       justify-content: center;
       align-items: center;
-      z-index: 4;
+      z-index: 9999;
     }
 
     .modal-content {
-      background: linear-gradient(135deg, #1a1a1a, #333);
-      padding: 20px;
+      background: #fff;
+      color: #333;
+      padding: 30px 40px;
       border-radius: 12px;
-      text-align: center;
-      max-width: 400px;
+      max-width: 450px;
       width: 90%;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
       position: relative;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .modal-content h2 {
       margin-top: 0;
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #e50914;
+    }
+
+    .modal-content p {
+      font-size: 1em;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 12px 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 6px;
+      background: #e50914;
+      color: #fff;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .modal-content button:hover {
+      background: #c1070a;
     }
 
     .close {
       position: absolute;
       top: 10px;
       right: 15px;
-      font-size: 20px;
+      font-size: 26px;
+      color: #999;
       cursor: pointer;
-      color: white;
+      transition: color 0.3s ease;
+    }
+
+    .close:hover {
+      color: #333;
     }
 
     /* Animações */
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes shake {
-      0%, 100% {
-        transform: translateX(0);
-      }
-      25% {
-        transform: translateX(-5px);
-      }
-      50% {
-        transform: translateX(5px);
-      }
-      75% {
-        transform: translateX(-5px);
-      }
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
     }
 
     /* Responsividade */
@@ -294,13 +340,11 @@
         align-items: center;
         gap: 20px;
       }
-
       .login-container,
       .live-notification {
         width: 100%;
         max-width: 100%;
       }
-
       .player {
         height: auto;
       }
@@ -312,39 +356,31 @@
         padding: 10px;
         width: 100%;
       }
-
       h1 {
         font-size: 1.2em;
         margin-bottom: 10px;
       }
-
       .subtitle {
         font-size: 0.8em;
         margin-bottom: 10px;
       }
-
       input {
         padding: 8px;
         font-size: 0.8em;
       }
-
       button {
         padding: 8px;
         font-size: 0.8em;
       }
-
       .error-message {
         font-size: 0.7em;
       }
-
       .whatsapp-info {
         font-size: 0.7em;
       }
-
       .player {
         height: auto;
       }
-
       .live-notification h2 {
         font-size: 1em;
       }
@@ -389,11 +425,9 @@
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2>Adquirir Chave para Acesso</h2>
-      <p>Para obter uma chave, preencha seu nome e telefone abaixo.</p>
-      <p><strong>Valor Simbólico da chave: R$ 2,00</strong></p>
-      <p>Faça um Pix para: <strong>lourimarcos@outlook.com</strong></p>
-      <p>Uma chave tem duração de <strong>15 Dias</strong></p>
-      <p>Após o pagamento, envie o comprovante para o WhatsApp.</p>
+      <p>Preencha seu nome e telefone para adquirir sua chave de acesso. Após o pagamento, envie o comprovante pelo WhatsApp.</p>
+      <p><strong>Valor Simbólico: R$ 2,00</strong></p>
+      <p><strong>Pix: lourimarcos@outlook.com</strong></p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
       <input type="text" id="user-phone" placeholder="Seu Telefone" />
       <button onclick="sendToWhatsApp()">Enviar</button>
@@ -411,7 +445,7 @@
       });
     }
 
-    // Cria o controle de volume apenas se o dispositivo for móvel
+    // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
@@ -448,6 +482,21 @@
       });
     }
 
+    // Cria um overlay de "Toque para restaurar o som" para dispositivos móveis
+    function createSoundOverlay(playerInstance) {
+      const overlay = document.createElement('div');
+      overlay.id = 'sound-overlay';
+      overlay.textContent = 'Toque para restaurar o som';
+      overlay.addEventListener('click', function() {
+        playerInstance.setMuted(false);
+        // Remove o overlay após o clique
+        overlay.style.display = 'none';
+      });
+      // Adiciona o overlay dentro do contêiner do player.
+      const playerContainer = document.getElementById('player');
+      playerContainer.appendChild(overlay);
+    }
+
     function createTwitchPlayer() {
       player = new Twitch.Player("twitch-embed", {
         channel: "lourimarcos",
@@ -455,20 +504,21 @@
         height: "100%",
         controls: false, // Remove os controles nativos
         autoplay: true,
-        muted: false,
+        muted: true, // Inicialmente mutado para garantir a interação do usuário
         parent: ["localhost"]
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
+        // Mantenha o player mutado até o usuário tocar
         player.setVolume(1.0);
-        player.setMuted(false);
         player.play();
         const playerElement = player.getIframe();
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
-        // Apenas cria o controle de volume se o dispositivo for móvel
+        // Se for um dispositivo móvel, cria o overlay para restaurar o som
         if (/Mobi|Android/i.test(navigator.userAgent)) {
+          createSoundOverlay(player);
           createVolumeControl(player);
         }
       });
