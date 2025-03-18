@@ -200,6 +200,7 @@
             pointer-events: none;
         }
 
+        /* Esconde botões nativos exceto volume e fullscreen */
         .player .player-controls__button {
             display: none !important;
         }
@@ -398,12 +399,41 @@
             });
         }
 
+        function createVolumeControl(playerInstance) {
+            const volumeControl = document.createElement('input');
+            volumeControl.type = 'range';
+            volumeControl.min = 0;
+            volumeControl.max = 1;
+            volumeControl.step = 0.01;
+            volumeControl.value = playerInstance.getVolume(); // volume atual
+            volumeControl.style.position = 'absolute';
+            volumeControl.style.bottom = '10px';
+            volumeControl.style.right = '10px';
+            volumeControl.style.width = '100px';
+            volumeControl.style.opacity = '0.7';
+            volumeControl.style.zIndex = '5';
+            volumeControl.style.background = 'transparent';
+            volumeControl.style.cursor = 'pointer';
+
+            volumeControl.addEventListener('input', (e) => {
+                let val = parseFloat(e.target.value);
+                playerInstance.setVolume(val);
+            });
+
+            const playerContainer = document.getElementById('player');
+            // Evita duplicar o controle se já existir
+            if(!document.getElementById('volume-control')) {
+                volumeControl.id = 'volume-control';
+                playerContainer.appendChild(volumeControl);
+            }
+        }
+
         function createTwitchPlayer() {
             player = new Twitch.Player("twitch-embed", {
                 channel: "lourimarcos",
                 width: "100%",
                 height: "100%",
-                controls: true,
+                controls: false, // Removendo os controles nativos
                 autoplay: true,
                 muted: false,
                 parent: ["localhost"]
@@ -420,6 +450,8 @@
                     cancelable: true
                 });
                 playerElement.dispatchEvent(clickEvent);
+                // Cria o controle de volume customizado
+                createVolumeControl(player);
             });
 
             player.addEventListener(Twitch.Player.OFFLINE, () => {
