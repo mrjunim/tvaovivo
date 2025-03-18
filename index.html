@@ -411,6 +411,7 @@
       });
     }
 
+    // Cria o controle de volume apenas se o dispositivo for móvel
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
@@ -420,7 +421,7 @@
       volumeControl.value = playerInstance.getVolume();
       volumeControl.id = 'volume-control';
 
-      // Aplica os estilos definidos via CSS e garante que o controle esteja posicionado corretamente
+      // Aplica os estilos definidos via CSS
       volumeControl.style.position = 'absolute';
       volumeControl.style.bottom = '20px';
       volumeControl.style.left = '20px';
@@ -466,8 +467,10 @@
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
-        // Cria o controle de volume customizado
-        createVolumeControl(player);
+        // Apenas cria o controle de volume se o dispositivo for móvel
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+          createVolumeControl(player);
+        }
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
