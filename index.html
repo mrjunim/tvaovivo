@@ -200,13 +200,19 @@
             pointer-events: none;
         }
 
-        .player .player-controls__button {
-            display: none !important;
-        }
-
-        .player .player-controls__volume-button,
-        .player .player-controls__fullscreen-button {
-            display: block !important;
+        /* Botão de Volume customizado */
+        #volume-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 5px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            cursor: pointer;
+            z-index: 5;
+            font-size: 18px;
         }
 
         /* Modal Estilo */
@@ -403,16 +409,19 @@
                 channel: "lourimarcos",
                 width: "100%",
                 height: "100%",
-                controls: true,
+                controls: false, // Oculta os controles nativos
                 autoplay: true,
                 muted: false,
                 parent: ["localhost"]
             });
 
+            // Evento READY para configurar o player e criar o botão de volume
             player.addEventListener(Twitch.Player.READY, () => {
-                player.setVolume(1.0); // Volume em 100%
+                player.setVolume(1.0);
                 player.setMuted(false);
                 player.play();
+
+                // Dispara um clique no iframe para garantir a reprodução, se necessário
                 const playerElement = player.getIframe();
                 const clickEvent = new MouseEvent('click', {
                     view: window,
@@ -420,6 +429,23 @@
                     cancelable: true
                 });
                 playerElement.dispatchEvent(clickEvent);
+
+                // Adiciona o botão de volume se ainda não existir
+                if (!document.getElementById('volume-button')) {
+                    const volumeButton = document.createElement('button');
+                    volumeButton.id = 'volume-button';
+                    volumeButton.textContent = player.isMuted() ? '🔇' : '🔊';
+                    volumeButton.onclick = function() {
+                        if (player.isMuted()){
+                            player.setMuted(false);
+                            volumeButton.textContent = '🔊';
+                        } else {
+                            player.setMuted(true);
+                            volumeButton.textContent = '🔇';
+                        }
+                    }
+                    document.getElementById('player-container').appendChild(volumeButton);
+                }
             });
 
             player.addEventListener(Twitch.Player.OFFLINE, () => {
@@ -436,6 +462,7 @@
                 playVideo(offlineVideo);
             });
 
+            // Intervalo para verificar se o canal está online e atualizar o player
             setInterval(() => {
                 if (player.isLive()) {
                     document.getElementById('player-container').innerHTML = `
