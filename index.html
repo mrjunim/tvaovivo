@@ -18,7 +18,6 @@
       height: 100vh;
       overflow: hidden;
     }
-
     .container {
       display: flex;
       flex-direction: row;
@@ -30,7 +29,6 @@
       gap: 20px;
       z-index: 1;
     }
-
     .background-video {
       position: absolute;
       top: 0;
@@ -40,7 +38,6 @@
       object-fit: cover;
       z-index: -1;
     }
-
     .login-container,
     .live-notification {
       background: rgba(20, 20, 20, 0.8);
@@ -54,27 +51,18 @@
       flex-direction: column;
       align-items: center;
     }
-
-    .login-container {
-      max-width: 300px;
-    }
-
-    .live-notification {
-      max-width: 630px;
-    }
-
+    .login-container { max-width: 300px; }
+    .live-notification { max-width: 630px; }
     h1 {
       font-size: 1.8em;
       margin-bottom: 20px;
       color: #f1f1f1;
     }
-
     .subtitle {
       margin-bottom: 20px;
       color: #bbb;
       font-size: 1em;
     }
-
     input {
       width: 100%;
       padding: 12px;
@@ -86,7 +74,6 @@
       font-size: 1em;
       outline: none;
     }
-
     button {
       width: 100%;
       padding: 12px;
@@ -100,48 +87,34 @@
       cursor: pointer;
       transition: 0.3s;
     }
-
-    button:hover {
-      background: #b20710;
-    }
-
-    button:active {
-      transform: scale(0.95);
-    }
-
+    button:hover { background: #b20710; }
+    button:active { transform: scale(0.95); }
     .error-message {
       color: #ff3b3b;
       font-size: 0.9em;
       margin-top: 10px;
       animation: shake 0.3s;
     }
-
     .whatsapp-info {
       margin-top: 15px;
       font-size: 0.9em;
       color: #bbb;
     }
-
-    .whatsapp-info strong {
-      color: #1db954;
-    }
-
+    .whatsapp-info strong { color: #1db954; }
     .live-notification h2 {
       font-size: 1.2em;
       margin-bottom: 10px;
       color: #f1f1f1;
     }
-
     .live-notification .player {
       width: 100%;
       height: 0;
-      padding-bottom: 56.25%;
+      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
       position: relative;
       border-radius: 8px;
       overflow: hidden;
       pointer-events: none;
     }
-
     .live-notification .player iframe {
       position: absolute;
       top: 0;
@@ -150,7 +123,6 @@
       height: 100%;
       border: none;
     }
-
     /* Player */
     #player-container {
       display: none;
@@ -167,7 +139,6 @@
       left: 0;
       z-index: 2;
     }
-
     .player {
       width: 100%;
       height: 100%;
@@ -175,7 +146,6 @@
       overflow: hidden;
       border-radius: 0;
     }
-
     #player-container iframe {
       width: 100%;
       height: 100%;
@@ -184,11 +154,9 @@
       top: 0;
       left: 0;
     }
-
     .twitch-player iframe {
       position: relative;
     }
-
     .twitch-player iframe::before {
       content: '';
       position: absolute;
@@ -199,15 +167,9 @@
       background: none;
       pointer-events: none;
     }
-
     /* Esconde botões nativos, exceto fullscreen (o volume será custom) */
-    .player .player-controls__button {
-      display: none !important;
-    }
-    .player .player-controls__fullscreen-button {
-      display: block !important;
-    }
-
+    .player .player-controls__button { display: none !important; }
+    .player .player-controls__fullscreen-button { display: block !important; }
     /* Estilo para o controle de volume */
     #volume-control {
       position: absolute;
@@ -221,8 +183,7 @@
       border: none;
       border-radius: 8px;
     }
-
-    /* Estilo para o overlay de som (dispositivos móveis) */
+    /* Overlay para "toque para ativar o áudio" */
     #sound-overlay {
       position: absolute;
       top: 0;
@@ -238,7 +199,6 @@
       z-index: 1100;
       cursor: pointer;
     }
-
     /* Modal Estilo - mais elegante e profissional */
     .modal {
       display: none;
@@ -252,7 +212,6 @@
       align-items: center;
       z-index: 9999;
     }
-
     .modal-content {
       background: #fff;
       color: #333;
@@ -264,20 +223,17 @@
       position: relative;
       animation: fadeIn 0.5s ease-out;
     }
-
     .modal-content h2 {
       margin-top: 0;
       font-size: 1.8em;
       font-weight: bold;
       color: #e50914;
     }
-
     .modal-content p {
       font-size: 1em;
       line-height: 1.5;
       margin-bottom: 15px;
     }
-
     .modal-content input {
       width: 100%;
       padding: 12px 10px;
@@ -286,7 +242,6 @@
       border-radius: 6px;
       font-size: 1em;
     }
-
     .modal-content button {
       width: 100%;
       padding: 12px;
@@ -300,11 +255,7 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-
-    .modal-content button:hover {
-      background: #c1070a;
-    }
-
+    .modal-content button:hover { background: #c1070a; }
     .close {
       position: absolute;
       top: 10px;
@@ -314,24 +265,18 @@
       cursor: pointer;
       transition: color 0.3s ease;
     }
-
-    .close:hover {
-      color: #333;
-    }
-
+    .close:hover { color: #333; }
     /* Animações */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-5px); }
       50% { transform: translateX(5px); }
       75% { transform: translateX(-5px); }
     }
-
     /* Responsividade */
     @media (max-width: 768px) {
       .container {
@@ -341,49 +286,23 @@
         gap: 20px;
       }
       .login-container,
-      .live-notification {
-        width: 100%;
-        max-width: 100%;
-      }
-      .player {
-        height: auto;
-      }
+      .live-notification { width: 100%; max-width: 100%; }
+      .player { height: auto; }
     }
-
     @media (max-width: 480px) {
       .login-container,
       .live-notification {
         padding: 10px;
         width: 100%;
       }
-      h1 {
-        font-size: 1.2em;
-        margin-bottom: 10px;
-      }
-      .subtitle {
-        font-size: 0.8em;
-        margin-bottom: 10px;
-      }
-      input {
-        padding: 8px;
-        font-size: 0.8em;
-      }
-      button {
-        padding: 8px;
-        font-size: 0.8em;
-      }
-      .error-message {
-        font-size: 0.7em;
-      }
-      .whatsapp-info {
-        font-size: 0.7em;
-      }
-      .player {
-        height: auto;
-      }
-      .live-notification h2 {
-        font-size: 1em;
-      }
+      h1 { font-size: 1.2em; margin-bottom: 10px; }
+      .subtitle { font-size: 0.8em; margin-bottom: 10px; }
+      input { padding: 8px; font-size: 0.8em; }
+      button { padding: 8px; font-size: 0.8em; }
+      .error-message { font-size: 0.7em; }
+      .whatsapp-info { font-size: 0.7em; }
+      .player { height: auto; }
+      .live-notification h2 { font-size: 1em; }
     }
   </style>
 </head>
@@ -405,7 +324,6 @@
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">CRIAR CHAVE AGORA</button>
     </div>
-
     <!-- Notificação de Live -->
     <div class="live-notification">
       <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
@@ -445,7 +363,40 @@
       });
     }
 
-    // Cria o controle de volume apenas se o dispositivo for móvel.
+    // Toggle sound: if muted turn on sound; if sound is on, mute it.
+    function toggleSound() {
+      if (player.getMuted()) {
+        player.setMuted(false);
+      } else {
+        player.setMuted(true);
+      }
+    }
+
+    // Create overlay message displayed on mobile/initial load.
+    function createSoundOverlay(playerInstance) {
+      const overlay = document.createElement('div');
+      overlay.id = 'sound-overlay';
+      overlay.textContent = 'Toque para ativar o áudio';
+      
+      // When the overlay is clicked, toggle the sound and remove the overlay.
+      overlay.addEventListener('click', function() {
+        toggleSound();
+        overlay.style.display = 'none';
+      });
+      
+      // Append the overlay to the player container.
+      const playerContainer = document.getElementById('player');
+      playerContainer.appendChild(overlay);
+      
+      // Automatically remove the overlay after 6 seconds if still visible.
+      setTimeout(() => {
+        if (overlay && overlay.parentNode) {
+          overlay.style.display = 'none';
+        }
+      }, 6000);
+    }
+
+    // Create control to adjust volume (only added on mobile if needed).
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
@@ -455,7 +406,7 @@
       volumeControl.value = playerInstance.getVolume();
       volumeControl.id = 'volume-control';
 
-      // Aplica os estilos definidos via CSS
+      // Estilos definidos via CSS.
       volumeControl.style.position = 'absolute';
       volumeControl.style.bottom = '20px';
       volumeControl.style.left = '20px';
@@ -467,7 +418,6 @@
       volumeControl.style.border = 'none';
       volumeControl.style.borderRadius = '8px';
 
-      // Adiciona o controle dentro do contêiner do player (div#player)
       const playerContainer = document.getElementById('player');
       const existingControl = document.getElementById('volume-control');
       if (existingControl) {
@@ -475,26 +425,10 @@
       }
       playerContainer.appendChild(volumeControl);
 
-      // Atualiza o volume quando o controle é ajustado
       volumeControl.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         playerInstance.setVolume(val);
       });
-    }
-
-    // Cria um overlay de "Toque para restaurar o som" para dispositivos móveis
-    function createSoundOverlay(playerInstance) {
-      const overlay = document.createElement('div');
-      overlay.id = 'sound-overlay';
-      overlay.textContent = 'Toque para restaurar o som';
-      overlay.addEventListener('click', function() {
-        playerInstance.setMuted(false);
-        // Remove o overlay após o clique
-        overlay.style.display = 'none';
-      });
-      // Adiciona o overlay dentro do contêiner do player.
-      const playerContainer = document.getElementById('player');
-      playerContainer.appendChild(overlay);
     }
 
     function createTwitchPlayer() {
@@ -504,21 +438,26 @@
         height: "100%",
         controls: false, // Remove os controles nativos
         autoplay: true,
-        muted: true, // Inicialmente mutado para garantir a interação do usuário
+        muted: true, // Inicialmente mutado para garantir a interação
         parent: ["localhost"]
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
-        // Mantenha o player mutado até o usuário tocar
         player.setVolume(1.0);
         player.play();
         const playerElement = player.getIframe();
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
-        // Se for um dispositivo móvel, cria o overlay para restaurar o som
+        // Add a click listener on the player container to toggle sound on any click.
+        const playerContainer = document.getElementById('player');
+        playerContainer.addEventListener('click', toggleSound);
+
+        // Exiba o overlay "toque para ativar o áudio" para que o usuário ative o som.
+        createSoundOverlay(player);
+        
+        // (Optional) Crie o controle de volume para dispositivos móveis se necessário.
         if (/Mobi|Android/i.test(navigator.userAgent)) {
-          createSoundOverlay(player);
           createVolumeControl(player);
         }
       });
@@ -572,9 +511,7 @@
         const iframe = livePlayer.getIframe();
         iframe.style.pointerEvents = "none";
       });
-      function reloadLivePlayer() {
-        livePlayer.seek(0);
-      }
+      function reloadLivePlayer() { livePlayer.seek(0); }
       setInterval(reloadLivePlayer, 30000);
     }
 
@@ -586,23 +523,18 @@
         validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
         console.log('Chaves carregadas:', validKeys);
       })
-      .catch(error => {
-        console.error('Erro ao carregar as chaves:', error);
-      });
+      .catch(error => { console.error('Erro ao carregar as chaves:', error); });
 
     function verifyKey() {
       const keyInput = document.getElementById('key-input').value;
       const errorMessage = document.getElementById('error-message');
-
       if (keyInput.length !== 25) {
         errorMessage.textContent = "A chave deve ter 25 caracteres.";
         return;
       }
-
       if (validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('player-container').style.display = 'flex';
-
         const welcomeMessage = document.createElement('div');
         welcomeMessage.textContent = "Seja Bem vindo!!!";
         welcomeMessage.style.position = "absolute";
@@ -616,41 +548,27 @@
         welcomeMessage.style.borderRadius = "8px";
         welcomeMessage.style.zIndex = "3";
         document.body.appendChild(welcomeMessage);
-
-        setTimeout(() => {
-          welcomeMessage.remove();
-        }, 6000);
-
+        setTimeout(() => { welcomeMessage.remove(); }, 6000);
         createTwitchPlayer();
       } else {
         errorMessage.textContent = "Chave inválida. Tente novamente.";
       }
     }
 
-    function openModal() {
-      document.getElementById("modal").style.display = "flex";
-    }
-
-    function closeModal() {
-      document.getElementById("modal").style.display = "none";
-    }
-
+    function openModal() { document.getElementById("modal").style.display = "flex"; }
+    function closeModal() { document.getElementById("modal").style.display = "none"; }
+    
     function sendToWhatsApp() {
       const name = document.getElementById("user-name").value;
-      if (!name) {
-        alert("Por favor, preencha seu nome antes de enviar.");
-        return;
-      }
+      if (!name) { alert("Por favor, preencha seu nome antes de enviar."); return; }
       const message = `${name}, comprei uma chave e vou mandar o comprovante agora!!!!`;
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
     document.addEventListener('keydown', function(event) {
-      if (
-        event.key === 'F12' || 
-        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-        (event.ctrlKey && event.key === 'U')
-      ) {
+      if (event.key === 'F12' || 
+         (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+         (event.ctrlKey && event.key === 'U')) {
         alert("isso não é permitido 😢");
         event.preventDefault();
         return false;
@@ -678,6 +596,5 @@
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
   </script>
-
 </body>
 </html>
