@@ -1,522 +1,582 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Streaming ao Vivo 📺</title>
     <style>
-      /* Reset & Geral */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-      }
-      /* Background full screen */
-      .background-video {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
-        z-index: -2;
-      }
-      /* Container principal para login e live notification */
-      .container {
-        position: relative;
-        z-index: 3;
-        display: flex;
-        gap: 20px;
-        padding: 20px;
-      }
-      .login-container,
-      .live-notification {
-        background: rgba(20, 20, 20, 0.8);
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-      .login-container {
-        max-width: 300px;
-      }
-      .live-notification {
-        max-width: 630px;
-      }
-      h1 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-        color: #f1f1f1;
-      }
-      .subtitle {
-        margin-bottom: 20px;
-        color: #bbb;
-        font-size: 1em;
-      }
-      input {
-        width: 100%;
-        padding: 12px;
-        margin-top: 10px;
-        border: 1px solid #444;
-        border-radius: 8px;
-        background: #222;
-        color: white;
-        font-size: 1em;
-        outline: none;
-      }
-      button {
-        width: 100%;
-        padding: 12px;
-        margin-top: 15px;
-        border: none;
-        border-radius: 8px;
-        background: #e50914;
-        color: white;
-        font-size: 1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-      }
-      button:hover {
-        background: #b20710;
-      }
-      button:active {
-        transform: scale(0.95);
-      }
-      .error-message {
-        color: #ff3b3b;
-        font-size: 0.9em;
-        margin-top: 10px;
-      }
-      .whatsapp-info {
-        margin-top: 15px;
-        font-size: 0.9em;
-        color: #bbb;
-      }
-      .whatsapp-info strong {
-        color: #1db954;
-      }
-      .live-notification h2 {
-        font-size: 1.2em;
-        margin-bottom: 10px;
-        color: #f1f1f1;
-      }
-      /* Player Principal (preenche toda a tela) */
-      #player-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: linear-gradient(45deg, #141414, #222222);
-        z-index: 2;
-        display: none;
-        overflow: hidden;
-      }
-      .player {
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-      /* Custom Volume Button */
-      .volume-btn {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-        background: rgba(229, 9, 20, 0.8);
-        border: none;
-        border-radius: 50%;
-        color: white;
-        font-size: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        z-index: 10;
-        transition: opacity 0.3s;
-      }
-      .volume-btn.hidden {
-        opacity: 0;
-        pointer-events: none;
-      }
-      /* Modal */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        justify-content: center;
-        align-items: center;
-        z-index: 6;
-      }
-      .modal-content {
-        background: linear-gradient(135deg, #1a1a1a, #333);
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        max-width: 400px;
-        width: 90%;
-        position: relative;
-      }
-      .modal-content h2 {
-        margin-top: 0;
-      }
-      .close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        font-size: 20px;
-        cursor: pointer;
-        color: white;
-      }
-      /* Animações */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-10px);
+        /* Estilo Geral */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      /* Responsividade */
-      @media (max-width: 768px) {
+
         .container {
-          flex-direction: column;
-          padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            gap: 20px;
+            z-index: 1;
         }
+
+        .background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
         .login-container,
         .live-notification {
-          width: 100%;
-          max-width: none;
+            background: rgba(20, 20, 20, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            flex: 1;
+            animation: fadeIn 1s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .volume-btn {
-          width: 35px;
-          height: 35px;
-          font-size: 18px;
-          bottom: 15px;
-          right: 15px;
+
+        .login-container {
+            max-width: 300px;
         }
-      }
-      @media (max-width: 480px) {
-        .login-container,
+
         .live-notification {
-          padding: 10px;
+            max-width: 630px;
         }
+
         h1 {
-          font-size: 1.2em;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #f1f1f1;
         }
+
         .subtitle {
-          font-size: 0.8em;
+            margin-bottom: 20px;
+            color: #bbb;
+            font-size: 1em;
         }
+
         input {
-          padding: 8px;
-          font-size: 0.8em;
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #222;
+            color: white;
+            font-size: 1em;
+            outline: none;
         }
+
         button {
-          padding: 8px;
-          font-size: 0.8em;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #e50914;
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        .error-message,
+
+        button:hover {
+            background: #b20710;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .error-message {
+            color: #ff3b3b;
+            font-size: 0.9em;
+            margin-top: 10px;
+            animation: shake 0.3s;
+        }
+
         .whatsapp-info {
-          font-size: 0.7em;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #bbb;
         }
-        .volume-btn {
-          width: 35px;
-          height: 35px;
-          font-size: 18px;
-          bottom: 15px;
-          right: 15px;
+
+        .whatsapp-info strong {
+            color: #1db954;
         }
-      }
+
+        .live-notification h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #f1f1f1;
+        }
+
+        .live-notification .player {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .live-notification .player iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Player */
+        #player-container {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            text-align: center;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: none;
+            background: linear-gradient(45deg, #141414, #222222);
+            padding: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+
+        .player {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        #player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .twitch-player iframe {
+            position: relative;
+        }
+
+        .twitch-player iframe::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: none;
+            pointer-events: none;
+        }
+
+        .player .player-controls__button {
+            display: none !important;
+        }
+
+        .player .player-controls__volume-button,
+        .player .player-controls__fullscreen-button {
+            display: block !important;
+        }
+
+        /* Modal Estilo */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 4;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #333);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+            75% {
+                transform: translateX(-5px);
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .login-container,
+            .live-notification {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .player {
+                height: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container,
+            .live-notification {
+                padding: 10px;
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+            }
+
+            .subtitle {
+                font-size: 0.8em;
+                margin-bottom: 10px;
+            }
+
+            input {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+
+            button {
+                padding: 8px;
+                font-size: 0.8em;
+            }
+
+            .error-message {
+                font-size: 0.7em;
+            }
+
+            .whatsapp-info {
+                font-size: 0.7em;
+            }
+
+            .player {
+                height: auto;
+            }
+
+            .live-notification h2 {
+                font-size: 1em;
+            }
+        }
     </style>
-  </head>
-  <body>
-    <!-- Background Video -->
-    <video
-      autoplay
-      muted
-      loop
-      playsinline
-      class="background-video"
-      id="background-video"
-    >
-      <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4" />
+</head>
+<body>
+
+    <!-- Vídeo de Fundo -->
+    <video autoplay muted loop playsinline class="background-video" id="background-video">
+        <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
     </video>
 
-    <!-- Container Principal para Login e Live Notificação -->
+    <!-- Container Principal -->
     <div class="container">
-      <!-- Tela de Login -->
-      <div class="login-container" id="login-container">
-        <h1>📺 Bem-vindo 🎬</h1>
-        <p class="subtitle">Digite a chave de acesso para entrar</p>
-        <input
-          type="text"
-          id="key-input"
-          placeholder="Digite a chave de 25 caracteres"
-          aria-label="Chave de 25 caracteres"
-        />
-        <button onclick="verifyKey()">Entrar</button>
-        <div class="error-message" id="error-message" role="alert"></div>
-        <p class="whatsapp-info">
-          Para conseguir uma chave, solicite via WhatsApp:
-          <strong>64 9 9671-8993</strong>
-        </p>
-        <button onclick="openModal()">CRIAR CHAVE AGORA</button>
-      </div>
+        <!-- Tela de Login -->
+        <div class="login-container" id="login-container">
+            <h1> 📺 Bem-vindo 🎬 </h1>
+            <p class="subtitle">Digite a chave de acesso para entrar</p>
+            <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
+            <button onclick="verifyKey()">Entrar</button>
+            <div class="error-message" id="error-message" role="alert"></div>
+            <button onclick="openModal()">CRIAR CHAVE AGORA</button>
+        </div>
 
-      <!-- Notificação de Live -->
-      <div class="live-notification">
-        <h2>🔴 O QUE ESTÁ PASSANDO AGORA 📺</h2>
-        <div class="player" id="live-player"></div>
-      </div>
+        <!-- Notificação de Live -->
+        <div class="live-notification">
+            <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
+            <div class="player" id="live-player"></div>
+        </div>
     </div>
 
-    <!-- Player Principal (100% da tela) -->
+    <!-- Player -->
     <div id="player-container">
-      <div class="player twitch-player" id="player">
-        <div id="twitch-embed"></div>
-        <!-- Custom Volume Button -->
-        <button id="volume-btn" class="volume-btn">🔊</button>
-      </div>
+        <div class="player twitch-player" id="player">
+            <div id="twitch-embed"></div>
+        </div>
     </div>
 
     <!-- Modal para criação de chave -->
     <div id="modal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Adquirir Chave para Acesso</h2>
-        <p>Para obter uma chave, preencha seu nome e telefone abaixo.</p>
-        <p><strong>Valor da chave: R$ 2,00</strong></p>
-        <p>
-          Faça um Pix para: <strong>lourimarcos@outlook.com</strong><br />
-          Após o pagamento, envie o comprovante para o WhatsApp.
-        </p>
-        <input type="text" id="user-name" placeholder="Seu Nome" />
-        <input type="text" id="user-phone" placeholder="Seu Telefone" />
-        <button onclick="sendToWhatsApp()">Enviar</button>
-      </div>
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Adquirir Chave para Acesso</h2>
+            <p>Para obter uma chave, preencha seu nome e telefone abaixo.</p>
+            <p><strong>Valor Simbólico da chave: R$ 2,00</strong></p>
+            <p>Faça um Pix para: <strong>lourimarcos@outlook.com</strong></p>
+            <p>uma Chave tem duração de <strong>15 Dias</strong></p>
+            <p>Após o pagamento, envie o comprovante para o WhatsApp.</p>
+            <input type="text" id="user-name" placeholder="Seu Nome" />
+            <input type="text" id="user-phone" placeholder="Seu Telefone" />
+            <button onclick="sendToWhatsApp()">Enviar</button>
+        </div>
     </div>
 
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
-      let player;
-      let livePlayer;
-      let volumeBtnVisible = true;
+        let player;
+        let livePlayer;
 
-      function playVideo(videoElement) {
-        videoElement.play().catch((error) => {
-          console.log("Erro ao reproduzir o vídeo:", error);
-        });
-      }
-
-      function createTwitchPlayer() {
-        player = new Twitch.Player("twitch-embed", {
-          channel: "lourimarcos",
-          width: "100%",
-          height: "100%",
-          controls: false, // Desativa os controles padrão da Twitch
-          autoplay: true,
-          muted: false,
-          parent: ["localhost"],
-        });
-
-        player.addEventListener(Twitch.Player.READY, () => {
-          player.setVolume(1.0);
-          player.setMuted(false);
-
-          // Configurar botão de volume customizado
-          const volumeBtn = document.getElementById("volume-btn");
-          volumeBtn.textContent = player.getMuted() ? "🔇" : "🔊";
-          volumeBtn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            const muted = player.getMuted();
-            player.setMuted(!muted);
-            volumeBtn.textContent = muted ? "🔊" : "🔇";
-          });
-
-          // Ao clicar no player (fora do botão) alterna a visibilidade do botão
-          const playerContainer = document.getElementById("player-container");
-          playerContainer.addEventListener("click", function (e) {
-            if (e.target === volumeBtn) return;
-            volumeBtnVisible = !volumeBtnVisible;
-            volumeBtn.classList.toggle("hidden", !volumeBtnVisible);
-          });
-        });
-
-        player.addEventListener(Twitch.Player.OFFLINE, () => {
-          document.getElementById("player-container").innerHTML = `
-            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
-              <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-            </video>
-            <div style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%);
-              color: white; font-size: 24px; text-align: center;">
-              <p>🔴 ESTAMOS OFFLINE, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-            </div>`;
-          const offlineVideo = document.getElementById("offline-video");
-          offlineVideo.addEventListener("click", () => playVideo(offlineVideo));
-          playVideo(offlineVideo);
-        });
-
-        setInterval(() => {
-          if (!player.isLive()) {
-            document.getElementById("player-container").innerHTML = `
-              <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
-                <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-              </video>
-              <div style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%);
-                color: white; font-size: 24px; text-align: center;">
-                <p>🔴 ESTAMOS OFFLINE, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-              </div>`;
-            const offlineVideo = document.getElementById("offline-video");
-            offlineVideo.addEventListener("click", () => playVideo(offlineVideo));
-            playVideo(offlineVideo);
-          }
-        }, 60000);
-      }
-
-      function createLiveNotificationPlayer() {
-        const livePlayerContainer = document.getElementById("live-player");
-        livePlayer = new Twitch.Player("live-player", {
-          channel: "lourimarcos",
-          height: "100%",
-          width: "100%",
-          muted: true,
-          autoplay: true,
-          controls: false,
-          parent: ["localhost"],
-        });
-        livePlayer.addEventListener(Twitch.Player.READY, () => {
-          const iframe = livePlayer.getIframe();
-          iframe.style.pointerEvents = "none";
-        });
-        setInterval(() => {
-          livePlayer.seek(0);
-        }, 30000);
-      }
-
-      let validKeys = [];
-      fetch(
-        "https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt"
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          validKeys = data
-            .split("\n")
-            .map((key) => key.trim())
-            .filter((key) => key.length === 25);
-          console.log("Chaves carregadas:", validKeys);
-        })
-        .catch((error) => {
-          console.error("Erro ao carregar as chaves:", error);
-        });
-
-      function verifyKey() {
-        const keyInput = document.getElementById("key-input").value;
-        const errorMessage = document.getElementById("error-message");
-        if (keyInput.length !== 25) {
-          errorMessage.textContent = "A chave deve ter 25 caracteres.";
-          return;
+        function playVideo(videoElement) {
+            videoElement.play().catch(error => {
+                console.log('Erro ao reproduzir o vídeo:', error);
+            });
         }
-        if (validKeys.includes(keyInput)) {
-          document.getElementById("login-container").style.display = "none";
-          document.getElementById("player-container").style.display = "flex";
-          const welcomeMessage = document.createElement("div");
-          welcomeMessage.textContent = "Seja Bem vindo!!!";
-          welcomeMessage.style.position = "absolute";
-          welcomeMessage.style.top = "20px";
-          welcomeMessage.style.left = "50%";
-          welcomeMessage.style.transform = "translateX(-50%)";
-          welcomeMessage.style.color = "white";
-          welcomeMessage.style.fontSize = "18px";
-          welcomeMessage.style.backgroundColor = "rgba(0,0,0,0.7)";
-          welcomeMessage.style.padding = "10px";
-          welcomeMessage.style.borderRadius = "8px";
-          welcomeMessage.style.zIndex = "3";
-          document.body.appendChild(welcomeMessage);
-          setTimeout(() => {
-            welcomeMessage.remove();
-          }, 6000);
-          createTwitchPlayer();
-        } else {
-          errorMessage.textContent = "Chave inválida. Tente novamente.";
+
+        function createTwitchPlayer() {
+            player = new Twitch.Player("twitch-embed", {
+                channel: "lourimarcos",
+                width: "100%",
+                height: "100%",
+                controls: true,
+                autoplay: true,
+                muted: false,
+                parent: ["localhost"]
+            });
+
+            player.addEventListener(Twitch.Player.READY, () => {
+                player.setVolume(1.0); // Volume em 100%
+                player.setMuted(false);
+                player.play();
+                const playerElement = player.getIframe();
+                const clickEvent = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                playerElement.dispatchEvent(clickEvent);
+            });
+
+            player.addEventListener(Twitch.Player.OFFLINE, () => {
+                document.getElementById('player-container').innerHTML = ` 
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                    </video>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                        <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                    </div>
+                `;
+                const offlineVideo = document.getElementById('offline-video');
+                offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                playVideo(offlineVideo);
+            });
+
+            setInterval(() => {
+                if (player.isLive()) {
+                    document.getElementById('player-container').innerHTML = `
+                        <div id="twitch-embed"></div>
+                    `;
+                    createTwitchPlayer();
+                } else {
+                    document.getElementById('player-container').innerHTML = `
+                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                        </video>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                            <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                        </div>
+                    `;
+                    const offlineVideo = document.getElementById('offline-video');
+                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                    playVideo(offlineVideo);
+                }
+            }, 60000);
         }
-      }
 
-      function openModal() {
-        document.getElementById("modal").style.display = "flex";
-      }
-
-      function closeModal() {
-        document.getElementById("modal").style.display = "none";
-      }
-
-      function sendToWhatsApp() {
-        const name = document.getElementById("user-name").value;
-        if (!name) {
-          alert("Por favor, preencha seu nome antes de enviar.");
-          return;
+        function createLiveNotificationPlayer() {
+            const livePlayerContainer = document.getElementById("live-player");
+            livePlayer = new Twitch.Player("live-player", {
+                channel: "lourimarcos",
+                height: "100%",
+                width: "100%",
+                muted: true,
+                autoplay: true,
+                controls: false,
+                parent: ["localhost"]
+            });
+            livePlayer.addEventListener(Twitch.Player.READY, () => {
+                const iframe = livePlayer.getIframe();
+                iframe.style.pointerEvents = "none";
+            });
+            function reloadLivePlayer() {
+                livePlayer.seek(0);
+            }
+            setInterval(reloadLivePlayer, 30000);
         }
-        const message = `${name}, comprei uma chave e vou mandar o comprovante agora!!!!`;
-        window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(
-          message
-        )}`;
-      }
 
-      document.addEventListener("keydown", function (event) {
-        if (
-          event.key === "F12" ||
-          (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
-          (event.ctrlKey && event.key === "U")
-        ) {
-          alert("isso não é permitido 😢");
-          event.preventDefault();
-          return false;
+        let validKeys = [];
+
+        fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
+            .then(response => response.text())
+            .then(data => {
+                validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
+                console.log('Chaves carregadas:', validKeys);
+            })
+            .catch(error => {
+                console.error('Erro ao carregar as chaves:', error);
+            });
+
+        function verifyKey() {
+            const keyInput = document.getElementById('key-input').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (keyInput.length !== 25) {
+                errorMessage.textContent = "A chave deve ter 25 caracteres.";
+                return;
+            }
+
+            if (validKeys.includes(keyInput)) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('player-container').style.display = 'flex';
+
+                const welcomeMessage = document.createElement('div');
+                welcomeMessage.textContent = "Seja Bem vindo!!!";
+                welcomeMessage.style.position = "absolute";
+                welcomeMessage.style.top = "20px";
+                welcomeMessage.style.left = "50%";
+                welcomeMessage.style.transform = "translateX(-50%)";
+                welcomeMessage.style.color = "white";
+                welcomeMessage.style.fontSize = "18px";
+                welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+                welcomeMessage.style.padding = "10px";
+                welcomeMessage.style.borderRadius = "8px";
+                welcomeMessage.style.zIndex = "3";
+                document.body.appendChild(welcomeMessage);
+
+                setTimeout(() => {
+                    welcomeMessage.remove();
+                }, 6000);
+
+                createTwitchPlayer();
+            } else {
+                errorMessage.textContent = "Chave inválida. Tente novamente.";
+            }
         }
-      });
 
-      document.addEventListener("contextmenu", function (event) {
-        alert("isso não é permitido 😢");
-        event.preventDefault();
-        return false;
-      });
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
 
-      setInterval(function () {
-        (function () {
-          function logNop() {
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+        function sendToWhatsApp() {
+            const name = document.getElementById("user-name").value;
+            if (!name) {
+                alert("Por favor, preencha seu nome antes de enviar.");
+                return;
+            }
+            const message = `${name}, comprei uma chave e vou mandar o comprovante agora!!!!`;
+            window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F12' || 
+                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+                (event.ctrlKey && event.key === 'U')) {
+                alert("isso não é permitido 😢");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('contextmenu', function(event) {
             alert("isso não é permitido 😢");
+            event.preventDefault();
             return false;
-          }
-          console.log = logNop;
-          console.warn = logNop;
-          console.error = logNop;
-          console.info = logNop;
-          console.debug = logNop;
-          console.table = logNop;
-        })();
-      }, 1000);
+        });
 
-      playVideo(document.getElementById("background-video"));
-      createLiveNotificationPlayer();
+        setInterval(function () {
+            (function () {
+                function logNop() { alert("isso não é permitido 😢"); return false; }
+                console.log = logNop;
+                console.warn = logNop;
+                console.error = logNop;
+                console.info = logNop;
+                console.debug = logNop;
+                console.table = logNop;
+            })();
+        }, 1000);
+
+        playVideo(document.getElementById('background-video'));
+        createLiveNotificationPlayer();
     </script>
-  </body>
+
+</body>
 </html>
