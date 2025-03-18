@@ -18,6 +18,7 @@
       height: 100vh;
       overflow: hidden;
     }
+
     .container {
       display: flex;
       flex-direction: row;
@@ -29,6 +30,7 @@
       gap: 20px;
       z-index: 1;
     }
+
     .background-video {
       position: absolute;
       top: 0;
@@ -38,12 +40,13 @@
       object-fit: cover;
       z-index: -1;
     }
+
     .login-container,
     .live-notification {
-      background: rgba(20, 20, 20, 0.8);
+      background: rgba(20,20,20,0.8);
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
       text-align: center;
       flex: 1;
       animation: fadeIn 1s ease-in-out;
@@ -51,22 +54,27 @@
       flex-direction: column;
       align-items: center;
     }
+    
     .login-container {
       max-width: 300px;
     }
+    
     .live-notification {
       max-width: 630px;
     }
+    
     h1 {
       font-size: 1.8em;
       margin-bottom: 20px;
       color: #f1f1f1;
     }
+    
     .subtitle {
       margin-bottom: 20px;
       color: #bbb;
       font-size: 1em;
     }
+    
     input {
       width: 100%;
       padding: 12px;
@@ -78,6 +86,7 @@
       font-size: 1em;
       outline: none;
     }
+    
     button {
       width: 100%;
       padding: 12px;
@@ -91,31 +100,38 @@
       cursor: pointer;
       transition: 0.3s;
     }
+    
     button:hover {
       background: #b20710;
     }
+    
     button:active {
       transform: scale(0.95);
     }
+    
     .error-message {
       color: #ff3b3b;
       font-size: 0.9em;
       margin-top: 10px;
       animation: shake 0.3s;
     }
+    
     .whatsapp-info {
       margin-top: 15px;
       font-size: 0.9em;
       color: #bbb;
     }
+    
     .whatsapp-info strong {
       color: #1db954;
     }
+    
     .live-notification h2 {
       font-size: 1.2em;
       margin-bottom: 10px;
       color: #f1f1f1;
     }
+    
     .live-notification .player {
       width: 100%;
       height: 0;
@@ -125,6 +141,7 @@
       overflow: hidden;
       pointer-events: none;
     }
+    
     .live-notification .player iframe {
       position: absolute;
       top: 0;
@@ -133,7 +150,8 @@
       height: 100%;
       border: none;
     }
-    /* Player */
+    
+    /* Player Principal */
     #player-container {
       display: none;
       width: 100%;
@@ -149,6 +167,7 @@
       left: 0;
       z-index: 2;
     }
+    
     .player {
       width: 100%;
       height: 100%;
@@ -156,6 +175,32 @@
       overflow: hidden;
       border-radius: 0;
     }
+    
+    /* Custom Volume Button */
+    .volume-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: rgba(229,9,20,0.8);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: opacity 0.3s;
+    }
+    
+    .volume-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
     /* Modal Estilo */
     .modal {
       display: none;
@@ -169,6 +214,7 @@
       align-items: center;
       z-index: 4;
     }
+    
     .modal-content {
       background: linear-gradient(135deg, #1a1a1a, #333);
       padding: 20px;
@@ -178,9 +224,11 @@
       width: 90%;
       position: relative;
     }
+    
     .modal-content h2 {
       margin-top: 0;
     }
+    
     .close {
       position: absolute;
       top: 10px;
@@ -189,31 +237,20 @@
       cursor: pointer;
       color: white;
     }
+    
     /* Animações */
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+    
     @keyframes shake {
-      0%, 100% {
-        transform: translateX(0);
-      }
-      25% {
-        transform: translateX(-5px);
-      }
-      50% {
-        transform: translateX(5px);
-      }
-      75% {
-        transform: translateX(-5px);
-      }
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
     }
+    
     /* Responsividade */
     @media (max-width: 768px) {
       .container {
@@ -222,48 +259,67 @@
         align-items: center;
         gap: 20px;
       }
+    
       .login-container,
       .live-notification {
         width: 100%;
         max-width: 100%;
       }
+    
       .player {
         height: auto;
       }
     }
+    
     @media (max-width: 480px) {
       .login-container,
       .live-notification {
         padding: 10px;
         width: 100%;
       }
+    
       h1 {
         font-size: 1.2em;
         margin-bottom: 10px;
       }
+    
       .subtitle {
         font-size: 0.8em;
         margin-bottom: 10px;
       }
+    
       input {
         padding: 8px;
         font-size: 0.8em;
       }
+    
       button {
         padding: 8px;
         font-size: 0.8em;
       }
+    
       .error-message {
         font-size: 0.7em;
       }
+    
       .whatsapp-info {
         font-size: 0.7em;
       }
+    
       .player {
         height: auto;
       }
+    
       .live-notification h2 {
         font-size: 1em;
+      }
+      
+      .volume-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        bottom: 15px;
+        right: 15px;
       }
     }
   </style>
@@ -284,7 +340,10 @@
       <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
-      <p class="whatsapp-info">Para conseguir uma chave, solicite via WhatsApp: <strong>64 9 9671-8993</strong></p>
+      <p class="whatsapp-info">
+        Para conseguir uma chave, solicite via WhatsApp:
+        <strong>64 9 9671-8993</strong>
+      </p>
       <button onclick="openModal()">CRIAR CHAVE AGORA</button>
     </div>
 
@@ -295,10 +354,12 @@
     </div>
   </div>
 
-  <!-- Player -->
+  <!-- Player Principal -->
   <div id="player-container">
     <div class="player twitch-player" id="player">
       <div id="twitch-embed"></div>
+      <!-- Custom volume button -->
+      <button id="volume-btn" class="volume-btn">🔊</button>
     </div>
   </div>
 
@@ -321,6 +382,7 @@
   <script>
     let player;
     let livePlayer;
+    let volumeBtnVisible = true;
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -329,12 +391,11 @@
     }
 
     function createTwitchPlayer() {
-      // Create Twitch player with built-in controls disabled
       player = new Twitch.Player("twitch-embed", {
         channel: "lourimarcos",
         width: "100%",
         height: "100%",
-        controls: false, // disables Twitch default controls
+        controls: false, // Desativa os controles padrão da Twitch
         autoplay: true,
         muted: false,
         parent: ["localhost"]
@@ -343,28 +404,24 @@
       player.addEventListener(Twitch.Player.READY, () => {
         player.setVolume(1.0);
         player.setMuted(false);
-        
-        // Remove any Twitch control overlay if exists (not generally possible since the player is in an iframe)
-        // Instead, we add a custom volume button.
-        let volumeButton = document.createElement('button');
-        volumeButton.textContent = player.getMuted() ? 'Volume Off' : 'Volume On';
-        volumeButton.style.position = 'absolute';
-        volumeButton.style.bottom = '20px';
-        volumeButton.style.right = '20px';
-        volumeButton.style.padding = '10px';
-        volumeButton.style.background = '#e50914';
-        volumeButton.style.color = 'white';
-        volumeButton.style.border = 'none';
-        volumeButton.style.borderRadius = '8px';
-        volumeButton.style.cursor = 'pointer';
-        volumeButton.style.zIndex = 5;
-        volumeButton.addEventListener('click', function(){
-          let muted = player.getMuted();
+
+        // Configure o botão de volume depois que o player estiver pronto
+        const volumeBtn = document.getElementById('volume-btn');
+        volumeBtn.textContent = player.getMuted() ? '🔇' : '🔊';
+        volumeBtn.addEventListener('click', function(e) {
+          // Previne o evento de propagação para não disparar a alternância de exibir/ocultar
+          e.stopPropagation();
+          const muted = player.getMuted();
           player.setMuted(!muted);
-          volumeButton.textContent = muted ? 'Volume On' : 'Volume Off';
+          volumeBtn.textContent = muted ? '🔊' : '🔇';
         });
-        // Append the custom volume button to the player container
-        document.getElementById('player-container').appendChild(volumeButton);
+
+        // Toggle volume button visibility on player container tap/click
+        const playerContainer = document.getElementById('player-container');
+        playerContainer.addEventListener('click', function() {
+          volumeBtnVisible = !volumeBtnVisible;
+          volumeBtn.classList.toggle('hidden', !volumeBtnVisible);
+        });
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
@@ -372,8 +429,10 @@
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
-          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+          <div style="position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); color: white; font-size: 24px;
+            text-align: center;">
+            <p> 🔴 ESTAMOS OFFLINE, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
           </div>
         `;
         const offlineVideo = document.getElementById('offline-video');
@@ -382,14 +441,15 @@
       });
 
       setInterval(() => {
-        // Check if the stream is offline then reinitialize
-        if (player.isLive() === false) {
+        if (!player.isLive()) {
           document.getElementById('player-container').innerHTML = `
             <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
               <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
             </video>
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-              <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+            <div style="position: absolute; top: 50%; left: 50%;
+              transform: translate(-50%, -50%); color: white; font-size: 24px;
+              text-align: center;">
+              <p>🔴 ESTAMOS OFFLINE, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
             </div>
           `;
           const offlineVideo = document.getElementById('offline-video');
