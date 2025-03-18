@@ -154,9 +154,7 @@
       top: 0;
       left: 0;
     }
-    .twitch-player iframe {
-      position: relative;
-    }
+    .twitch-player iframe { position: relative; }
     .twitch-player iframe::before {
       content: '';
       position: absolute;
@@ -182,22 +180,6 @@
       background: rgba(0, 0, 0, 0.3);
       border: none;
       border-radius: 8px;
-    }
-    /* Overlay para "toque para ativar o áudio" */
-    #sound-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #fff;
-      font-size: 1.5em;
-      z-index: 1100;
-      cursor: pointer;
     }
     /* Modal Estilo - mais elegante e profissional */
     .modal {
@@ -309,7 +291,7 @@
 <body>
 
   <!-- Vídeo de Fundo -->
-  <video autoplay muted loop playsinline class="background-video" id="background-video">
+  <video autoplay loop playsinline class="background-video" id="background-video">
     <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
   </video>
 
@@ -363,40 +345,7 @@
       });
     }
 
-    // Toggle sound: if muted turn on sound; if sound is on, mute it.
-    function toggleSound() {
-      if (player.getMuted()) {
-        player.setMuted(false);
-      } else {
-        player.setMuted(true);
-      }
-    }
-
-    // Create overlay message displayed on mobile/initial load.
-    function createSoundOverlay(playerInstance) {
-      const overlay = document.createElement('div');
-      overlay.id = 'sound-overlay';
-      overlay.textContent = 'Toque para ativar o áudio';
-      
-      // When the overlay is clicked, toggle the sound and remove the overlay.
-      overlay.addEventListener('click', function() {
-        toggleSound();
-        overlay.style.display = 'none';
-      });
-      
-      // Append the overlay to the player container.
-      const playerContainer = document.getElementById('player');
-      playerContainer.appendChild(overlay);
-      
-      // Automatically remove the overlay after 6 seconds if still visible.
-      setTimeout(() => {
-        if (overlay && overlay.parentNode) {
-          overlay.style.display = 'none';
-        }
-      }, 6000);
-    }
-
-    // Create control to adjust volume (only added on mobile if needed).
+    // Create control to adjust volume (if needed)
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
@@ -405,8 +354,7 @@
       volumeControl.step = 0.01;
       volumeControl.value = playerInstance.getVolume();
       volumeControl.id = 'volume-control';
-
-      // Estilos definidos via CSS.
+      // Estilos definidos via CSS
       volumeControl.style.position = 'absolute';
       volumeControl.style.bottom = '20px';
       volumeControl.style.left = '20px';
@@ -417,14 +365,10 @@
       volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
       volumeControl.style.border = 'none';
       volumeControl.style.borderRadius = '8px';
-
       const playerContainer = document.getElementById('player');
       const existingControl = document.getElementById('volume-control');
-      if (existingControl) {
-        existingControl.parentNode.removeChild(existingControl);
-      }
+      if (existingControl) { existingControl.parentNode.removeChild(existingControl); }
       playerContainer.appendChild(volumeControl);
-
       volumeControl.addEventListener('input', (e) => {
         const val = parseFloat(e.target.value);
         playerInstance.setVolume(val);
@@ -438,36 +382,32 @@
         height: "100%",
         controls: false, // Remove os controles nativos
         autoplay: true,
-        muted: true, // Inicialmente mutado para garantir a interação
+        muted: false,  // Inicia com áudio ativo
         parent: ["localhost"]
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
         player.setVolume(1.0);
+        player.setMuted(false);
         player.play();
         const playerElement = player.getIframe();
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
-
-        // Add a click listener on the player container to toggle sound on any click.
-        const playerContainer = document.getElementById('player');
-        playerContainer.addEventListener('click', toggleSound);
-
-        // Exiba o overlay "toque para ativar o áudio" para que o usuário ative o som.
-        createSoundOverlay(player);
-        
-        // (Optional) Crie o controle de volume para dispositivos móveis se necessário.
+        // Adiciona o controle de volume se desejar (opcional).
         if (/Mobi|Android/i.test(navigator.userAgent)) {
           createVolumeControl(player);
         }
+        // O player inicia com áudio, então nenhuma sobreposição é necessária.
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
-        document.getElementById('player-container').innerHTML = ` 
+        document.getElementById('player-container').innerHTML = `
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
-          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+          <div style="position: absolute; top: 50%; left: 50%;
+                      transform: translate(-50%, -50%);
+                      color: white; font-size: 24px; text-align: center;">
             <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
           </div>
         `;
@@ -485,7 +425,9 @@
             <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
               <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
             </video>
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+            <div style="position: absolute; top: 50%; left: 50%;
+                        transform: translate(-50%, -50%);
+                        color: white; font-size: 24px; text-align: center;">
               <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
             </div>
           `;
@@ -502,7 +444,7 @@
         channel: "lourimarcos",
         height: "100%",
         width: "100%",
-        muted: true,
+        muted: false,  // Também inicia com áudio ativo aqui
         autoplay: true,
         controls: false,
         parent: ["localhost"]
@@ -516,7 +458,6 @@
     }
 
     let validKeys = [];
-
     fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
       .then(response => response.text())
       .then(data => {
@@ -557,7 +498,6 @@
 
     function openModal() { document.getElementById("modal").style.display = "flex"; }
     function closeModal() { document.getElementById("modal").style.display = "none"; }
-    
     function sendToWhatsApp() {
       const name = document.getElementById("user-name").value;
       if (!name) { alert("Por favor, preencha seu nome antes de enviar."); return; }
