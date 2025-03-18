@@ -23,17 +23,16 @@
     #guide-container {
       width: 100%;
       overflow: hidden;
-      background: #222; /* fundo para o guia */
+      white-space: nowrap;
+      background: #222; /* tema de fundo - altere conforme necessário */
       color: #fff;
       padding: 8px 0;
       margin-bottom: 15px;
-      position: relative;
     }
-    #guide-text {
+    #guide-container span {
       display: inline-block;
-      white-space: nowrap;
       padding-left: 100%;
-      animation: scroll-text 60s linear infinite; /* aumentei para 60s */
+      animation: scroll-text 25s linear infinite;
     }
     @keyframes scroll-text {
       0% { transform: translateX(0); }
@@ -221,7 +220,7 @@
       pointer-events: none;
     }
 
-    /* Esconde botões nativos, exceto fullscreen */
+    /* Esconde botões nativos, exceto fullscreen (o volume será custom) */
     .player .player-controls__button {
       display: none !important;
     }
@@ -243,7 +242,7 @@
       border-radius: 8px;
     }
 
-    /* Modal Estilo */
+    /* Modal Estilo - mais elegante e profissional */
     .modal {
       display: none;
       position: fixed;
@@ -459,7 +458,7 @@
       volumeControl.type = 'range';
       volumeControl.min = 0;
       volumeControl.max = 1;
-      volumeControl.step = 1.00;
+      volumeControl.step = 0.01;
       volumeControl.value = playerInstance.getVolume();
       volumeControl.id = 'volume-control';
 
@@ -495,7 +494,7 @@
         channel: "lourimarcos",
         width: "100%",
         height: "100%",
-        controls: false,
+        controls: false, // Remove os controles nativos
         autoplay: true,
         muted: false,
         parent: ["localhost"]
@@ -509,6 +508,7 @@
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
+        // Apenas cria o controle de volume se o dispositivo for móvel
         if (/Mobi|Android/i.test(navigator.userAgent)) {
           createVolumeControl(player);
         }
@@ -568,7 +568,7 @@
       }
       setInterval(reloadLivePlayer, 30000);
     }
-
+    
     // Carrega guia de programação do arquivo de texto
     fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
       .then(response => response.text())
