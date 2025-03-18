@@ -12,33 +12,30 @@
       font-family: 'Arial', sans-serif;
       background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       overflow: hidden;
     }
 
+    /* Background Video covering entire screen */
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    /* Container Principal (login e live notificação) */
     .container {
+      position: relative;
+      z-index: 3;
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      width: 90%;
-      max-width: 1200px;
-      padding: 20px;
       gap: 20px;
-      z-index: 1;
-    }
-
-    .background-video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
+      padding: 20px;
     }
 
     .login-container,
@@ -131,49 +128,24 @@
       margin-bottom: 10px;
       color: #f1f1f1;
     }
-    
-    .live-notification .player {
-      width: 100%;
-      height: 0;
-      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      pointer-events: none;
-    }
-    
-    .live-notification .player iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    
+
     /* Player Principal */
     #player-container {
-      display: none;
-      width: 100%;
-      height: 100vh;
-      text-align: center;
-      border-radius: 0;
-      overflow: hidden;
-      box-shadow: none;
-      background: linear-gradient(45deg, #141414, #222222);
-      padding: 0;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(45deg, #141414, #222222);
       z-index: 2;
+      display: none;
+      overflow: hidden;
     }
     
     .player {
+      position: relative;
       width: 100%;
       height: 100%;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0;
     }
     
     /* Custom Volume Button */
@@ -212,7 +184,7 @@
       background: rgba(0, 0, 0, 0.8);
       justify-content: center;
       align-items: center;
-      z-index: 4;
+      z-index: 6;
     }
     
     .modal-content {
@@ -255,63 +227,48 @@
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
+        padding: 10px;
       }
     
-      .login-container,
-      .live-notification {
+      .login-container, .live-notification {
         width: 100%;
-        max-width: 100%;
+        max-width: none;
       }
-    
-      .player {
-        height: auto;
+      
+      .volume-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        bottom: 15px;
+        right: 15px;
       }
     }
     
     @media (max-width: 480px) {
-      .login-container,
-      .live-notification {
+      .login-container, .live-notification {
         padding: 10px;
-        width: 100%;
       }
-    
+      
       h1 {
         font-size: 1.2em;
-        margin-bottom: 10px;
       }
-    
+      
       .subtitle {
         font-size: 0.8em;
-        margin-bottom: 10px;
       }
-    
+      
       input {
         padding: 8px;
         font-size: 0.8em;
       }
-    
+      
       button {
         padding: 8px;
         font-size: 0.8em;
       }
-    
-      .error-message {
+      
+      .error-message, .whatsapp-info {
         font-size: 0.7em;
-      }
-    
-      .whatsapp-info {
-        font-size: 0.7em;
-      }
-    
-      .player {
-        height: auto;
-      }
-    
-      .live-notification h2 {
-        font-size: 1em;
       }
       
       .volume-btn {
@@ -331,25 +288,24 @@
     <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
   </video>
 
-  <!-- Container Principal -->
+  <!-- Container Principal (Login e Live Notification) -->
   <div class="container">
     <!-- Tela de Login -->
     <div class="login-container" id="login-container">
-      <h1> 📺 Bem-vindo 🎬 </h1>
+      <h1>📺 Bem-vindo 🎬</h1>
       <p class="subtitle">Digite a chave de acesso para entrar</p>
       <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
       <p class="whatsapp-info">
-        Para conseguir uma chave, solicite via WhatsApp:
-        <strong>64 9 9671-8993</strong>
+        Para conseguir uma chave, solicite via WhatsApp: <strong>64 9 9671-8993</strong>
       </p>
       <button onclick="openModal()">CRIAR CHAVE AGORA</button>
     </div>
 
     <!-- Notificação de Live -->
     <div class="live-notification">
-      <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
+      <h2>🔴 O QUE ESTÁ PASSANDO AGORA 📺</h2>
       <div class="player" id="live-player"></div>
     </div>
   </div>
@@ -358,7 +314,7 @@
   <div id="player-container">
     <div class="player twitch-player" id="player">
       <div id="twitch-embed"></div>
-      <!-- Custom volume button -->
+      <!-- Custom Volume Button -->
       <button id="volume-btn" class="volume-btn">🔊</button>
     </div>
   </div>
@@ -404,21 +360,22 @@
       player.addEventListener(Twitch.Player.READY, () => {
         player.setVolume(1.0);
         player.setMuted(false);
-
-        // Configure o botão de volume depois que o player estiver pronto
+        
+        // Configure o botão de volume após o player estar pronto
         const volumeBtn = document.getElementById('volume-btn');
         volumeBtn.textContent = player.getMuted() ? '🔇' : '🔊';
         volumeBtn.addEventListener('click', function(e) {
-          // Previne o evento de propagação para não disparar a alternância de exibir/ocultar
           e.stopPropagation();
           const muted = player.getMuted();
           player.setMuted(!muted);
           volumeBtn.textContent = muted ? '🔊' : '🔇';
         });
 
-        // Toggle volume button visibility on player container tap/click
+        // Toggle do botão de volume: ao clicar no player, o botão some/aparece
         const playerContainer = document.getElementById('player-container');
-        playerContainer.addEventListener('click', function() {
+        playerContainer.addEventListener('click', function(e) {
+          // Se o clique vier do botão, não altere
+          if(e.target === volumeBtn) return;
           volumeBtnVisible = !volumeBtnVisible;
           volumeBtn.classList.toggle('hidden', !volumeBtnVisible);
         });
@@ -429,10 +386,9 @@
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
-          <div style="position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); color: white; font-size: 24px;
-            text-align: center;">
-            <p> 🔴 ESTAMOS OFFLINE, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+          <div style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+            color: white; font-size: 24px; text-align: center;">
+            <p>🔴 ESTAMOS OFFLINE, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
           </div>
         `;
         const offlineVideo = document.getElementById('offline-video');
@@ -440,15 +396,15 @@
         playVideo(offlineVideo);
       });
 
+      // Verifica a cada minuto e, se necessário, exibe fallback offline
       setInterval(() => {
         if (!player.isLive()) {
           document.getElementById('player-container').innerHTML = `
             <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video" controls>
               <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
             </video>
-            <div style="position: absolute; top: 50%; left: 50%;
-              transform: translate(-50%, -50%); color: white; font-size: 24px;
-              text-align: center;">
+            <div style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+              color: white; font-size: 24px; text-align: center;">
               <p>🔴 ESTAMOS OFFLINE, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
             </div>
           `;
@@ -474,10 +430,9 @@
         const iframe = livePlayer.getIframe();
         iframe.style.pointerEvents = "none";
       });
-      function reloadLivePlayer() {
+      setInterval(() => {
         livePlayer.seek(0);
-      }
-      setInterval(reloadLivePlayer, 30000);
+      }, 30000);
     }
 
     let validKeys = [];
@@ -509,7 +464,7 @@
         welcomeMessage.style.transform = "translateX(-50%)";
         welcomeMessage.style.color = "white";
         welcomeMessage.style.fontSize = "18px";
-        welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+        welcomeMessage.style.backgroundColor = "rgba(0,0,0,0.7)";
         welcomeMessage.style.padding = "10px";
         welcomeMessage.style.borderRadius = "8px";
         welcomeMessage.style.zIndex = "3";
