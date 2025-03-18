@@ -208,6 +208,20 @@
       display: block !important;
     }
 
+    /* Estilo para o controle de volume */
+    #volume-control {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 150px;
+      opacity: 0.8;
+      z-index: 1000;
+      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      border-radius: 8px;
+    }
+
     /* Modal Estilo */
     .modal {
       display: none;
@@ -405,28 +419,30 @@
       volumeControl.step = 0.01;
       volumeControl.value = playerInstance.getVolume();
       volumeControl.id = 'volume-control';
+
+      // Aplica os estilos definidos via CSS e garante que o controle esteja posicionado corretamente
       volumeControl.style.position = 'absolute';
-      volumeControl.style.bottom = '10px';
-      volumeControl.style.right = '10px';
-      volumeControl.style.width = '100px';
+      volumeControl.style.bottom = '20px';
+      volumeControl.style.left = '20px';
+      volumeControl.style.width = '150px';
       volumeControl.style.opacity = '0.8';
       volumeControl.style.zIndex = '1000';
       volumeControl.style.pointerEvents = 'auto';
       volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
       volumeControl.style.border = 'none';
-      volumeControl.style.borderRadius = '4px';
+      volumeControl.style.borderRadius = '8px';
 
       // Adiciona o controle dentro do contêiner do player (div#player)
       const playerContainer = document.getElementById('player');
-      // Remove eventual controle duplicado
       const existingControl = document.getElementById('volume-control');
       if (existingControl) {
         existingControl.parentNode.removeChild(existingControl);
       }
       playerContainer.appendChild(volumeControl);
 
+      // Atualiza o volume quando o controle é ajustado
       volumeControl.addEventListener('input', (e) => {
-        let val = parseFloat(e.target.value);
+        const val = parseFloat(e.target.value);
         playerInstance.setVolume(val);
       });
     }
@@ -446,15 +462,11 @@
         player.setVolume(1.0);
         player.setMuted(false);
         player.play();
-        // Simula um clique para garantir a reprodução em alguns browsers
         const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true
-        });
+        const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
-        // Cria o controle de volume customizado dentro do contêiner "player"
+
+        // Cria o controle de volume customizado
         createVolumeControl(player);
       });
 
@@ -581,9 +593,11 @@
     }
 
     document.addEventListener('keydown', function(event) {
-      if (event.key === 'F12' || 
-          (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-          (event.ctrlKey && event.key === 'U')) {
+      if (
+        event.key === 'F12' || 
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+        (event.ctrlKey && event.key === 'U')
+      ) {
         alert("isso não é permitido 😢");
         event.preventDefault();
         return false;
