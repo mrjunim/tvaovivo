@@ -19,7 +19,7 @@
       overflow: hidden;
     }
 
-    /* Guia de Programação - Barra com rolagem */
+    /* Guia de Programação - Barra com rolagem contínua via duplicação */
     #guide-container {
       width: 100%;
       overflow: hidden;
@@ -29,29 +29,32 @@
       margin-bottom: 15px;
       position: relative;
     }
-    #guide-text {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
-      /* Diminua a duration para aumentar a velocidade */
+    .scrolling-text {
+      display: inline-flex;
+      /* O conteúdo duplicado ocupa o dobro do espaço */
+      width: max-content;
       animation: scroll-text 30s linear infinite;
       -webkit-animation: scroll-text 30s linear infinite;
     }
+    .scrolling-text span {
+      white-space: nowrap;
+      padding-right: 50px; /* Espaço entre as repetições */
+      font-size: 14px;
+    }
     @keyframes scroll-text {
       0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+      100% { transform: translateX(-50%); }
     }
     @-webkit-keyframes scroll-text {
       0% { -webkit-transform: translateX(0); }
-      100% { -webkit-transform: translateX(-100%); }
+      100% { -webkit-transform: translateX(-50%); }
     }
-    
-    /* Ajuste para dispositivos móveis se necessário */
+    /* Para dispositivos móveis, ajuste a duração se necessário */
     @media (max-width: 480px) {
-      #guide-text {
-        /* Se desejar uma velocidade diferente em mobile, ajuste a duração aqui */
+      .scrolling-text {
         animation-duration: 25s;
         -webkit-animation-duration: 25s;
+        font-size: 12px;
       }
     }
 
@@ -416,9 +419,12 @@
   <div class="container">
     <!-- Tela de Login -->
     <div class="login-container" id="login-container">
-      <!-- Guia de Programação -->
+      <!-- Guia de Programação com duplicação para loop contínuo -->
       <div id="guide-container">
-        <span id="guide-text">Carregando guia...</span>
+        <div class="scrolling-text" id="scrolling-text">
+          <span id="guide-text">Carregando guia...</span>
+          <span id="guide-text-duplicate">Carregando guia...</span>
+        </div>
       </div>
       <h1> 📺 Bem-vindo 🎬 </h1>
       <p class="subtitle">Digite a chave de acesso para entrar</p>
@@ -580,15 +586,17 @@
       setInterval(reloadLivePlayer, 30000);
     }
 
-    // Carrega guia de programação do arquivo de texto
+    // Carrega guia de programação do arquivo de texto e atualiza ambos os spans
     fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
       .then(response => response.text())
       .then(data => {
         document.getElementById('guide-text').textContent = data;
+        document.getElementById('guide-text-duplicate').textContent = data;
       })
       .catch(error => {
         console.error('Erro ao carregar guia de programação:', error);
         document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
+        document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
       });
 
     let validKeys = [];
