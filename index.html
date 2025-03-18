@@ -200,25 +200,13 @@
             pointer-events: none;
         }
 
-        /* Remover todos os controles, exceto o botão de volume */
         .player .player-controls__button {
             display: none !important;
         }
 
-        .player .player-controls__volume-button {
+        .player .player-controls__volume-button,
+        .player .player-controls__fullscreen-button {
             display: block !important;
-        }
-
-        /* Estilo do botão de volume */
-        .volume-control {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
         }
 
         /* Modal Estilo */
@@ -380,10 +368,6 @@
     <div id="player-container">
         <div class="player twitch-player" id="player">
             <div id="twitch-embed"></div>
-            <!-- Botão de Volume -->
-            <div class="volume-control" id="volume-button" onclick="toggleMute()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Volume_icon.svg/1200px-Volume_icon.svg.png" alt="Volume" style="width: 30px; height: 30px;">
-            </div>
         </div>
     </div>
 
@@ -407,7 +391,6 @@
     <script>
         let player;
         let livePlayer;
-        let isMuted = false;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -420,7 +403,7 @@
                 channel: "lourimarcos",
                 width: "100%",
                 height: "100%",
-                controls: false,  // Remover todos os controles
+                controls: true,
                 autoplay: true,
                 muted: false,
                 parent: ["localhost"]
@@ -441,22 +424,107 @@
 
             player.addEventListener(Twitch.Player.OFFLINE, () => {
                 document.getElementById('player-container').innerHTML = ` 
-                    <video autoplay loop muted playsinline width="100%" height="100%" class="background-video">
-                        <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                     </video>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                        <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                    </div>
                 `;
+                const offlineVideo = document.getElementById('offline-video');
+                offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                playVideo(offlineVideo);
             });
+
+            setInterval(() => {
+                if (player.isLive()) {
+                    document.getElementById('player-container').innerHTML = `
+                        <div id="twitch-embed"></div>
+                    `;
+                    createTwitchPlayer();
+                } else {
+                    document.getElementById('player-container').innerHTML = `
+                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                        </video>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                            <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                        </div>
+                    `;
+                    const offlineVideo = document.getElementById('offline-video');
+                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                    playVideo(offlineVideo);
+                }
+            }, 60000);
         }
 
+        function createLiveNotificationPlayer() {
+            const livePlayerContainer = document.getElementById("live-player");
+            livePlayer = new Twitch.Player("live-player", {
+                channel: "lourimarcos",
+                height: "100%",
+                width: "100%",
+                muted: true,
+                autoplay: true,
+                controls: false,
+                parent: ["localhost"]
+            });
+            livePlayer.addEventListener(Twitch.Player.READY, () => {
+                const iframe = livePlayer.getIframe();
+                iframe.style.pointerEvents = "none";
+            });
+            function reloadLivePlayer() {
+                livePlayer.seek(0);
+            }
+            setInterval(reloadLivePlayer, 30000);
+        }
+
+        let validKeys = [];
+
+        fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
+            .then(response => response.text())
+            .then(data => {
+                validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
+                console.log('Chaves carregadas:', validKeys);
+            })
+            .catch(error => {
+                console.error('Erro ao carregar as chaves:', error);
+            });
+
         function verifyKey() {
-            const inputKey = document.getElementById("key-input").value;
-            const key = "código-de-acesso"; // Defina o código correto
-            if (inputKey === key) {
-                document.getElementById("login-container").style.display = "none";
-                document.getElementById("player-container").style.display = "block";
+            const keyInput = document.getElementById('key-input').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (keyInput.length !== 25) {
+                errorMessage.textContent = "A chave deve ter 25 caracteres.";
+                return;
+            }
+
+            if (validKeys.includes(keyInput)) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('player-container').style.display = 'flex';
+
+                const welcomeMessage = document.createElement('div');
+                welcomeMessage.textContent = "Seja Bem vindo!!!";
+                welcomeMessage.style.position = "absolute";
+                welcomeMessage.style.top = "20px";
+                welcomeMessage.style.left = "50%";
+                welcomeMessage.style.transform = "translateX(-50%)";
+                welcomeMessage.style.color = "white";
+                welcomeMessage.style.fontSize = "18px";
+                welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+                welcomeMessage.style.padding = "10px";
+                welcomeMessage.style.borderRadius = "8px";
+                welcomeMessage.style.zIndex = "3";
+                document.body.appendChild(welcomeMessage);
+
+                setTimeout(() => {
+                    welcomeMessage.remove();
+                }, 6000);
+
                 createTwitchPlayer();
             } else {
-                document.getElementById("error-message").innerText = "Chave de acesso incorreta. Tente novamente.";
+                errorMessage.textContent = "Chave inválida. Tente novamente.";
             }
         }
 
@@ -468,10 +536,47 @@
             document.getElementById("modal").style.display = "none";
         }
 
-        function toggleMute() {
-            isMuted = !isMuted;
-            player.setMuted(isMuted);
+        function sendToWhatsApp() {
+            const name = document.getElementById("user-name").value;
+            if (!name) {
+                alert("Por favor, preencha seu nome antes de enviar.");
+                return;
+            }
+            const message = `${name}, comprei uma chave e vou mandar o comprovante agora!!!!`;
+            window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
         }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F12' || 
+                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+                (event.ctrlKey && event.key === 'U')) {
+                alert("isso não é permitido 😢");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('contextmenu', function(event) {
+            alert("isso não é permitido 😢");
+            event.preventDefault();
+            return false;
+        });
+
+        setInterval(function () {
+            (function () {
+                function logNop() { alert("isso não é permitido 😢"); return false; }
+                console.log = logNop;
+                console.warn = logNop;
+                console.error = logNop;
+                console.info = logNop;
+                console.debug = logNop;
+                console.table = logNop;
+            })();
+        }, 1000);
+
+        playVideo(document.getElementById('background-video'));
+        createLiveNotificationPlayer();
     </script>
+
 </body>
 </html>
