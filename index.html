@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     /* Estilo Geral */
     body {
@@ -206,10 +205,6 @@
       top: 0;
       left: 0;
       z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
     }
 
     .player {
@@ -264,23 +259,6 @@
       background: rgba(0, 0, 0, 0.3);
       border: none;
       border-radius: 8px;
-    }
-
-    /* Estilo para o botão de mute */
-    #mute-button {
-      padding: 8px 12px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 5px;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    #mute-button:hover {
-      background: rgba(0, 0, 0, 0.7);
     }
 
     /* Modal Estilo */
@@ -468,9 +446,6 @@
     <div class="player twitch-player" id="player">
       <div id="twitch-embed"></div>
     </div>
-    <button id="mute-button">
-      <i id="mute-icon" class="fas fa-volume-up"></i>
-    </button>
   </div>
 
   <!-- Modal para criação de chave -->
@@ -491,10 +466,6 @@
   <script>
     let player;
     let livePlayer;
-    let isMuted = false;
-    let isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    const muteButton = document.getElementById('mute-button');
-    const muteIcon = document.getElementById('mute-icon');
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -555,11 +526,8 @@
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
-        if (isMobile) {
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
           createVolumeControl(player);
-          muteButton.style.display = 'block';
-        } else {
-          muteButton.style.display = 'none';
         }
       });
 
@@ -726,15 +694,6 @@
         console.table = logNop;
       })();
     }, 1000);
-
-    function toggleMute() {
-      isMuted = !isMuted;
-      player.setMuted(isMuted);
-      muteIcon.classList.toggle('fa-volume-up');
-      muteIcon.classList.toggle('fa-volume-mute');
-    }
-
-    muteButton.addEventListener('click', toggleMute);
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
