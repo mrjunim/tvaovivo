@@ -5,13 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
   <style>
-    /* Estilo Geral */
+    /* Estilos Modernos e Elegantes */
+    :root {
+      --primary-color: #e50914;
+      --secondary-color: #f1f1f1;
+      --bg-dark: #0a0a0a;
+      --bg-medium: #1a1a1a;
+      --bg-light: #222;
+      --text-default: #bbb;
+      --border-radius: 12px;
+      --box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #141E30, #243B55);
-      color: #fff;
+      font-family: var(--font-family);
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-medium));
+      color: var(--secondary-color);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,16 +31,16 @@
       overflow: hidden;
     }
 
-    /* Guia de Programação - Barra com rolagem contínua */
+    /* Guia de Programação - Barra com rolagem contínua via duplicação */
     #guide-container {
       width: 100%;
       overflow: hidden;
-      background: rgba(34, 34, 34, 0.7);
-      color: #fff;
+      background: var(--bg-light);
+      color: var(--secondary-color);
       padding: 10px 0;
       margin-bottom: 20px;
       position: relative;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--box-shadow);
     }
 
     .scrolling-text {
@@ -40,30 +52,36 @@
 
     .scrolling-text span {
       white-space: nowrap;
-      padding-right: 60px;
+      padding-right: 50px;
       font-size: 16px;
-      font-weight: 500;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.5px;
     }
 
     @keyframes scroll-text {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
     }
 
     @-webkit-keyframes scroll-text {
-      0% { -webkit-transform: translateX(0); }
-      100% { -webkit-transform: translateX(-50%); }
+      0% {
+        -webkit-transform: translateX(0);
+      }
+
+      100% {
+        -webkit-transform: translateX(-50%);
+      }
     }
 
     @media (max-width: 480px) {
       .scrolling-text {
-        animation-duration: 20s;
-        -webkit-animation-duration: 20s;
+        animation-duration: 25s;
+        -webkit-animation-duration: 25s;
         font-size: 14px;
-      }
-      .scrolling-text span {
-        padding-right: 40px;
       }
     }
 
@@ -71,7 +89,7 @@
       display: flex;
       flex-direction: row;
       justify-content: center;
-      align-items: stretch;
+      align-items: center;
       width: 90%;
       max-width: 1200px;
       padding: 30px;
@@ -91,27 +109,20 @@
 
     .login-container,
     .live-notification {
-      background: rgba(30, 41, 59, 0.85);
+      background: rgba(20, 20, 20, 0.8);
       padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
       text-align: center;
       flex: 1;
       animation: fadeIn 1s ease-in-out;
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: all 0.3s ease;
-    }
-
-    .login-container:hover,
-    .live-notification:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
     }
 
     .login-container {
-      max-width: 350px;
+      max-width: 400px;
     }
 
     .live-notification {
@@ -121,93 +132,89 @@
     h1 {
       font-size: 2.2em;
       margin-bottom: 25px;
-      color: #f0f0f0;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      color: var(--secondary-color);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .subtitle {
       margin-bottom: 25px;
-      color: #ddd;
+      color: var(--text-default);
       font-size: 1.1em;
-      font-weight: 400;
     }
 
     input {
       width: 100%;
-      padding: 15px;
-      margin-top: 15px;
-      border: 1px solid #556b82;
+      padding: 14px;
+      margin-top: 12px;
+      border: 1px solid #444;
       border-radius: 10px;
-      background: #374151;
-      color: #fff;
+      background: var(--bg-light);
+      color: var(--secondary-color);
       font-size: 1.1em;
       outline: none;
       transition: border-color 0.3s ease;
     }
 
     input:focus {
-      border-color: #6b7280;
+      border-color: var(--primary-color);
     }
 
     button {
       width: 100%;
-      padding: 15px;
+      padding: 14px;
       margin-top: 20px;
       border: none;
       border-radius: 10px;
-      background: #E53935;
-      color: white;
+      background: var(--primary-color);
+      color: var(--secondary-color);
       font-size: 1.1em;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s ease, transform 0.1s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
     button:hover {
-      background: #C62828;
+      background: #b20710;
     }
 
     button:active {
       transform: scale(0.98);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .error-message {
-      color: #FF5252;
+      color: #ff3b3b;
       font-size: 1em;
-      margin-top: 15px;
+      margin-top: 12px;
       animation: shake 0.3s;
-      font-weight: 500;
     }
 
     .whatsapp-info {
       margin-top: 20px;
       font-size: 1em;
-      color: #bbb;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      color: var(--text-default);
     }
 
     .whatsapp-info strong {
-      color: #4CAF50;
+      color: #1db954;
     }
 
     .live-notification h2 {
       font-size: 1.5em;
       margin-bottom: 15px;
-      color: #f0f0f0;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      color: var(--secondary-color);
     }
 
     .live-notification .player {
       width: 100%;
       height: 0;
-      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+      padding-bottom: 56.25%;
+      /* Aspect ratio 16:9 */
       position: relative;
-      border-radius: 10px;
+      border-radius: var(--border-radius);
       overflow: hidden;
       pointer-events: none;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--box-shadow);
     }
 
     .live-notification .player iframe {
@@ -272,6 +279,7 @@
     .player .player-controls__button {
       display: none !important;
     }
+
     .player .player-controls__fullscreen-button {
       display: block !important;
     }
@@ -298,20 +306,20 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       justify-content: center;
       align-items: center;
       z-index: 9999;
     }
 
     .modal-content {
-      background: #fff;
-      color: #333;
+      background: var(--secondary-color);
+      color: var(--bg-dark);
       padding: 40px;
-      border-radius: 15px;
+      border-radius: var(--border-radius);
       max-width: 500px;
       width: 90%;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       position: relative;
       animation: fadeIn 0.5s ease-out;
     }
@@ -320,8 +328,7 @@
       margin-top: 0;
       font-size: 2em;
       font-weight: bold;
-      color: #e50914;
-      margin-bottom: 15px;
+      color: var(--primary-color);
     }
 
     .modal-content p {
@@ -332,21 +339,22 @@
 
     .modal-content input {
       width: 100%;
-      padding: 15px 12px;
+      padding: 14px 12px;
       margin: 10px 0;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1.1em;
+      color: var(--bg-dark);
     }
 
     .modal-content button {
       width: 100%;
-      padding: 15px;
+      padding: 14px;
       margin-top: 20px;
       border: none;
       border-radius: 8px;
-      background: #e50914;
-      color: #fff;
+      background: var(--primary-color);
+      color: var(--secondary-color);
       font-size: 1.1em;
       font-weight: bold;
       cursor: pointer;
@@ -373,15 +381,34 @@
 
     /* Animações */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      50% { transform: translateX(8px); }
-      75% { transform: translateX(-8px); }
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
     }
 
     /* Responsividade */
@@ -390,55 +417,66 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 30px;
+        gap: 25px;
       }
+
       .login-container,
       .live-notification {
         width: 100%;
         max-width: 100%;
-        padding: 20px;
       }
+
       .player {
         height: auto;
       }
     }
+
     @media (max-width: 480px) {
       .login-container,
       .live-notification {
         padding: 15px;
         width: 100%;
       }
+
       h1 {
         font-size: 1.5em;
         margin-bottom: 15px;
       }
+
       .subtitle {
         font-size: 0.9em;
         margin-bottom: 15px;
       }
+
       input {
-        padding: 12px;
+        padding: 10px;
         font-size: 0.9em;
       }
+
       button {
-        padding: 12px;
+        padding: 10px;
         font-size: 0.9em;
       }
+
       .error-message {
         font-size: 0.8em;
       }
+
       .whatsapp-info {
         font-size: 0.8em;
       }
+
       .player {
         height: auto;
       }
+
       .live-notification h2 {
         font-size: 1.2em;
       }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Vídeo de Fundo -->
@@ -457,8 +495,8 @@
           <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
       </div>
-      <h1> 📺 Bem-vindo(a)! 🎬 </h1>
-      <p class="subtitle">Entre com sua chave de acesso</p>
+      <h1> 📺 Bem-vindo(a) 🎬 </h1>
+      <p class="subtitle">Digite sua chave de acesso para continuar</p>
       <input type="text" id="key-input" placeholder="Chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
@@ -467,7 +505,7 @@
 
     <!-- Notificação de Live -->
     <div class="live-notification">
-      <h2> 🔴 Transmissão ao vivo 📺 </h2>
+      <h2> 🔴 Acompanhe Agora Nossa Programação 📺 </h2>
       <div class="player" id="live-player"></div>
     </div>
   </div>
@@ -483,13 +521,14 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Adquira sua Chave de Acesso</h2>
-      <p>Insira seu nome para solicitar sua chave de acesso. Após o pagamento, envie o comprovante via WhatsApp.</p>
-      <p><strong>Valor: R$ 2,00</strong></p>
+      <h2>🔑 Adquira sua Chave de Acesso</h2>
+      <p>Para ter acesso, preencha seu nome e realize o pagamento via PIX. Envie o comprovante pelo WhatsApp após a
+        transação.</p>
+      <p><strong>Valor Simbólico: R$ 2,00</strong></p>
       <p><strong>PIX: lourimarcos@outlook.com</strong></p>
-      <p>A chave é válida por <strong>15 dias</strong></p>
-      <input type="text" id="user-name" placeholder="Seu Nome" />
-      <button onclick="sendToWhatsApp()">Enviar Solicitação</button>
+      <p>A chave é válida por <strong>15 dias</strong>.</p>
+      <input type="text" id="user-name" placeholder="Seu Nome Completo" />
+      <button onclick="sendToWhatsApp()">Enviar Comprovante via WhatsApp</button>
     </div>
   </div>
 
@@ -554,7 +593,11 @@
         player.setMuted(false);
         player.play();
         const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+        const clickEvent = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true
+        });
         playerElement.dispatchEvent(clickEvent);
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
@@ -568,7 +611,7 @@
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
           <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-            <p> 🔴 Estamos offline no momento, tente novamente mais tarde 😢 🔴</p>
+            <p> 🔴 Estamos Offline no Momento, Tente Novamente Mais Tarde 😢 🔴</p>
           </div>
         `;
         const offlineVideo = document.getElementById('offline-video');
@@ -586,7 +629,7 @@
               <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
             </video>
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-              <p>🔴 Estamos offline no momento, tente novamente mais tarde 😢 🔴</p>
+              <p>🔴 Estamos Offline no Momento, Tente Novamente Mais Tarde 😢 🔴</p>
             </div>
           `;
           const offlineVideo = document.getElementById('offline-video');
@@ -611,6 +654,7 @@
         const iframe = livePlayer.getIframe();
         iframe.style.pointerEvents = "none";
       });
+
       function reloadLivePlayer() {
         livePlayer.seek(0);
       }
@@ -655,7 +699,7 @@
         document.getElementById('player-container').style.display = 'flex';
 
         const welcomeMessage = document.createElement('div');
-        welcomeMessage.textContent = "Seja Bem vindo(a)!";
+        welcomeMessage.textContent = "Seja Bem vindo(a)!!!";
         welcomeMessage.style.position = "absolute";
         welcomeMessage.style.top = "20px";
         welcomeMessage.style.left = "50%";
@@ -696,9 +740,9 @@
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
       if (
-        event.key === 'F12' || 
+        event.key === 'F12' ||
         (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
         (event.ctrlKey && event.key === 'U')
       ) {
@@ -708,7 +752,7 @@
       }
     });
 
-    document.addEventListener('contextmenu', function(event) {
+    document.addEventListener('contextmenu', function (event) {
       alert("isso não é permitido 😢");
       event.preventDefault();
       return false;
@@ -716,7 +760,10 @@
 
     setInterval(function () {
       (function () {
-        function logNop() { alert("isso não é permitido 😢"); return false; }
+        function logNop() {
+          alert("isso não é permitido 😢");
+          return false;
+        }
         console.log = logNop;
         console.warn = logNop;
         console.error = logNop;
@@ -731,4 +778,5 @@
   </script>
 
 </body>
+
 </html>
