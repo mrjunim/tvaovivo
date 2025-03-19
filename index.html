@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     /* Estilo Geral */
     body {
@@ -205,6 +206,8 @@
       top: 0;
       left: 0;
       z-index: 2;
+      display: flex;
+      flex-direction: column;
     }
 
     .player {
@@ -261,19 +264,29 @@
       border-radius: 8px;
     }
 
-    /* Estilo para o botão de mudo/desmudo */
-    #mute-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
+    /* Estilo para os botões de controle */
+    .player-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+
+    .player-controls button {
       background: rgba(0, 0, 0, 0.5);
       color: white;
       border: none;
       border-radius: 5px;
       padding: 5px 10px;
+      margin: 0 5px;
       cursor: pointer;
       opacity: 0.8;
+      display: flex;
+      align-items: center;
+    }
+
+    .player-controls button i {
+      margin-right: 5px;
     }
 
     /* Modal Estilo */
@@ -420,6 +433,25 @@
       .live-notification h2 {
         font-size: 1em;
       }
+       /* Estilo para o botão de mudo/desmudo */
+      #mute-toggle {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        opacity: 0.8;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Centraliza o conteúdo horizontalmente */
+        position: absolute; /* Posiciona o botão absolutamente */
+        bottom: 10px; /* Distância da parte inferior do container */
+        left: 50%; /* Centraliza o botão horizontalmente */
+        transform: translateX(-50%); /* Ajusta o posicionamento para centralizar corretamente */
+        z-index: 2; /* Garante que o botão esteja acima do player */
+      }
     }
   </style>
 </head>
@@ -460,7 +492,10 @@
   <div id="player-container">
     <div class="player twitch-player" id="player">
       <div id="twitch-embed"></div>
-      <button id="mute-toggle">Mudo</button>
+       <button id="mute-toggle" style="display:none"><i class="fas fa-volume-mute"></i></button>
+    </div>
+    <div class="player-controls">
+      <button id="fullscreen-toggle"><i class="fas fa-expand"></i> Tela Cheia</button>
     </div>
   </div>
 
@@ -483,11 +518,28 @@
     let player;
     let livePlayer;
     let isMuted = false; // Variável para controlar o estado do áudio
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const fullscreenButton = document.getElementById('fullscreen-toggle');
+    const muteToggleButton = document.getElementById('mute-toggle');
+    const playerContainer = document.getElementById('player-container');
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
         console.log('Erro ao reproduzir o vídeo:', error);
       });
+    }
+
+    // Função para lidar com a tela cheia
+    function toggleFullscreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+        fullscreenButton.innerHTML = '<i class="fas fa-expand"></i> Tela Cheia';
+      } else {
+        playerContainer.requestFullscreen().catch(err => {
+          alert(`Erro ao entrar no modo tela cheia: ${err.message}`);
+        });
+        fullscreenButton.innerHTML = '<i class="fas fa-compress"></i> Minimizar';
+      }
     }
 
     // Cria o controle de volume apenas se o dispositivo for móvel.
@@ -531,7 +583,7 @@
         height: "100%",
         controls: false,
         autoplay: true,
-        muted: true, // Inicia com o áudio desativado
+        muted: !isMobile, // Inicia com o áudio ativado no desktop e desativado no mobile
         parent: ["localhost"]
       });
 
@@ -543,7 +595,7 @@
           player.setVolume(1.0); // Define o volume máximo
           player.setMuted(false); // Tenta ativar o áudio
           isMuted = false; // Atualiza o estado do áudio
-          document.getElementById('mute-toggle').textContent = 'Mudo'; // Atualiza o texto do botão
+          document.getElementById('mute-toggle').innerHTML = '<i class="fas fa-volume-mute"></i>'; // Atualiza o texto do botão
 
           // Simula um clique no player (pode ajudar em alguns navegadores)
           const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
@@ -561,19 +613,18 @@
           }, 500); // Verifica após 500ms
         }
 
-        // Verifica se é um dispositivo móvel
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
+        if (isMobile) {
+          // Mostra o botão de mudo/desmudo apenas em dispositivos móveis
+          muteToggleButton.style.display = 'flex';
           tryUnmute(); // Tenta ativar o áudio em dispositivos móveis
         } else {
           player.setVolume(1.0);
-          player.setMuted(false);
           isMuted = false; // Garante que o estado do áudio esteja correto
-          document.getElementById('mute-toggle').textContent = 'Mudo'; // Atualiza o texto do botão
         }
 
         player.play();
 
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
+        if (isMobile) {
           createVolumeControl(player);
         }
       });
@@ -743,13 +794,21 @@
     }, 1000);
 
     // Adiciona o event listener para o botão de mudo/desmudo
-    document.getElementById('mute-toggle').addEventListener('click', function() {
+    muteToggleButton.addEventListener('click', function() {
       if (player) {
         isMuted = !isMuted; // Inverte o estado do áudio
         player.setMuted(isMuted); // Define o estado do áudio no player
-        this.textContent = isMuted ? 'Som' : 'Mudo'; // Atualiza o texto do botão
+        this.innerHTML = isMuted ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>'; // Atualiza o texto do botão
       }
     });
+
+    // Adiciona o event listener para o botão de tela cheia
+    fullscreenButton.addEventListener('click', toggleFullscreen);
+
+    // Mostra o botão de tela cheia apenas em dispositivos móveis
+    if (isMobile) {
+      muteToggleButton.style.display = 'flex';
+    }
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
