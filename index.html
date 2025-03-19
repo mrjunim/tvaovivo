@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
   <style>
-    /* Estilo Geral (existing styles - keep as is) */
+    /* Estilo Geral */
     body {
       margin: 0;
       padding: 0;
@@ -19,7 +19,7 @@
       overflow: hidden;
     }
 
-    /* Guia de Programação (existing styles - keep as is) */
+    /* Guia de Programação */
     #guide-container {
       width: 100%;
       overflow: hidden;
@@ -539,6 +539,7 @@
 
     // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
+      console.log("createVolumeControl called"); // DEBUG
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
       volumeControl.min = 0;
@@ -572,6 +573,7 @@
     }
 
     function createTwitchPlayer() {
+      console.log("createTwitchPlayer called"); // DEBUG
       player = new Twitch.Player("twitch-embed", {
         channel: "lourimarcos",
         width: "100%",
@@ -583,6 +585,7 @@
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
+        console.log("Twitch Player READY"); // DEBUG
         player.setVolume(1.0);
         player.setMuted(false);
         player.play();
@@ -591,7 +594,10 @@
         playerElement.dispatchEvent(clickEvent);
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
+          console.log("Mobile device detected"); // DEBUG
           createVolumeControl(player);
+        } else {
+          console.log("Non-mobile device detected"); // DEBUG
         }
       });
 
@@ -771,6 +777,12 @@
         }
       });
     }
+
+    // Ensure createTwitchPlayer is called after the DOM is fully loaded
+    window.onload = function() {
+      console.log("DOM fully loaded"); // DEBUG
+      createTwitchPlayer();
+    };
   </script>
 
 </body>
