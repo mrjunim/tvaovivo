@@ -576,7 +576,7 @@
       });
     }
 
-    function createTwitchPlayer() {
+   function createTwitchPlayer() {
       player = new Twitch.Player("twitch-embed", {
         channel: "lourimarcos",
         width: "100%",
@@ -629,13 +629,13 @@
         }
       });
 
-      player.addEventListener(Twitch.Player.OFFLINE, () => {
-        document.getElementById('player-container').innerHTML = ` 
+          player.addEventListener(Twitch.Player.OFFLINE, () => {
+        document.getElementById('player-container').innerHTML = `
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
           <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+            <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢🔴</p>
           </div>
         `;
         const offlineVideo = document.getElementById('offline-video');
@@ -644,16 +644,16 @@
       });
 
       setInterval(() => {
-        if (player.isLive()) {
-          document.getElementById('player-container').innerHTML = `<div id="twitch-embed"></div>`;
-          createTwitchPlayer();
+        if (player && player.isLive()) {
+          // The stream is live, no need to do anything
         } else {
+          // The stream is offline, display the offline content
           document.getElementById('player-container').innerHTML = `
             <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
               <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
             </video>
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-              <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+              <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢🔴</p>
             </div>
           `;
           const offlineVideo = document.getElementById('offline-video');
@@ -662,6 +662,7 @@
         }
       }, 60000);
     }
+
 
     function createLiveNotificationPlayer() {
       const livePlayerContainer = document.getElementById("live-player");
