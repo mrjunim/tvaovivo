@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     /* Estilo Geral */
     body {
@@ -206,8 +205,6 @@
       top: 0;
       left: 0;
       z-index: 2;
-      display: flex;
-      flex-direction: column;
     }
 
     .player {
@@ -262,26 +259,6 @@
       background: rgba(0, 0, 0, 0.3);
       border: none;
       border-radius: 8px;
-    }
-
-    /* Estilo para o botão de mudo/desmudo */
-    #mute-toggle {
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      margin: 0 5px;
-      cursor: pointer;
-      opacity: 0.8;
-      display: flex;
-      align-items: center;
-      justify-content: center; /* Centraliza o conteúdo horizontalmente */
-      position: absolute; /* Posiciona o botão absolutamente */
-      bottom: 10px; /* Distância da parte inferior do container */
-      left: 50%; /* Centraliza o botão horizontalmente */
-      transform: translateX(-50%); /* Ajusta o posicionamento para centralizar corretamente */
-      z-index: 2; /* Garante que o botão esteja acima do player */
     }
 
     /* Modal Estilo */
@@ -468,7 +445,6 @@
   <div id="player-container">
     <div class="player twitch-player" id="player">
       <div id="twitch-embed"></div>
-       <button id="mute-toggle" style="display:none"><i class="fas fa-volume-mute"></i></button>
     </div>
   </div>
 
@@ -490,10 +466,6 @@
   <script>
     let player;
     let livePlayer;
-    let isMuted = false; // Variável para controlar o estado do áudio
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    const muteToggleButton = document.getElementById('mute-toggle');
-    const playerContainer = document.getElementById('player-container');
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -536,7 +508,6 @@
     }
 
     function createTwitchPlayer() {
-      console.log('createTwitchPlayer chamado'); // Adicionado log
       player = new Twitch.Player("twitch-embed", {
         channel: "lourimarcos",
         width: "100%",
@@ -548,7 +519,6 @@
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
-        console.log('Twitch.Player.READY event'); // Adicionado log
         player.setVolume(1.0);
         player.setMuted(false);
         player.play();
@@ -557,14 +527,11 @@
         playerElement.dispatchEvent(clickEvent);
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
-          console.log('Dispositivo móvel detectado'); // Adicionado log
           createVolumeControl(player);
-                muteToggleButton.style.display = 'flex';
         }
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
-        console.log('Twitch.Player.OFFLINE event'); // Adicionado log
         document.getElementById('player-container').innerHTML = ` 
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
@@ -655,7 +622,6 @@
       if (validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('player-container').style.display = 'flex';
-        console.log('Chave verificada com sucesso'); // Adicionado log
 
         const welcomeMessage = document.createElement('div');
         welcomeMessage.textContent = "Seja Bem vindo!!!";
@@ -728,15 +694,6 @@
         console.table = logNop;
       })();
     }, 1000);
-
-      // Adiciona o event listener para o botão de mudo/desmudo
-    muteToggleButton.addEventListener('click', function() {
-      if (player) {
-        isMuted = !isMuted; // Inverte o estado do áudio
-        player.setMuted(isMuted); // Define o estado do áudio no player
-        this.innerHTML = isMuted ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute"></i>'; // Atualiza o texto do botão
-      }
-    });
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
