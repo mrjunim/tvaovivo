@@ -519,19 +519,38 @@
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
+        const playerElement = player.getIframe();
+
+        // Função para tentar ativar o áudio
+        function tryUnmute() {
+          player.setVolume(1.0); // Define o volume máximo
+          player.setMuted(false); // Tenta ativar o áudio
+
+          // Simula um clique no player (pode ajudar em alguns navegadores)
+          const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+          playerElement.dispatchEvent(clickEvent);
+
+          // Verifica se o áudio está realmente ativado após a tentativa
+          setTimeout(() => {
+            if (player.getMuted()) {
+              console.warn('Áudio ainda está mudo. Tentando novamente...');
+              // Se ainda estiver mudo, tenta novamente após um pequeno atraso
+              tryUnmute();
+            } else {
+              console.log('Áudio ativado com sucesso!');
+            }
+          }, 500); // Verifica após 500ms
+        }
+
         // Verifica se é um dispositivo móvel
         if (/Mobi|Android/i.test(navigator.userAgent)) {
-          player.setVolume(1.0); // Define o volume máximo
-          player.setMuted(false); // Ativa o áudio
+          tryUnmute(); // Tenta ativar o áudio em dispositivos móveis
         } else {
           player.setVolume(1.0);
           player.setMuted(false);
         }
 
         player.play();
-        const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
-        playerElement.dispatchEvent(clickEvent);
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
           createVolumeControl(player);
