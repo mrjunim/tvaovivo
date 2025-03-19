@@ -261,6 +261,21 @@
       border-radius: 8px;
     }
 
+    /* Estilo para o botão de mudo/desmudo */
+    #mute-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      opacity: 0.8;
+    }
+
     /* Modal Estilo */
     .modal {
       display: none;
@@ -445,6 +460,7 @@
   <div id="player-container">
     <div class="player twitch-player" id="player">
       <div id="twitch-embed"></div>
+      <button id="mute-toggle">Mudo</button>
     </div>
   </div>
 
@@ -466,6 +482,7 @@
   <script>
     let player;
     let livePlayer;
+    let isMuted = false; // Variável para controlar o estado do áudio
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -525,6 +542,8 @@
         function tryUnmute() {
           player.setVolume(1.0); // Define o volume máximo
           player.setMuted(false); // Tenta ativar o áudio
+          isMuted = false; // Atualiza o estado do áudio
+          document.getElementById('mute-toggle').textContent = 'Mudo'; // Atualiza o texto do botão
 
           // Simula um clique no player (pode ajudar em alguns navegadores)
           const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
@@ -548,6 +567,8 @@
         } else {
           player.setVolume(1.0);
           player.setMuted(false);
+          isMuted = false; // Garante que o estado do áudio esteja correto
+          document.getElementById('mute-toggle').textContent = 'Mudo'; // Atualiza o texto do botão
         }
 
         player.play();
@@ -720,6 +741,15 @@
         console.table = logNop;
       })();
     }, 1000);
+
+    // Adiciona o event listener para o botão de mudo/desmudo
+    document.getElementById('mute-toggle').addEventListener('click', function() {
+      if (player) {
+        isMuted = !isMuted; // Inverte o estado do áudio
+        player.setMuted(isMuted); // Define o estado do áudio no player
+        this.textContent = isMuted ? 'Som' : 'Mudo'; // Atualiza o texto do botão
+      }
+    });
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
