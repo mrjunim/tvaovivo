@@ -78,13 +78,60 @@
       }
     }
 
-    @media (max-width: 480px) {
+    /* Ajustes para dispositivos móveis */
+    @media (max-width: 768px) {
       .scrolling-text {
         animation-duration: 40s;
         /* Aumenta a duração para telas menores */
         -webkit-animation-duration: 40s;
         /* Aumenta a duração para telas menores */
         font-size: 14px;
+      }
+
+      .container {
+        flex-direction: column;
+        align-items: center;
+        /* Centraliza os itens */
+        padding: 20px;
+        /* Reduz o preenchimento */
+        gap: 15px;
+        /* Reduz o espaço entre os itens */
+      }
+
+      .login-container,
+      .live-notification {
+        width: 100%;
+        max-width: 100%;
+        /* Ocupa toda a largura */
+        padding: 20px;
+        /* Reduz o preenchimento */
+      }
+
+      h1 {
+        font-size: 1.8em;
+        /* Reduz o tamanho da fonte */
+        margin-bottom: 15px;
+        /* Reduz a margem */
+      }
+
+      .subtitle {
+        font-size: 1em;
+        /* Reduz o tamanho da fonte */
+        margin-bottom: 15px;
+        /* Reduz a margem */
+      }
+
+      input,
+      button {
+        padding: 12px;
+        /* Reduz o preenchimento */
+        font-size: 1em;
+        /* Reduz o tamanho da fonte */
+      }
+
+      .live-notification .player {
+        padding-bottom: 56.25%;
+        /* Mantém a proporção */
       }
     }
 
@@ -411,70 +458,6 @@
 
       75% {
         transform: translateX(-5px);
-      }
-    }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 25px;
-      }
-
-      .login-container,
-      .live-notification {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .player {
-        height: auto;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .login-container,
-      .live-notification {
-        padding: 15px;
-        width: 100%;
-      }
-
-      h1 {
-        font-size: 1.5em;
-        margin-bottom: 15px;
-      }
-
-      .subtitle {
-        font-size: 0.9em;
-        margin-bottom: 15px;
-      }
-
-      input {
-        padding: 10px;
-        font-size: 0.9em;
-      }
-
-      button {
-        padding: 10px;
-        font-size: 0.9em;
-      }
-
-      .error-message {
-        font-size: 0.8em;
-      }
-
-      .whatsapp-info {
-        font-size: 0.8em;
-      }
-
-      .player {
-        height: auto;
-      }
-
-      .live-notification h2 {
-        font-size: 1.2em;
       }
     }
   </style>
