@@ -1,30 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
   <style>
-    /* Estilos Modernos e Elegantes */
-    :root {
-      --primary-color: #e50914;
-      --secondary-color: #f1f1f1;
-      --bg-dark: #0a0a0a;
-      --bg-medium: #1a1a1a;
-      --bg-light: #222;
-      --text-default: #bbb;
-      --border-radius: 12px;
-      --box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
+    /* Estilo Geral */
     body {
       margin: 0;
       padding: 0;
-      font-family: var(--font-family);
-      background: linear-gradient(135deg, var(--bg-dark), var(--bg-medium));
-      color: var(--secondary-color);
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -36,110 +23,38 @@
     #guide-container {
       width: 100%;
       overflow: hidden;
-      background: var(--bg-light);
-      color: var(--secondary-color);
-      padding: 10px 0;
-      margin-bottom: 20px;
+      background: #222;
+      color: #fff;
+      padding: 8px 0;
+      margin-bottom: 15px;
       position: relative;
-      box-shadow: var(--box-shadow);
     }
-
     .scrolling-text {
       display: inline-flex;
+      /* O conteúdo duplicado ocupa o dobro do espaço */
       width: max-content;
       animation: scroll-text 30s linear infinite;
       -webkit-animation: scroll-text 30s linear infinite;
     }
-
     .scrolling-text span {
       white-space: nowrap;
-      padding-right: 50px;
-      font-size: 16px;
-      letter-spacing: 0.5px;
+      padding-right: 50px; /* Espaço entre as repetições */
+      font-size: 14px;
     }
-
     @keyframes scroll-text {
-      0% {
-        transform: translateX(0);
-      }
-
-      100% {
-        transform: translateX(-50%);
-      }
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
-
     @-webkit-keyframes scroll-text {
-      0% {
-        -webkit-transform: translateX(0);
-      }
-
-      100% {
-        -webkit-transform: translateX(-50%);
-      }
+      0% { -webkit-transform: translateX(0); }
+      100% { -webkit-transform: translateX(-50%); }
     }
-
-    /* Ajustes para dispositivos móveis */
-    @media (max-width: 768px) {
+    /* Para dispositivos móveis, ajuste a duração se necessário */
+    @media (max-width: 480px) {
       .scrolling-text {
-        animation-duration: 40s;
-        /* Aumenta a duração para telas menores */
-        -webkit-animation-duration: 40s;
-        /* Aumenta a duração para telas menores */
-        font-size: 14px;
-      }
-
-      .container {
-        flex-direction: column;
-        /* Alinha os itens verticalmente */
-        align-items: center;
-        /* Centraliza os itens */
-        padding: 20px;
-        /* Reduz o preenchimento */
-        gap: 20px;
-        /* Reduz o espaço entre os itens */
-      }
-
-      .login-container,
-      .live-notification {
-        width: 90%;
-        /* Ajusta a largura */
-        max-width: 90%;
-        /* Ajusta a largura máxima */
-        padding: 20px;
-        /* Reduz o preenchimento */
-        margin-bottom: 15px;
-        /* Adiciona margem inferior */
-        box-sizing: border-box;
-        /* Garante que o preenchimento e a borda não aumentem a largura */
-      }
-
-      h1 {
-        font-size: 1.8em;
-        /* Reduz o tamanho da fonte */
-        margin-bottom: 15px;
-        /* Reduz a margem */
-      }
-
-      .subtitle {
-        font-size: 1em;
-        /* Reduz o tamanho da fonte */
-        margin-bottom: 15px;
-        /* Reduz a margem */
-      }
-
-      input,
-      button {
-        padding: 12px;
-        /* Reduz o preenchimento */
-        font-size: 1em;
-        /* Reduz o tamanho da fonte */
-        box-sizing: border-box;
-        /* Garante que o preenchimento e a borda não aumentem a largura */
-      }
-
-      .live-notification .player {
-        padding-bottom: 56.25%;
-        /* Mantém a proporção */
+        animation-duration: 25s;
+        -webkit-animation-duration: 25s;
+        font-size: 12px;
       }
     }
 
@@ -150,11 +65,9 @@
       align-items: center;
       width: 90%;
       max-width: 1200px;
-      padding: 30px;
-      gap: 30px;
+      padding: 20px;
+      gap: 20px;
       z-index: 1;
-      box-sizing: border-box;
-      /* Garante que o preenchimento e a borda não aumentem a largura */
     }
 
     .background-video {
@@ -170,74 +83,61 @@
     .login-container,
     .live-notification {
       background: rgba(20, 20, 20, 0.8);
-      padding: 30px;
-      border-radius: var(--border-radius);
-      box-shadow: var(--box-shadow);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
       text-align: center;
       flex: 1;
       animation: fadeIn 1s ease-in-out;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-sizing: border-box;
-      /* Garante que o preenchimento e a borda não aumentem a largura */
     }
 
     .login-container {
-      max-width: 400px;
+      max-width: 300px;
     }
 
     .live-notification {
-      max-width: 700px;
+      max-width: 630px;
     }
 
     h1 {
-      font-size: 2.2em;
-      margin-bottom: 25px;
-      color: var(--secondary-color);
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #f1f1f1;
     }
 
     .subtitle {
-      margin-bottom: 25px;
-      color: var(--text-default);
-      font-size: 1.1em;
+      margin-bottom: 20px;
+      color: #bbb;
+      font-size: 1em;
     }
 
     input {
       width: 100%;
-      padding: 14px;
-      margin-top: 12px;
+      padding: 12px;
+      margin-top: 10px;
       border: 1px solid #444;
-      border-radius: 10px;
-      background: var(--bg-light);
-      color: var(--secondary-color);
-      font-size: 1.1em;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      font-size: 1em;
       outline: none;
-      transition: border-color 0.3s ease;
-      box-sizing: border-box;
-      /* Garante que o preenchimento e a borda não aumentem a largura */
-    }
-
-    input:focus {
-      border-color: var(--primary-color);
     }
 
     button {
       width: 100%;
-      padding: 14px;
-      margin-top: 20px;
+      padding: 12px;
+      margin-top: 15px;
       border: none;
-      border-radius: 10px;
-      background: var(--primary-color);
-      color: var(--secondary-color);
-      font-size: 1.1em;
+      border-radius: 8px;
+      background: #e50914;
+      color: white;
+      font-size: 1em;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.1s;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      box-sizing: border-box;
-      /* Garante que o preenchimento e a borda não aumentem a largura */
+      transition: 0.3s;
     }
 
     button:hover {
@@ -245,20 +145,20 @@
     }
 
     button:active {
-      transform: scale(0.98);
+      transform: scale(0.95);
     }
 
     .error-message {
       color: #ff3b3b;
-      font-size: 1em;
-      margin-top: 12px;
+      font-size: 0.9em;
+      margin-top: 10px;
       animation: shake 0.3s;
     }
 
     .whatsapp-info {
-      margin-top: 20px;
-      font-size: 1em;
-      color: var(--text-default);
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #bbb;
     }
 
     .whatsapp-info strong {
@@ -266,21 +166,19 @@
     }
 
     .live-notification h2 {
-      font-size: 1.5em;
-      margin-bottom: 15px;
-      color: var(--secondary-color);
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #f1f1f1;
     }
 
     .live-notification .player {
       width: 100%;
       height: 0;
-      padding-bottom: 56.25%;
-      /* Aspect ratio 16:9 */
+      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
       position: relative;
-      border-radius: var(--border-radius);
+      border-radius: 8px;
       overflow: hidden;
       pointer-events: none;
-      box-shadow: var(--box-shadow);
     }
 
     .live-notification .player iframe {
@@ -345,7 +243,6 @@
     .player .player-controls__button {
       display: none !important;
     }
-
     .player .player-controls__fullscreen-button {
       display: block !important;
     }
@@ -372,56 +269,55 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0,0.7);
       justify-content: center;
       align-items: center;
       z-index: 9999;
     }
 
     .modal-content {
-      background: var(--secondary-color);
-      color: var(--bg-dark);
-      padding: 40px;
-      border-radius: var(--border-radius);
-      max-width: 500px;
+      background: #fff;
+      color: #333;
+      padding: 30px 40px;
+      border-radius: 12px;
+      max-width: 450px;
       width: 90%;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
       position: relative;
       animation: fadeIn 0.5s ease-out;
     }
 
     .modal-content h2 {
       margin-top: 0;
-      font-size: 2em;
+      font-size: 1.8em;
       font-weight: bold;
-      color: var(--primary-color);
+      color: #e50914;
     }
 
     .modal-content p {
-      font-size: 1.1em;
-      line-height: 1.6;
-      margin-bottom: 20px;
+      font-size: 1em;
+      line-height: 1.5;
+      margin-bottom: 15px;
     }
 
     .modal-content input {
       width: 100%;
-      padding: 14px 12px;
-      margin: 10px 0;
+      padding: 12px 10px;
+      margin: 8px 0;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1.1em;
-      color: var(--bg-dark);
+      border-radius: 6px;
+      font-size: 1em;
     }
 
     .modal-content button {
       width: 100%;
-      padding: 14px;
-      margin-top: 20px;
+      padding: 12px;
+      margin-top: 15px;
       border: none;
-      border-radius: 8px;
-      background: var(--primary-color);
-      color: var(--secondary-color);
-      font-size: 1.1em;
+      border-radius: 6px;
+      background: #e50914;
+      color: #fff;
+      font-size: 1em;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s ease;
@@ -433,9 +329,9 @@
 
     .close {
       position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 30px;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
       color: #999;
       cursor: pointer;
       transition: color 0.3s ease;
@@ -447,38 +343,71 @@
 
     /* Animações */
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes shake {
-      0%,
-      100% {
-        transform: translateX(0);
-      }
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
 
-      25% {
-        transform: translateX(-5px);
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
       }
-
-      50% {
-        transform: translateX(5px);
+      .login-container,
+      .live-notification {
+        width: 100%;
+        max-width: 100%;
       }
-
-      75% {
-        transform: translateX(-5px);
+      .player {
+        height: auto;
+      }
+    }
+    @media (max-width: 480px) {
+      .login-container,
+      .live-notification {
+        padding: 10px;
+        width: 100%;
+      }
+      h1 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+      .subtitle {
+        font-size: 0.8em;
+        margin-bottom: 10px;
+      }
+      input {
+        padding: 8px;
+        font-size: 0.8em;
+      }
+      button {
+        padding: 8px;
+        font-size: 0.8em;
+      }
+      .error-message {
+        font-size: 0.7em;
+      }
+      .whatsapp-info {
+        font-size: 0.7em;
+      }
+      .player {
+        height: auto;
+      }
+      .live-notification h2 {
+        font-size: 1em;
       }
     }
   </style>
 </head>
-
 <body>
 
   <!-- Vídeo de Fundo -->
@@ -497,17 +426,17 @@
           <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
       </div>
-      <h1> 📺 Bem-vindo(a) 🎬 </h1>
-      <p class="subtitle">Digite sua chave de acesso para continuar</p>
-      <input type="text" id="key-input" placeholder="Chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
+      <h1> 📺 Bem-vindo 🎬 </h1>
+      <p class="subtitle">Digite a chave de acesso para entrar</p>
+      <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
-      <button onclick="openModal()">Obter Chave de Acesso</button>
+      <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
     </div>
 
     <!-- Notificação de Live -->
     <div class="live-notification">
-      <h2> 🔴 Acompanhe Agora Nossa Programação 📺 </h2>
+      <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
       <div class="player" id="live-player"></div>
     </div>
   </div>
@@ -523,14 +452,13 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2>🔑 Adquira sua Chave de Acesso</h2>
-      <p>Para ter acesso, preencha seu nome e realize o pagamento via PIX. Envie o comprovante pelo WhatsApp após a
-        transação.</p>
+      <h2>Adquirir Chave para Acesso</h2>
+      <p>Preencha seu nome para adquirir sua chave de acesso. Após o pagamento, envie o comprovante pelo WhatsApp.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
-      <p><strong>PIX: lourimarcos@outlook.com</strong></p>
-      <p>A chave é válida por <strong>15 dias</strong>.</p>
-      <input type="text" id="user-name" placeholder="Seu Nome Completo" />
-      <button onclick="sendToWhatsApp()">Enviar Comprovante via WhatsApp</button>
+      <p><strong>Pix: lourimarcos@outlook.com</strong></p>
+      <p>A chave tem duração de <strong>15 dias</strong></p>
+      <input type="text" id="user-name" placeholder="Seu Nome" />
+      <button onclick="sendToWhatsApp()">Enviar</button>
     </div>
   </div>
 
@@ -595,11 +523,7 @@
         player.setMuted(false);
         player.play();
         const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true
-        });
+        const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
@@ -613,7 +537,7 @@
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
           <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-            <p> 🔴 Estamos Offline no Momento, Tente Novamente Mais Tarde 😢 🔴</p>
+            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
           </div>
         `;
         const offlineVideo = document.getElementById('offline-video');
@@ -631,7 +555,7 @@
               <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
             </video>
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-              <p>🔴 Estamos Offline no Momento, Tente Novamente Mais Tarde 😢 🔴</p>
+              <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
             </div>
           `;
           const offlineVideo = document.getElementById('offline-video');
@@ -656,7 +580,6 @@
         const iframe = livePlayer.getIframe();
         iframe.style.pointerEvents = "none";
       });
-
       function reloadLivePlayer() {
         livePlayer.seek(0);
       }
@@ -701,7 +624,7 @@
         document.getElementById('player-container').style.display = 'flex';
 
         const welcomeMessage = document.createElement('div');
-        welcomeMessage.textContent = "Seja Bem vindo(a)!!!";
+        welcomeMessage.textContent = "Seja Bem vindo!!!";
         welcomeMessage.style.position = "absolute";
         welcomeMessage.style.top = "20px";
         welcomeMessage.style.left = "50%";
@@ -742,9 +665,9 @@
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
-    document.addEventListener('keydown', function (event) {
+    document.addEventListener('keydown', function(event) {
       if (
-        event.key === 'F12' ||
+        event.key === 'F12' || 
         (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
         (event.ctrlKey && event.key === 'U')
       ) {
@@ -754,7 +677,7 @@
       }
     });
 
-    document.addEventListener('contextmenu', function (event) {
+    document.addEventListener('contextmenu', function(event) {
       alert("isso não é permitido 😢");
       event.preventDefault();
       return false;
@@ -762,10 +685,7 @@
 
     setInterval(function () {
       (function () {
-        function logNop() {
-          alert("isso não é permitido 😢");
-          return false;
-        }
+        function logNop() { alert("isso não é permitido 😢"); return false; }
         console.log = logNop;
         console.warn = logNop;
         console.error = logNop;
@@ -780,5 +700,4 @@
   </script>
 
 </body>
-
 </html>
