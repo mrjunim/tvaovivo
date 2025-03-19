@@ -467,6 +467,7 @@
     let player;
     let livePlayer;
     let isMuted = false;
+    let isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -527,11 +528,11 @@
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
         playerElement.dispatchEvent(clickEvent);
 
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
+        if (isMobile) {
           createVolumeControl(player);
 
-          // Adiciona o listener de clique para dispositivos móveis
-          document.getElementById('player').addEventListener('click', toggleMute);
+          // Attach the click listener to the iframe's document body
+          player.getIframe().contentDocument.body.addEventListener('click', toggleMute);
         }
       });
 
@@ -700,7 +701,7 @@
     }, 1000);
 
     function toggleMute() {
-      if (/Mobi|Android/i.test(navigator.userAgent)) {
+      if (isMobile) {
         isMuted = !isMuted;
         player.setMuted(isMuted);
       }
