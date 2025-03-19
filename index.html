@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
   <style>
-    /* Estilo Geral */
+    /* Estilo Geral (existing styles - keep as is) */
     body {
       margin: 0;
       padding: 0;
@@ -19,7 +19,7 @@
       overflow: hidden;
     }
 
-    /* Guia de Programação - Barra com rolagem contínua via duplicação */
+    /* Guia de Programação (existing styles - keep as is) */
     #guide-container {
       width: 100%;
       overflow: hidden;
@@ -406,6 +406,65 @@
         font-size: 1em;
       }
     }
+
+    /* Mobile-Specific Styles */
+    @media (max-width: 480px) {
+      #mobile-volume-controls {
+        display: flex; /* Show only on mobile */
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        padding: 5px;
+        border-radius: 5px;
+        z-index: 2;
+      }
+
+      #mobile-volume-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        /* Add your volume icon here, e.g., using a background image or an SVG */
+        /* Example with a simple text-based icon: */
+        text-align: center;
+        line-height: 20px;
+        font-size: 14px;
+        color: white;
+      }
+
+      #mobile-volume-slider {
+        width: 100px;
+        height: 5px;
+        -webkit-appearance: none;
+        background: #ddd;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+        border-radius: 5px;
+      }
+
+      #mobile-volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 10px;
+        height: 10px;
+        background: #e50914;
+        cursor: pointer;
+        border-radius: 50%;
+      }
+
+      #mobile-volume-slider::-moz-range-thumb {
+        width: 10px;
+        height: 10px;
+        background: #e50914;
+        cursor: pointer;
+        border-radius: 50%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -444,7 +503,12 @@
   <!-- Player -->
   <div id="player-container">
     <div class="player twitch-player" id="player">
-      <div id="twitch-embed"></div>
+      <div id="twitch-embed">
+        <div id="mobile-volume-controls">
+          <div id="mobile-volume-icon">🔊</div>
+          <input type="range" id="mobile-volume-slider" min="0" max="1" step="0.01" value="1">
+        </div>
+      </div>
     </div>
   </div>
 
@@ -697,6 +761,16 @@
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
+
+    // Mobile Volume Control
+    const mobileVolumeSlider = document.getElementById('mobile-volume-slider');
+    if (mobileVolumeSlider) {
+      mobileVolumeSlider.addEventListener('input', function(e) {
+        if (player) {
+          player.setVolume(parseFloat(e.target.value));
+        }
+      });
+    }
   </script>
 
 </body>
