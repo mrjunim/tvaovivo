@@ -803,13 +803,6 @@
       }
     });
 
-    // Adiciona o event listener para o botão de tela cheia
-    fullscreenButton.addEventListener('click', toggleFullscreen);
-
-    // Mostra o botão de tela cheia apenas em dispositivos móveis
-    if (isMobile) {
-      muteToggleButton.style.display = 'flex';
-    }
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
