@@ -466,6 +466,7 @@
   <script>
     let player;
     let livePlayer;
+    let isMuted = false;
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -528,6 +529,9 @@
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
           createVolumeControl(player);
+
+          // Adiciona o listener de clique para dispositivos móveis
+          document.getElementById('player').addEventListener('click', toggleMute);
         }
       });
 
@@ -694,6 +698,13 @@
         console.table = logNop;
       })();
     }, 1000);
+
+    function toggleMute() {
+      if (/Mobi|Android/i.test(navigator.userAgent)) {
+        isMuted = !isMuted;
+        player.setMuted(isMuted);
+      }
+    }
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
