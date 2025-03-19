@@ -22,6 +22,9 @@
       --text-primary: #fff;
       --text-secondary: #ddd;
       --accent-color: #E53935;
+      --accent-darker: #C62828; /* Mais escuro para hover */
+      --modal-bg: #fff; /* Fundo do modal */
+      --modal-text: #333; /* Texto do modal */
       --shadow-color: rgba(0, 0, 0, 0.2);
       --blur-bg: rgba(36, 59, 85, 0.8);
     }
@@ -176,7 +179,7 @@
     }
 
     button:hover {
-      background: #D32F2F;
+      background: var(--accent-darker);
     }
 
     button:active {
@@ -255,8 +258,8 @@
     }
 
     .modal-content {
-      background: #fff;
-      color: #333;
+      background: var(--modal-bg);
+      color: var(--modal-text);
       padding: 40px;
       border-radius: 15px;
       max-width: 500px;
@@ -306,7 +309,7 @@
     }
 
     .modal-content button:hover {
-      background: #C62828;
+      background: var(--accent-darker);
     }
 
     .close {
