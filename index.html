@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     /* Estilo Geral */
     body {
@@ -205,6 +206,10 @@
       top: 0;
       left: 0;
       z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .player {
@@ -249,9 +254,7 @@
 
     /* Estilo para o controle de volume */
     #volume-control {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
+      position: relative;
       width: 150px;
       opacity: 0.8;
       z-index: 1000;
@@ -259,6 +262,36 @@
       background: rgba(0, 0, 0, 0.3);
       border: none;
       border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px;
+    }
+
+    #volume-control input[type="range"] {
+      width: 70%;
+      background: transparent;
+      border: none;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    #volume-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      height: 12px;
+      width: 12px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    #mute-button {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      font-size: 1em;
     }
 
     /* Modal Estilo */
@@ -446,6 +479,12 @@
     <div class="player twitch-player" id="player">
       <div id="twitch-embed"></div>
     </div>
+    <div id="volume-control">
+      <button id="mute-button">
+        <i id="mute-icon" class="fas fa-volume-up"></i>
+      </button>
+      <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+    </div>
   </div>
 
   <!-- Modal para criação de chave -->
@@ -466,44 +505,16 @@
   <script>
     let player;
     let livePlayer;
+    let isMuted = false;
+    let isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const volumeControl = document.getElementById('volume-control');
+    const muteButton = document.getElementById('mute-button');
+    const muteIcon = document.getElementById('mute-icon');
+    const volumeSlider = document.getElementById('volume-slider');
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
         console.log('Erro ao reproduzir o vídeo:', error);
-      });
-    }
-
-    // Cria o controle de volume apenas se o dispositivo for móvel.
-    function createVolumeControl(playerInstance) {
-      const volumeControl = document.createElement('input');
-      volumeControl.type = 'range';
-      volumeControl.min = 0;
-      volumeControl.max = 1;
-      volumeControl.step = 0.01;
-      volumeControl.value = playerInstance.getVolume();
-      volumeControl.id = 'volume-control';
-
-      volumeControl.style.position = 'absolute';
-      volumeControl.style.bottom = '20px';
-      volumeControl.style.left = '20px';
-      volumeControl.style.width = '150px';
-      volumeControl.style.opacity = '0.8';
-      volumeControl.style.zIndex = '1000';
-      volumeControl.style.pointerEvents = 'auto';
-      volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
-      volumeControl.style.border = 'none';
-      volumeControl.style.borderRadius = '8px';
-
-      const playerContainer = document.getElementById('player');
-      const existingControl = document.getElementById('volume-control');
-      if (existingControl) {
-        existingControl.parentNode.removeChild(existingControl);
-      }
-      playerContainer.appendChild(volumeControl);
-
-      volumeControl.addEventListener('input', (e) => {
-        const val = parseFloat(e.target.value);
-        playerInstance.setVolume(val);
       });
     }
 
@@ -521,18 +532,17 @@
       player.addEventListener(Twitch.Player.READY, () => {
         player.setVolume(1.0);
         player.setMuted(false);
-        player.play();
-        const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
-        playerElement.dispatchEvent(clickEvent);
+        volumeSlider.value = 1.0; // Set initial slider value
 
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-          createVolumeControl(player);
+        if (isMobile) {
+          volumeControl.style.display = 'flex'; // Show volume control on mobile
+        } else {
+          volumeControl.style.display = 'none'; // Hide on desktop
         }
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
-        document.getElementById('player-container').innerHTML = ` 
+        document.getElementById('player-container').innerHTML = `
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
@@ -667,7 +677,7 @@
 
     document.addEventListener('keydown', function(event) {
       if (
-        event.key === 'F12' || 
+        event.key === 'F12' ||
         (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
         (event.ctrlKey && event.key === 'U')
       ) {
@@ -694,6 +704,20 @@
         console.table = logNop;
       })();
     }, 1000);
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      player.setMuted(isMuted);
+      muteIcon.classList.toggle('fa-volume-up');
+      muteIcon.classList.toggle('fa-volume-mute');
+    }
+
+    muteButton.addEventListener('click', toggleMute);
+
+    volumeSlider.addEventListener('input', (e) => {
+      const volume = parseFloat(e.target.value);
+      player.setVolume(volume);
+    });
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
