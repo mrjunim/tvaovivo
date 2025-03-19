@@ -536,6 +536,7 @@
     }
 
     function createTwitchPlayer() {
+      console.log('createTwitchPlayer chamado'); // Adicionado log
       player = new Twitch.Player("twitch-embed", {
         channel: "lourimarcos",
         width: "100%",
@@ -547,6 +548,7 @@
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
+        console.log('Twitch.Player.READY event'); // Adicionado log
         player.setVolume(1.0);
         player.setMuted(false);
         player.play();
@@ -555,12 +557,14 @@
         playerElement.dispatchEvent(clickEvent);
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
+          console.log('Dispositivo móvel detectado'); // Adicionado log
           createVolumeControl(player);
                 muteToggleButton.style.display = 'flex';
         }
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
+        console.log('Twitch.Player.OFFLINE event'); // Adicionado log
         document.getElementById('player-container').innerHTML = ` 
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
@@ -651,6 +655,7 @@
       if (validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('player-container').style.display = 'flex';
+        console.log('Chave verificada com sucesso'); // Adicionado log
 
         const welcomeMessage = document.createElement('div');
         welcomeMessage.textContent = "Seja Bem vindo!!!";
