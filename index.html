@@ -514,13 +514,20 @@
         height: "100%",
         controls: false,
         autoplay: true,
-        muted: false,
+        muted: true, // Inicia com o áudio desativado
         parent: ["localhost"]
       });
 
       player.addEventListener(Twitch.Player.READY, () => {
-        player.setVolume(1.0);
-        player.setMuted(false);
+        // Verifica se é um dispositivo móvel
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+          player.setVolume(1.0); // Define o volume máximo
+          player.setMuted(false); // Ativa o áudio
+        } else {
+          player.setVolume(1.0);
+          player.setMuted(false);
+        }
+
         player.play();
         const playerElement = player.getIframe();
         const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
