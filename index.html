@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Streaming ao Vivo 📺</title>
+  <title>StreamXcellence 📺</title>
   <style>
     /* Estilo Geral */
     body {
@@ -516,7 +516,7 @@
           <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
       </div>
-      <h1> 📺 Bem-vindo 🎬 </h1>
+      <h1> 📺 Bem-vindo ao StreamXcellence 🎬 </h1>
       <p class="subtitle">Digite a chave de acesso para entrar</p>
       <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
       <button onclick="verifyKey()">Entrar</button>
@@ -543,7 +543,8 @@
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2>Adquirir Chave para Acesso</h2>
-      <p>Preencha seu nome para adquirir sua chave de acesso. Após o pagamento, envie o comprovante pelo WhatsApp.</p>
+      <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
+        envie o comprovante para liberação imediata.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
       <p><strong>Pix: lourimarcos@outlook.com</strong></p>
       <p>A chave tem duração de <strong>15 dias</strong></p>
@@ -725,7 +726,6 @@
         welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
         welcomeMessage.style.padding = "10px";
         welcomeMessage.style.borderRadius = "8px";
-        welcomeMessage.style.zIndex = "3";
         document.body.appendChild(welcomeMessage);
 
         setTimeout(() => {
@@ -752,7 +752,7 @@
         alert("Por favor, preencha seu nome antes de enviar.");
         return;
       }
-      const message = `${name}, comprei uma chave e vou mandar o comprovante agora!!!!`;
+       const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
