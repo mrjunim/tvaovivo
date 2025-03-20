@@ -288,44 +288,6 @@
       border-radius: 8px;
     }
 
-    /* Estilo para o botão de transmitir */
-    #cast-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      padding: 5px 8px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-      font-size: 12px;
-    }
-
-    #cast-button:hover {
-      background: rgba(0, 0, 0, 0.7);
-    }
-
-    /* Estilo para o botão de transmitir guia */
-    #cast-guide-button {
-      position: absolute;
-      top: 10px;
-      right: 70px; /* Ajuste a posição para não sobrepor o botão de transmitir */
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      padding: 5px 8px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 1000;
-      font-size: 12px;
-    }
-
-    #cast-guide-button:hover {
-      background: rgba(0, 0, 0, 0.7);
-    }
-
     /* Modal Estilo */
     .modal {
       display: none;
@@ -566,8 +528,6 @@
   <div id="player-container">
     <div class="player twitch-player" id="player">
       <div id="twitch-embed">
-        <button id="cast-button">Transmitir</button>
-        <button id="cast-guide-button">Transmitir Guia</button>
       </div>
     </div>
   </div>
@@ -825,19 +785,6 @@
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
-
-    // Adicionar funcionalidade de "Transmitir"
-    document.getElementById('cast-button').addEventListener('click', function () {
-      alert('Funcionalidade de Transmitir para a TV em Desenvolvimento!');
-      // Aqui você integraria a API do Chromecast, AirPlay, ou outra tecnologia de transmissão
-    });
-
-    // Adicionar funcionalidade de "Transmitir Guia"
-    document.getElementById('cast-guide-button').addEventListener('click', function () {
-      alert('Funcionalidade de Transmitir a Guia do Navegador em Desenvolvimento!');
-      // Aqui você integraria a API do Chromecast, WebRTC, ou outra tecnologia de transmissão
-      // para capturar e transmitir a guia do navegador
-    });
   </script>
 
 </body>
