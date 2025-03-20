@@ -387,6 +387,22 @@
         font-size: 1.4vh;
       }
     }
+
+    /* Estilo para mostrar o player em tela cheia desde o início */
+    #player-container.show {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+    }
+
+    #player-container.show .player {
+      width: 100%;
+      height: 100%;
+    }
   </style>
 </head>
 <body>
@@ -605,7 +621,7 @@
         document.getElementById('main-container').style.display = 'none';
 
         // Mostra o player em tela cheia
-        document.getElementById('player-container').style.display = 'flex';
+        document.getElementById('player-container').classList.add('show');
 
         createTwitchPlayer();
       } else {
@@ -661,6 +677,10 @@
       })();
     }, 1000);
 
+    // Mostrar o player principal inicialmente
+    document.getElementById('main-container').style.display = 'none';
+    document.getElementById('player-container').classList.add('show');
+    createTwitchPlayer();
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
   </script>
