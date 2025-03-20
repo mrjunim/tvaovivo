@@ -15,8 +15,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh; /* Garante que o body ocupe pelo menos a altura total da tela */
+    overflow-x: hidden; /* Impede a rolagem horizontal */
   }
 
   /* Guia de Programação - Barra com rolagem contínua via duplicação */
@@ -60,9 +60,9 @@
 
   .container {
     display: flex;
-    flex-direction: row; /* Alterado para row para desktop */
+    flex-direction: row; /* Layout horizontal em telas maiores */
     justify-content: center;
-    align-items: center;
+    align-items: stretch; /* Alinha os itens para preencher a altura */
     width: 90%;
     max-width: 1200px;
     padding: 20px;
@@ -71,7 +71,7 @@
   }
 
   .background-video {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -87,7 +87,7 @@
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     text-align: center;
-    flex: 1; /* Permite que os containers cresçam igualmente */
+    flex: 1; /* Permite que os containers cresçam igualmente em telas maiores */
     animation: fadeIn 1s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -381,6 +381,29 @@
 
   /* Media Queries para Responsividade */
   @media (max-width: 768px) {
+    .container {
+      flex-direction: column; /* Layout vertical em telas menores */
+      align-items: center; /* Centraliza os itens horizontalmente */
+    }
+
+    .login-container,
+    .live-notification {
+      width: 90%; /* Ocupa 90% da largura da tela */
+      max-width: none; /* Remove a largura máxima */
+      min-width: auto; /* Remove a largura mínima */
+      margin-bottom: 20px; /* Adiciona espaço abaixo dos containers */
+    }
+
+    .login-container {
+      max-width: none;
+    }
+
+    .live-notification {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 576px) {
     .modal-content {
       padding: 40px;
     }
@@ -397,36 +420,6 @@
       font-size: 30px;
       top: 15px;
       right: 25px;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .modal-content {
-      padding: 30px;
-    }
-
-    .modal-content h2 {
-      font-size: 2em;
-    }
-
-    .modal-content p {
-      font-size: 1em;
-    }
-
-     .modal-content input[type="text"] {
-        padding: 15px;
-        font-size: 1em;
-     }
-
-     .modal-content button {
-        padding: 15px;
-        font-size: 1.1em;
-     }
-
-    .close {
-      font-size: 28px;
-      top: 10px;
-      right: 20px;
     }
   }
 
