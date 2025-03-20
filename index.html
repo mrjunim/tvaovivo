@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StreamXcellence 📺</title>
-  <!-- Título alterado -->
   <style>
     /* Estilo Geral */
     body {
@@ -15,6 +14,8 @@
       background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
       color: white;
       display: flex;
+      flex-direction: column;
+      /* Alterado para column */
       justify-content: center;
       align-items: center;
       min-height: 100vh;
@@ -85,9 +86,10 @@
 
     .container {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      /* Alterado para column */
       justify-content: center;
-      align-items: stretch;
+      align-items: center;
       width: 90%;
       max-width: 1200px;
       padding: 20px;
@@ -112,20 +114,11 @@
       border-radius: 12px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
       text-align: center;
-      flex: 1;
+      width: 100%;
+      /* Alterado para 100% */
+      max-width: 500px;
+      /* Limitado o tamanho */
       animation: fadeIn 1s ease-in-out;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 300px;
-    }
-
-    .login-container {
-      max-width: 300px;
-    }
-
-    .live-notification {
-      max-width: 630px;
     }
 
     h1 {
@@ -189,6 +182,7 @@
 
     .whatsapp-info strong {
       color: #1db954;
+      text-decoration: none;
     }
 
     .live-notification h2 {
@@ -199,9 +193,10 @@
 
     .live-notification .player {
       width: 100%;
-      height: 0;
-      padding-bottom: 56.25%;
-      /* Aspect ratio 16:9 */
+      height: auto;
+      /* Alterado para auto */
+      aspect-ratio: 16 / 9;
+      /* Mantém a proporção */
       position: relative;
       border-radius: 8px;
       overflow: hidden;
@@ -221,17 +216,17 @@
     #player-container {
       display: none;
       width: 100%;
-      height: 100vh;
+      height: auto;
+      /* Alterado para auto */
+      aspect-ratio: 16 / 9;
+      /* Mantém a proporção */
       text-align: center;
       border-radius: 0;
       overflow: hidden;
       box-shadow: none;
       background: linear-gradient(45deg, #141414, #222222);
-      padding: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 2;
+      position: relative;
+      /* Alterado para relative */
     }
 
     .player {
@@ -298,7 +293,6 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.8);
-      /* Fundo mais escuro e transparente */
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       justify-content: center;
@@ -308,19 +302,15 @@
 
     .modal-content {
       background: linear-gradient(to bottom, #181818, #101010);
-      /* Fundo gradiente Netflix-like */
       border-radius: 16px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-      /* Sombra mais intensa */
       padding: 40px;
       text-align: center;
       position: relative;
       width: 90%;
       max-width: 500px;
-      /* Aumenta o tamanho máximo */
       animation: fadeIn 0.4s ease-out;
       border: 1px solid #222;
-      /* Adiciona uma borda sutil */
     }
 
     .modal-content h2 {
@@ -331,7 +321,6 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-      /* Sombra no texto */
     }
 
     .modal-content p {
@@ -340,7 +329,6 @@
       line-height: 1.6;
       margin-bottom: 25px;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-      /* Sombra no texto */
     }
 
     .modal-content input[type="text"] {
@@ -352,18 +340,14 @@
       font-size: 1em;
       color: #fff;
       background-color: rgba(255, 255, 255, 0.08);
-      /* Fundo levemente transparente */
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
       outline: none;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-      /* Sombra no input */
     }
 
     .modal-content input[type="text"]:focus {
       background-color: rgba(255, 255, 255, 0.15);
-      /* Fundo mais claro ao focar */
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-      /* Sombra mais intensa ao focar */
     }
 
     .modal-content button {
@@ -378,19 +362,16 @@
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
-      /* Sombra no botão */
     }
 
     .modal-content button:hover {
       background-color: #c6000b;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-      /* Sombra mais intensa no hover */
     }
 
     .modal-content button:active {
       transform: scale(0.98);
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-      /* Sombra menor ao clicar */
     }
 
     .close {
@@ -439,6 +420,17 @@
         font-size: 28px;
         top: 10px;
         right: 15px;
+      }
+
+      .container {
+        width: 100%;
+        padding: 10px;
+      }
+
+      .login-container,
+      .live-notification {
+        max-width: 100%;
+        /* Ocupar a largura total */
       }
     }
 
@@ -500,7 +492,6 @@
         </div>
       </div>
       <h1> 📺 Bem-vindo ao StreamXcellence 🎬 </h1>
-      <!-- Título alterado -->
       <p class="subtitle">Digite a chave de acesso para entrar</p>
       <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
       <button onclick="verifyKey()">Entrar</button>
@@ -530,20 +521,16 @@
       <h2>Adquirir Chave de Acesso</h2>
       <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
         envie o comprovante para liberação imediata.</p>
-      <!-- Mensagem alterada -->
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
       <p><strong>Pix: lourimarcos@outlook.com</strong></p>
       <p>A chave tem duração de <strong>15 dias</strong></p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
       <button onclick="sendToWhatsApp()">Enviar Comprovante</button>
-      <!-- Texto do botão alterado -->
     </div>
   </div>
 
   <footer>
-    <!-- Rodapé -->
     © 2025 StreamXcellence - Suporte: <a href="mailto:streamxcellence@gmail.com">streamxcellence@gmail.com</a>
-    <!-- Email de suporte alterado -->
   </footer>
 
   <script src="https://player.twitch.tv/js/embed/v1.js"></script>
@@ -557,7 +544,6 @@
       });
     }
 
-    // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
@@ -747,7 +733,6 @@
         return;
       }
       const message = `Olá, StreamXcellence! Sou ${name} e efetuei a compra da chave de acesso. Segue o comprovante para liberação. Agradeço a atenção.`;
-      // Mensagem do WhatsApp alterada
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
