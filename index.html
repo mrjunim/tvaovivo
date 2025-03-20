@@ -4,439 +4,499 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
- <style>
-  /* Estilo Geral */
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* Garante que o body ocupe pelo menos a altura total da tela */
-    overflow-x: hidden; /* Impede a rolagem horizontal */
-  }
+  <style>
+    /* Estilo Geral */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-  /* Guia de Programação - Barra com rolagem contínua via duplicação */
-  #guide-container {
-    width: 100%;
-    overflow: hidden;
-    background: #222;
-    color: #fff;
-    padding: 8px 0;
-    margin-bottom: 15px;
-    position: relative;
-  }
-  .scrolling-text {
-    display: inline-flex;
-    /* O conteúdo duplicado ocupa o dobro do espaço */
-    width: max-content;
-    animation: scroll-text 30s linear infinite;
-    -webkit-animation: scroll-text 30s linear infinite;
-  }
-  .scrolling-text span {
-    white-space: nowrap;
-    padding-right: 50px; /* Espaço entre as repetições */
-    font-size: 14px;
-  }
-  @keyframes scroll-text {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  @-webkit-keyframes scroll-text {
-    0% { -webkit-transform: translateX(0); }
-    100% { -webkit-transform: translateX(-50%); }
-  }
-  /* Para dispositivos móveis, ajuste a duração se necessário */
-  @media (max-width: 480px) {
+    /* Guia de Programação - Barra com rolagem contínua */
+    #guide-container {
+      width: 100%;
+      background: rgba(34, 34, 34, 0.9);
+      color: #fff;
+      padding: 12px 0;
+      margin-bottom: 20px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
     .scrolling-text {
-      animation-duration: 25s;
-      -webkit-animation-duration: 25s;
-      font-size: 12px;
+      display: inline-flex;
+      width: max-content;
+      animation: scroll-text 30s linear infinite;
+      -webkit-animation: scroll-text 30s linear infinite;
     }
-  }
 
-  .container {
-    display: flex;
-    flex-direction: row; /* Layout horizontal em telas maiores */
-    justify-content: center;
-    align-items: stretch; /* Alinha os itens para preencher a altura */
-    width: 90%;
-    max-width: 1200px;
-    padding: 20px;
-    gap: 20px;
-    z-index: 1;
-  }
-
-  .background-video {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-  }
-
-  .login-container,
-  .live-notification {
-    background: rgba(20, 20, 20, 0.8);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    text-align: center;
-    flex: 1; /* Permite que os containers cresçam igualmente em telas maiores */
-    animation: fadeIn 1s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 300px; /* Define uma largura mínima */
-  }
-
-  .login-container {
-    max-width: 300px;
-  }
-
-  .live-notification {
-    max-width: 630px;
-  }
-
-  h1 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    color: #f1f1f1;
-  }
-
-  .subtitle {
-    margin-bottom: 20px;
-    color: #bbb;
-    font-size: 1em;
-  }
-
-  input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border: 1px solid #444;
-    border-radius: 8px;
-    background: #222;
-    color: white;
-    font-size: 1em;
-    outline: none;
-  }
-
-  button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 8px;
-    background: #e50914;
-    color: white;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-  }
-
-  button:hover {
-    background: #b20710;
-  }
-
-  button:active {
-    transform: scale(0.95);
-  }
-
-  .error-message {
-    color: #ff3b3b;
-    font-size: 0.9em;
-    margin-top: 10px;
-    animation: shake 0.3s;
-  }
-
-  .whatsapp-info {
-    margin-top: 15px;
-    font-size: 0.9em;
-    color: #bbb;
-  }
-
-  .whatsapp-info strong {
-    color: #1db954;
-  }
-
-  .live-notification h2 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: #f1f1f1;
-  }
-
-  .live-notification .player {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* Aspect ratio 16:9 */
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .live-notification .player iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-
-  /* Player */
-  #player-container {
-    display: none;
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-    border-radius: 0;
-    overflow: hidden;
-    box-shadow: none;
-    background: linear-gradient(45deg, #141414, #222222);
-    padding: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-  }
-
-  .player {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    border-radius: 0;
-  }
-
-  #player-container iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  .twitch-player iframe {
-    position: relative;
-  }
-
-  .twitch-player iframe::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: none;
-    pointer-events: none;
-  }
-
-  /* Esconde botões nativos, exceto fullscreen */
-  .player .player-controls__button {
-    display: none !important;
-  }
-  .player .player-controls__fullscreen-button {
-    display: block !important;
-  }
-
-  /* Estilo para o controle de volume */
-  #volume-control {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    width: 150px;
-    opacity: 0.8;
-    z-index: 1000;
-    pointer-events: auto;
-    background: rgba(0, 0, 0, 0.3);
-    border: none;
-    border-radius: 8px;
-  }
-
-  /* Modal Estilo */
-  .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fundo mais escuro e transparente */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-  }
-
-  .modal-content {
-    background: linear-gradient(to bottom, #2c2c2c, #1a1a1a); /* Fundo gradiente */
-    border-radius: 20px;
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5); /* Sombra mais intensa */
-    padding: 50px;
-    text-align: center;
-    position: relative;
-    width: 90%;
-    max-width: 600px; /* Aumenta o tamanho máximo */
-    animation: fadeIn 0.4s ease-out;
-    border: 1px solid #333; /* Adiciona uma borda sutil */
-  }
-
-  .modal-content h2 {
-    color: #e50914;
-    font-size: 2.5em;
-    font-weight: 700;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra no texto */
-  }
-
-  .modal-content p {
-    color: #ddd;
-    font-size: 1.2em;
-    line-height: 1.7;
-    margin-bottom: 30px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* Sombra no texto */
-  }
-
-  .modal-content input[type="text"] {
-    width: 100%;
-    padding: 18px;
-    margin: 15px 0;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1em;
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.1); /* Fundo levemente transparente */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Sombra no input */
-  }
-
-  .modal-content input[type="text"]:focus {
-    background-color: rgba(255, 255, 255, 0.2); /* Fundo mais claro ao focar */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Sombra mais intensa ao focar */
-  }
-
-  .modal-content button {
-    width: 100%;
-    padding: 18px;
-    background-color: #e50914;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.2em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra no botão */
-  }
-
-  .modal-content button:hover {
-    background-color: #c6000b;
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4); /* Sombra mais intensa no hover */
-  }
-
-  .modal-content button:active {
-    transform: scale(0.98);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* Sombra menor ao clicar */
-  }
-
-  .close {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 35px;
-    color: #bbb;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
-  }
-
-  .close:hover {
-    color: #ddd;
-    transform: scale(1.1);
-  }
-
-  /* Animação de Fade */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-50px);
+    .scrolling-text span {
+      white-space: nowrap;
+      padding-right: 60px;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
 
-  /* Media Queries para Responsividade */
-  @media (max-width: 768px) {
+    @keyframes scroll-text {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @-webkit-keyframes scroll-text {
+      0% {
+        -webkit-transform: translateX(0);
+      }
+
+      100% {
+        -webkit-transform: translateX(-50%);
+      }
+    }
+
+    /* Para dispositivos móveis, ajuste a duração se necessário */
+    @media (max-width: 480px) {
+      .scrolling-text {
+        animation-duration: 25s;
+        -webkit-animation-duration: 25s;
+        font-size: 14px;
+      }
+
+      .scrolling-text span {
+        padding-right: 40px;
+      }
+    }
+
     .container {
-      flex-direction: column; /* Layout vertical em telas menores */
-      align-items: center; /* Centraliza os itens horizontalmente */
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+      width: 90%;
+      max-width: 1200px;
+      padding: 20px;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
     }
 
     .login-container,
     .live-notification {
-      width: 90%; /* Ocupa 90% da largura da tela */
-      max-width: none; /* Remove a largura máxima */
-      min-width: auto; /* Remove a largura mínima */
-      margin-bottom: 20px; /* Adiciona espaço abaixo dos containers */
+      background: rgba(20, 20, 20, 0.8);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      flex: 1;
+      animation: fadeIn 1s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 300px;
     }
 
     .login-container {
-      max-width: none;
+      max-width: 300px;
     }
 
     .live-notification {
-      max-width: none;
+      max-width: 630px;
     }
-  }
 
-  @media (max-width: 576px) {
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #f1f1f1;
+    }
+
+    .subtitle {
+      margin-bottom: 20px;
+      color: #bbb;
+      font-size: 1em;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      font-size: 1em;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #e50914;
+      color: white;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #b20710;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .error-message {
+      color: #ff3b3b;
+      font-size: 0.9em;
+      margin-top: 10px;
+      animation: shake 0.3s;
+    }
+
+    .whatsapp-info {
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #bbb;
+    }
+
+    .whatsapp-info strong {
+      color: #1db954;
+    }
+
+    .live-notification h2 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #f1f1f1;
+    }
+
+    .live-notification .player {
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%;
+      /* Aspect ratio 16:9 */
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .live-notification .player iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Player */
+    #player-container {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      text-align: center;
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: none;
+      background: linear-gradient(45deg, #141414, #222222);
+      padding: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    }
+
+    .player {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    #player-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .twitch-player iframe {
+      position: relative;
+    }
+
+    .twitch-player iframe::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: none;
+      pointer-events: none;
+    }
+
+    /* Esconde botões nativos, exceto fullscreen */
+    .player .player-controls__button {
+      display: none !important;
+    }
+
+    .player .player-controls__fullscreen-button {
+      display: block !important;
+    }
+
+    /* Estilo para o controle de volume */
+    #volume-control {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 150px;
+      opacity: 0.8;
+      z-index: 1000;
+      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      border-radius: 8px;
+    }
+
+    /* Modal Estilo */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      /* Fundo mais escuro e transparente */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
     .modal-content {
-      padding: 40px;
+      background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+      /* Fundo gradiente */
+      border-radius: 20px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+      /* Sombra mais intensa */
+      padding: 50px;
+      text-align: center;
+      position: relative;
+      width: 90%;
+      max-width: 600px;
+      /* Aumenta o tamanho máximo */
+      animation: fadeIn 0.4s ease-out;
+      border: 1px solid #333;
+      /* Adiciona uma borda sutil */
     }
 
     .modal-content h2 {
-      font-size: 2.2em;
+      color: #e50914;
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      /* Sombra no texto */
     }
 
     .modal-content p {
+      color: #ddd;
+      font-size: 1.2em;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      /* Sombra no texto */
+    }
+
+    .modal-content input[type="text"] {
+      width: 100%;
+      padding: 18px;
+      margin: 15px 0;
+      border: none;
+      border-radius: 12px;
       font-size: 1.1em;
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+      /* Fundo levemente transparente */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      /* Sombra no input */
+    }
+
+    .modal-content input[type="text"]:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+      /* Fundo mais claro ao focar */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      /* Sombra mais intensa ao focar */
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 18px;
+      background-color: #e50914;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      /* Sombra no botão */
+    }
+
+    .modal-content button:hover {
+      background-color: #c6000b;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+      /* Sombra mais intensa no hover */
+    }
+
+    .modal-content button:active {
+      transform: scale(0.98);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      /* Sombra menor ao clicar */
     }
 
     .close {
-      font-size: 30px;
-      top: 15px;
-      right: 25px;
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 35px;
+      color: #bbb;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
     }
-  }
 
-  /* Animações */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    .close:hover {
+      color: #ddd;
+      transform: scale(1.1);
+    }
 
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-  }
-</style>
+    /* Animação de Fade */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Media Queries para Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .login-container,
+      .live-notification {
+        width: 90%;
+        max-width: none;
+        min-width: auto;
+        margin-bottom: 20px;
+      }
+
+      .login-container {
+        max-width: none;
+      }
+
+      .live-notification {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .modal-content {
+        padding: 40px;
+      }
+
+      .modal-content h2 {
+        font-size: 2.2em;
+      }
+
+      .modal-content p {
+        font-size: 1.1em;
+      }
+
+      .close {
+        font-size: 30px;
+        top: 15px;
+        right: 25px;
+      }
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
+    }
+  </style>
 </head>
+
 <body>
 
   <!-- Vídeo de Fundo -->
@@ -457,7 +517,8 @@
       </div>
       <h1> 📺 Bem-vindo 🎬 </h1>
       <p class="subtitle">Digite a chave de acesso para entrar</p>
-      <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres" aria-label="Chave de 25 caracteres" />
+      <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres"
+        aria-label="Chave de 25 caracteres" />
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
@@ -552,7 +613,11 @@
         player.setMuted(false);
         player.play();
         const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+        const clickEvent = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true
+        });
         playerElement.dispatchEvent(clickEvent);
 
         if (/Mobi|Android/i.test(navigator.userAgent)) {
@@ -609,6 +674,7 @@
         const iframe = livePlayer.getIframe();
         iframe.style.pointerEvents = "none";
       });
+
       function reloadLivePlayer() {
         livePlayer.seek(0);
       }
@@ -694,9 +760,9 @@
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
       if (
-        event.key === 'F12' || 
+        event.key === 'F12' ||
         (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
         (event.ctrlKey && event.key === 'U')
       ) {
@@ -706,7 +772,7 @@
       }
     });
 
-    document.addEventListener('contextmenu', function(event) {
+    document.addEventListener('contextmenu', function (event) {
       alert("isso não é permitido 😢");
       event.preventDefault();
       return false;
@@ -714,7 +780,10 @@
 
     setInterval(function () {
       (function () {
-        function logNop() { alert("isso não é permitido 😢"); return false; }
+        function logNop() {
+          alert("isso não é permitido 😢");
+          return false;
+        }
         console.log = logNop;
         console.warn = logNop;
         console.error = logNop;
@@ -729,4 +798,5 @@
   </script>
 
 </body>
+
 </html>
