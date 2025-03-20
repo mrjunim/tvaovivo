@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StreamXcellence 📺</title>
+  <title>Streaming ao Vivo 📺</title>
   <style>
     /* Estilo Geral */
     body {
@@ -14,8 +14,6 @@
       background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
       color: white;
       display: flex;
-      flex-direction: column;
-      /* Alterado para column */
       justify-content: center;
       align-items: center;
       min-height: 100vh;
@@ -86,10 +84,9 @@
 
     .container {
       display: flex;
-      flex-direction: column;
-      /* Alterado para column */
+      flex-direction: row;
       justify-content: center;
-      align-items: center;
+      align-items: stretch;
       width: 90%;
       max-width: 1200px;
       padding: 20px;
@@ -114,11 +111,20 @@
       border-radius: 12px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
       text-align: center;
-      width: 100%;
-      /* Alterado para 100% */
-      max-width: 500px;
-      /* Limitado o tamanho */
+      flex: 1;
       animation: fadeIn 1s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 300px;
+    }
+
+    .login-container {
+      max-width: 300px;
+    }
+
+    .live-notification {
+      max-width: 630px;
     }
 
     h1 {
@@ -182,7 +188,6 @@
 
     .whatsapp-info strong {
       color: #1db954;
-      text-decoration: none;
     }
 
     .live-notification h2 {
@@ -193,10 +198,9 @@
 
     .live-notification .player {
       width: 100%;
-      height: auto;
-      /* Alterado para auto */
-      aspect-ratio: 16 / 9;
-      /* Mantém a proporção */
+      height: 0;
+      padding-bottom: 56.25%;
+      /* Aspect ratio 16:9 */
       position: relative;
       border-radius: 8px;
       overflow: hidden;
@@ -216,17 +220,17 @@
     #player-container {
       display: none;
       width: 100%;
-      height: auto;
-      /* Alterado para auto */
-      aspect-ratio: 16 / 9;
-      /* Mantém a proporção */
+      height: 100vh;
       text-align: center;
       border-radius: 0;
       overflow: hidden;
       box-shadow: none;
       background: linear-gradient(45deg, #141414, #222222);
-      position: relative;
-      /* Alterado para relative */
+      padding: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
     }
 
     .player {
@@ -292,93 +296,107 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background-color: rgba(0, 0, 0, 0.7);
+      /* Fundo mais escuro e transparente */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       justify-content: center;
       align-items: center;
       z-index: 10000;
     }
 
     .modal-content {
-      background: linear-gradient(to bottom, #181818, #101010);
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-      padding: 40px;
+      background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+      /* Fundo gradiente */
+      border-radius: 20px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+      /* Sombra mais intensa */
+      padding: 50px;
       text-align: center;
       position: relative;
       width: 90%;
-      max-width: 500px;
+      max-width: 600px;
+      /* Aumenta o tamanho máximo */
       animation: fadeIn 0.4s ease-out;
-      border: 1px solid #222;
+      border: 1px solid #333;
+      /* Adiciona uma borda sutil */
     }
 
     .modal-content h2 {
       color: #e50914;
-      font-size: 2.2em;
+      font-size: 2.5em;
       font-weight: 700;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      /* Sombra no texto */
     }
 
     .modal-content p {
       color: #ddd;
-      font-size: 1.1em;
-      line-height: 1.6;
-      margin-bottom: 25px;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+      font-size: 1.2em;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      /* Sombra no texto */
     }
 
     .modal-content input[type="text"] {
       width: 100%;
-      padding: 15px;
-      margin: 12px 0;
+      padding: 18px;
+      margin: 15px 0;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
+      border-radius: 12px;
+      font-size: 1.1em;
       color: #fff;
-      background-color: rgba(255, 255, 255, 0.08);
+      background-color: rgba(255, 255, 255, 0.1);
+      /* Fundo levemente transparente */
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
       outline: none;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      /* Sombra no input */
     }
 
     .modal-content input[type="text"]:focus {
-      background-color: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+      background-color: rgba(255, 255, 255, 0.2);
+      /* Fundo mais claro ao focar */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      /* Sombra mais intensa ao focar */
     }
 
     .modal-content button {
       width: 100%;
-      padding: 15px;
+      padding: 18px;
       background-color: #e50914;
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 1.1em;
+      border-radius: 12px;
+      font-size: 1.2em;
       font-weight: 600;
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      /* Sombra no botão */
     }
 
     .modal-content button:hover {
       background-color: #c6000b;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+      /* Sombra mais intensa no hover */
     }
 
     .modal-content button:active {
       transform: scale(0.98);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      /* Sombra menor ao clicar */
     }
 
     .close {
       position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 30px;
+      top: 20px;
+      right: 30px;
+      font-size: 35px;
       color: #bbb;
       cursor: pointer;
       transition: color 0.3s ease, transform 0.2s ease;
@@ -393,7 +411,7 @@
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-50px);
       }
 
       to {
@@ -404,71 +422,78 @@
 
     /* Media Queries para Responsividade */
     @media (max-width: 768px) {
-      .modal-content {
-        padding: 30px;
-      }
-
-      .modal-content h2 {
-        font-size: 2em;
-      }
-
-      .modal-content p {
-        font-size: 1em;
-      }
-
-      .close {
-        font-size: 28px;
-        top: 10px;
-        right: 15px;
-      }
-
       .container {
-        width: 100%;
-        padding: 10px;
+        flex-direction: column;
+        align-items: center;
       }
 
       .login-container,
       .live-notification {
-        max-width: 100%;
-        /* Ocupar a largura total */
+        width: 90%;
+        max-width: none;
+        min-width: auto;
+        margin-bottom: 20px;
+      }
+
+      .login-container {
+        max-width: none;
+      }
+
+      .live-notification {
+        max-width: none;
       }
     }
 
     @media (max-width: 576px) {
       .modal-content {
-        padding: 25px;
+        padding: 40px;
       }
 
       .modal-content h2 {
-        font-size: 1.8em;
+        font-size: 2.2em;
       }
 
       .modal-content p {
-        font-size: 0.95em;
+        font-size: 1.1em;
       }
 
-      .modal-content input[type="text"] {
-        padding: 12px;
-        font-size: 0.9em;
-      }
-
-      .modal-content button {
-        padding: 12px;
-        font-size: 1em;
+      .close {
+        font-size: 30px;
+        top: 15px;
+        right: 25px;
       }
     }
 
-    /* Rodapé */
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9em;
-      color: #aaa;
+    /* Animações */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    footer a {
-      color: #1db954;
-      text-decoration: none;
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
     }
   </style>
 </head>
@@ -491,7 +516,7 @@
           <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
       </div>
-      <h1> 📺 Bem-vindo ao StreamXcellence 🎬 </h1>
+      <h1> 📺 Bem-vindo 🎬 </h1>
       <p class="subtitle">Digite a chave de acesso para entrar</p>
       <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
       <button onclick="verifyKey()">Entrar</button>
@@ -509,8 +534,7 @@
   <!-- Player -->
   <div id="player-container">
     <div class="player twitch-player" id="player">
-      <div id="twitch-embed">
-      </div>
+      <div id="twitch-embed"></div>
     </div>
   </div>
 
@@ -518,20 +542,15 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Adquirir Chave de Acesso</h2>
-      <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
-        envie o comprovante para liberação imediata.</p>
+      <h2>Adquirir Chave para Acesso</h2>
+      <p>Preencha seu nome para adquirir sua chave de acesso. Após o pagamento, envie o comprovante pelo WhatsApp.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
       <p><strong>Pix: lourimarcos@outlook.com</strong></p>
       <p>A chave tem duração de <strong>15 dias</strong></p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
-      <button onclick="sendToWhatsApp()">Enviar Comprovante</button>
+      <button onclick="sendToWhatsApp()">Enviar</button>
     </div>
   </div>
-
-  <footer>
-    © 2025 StreamXcellence - Suporte: <a href="mailto:streamxcellence@gmail.com">streamxcellence@gmail.com</a>
-  </footer>
 
   <script src="https://player.twitch.tv/js/embed/v1.js"></script>
   <script>
@@ -544,6 +563,7 @@
       });
     }
 
+    // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
@@ -732,7 +752,7 @@
         alert("Por favor, preencha seu nome antes de enviar.");
         return;
       }
-      const message = `Olá, StreamXcellence! Sou ${name} e efetuei a compra da chave de acesso. Segue o comprovante para liberação. Agradeço a atenção.`;
+      const message = `${name}, comprei uma chave e vou mandar o comprovante agora!!!!`;
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
