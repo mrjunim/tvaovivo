@@ -238,6 +238,9 @@
     }
 
     #player-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       border: none;
@@ -338,60 +341,6 @@
       50% { transform: translateX(8px); }
       75% { transform: translateX(-8px); }
     }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        align-items: center;
-        padding: 10px; /* Reduzido padding */
-        gap: 20px;
-      }
-      .login-container,
-      .live-notification {
-        width: 100%;
-        max-width: 100%;
-        padding: 20px;
-      }
-      h1 {
-        font-size: 2em;
-      }
-      .subtitle {
-        font-size: 1em;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .login-container,
-      .live-notification {
-        padding: 15px;
-      }
-      h1 {
-        font-size: 1.7em;
-        margin-bottom: 15px;
-      }
-      .subtitle {
-        font-size: 0.9em;
-        margin-bottom: 15px;
-      }
-      input,
-      button {
-        padding: 12px;
-        font-size: 1em;
-      }
-      .modal-content {
-        padding: 30px;
-      }
-      .modal-content h2 {
-        font-size: 2em;
-      }
-      .modal-content p {
-        font-size: 1em;
-      }
-      .close {
-        font-size: 24px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -401,8 +350,15 @@
     <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
   </video>
 
-  <!-- Container Principal -->
-  <div class="container">
+  <!-- Player -->
+  <div id="player-container">
+    <div class="player twitch-player" id="player">
+      <div id="twitch-embed"></div>
+    </div>
+  </div>
+
+  <!-- Container Principal (Escondido quando o player está em tela cheia) -->
+  <div class="container" id="main-container">
     <!-- Tela de Login -->
     <div class="login-container" id="login-container">
       <!-- Guia de Programação com duplicação para loop contínuo -->
@@ -424,13 +380,6 @@
     <div class="live-notification">
       <h2> 🔴 Programação Ao Vivo 📺 </h2>
       <div class="player" id="live-player"></div>
-    </div>
-  </div>
-
-  <!-- Player -->
-  <div id="player-container">
-    <div class="player twitch-player" id="player">
-      <div id="twitch-embed"></div>
     </div>
   </div>
 
@@ -606,11 +555,11 @@
       }
 
       if (validKeys.includes(keyInput)) {
-        document.getElementById('login-container').style.display = 'none';
-        document.getElementById('player-container').style.display = 'flex';
-
         // Esconde o container principal
-        document.querySelector('.container').style.display = 'none';
+        document.getElementById('main-container').style.display = 'none';
+
+        // Mostra o player em tela cheia
+        document.getElementById('player-container').style.display = 'block';
 
         createTwitchPlayer();
       } else {
