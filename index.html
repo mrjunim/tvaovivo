@@ -383,6 +383,72 @@
         font-size: 1em; /* Adjust font size for readability */
       }
     }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+      .login-container,
+      .live-notification {
+        width: 100%;
+        max-width: 100%;
+      }
+      .player {
+        height: auto;
+      }
+    }
+    @media (max-width: 480px) {
+      .login-container,
+      .live-notification {
+        padding: 10px;
+        width: 100%;
+      }
+      h1 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+      .subtitle {
+        font-size: 0.8em;
+        margin-bottom: 10px;
+      }
+      input {
+        padding: 8px;
+        font-size: 0.8em;
+      }
+      button {
+        padding: 8px;
+        font-size: 0.8em;
+      }
+      .error-message {
+        font-size: 0.7em;
+      }
+      .whatsapp-info {
+        font-size: 0.7em;
+      }
+      .player {
+        height: auto;
+      }
+      .live-notification h2 {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 <body>
