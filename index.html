@@ -39,7 +39,7 @@
       align-items: center;
       min-height: 100vh;
       overflow: hidden;
-      padding: 20px; /* Adicionado padding para melhor responsividade */
+      padding: 0; /* Removido padding do body */
     }
 
     /* Guia de Programação - Barra com rolagem contínua */
@@ -344,7 +344,7 @@
       .container {
         flex-direction: column;
         align-items: center;
-        padding: 20px;
+        padding: 10px; /* Reduzido padding */
         gap: 20px;
       }
       .login-container,
@@ -609,23 +609,8 @@
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('player-container').style.display = 'flex';
 
-        const welcomeMessage = document.createElement('div');
-        welcomeMessage.textContent = "Seja Bem vindo!!!";
-        welcomeMessage.style.position = "absolute";
-        welcomeMessage.style.top = "20px";
-        welcomeMessage.style.left = "50%";
-        welcomeMessage.style.transform = "translateX(-50%)";
-        welcomeMessage.style.color = "white";
-        welcomeMessage.style.fontSize = "18px";
-        welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-        welcomeMessage.style.padding = "10px";
-        welcomeMessage.style.borderRadius = "8px";
-        welcomeMessage.style.zIndex = "3";
-        document.body.appendChild(welcomeMessage);
-
-        setTimeout(() => {
-          welcomeMessage.remove();
-        }, 6000);
+        // Esconde o container principal
+        document.querySelector('.container').style.display = 'none';
 
         createTwitchPlayer();
       } else {
