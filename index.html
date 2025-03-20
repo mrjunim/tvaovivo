@@ -707,11 +707,11 @@
         console.error('Erro ao carregar as chaves:', error);
       });
 
-    function verifyKey() {
+     function verifyKey() {
       const keyInput = document.getElementById('key-input').value;
       const errorMessage = document.getElementById('error-message');
 
-      if (validKeys.includes(keyInput)) {
+      if (keyInput && validKeys.includes(keyInput)) { // Adicionado keyInput &&
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('player-container').style.display = 'flex';
 
