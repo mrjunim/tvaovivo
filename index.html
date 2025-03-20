@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Streaming ao Vivo 📺</title>
+  <title>StreamXcellence 📺</title>
+  <!-- Título alterado -->
   <style>
     /* Estilo Geral */
     body {
@@ -288,7 +289,7 @@
       border-radius: 8px;
     }
 
-    /* Modal Estilo (Netflix-Inspired) */
+    /* Modal Estilo */
     .modal {
       display: none;
       position: fixed;
@@ -297,7 +298,7 @@
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.8);
-      /* Mais escuro e transparente */
+      /* Fundo mais escuro e transparente */
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       justify-content: center;
@@ -307,46 +308,45 @@
 
     .modal-content {
       background: linear-gradient(to bottom, #181818, #101010);
-      /* Preto Netflix */
-      border-radius: 15px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-      /* Sombra mais forte */
+      /* Fundo gradiente Netflix-like */
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+      /* Sombra mais intensa */
       padding: 40px;
       text-align: center;
       position: relative;
       width: 90%;
       max-width: 500px;
-      /* Ajuste o tamanho conforme necessário */
+      /* Aumenta o tamanho máximo */
       animation: fadeIn 0.4s ease-out;
       border: 1px solid #222;
-      /* Borda sutil */
+      /* Adiciona uma borda sutil */
     }
 
     .modal-content h2 {
       color: #e50914;
-      /* Vermelho Netflix */
       font-size: 2.2em;
       font-weight: 700;
       margin-bottom: 15px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
       /* Sombra no texto */
     }
 
     .modal-content p {
-      color: #ccc;
+      color: #ddd;
       font-size: 1.1em;
       line-height: 1.6;
       margin-bottom: 25px;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
       /* Sombra no texto */
     }
 
     .modal-content input[type="text"] {
       width: 100%;
-      padding: 14px;
-      margin: 10px 0;
+      padding: 15px;
+      margin: 12px 0;
       border: none;
       border-radius: 8px;
       font-size: 1em;
@@ -355,22 +355,21 @@
       /* Fundo levemente transparente */
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
       outline: none;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
       /* Sombra no input */
     }
 
     .modal-content input[type="text"]:focus {
       background-color: rgba(255, 255, 255, 0.15);
       /* Fundo mais claro ao focar */
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
       /* Sombra mais intensa ao focar */
     }
 
     .modal-content button {
       width: 100%;
-      padding: 14px;
+      padding: 15px;
       background-color: #e50914;
-      /* Vermelho Netflix */
       color: white;
       border: none;
       border-radius: 8px;
@@ -378,42 +377,42 @@
       font-weight: 600;
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
       /* Sombra no botão */
     }
 
     .modal-content button:hover {
       background-color: #c6000b;
-      /* Vermelho mais escuro */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
       /* Sombra mais intensa no hover */
     }
 
     .modal-content button:active {
       transform: scale(0.98);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       /* Sombra menor ao clicar */
     }
 
     .close {
       position: absolute;
-      top: 12px;
+      top: 15px;
       right: 20px;
-      font-size: 28px;
-      color: #aaa;
+      font-size: 30px;
+      color: #bbb;
       cursor: pointer;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, transform 0.2s ease;
     }
 
     .close:hover {
       color: #ddd;
+      transform: scale(1.1);
     }
 
     /* Animação de Fade */
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(-40px);
+        transform: translateY(-30px);
       }
 
       to {
@@ -437,10 +436,47 @@
       }
 
       .close {
-        font-size: 24px;
-        top: 8px;
-        right: 12px;
+        font-size: 28px;
+        top: 10px;
+        right: 15px;
       }
+    }
+
+    @media (max-width: 576px) {
+      .modal-content {
+        padding: 25px;
+      }
+
+      .modal-content h2 {
+        font-size: 1.8em;
+      }
+
+      .modal-content p {
+        font-size: 0.95em;
+      }
+
+      .modal-content input[type="text"] {
+        padding: 12px;
+        font-size: 0.9em;
+      }
+
+      .modal-content button {
+        padding: 12px;
+        font-size: 1em;
+      }
+    }
+
+    /* Rodapé */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+
+    footer a {
+      color: #1db954;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -463,7 +499,8 @@
           <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
       </div>
-      <h1> 📺 Bem-vindo 🎬 </h1>
+      <h1> 📺 Bem-vindo ao StreamXcellence 🎬 </h1>
+      <!-- Título alterado -->
       <p class="subtitle">Digite a chave de acesso para entrar</p>
       <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
       <button onclick="verifyKey()">Entrar</button>
@@ -491,14 +528,23 @@
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <h2>Adquirir Chave de Acesso</h2>
-      <p>Para continuar assistindo, adquira sua chave de acesso e aproveite o melhor do entretenimento.</p>
+      <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
+        envie o comprovante para liberação imediata.</p>
+      <!-- Mensagem alterada -->
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
-      <p><strong>PIX: lourimarcos@outlook.com</strong></p>
-      <p>A chave tem duração de <strong>15 dias</strong>.</p>
+      <p><strong>Pix: lourimarcos@outlook.com</strong></p>
+      <p>A chave tem duração de <strong>15 dias</strong></p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
       <button onclick="sendToWhatsApp()">Enviar Comprovante</button>
+      <!-- Texto do botão alterado -->
     </div>
   </div>
+
+  <footer>
+    <!-- Rodapé -->
+    © 2025 StreamXcellence - Suporte: <a href="mailto:streamxcellence@gmail.com">streamxcellence@gmail.com</a>
+    <!-- Email de suporte alterado -->
+  </footer>
 
   <script src="https://player.twitch.tv/js/embed/v1.js"></script>
   <script>
@@ -700,7 +746,8 @@
         alert("Por favor, preencha seu nome antes de enviar.");
         return;
       }
-      const message = `${name}, comprei uma chave e vou mandar o comprovante agora!!!!`;
+      const message = `Olá, StreamXcellence! Sou ${name} e efetuei a compra da chave de acesso. Segue o comprovante para liberação. Agradeço a atenção.`;
+      // Mensagem do WhatsApp alterada
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
