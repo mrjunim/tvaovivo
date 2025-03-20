@@ -4,452 +4,458 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming ao Vivo 📺</title>
-  <style>
-    /* Estilo Geral */
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+ <style>
+  /* Estilo Geral */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
 
-    /* Guia de Programação - Barra com rolagem contínua via duplicação */
-    #guide-container {
-      width: 100%;
-      overflow: hidden;
-      background: #222;
-      color: #fff;
-      padding: 8px 0;
-      margin-bottom: 15px;
-      position: relative;
-    }
+  /* Guia de Programação - Barra com rolagem contínua via duplicação */
+  #guide-container {
+    width: 100%;
+    overflow: hidden;
+    background: #222;
+    color: #fff;
+    padding: 8px 0;
+    margin-bottom: 15px;
+    position: relative;
+  }
+  .scrolling-text {
+    display: inline-flex;
+    /* O conteúdo duplicado ocupa o dobro do espaço */
+    width: max-content;
+    animation: scroll-text 30s linear infinite;
+    -webkit-animation: scroll-text 30s linear infinite;
+  }
+  .scrolling-text span {
+    white-space: nowrap;
+    padding-right: 50px; /* Espaço entre as repetições */
+    font-size: 14px;
+  }
+  @keyframes scroll-text {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @-webkit-keyframes scroll-text {
+    0% { -webkit-transform: translateX(0); }
+    100% { -webkit-transform: translateX(-50%); }
+  }
+  /* Para dispositivos móveis, ajuste a duração se necessário */
+  @media (max-width: 480px) {
     .scrolling-text {
-      display: inline-flex;
-      /* O conteúdo duplicado ocupa o dobro do espaço */
-      width: max-content;
-      animation: scroll-text 30s linear infinite;
-      -webkit-animation: scroll-text 30s linear infinite;
+      animation-duration: 25s;
+      -webkit-animation-duration: 25s;
+      font-size: 12px;
     }
-    .scrolling-text span {
-      white-space: nowrap;
-      padding-right: 50px; /* Espaço entre as repetições */
-      font-size: 14px;
-    }
-    @keyframes scroll-text {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    @-webkit-keyframes scroll-text {
-      0% { -webkit-transform: translateX(0); }
-      100% { -webkit-transform: translateX(-50%); }
-    }
-    /* Para dispositivos móveis, ajuste a duração se necessário */
-    @media (max-width: 480px) {
-      .scrolling-text {
-        animation-duration: 25s;
-        -webkit-animation-duration: 25s;
-        font-size: 12px;
-      }
-    }
+  }
 
-    .container {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      width: 90%;
-      max-width: 1200px;
-      padding: 20px;
-      gap: 20px;
-      z-index: 1;
-    }
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px;
+    gap: 20px;
+    z-index: 1;
+  }
 
-    .background-video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
+  .background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
 
-    .login-container,
-    .live-notification {
-      background: rgba(20, 20, 20, 0.8);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      text-align: center;
-      flex: 1;
-      animation: fadeIn 1s ease-in-out;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+  .login-container,
+  .live-notification {
+    background: rgba(20, 20, 20, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    text-align: center;
+    flex: 1;
+    animation: fadeIn 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .login-container {
-      max-width: 300px;
-    }
+  .login-container {
+    max-width: 300px;
+  }
 
-    .live-notification {
-      max-width: 630px;
-    }
+  .live-notification {
+    max-width: 630px;
+  }
 
-    h1 {
-      font-size: 1.8em;
-      margin-bottom: 20px;
-      color: #f1f1f1;
-    }
+  h1 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #f1f1f1;
+  }
 
-    .subtitle {
-      margin-bottom: 20px;
-      color: #bbb;
-      font-size: 1em;
-    }
+  .subtitle {
+    margin-bottom: 20px;
+    color: #bbb;
+    font-size: 1em;
+  }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border: 1px solid #444;
-      border-radius: 8px;
-      background: #222;
-      color: white;
-      font-size: 1em;
-      outline: none;
-    }
+  input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #222;
+    color: white;
+    font-size: 1em;
+    outline: none;
+  }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 8px;
-      background: #e50914;
-      color: white;
-      font-size: 1em;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #e50914;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
 
-    button:hover {
-      background: #b20710;
-    }
+  button:hover {
+    background: #b20710;
+  }
 
-    button:active {
-      transform: scale(0.95);
-    }
+  button:active {
+    transform: scale(0.95);
+  }
 
-    .error-message {
-      color: #ff3b3b;
-      font-size: 0.9em;
-      margin-top: 10px;
-      animation: shake 0.3s;
-    }
+  .error-message {
+    color: #ff3b3b;
+    font-size: 0.9em;
+    margin-top: 10px;
+    animation: shake 0.3s;
+  }
 
-    .whatsapp-info {
-      margin-top: 15px;
-      font-size: 0.9em;
-      color: #bbb;
-    }
+  .whatsapp-info {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #bbb;
+  }
 
-    .whatsapp-info strong {
-      color: #1db954;
-    }
+  .whatsapp-info strong {
+    color: #1db954;
+  }
 
-    .live-notification h2 {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-      color: #f1f1f1;
-    }
+  .live-notification h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #f1f1f1;
+  }
 
-    .live-notification .player {
-      width: 100%;
-      height: 0;
-      padding-bottom: 56.25%; /* Aspect ratio 16:9 */
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      pointer-events: none;
-    }
+  .live-notification .player {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    pointer-events: none;
+  }
 
-    .live-notification .player iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+  .live-notification .player iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
 
-    /* Player */
-    #player-container {
-      display: none;
-      width: 100%;
-      height: 100vh;
-      text-align: center;
-      border-radius: 0;
-      overflow: hidden;
-      box-shadow: none;
-      background: linear-gradient(45deg, #141414, #222222);
-      padding: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 2;
-    }
+  /* Player */
+  #player-container {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    background: linear-gradient(45deg, #141414, #222222);
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
 
-    .player {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      border-radius: 0;
-    }
+  .player {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+  }
 
-    #player-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+  #player-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 
-    .twitch-player iframe {
-      position: relative;
-    }
+  .twitch-player iframe {
+    position: relative;
+  }
 
-    .twitch-player iframe::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: none;
-      pointer-events: none;
-    }
+  .twitch-player iframe::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: none;
+    pointer-events: none;
+  }
 
-    /* Esconde botões nativos, exceto fullscreen */
-    .player .player-controls__button {
-      display: none !important;
-    }
-    .player .player-controls__fullscreen-button {
-      display: block !important;
-    }
+  /* Esconde botões nativos, exceto fullscreen */
+  .player .player-controls__button {
+    display: none !important;
+  }
+  .player .player-controls__fullscreen-button {
+    display: block !important;
+  }
 
-    /* Estilo para o controle de volume */
-    #volume-control {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      width: 150px;
-      opacity: 0.8;
-      z-index: 1000;
-      pointer-events: auto;
-      background: rgba(0, 0, 0, 0.3);
-      border: none;
-      border-radius: 8px;
-    }
+  /* Estilo para o controle de volume */
+  #volume-control {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 150px;
+    opacity: 0.8;
+    z-index: 1000;
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 8px;
+  }
 
-    /* Modal Estilo */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6); /* Slightly darker backdrop */
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      backdrop-filter: blur(5px); /* Adds a subtle blur to the background */
-    }
+  /* Modal Estilo */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  }
 
+  .modal-content {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    text-align: center;
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .modal-content h2 {
+    color: #e50914;
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .modal-content p {
+    color: #555;
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+
+  .modal-content input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 1em;
+    color: #333;
+    transition: border-color 0.3s ease;
+  }
+
+  .modal-content input[type="text"]:focus {
+    outline: none;
+    border-color: #e50914;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-content button {
+    width: 100%;
+    padding: 16px;
+    background-color: #e50914;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+  }
+
+  .modal-content button:hover {
+    background-color: #c6000b;
+  }
+
+  .modal-content button:active {
+    transform: scale(0.98);
+  }
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .close:hover {
+    color: #888;
+  }
+
+  /* Animação de Fade */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Media Queries para Responsividade */
+  @media (max-width: 576px) {
     .modal-content {
-      background: #fff;
-      color: #333;
-      padding: 30px; /* Reduced padding for a cleaner look */
-      border-radius: 15px; /* More rounded corners */
-      max-width: 500px; /* Slightly wider for better content spacing */
-      width: 90%;
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
-      position: relative;
-      animation: fadeIn 0.4s ease-out; /* Slightly faster animation */
-      text-align: center; /* Center align the content */
+      padding: 30px;
     }
 
     .modal-content h2 {
-      margin-top: 0;
-      font-size: 2em; /* Slightly larger heading */
-      font-weight: 600; /* Semi-bold font weight */
-      color: #e50914;
-      margin-bottom: 15px; /* Added spacing below the heading */
+      font-size: 1.8em;
     }
 
     .modal-content p {
-      font-size: 1.1em; /* Slightly larger font size */
-      line-height: 1.6;
-      margin-bottom: 20px; /* Increased spacing for readability */
-      color: #555; /* Darker text for better contrast */
-    }
-
-    .modal-content input {
-      width: 100%;
-      padding: 14px 12px; /* Increased padding */
-      margin: 10px 0; /* Adjusted margin */
-      border: 1px solid #ddd; /* Lighter border */
-      border-radius: 8px; /* More rounded corners */
       font-size: 1em;
-      color: #333;
-      transition: border-color 0.3s ease; /* Smooth border transition */
-    }
-
-    .modal-content input:focus {
-      border-color: #e50914; /* Highlight on focus */
-      outline: none;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow on focus */
-    }
-
-    .modal-content button {
-      width: 100%;
-      padding: 14px; /* Increased padding */
-      margin-top: 20px; /* Adjusted margin */
-      border: none;
-      border-radius: 8px; /* More rounded corners */
-      background: #e50914;
-      color: #fff;
-      font-size: 1.1em; /* Slightly larger font size */
-      font-weight: 500; /* Medium font weight */
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.1s ease; /* Smooth transition */
-    }
-
-    .modal-content button:hover {
-      background: #c1070a;
-    }
-
-    .modal-content button:active {
-      transform: scale(0.98); /* Subtle press effect */
     }
 
     .close {
-      position: absolute;
-      top: 15px; /* Adjusted position */
-      right: 20px; /* Adjusted position */
-      font-size: 28px; /* Slightly larger close button */
-      color: #999;
-      cursor: pointer;
-      transition: color 0.3s ease;
+      font-size: 26px;
+      top: 10px;
+      right: 15px;
     }
+  }
 
-    .close:hover {
-      color: #555; /* Darker color on hover */
+  /* Animações */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+  }
+
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
     }
-
-    /* Animações */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px); /* More pronounced entrance */
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .login-container,
+    .live-notification {
+      width: 100%;
+      max-width: 100%;
     }
-
-    /* Media Queries for Responsiveness */
-    @media (max-width: 600px) {
-      .modal-content {
-        padding: 20px; /* Reduced padding for smaller screens */
-      }
-
-      .modal-content h2 {
-        font-size: 1.7em; /* Smaller heading for smaller screens */
-      }
-
-      .modal-content p {
-        font-size: 1em; /* Adjust font size for readability */
-      }
+    .player {
+      height: auto;
     }
-
-    /* Animações */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+  }
+  @media (max-width: 480px) {
+    .login-container,
+    .live-notification {
+      padding: 10px;
+      width: 100%;
     }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
+    h1 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
     }
-
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-      }
-      .login-container,
-      .live-notification {
-        width: 100%;
-        max-width: 100%;
-      }
-      .player {
-        height: auto;
-      }
+    .subtitle {
+      font-size: 0.8em;
+      margin-bottom: 10px;
     }
-    @media (max-width: 480px) {
-      .login-container,
-      .live-notification {
-        padding: 10px;
-        width: 100%;
-      }
-      h1 {
-        font-size: 1.2em;
-        margin-bottom: 10px;
-      }
-      .subtitle {
-        font-size: 0.8em;
-        margin-bottom: 10px;
-      }
-      input {
-        padding: 8px;
-        font-size: 0.8em;
-      }
-      button {
-        padding: 8px;
-        font-size: 0.8em;
-      }
-      .error-message {
-        font-size: 0.7em;
-      }
-      .whatsapp-info {
-        font-size: 0.7em;
-      }
-      .player {
-        height: auto;
-      }
-      .live-notification h2 {
-        font-size: 1em;
-      }
+    input {
+      padding: 8px;
+      font-size: 0.8em;
     }
-  </style>
+    button {
+      padding: 8px;
+      font-size: 0.8em;
+    }
+    .error-message {
+      font-size: 0.7em;
+    }
+    .whatsapp-info {
+      font-size: 0.7em;
+    }
+    .player {
+      height: auto;
+    }
+    .live-notification h2 {
+      font-size: 1em;
+    }
+  }
+</style>
 </head>
 <body>
 
