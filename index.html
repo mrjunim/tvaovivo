@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -517,8 +518,7 @@
       </div>
       <h1> 📺 Bem-vindo 🎬 </h1>
       <p class="subtitle">Digite a chave de acesso para entrar</p>
-      <input type="text" id="key-input" placeholder="Digite a chave de 25 caracteres"
-        aria-label="Chave de 25 caracteres" />
+      <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
@@ -695,10 +695,11 @@
       });
 
     let validKeys = [];
+
     fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
       .then(response => response.text())
       .then(data => {
-        validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length === 25);
+        validKeys = data.split('\n').map(key => key.trim());
         console.log('Chaves carregadas:', validKeys);
       })
       .catch(error => {
@@ -708,11 +709,6 @@
     function verifyKey() {
       const keyInput = document.getElementById('key-input').value;
       const errorMessage = document.getElementById('error-message');
-
-      if (keyInput.length !== 25) {
-        errorMessage.textContent = "A chave deve ter 25 caracteres.";
-        return;
-      }
 
       if (validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
