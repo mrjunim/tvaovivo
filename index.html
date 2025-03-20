@@ -288,7 +288,7 @@
       border-radius: 8px;
     }
 
-    /* Modal Estilo */
+    /* Modal Estilo (Netflix-Inspired) */
     .modal {
       display: none;
       position: fixed;
@@ -296,122 +296,124 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      /* Fundo mais escuro e transparente */
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background-color: rgba(0, 0, 0, 0.8);
+      /* Mais escuro e transparente */
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       justify-content: center;
       align-items: center;
       z-index: 10000;
     }
 
     .modal-content {
-      background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
-      /* Fundo gradiente */
-      border-radius: 20px;
-      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-      /* Sombra mais intensa */
-      padding: 50px;
+      background: linear-gradient(to bottom, #181818, #101010);
+      /* Preto Netflix */
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+      /* Sombra mais forte */
+      padding: 40px;
       text-align: center;
       position: relative;
       width: 90%;
-      max-width: 600px;
-      /* Aumenta o tamanho máximo */
+      max-width: 500px;
+      /* Ajuste o tamanho conforme necessário */
       animation: fadeIn 0.4s ease-out;
-      border: 1px solid #333;
-      /* Adiciona uma borda sutil */
+      border: 1px solid #222;
+      /* Borda sutil */
     }
 
     .modal-content h2 {
       color: #e50914;
-      font-size: 2.5em;
+      /* Vermelho Netflix */
+      font-size: 2.2em;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       /* Sombra no texto */
     }
 
     .modal-content p {
-      color: #ddd;
-      font-size: 1.2em;
-      line-height: 1.7;
-      margin-bottom: 30px;
+      color: #ccc;
+      font-size: 1.1em;
+      line-height: 1.6;
+      margin-bottom: 25px;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       /* Sombra no texto */
     }
 
     .modal-content input[type="text"] {
       width: 100%;
-      padding: 18px;
-      margin: 15px 0;
+      padding: 14px;
+      margin: 10px 0;
       border: none;
-      border-radius: 12px;
-      font-size: 1.1em;
+      border-radius: 8px;
+      font-size: 1em;
       color: #fff;
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgba(255, 255, 255, 0.08);
       /* Fundo levemente transparente */
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
       outline: none;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
       /* Sombra no input */
     }
 
     .modal-content input[type="text"]:focus {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.15);
       /* Fundo mais claro ao focar */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
       /* Sombra mais intensa ao focar */
     }
 
     .modal-content button {
       width: 100%;
-      padding: 18px;
+      padding: 14px;
       background-color: #e50914;
+      /* Vermelho Netflix */
       color: white;
       border: none;
-      border-radius: 12px;
-      font-size: 1.2em;
+      border-radius: 8px;
+      font-size: 1.1em;
       font-weight: 600;
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
       /* Sombra no botão */
     }
 
     .modal-content button:hover {
       background-color: #c6000b;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+      /* Vermelho mais escuro */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
       /* Sombra mais intensa no hover */
     }
 
     .modal-content button:active {
       transform: scale(0.98);
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
       /* Sombra menor ao clicar */
     }
 
     .close {
       position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 35px;
-      color: #bbb;
+      top: 12px;
+      right: 20px;
+      font-size: 28px;
+      color: #aaa;
       cursor: pointer;
-      transition: color 0.3s ease, transform 0.2s ease;
+      transition: color 0.3s ease;
     }
 
     .close:hover {
       color: #ddd;
-      transform: scale(1.1);
     }
 
     /* Animação de Fade */
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(-50px);
+        transform: translateY(-40px);
       }
 
       to {
@@ -422,70 +424,22 @@
 
     /* Media Queries para Responsividade */
     @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .login-container,
-      .live-notification {
-        width: 90%;
-        max-width: none;
-        min-width: auto;
-        margin-bottom: 20px;
-      }
-
-      .login-container {
-        max-width: none;
-      }
-
-      .live-notification {
-        max-width: none;
-      }
-    }
-
-    @media (max-width: 576px) {
       .modal-content {
-        padding: 40px;
+        padding: 30px;
       }
 
       .modal-content h2 {
-        font-size: 2.2em;
+        font-size: 2em;
       }
 
       .modal-content p {
-        font-size: 1.1em;
+        font-size: 1em;
       }
 
       .close {
-        font-size: 30px;
-        top: 15px;
-        right: 25px;
-      }
-    }
-
-    /* Animações */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes shake {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
+        font-size: 24px;
+        top: 8px;
+        right: 12px;
       }
     }
   </style>
@@ -536,13 +490,13 @@
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <h2>Adquirir Chave para Acesso</h2>
-      <p>Preencha seu nome para adquirir sua chave de acesso. Após o pagamento, envie o comprovante pelo WhatsApp.</p>
+      <h2>Adquirir Chave de Acesso</h2>
+      <p>Para continuar assistindo, adquira sua chave de acesso e aproveite o melhor do entretenimento.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
-      <p><strong>Pix: lourimarcos@outlook.com</strong></p>
-      <p>A chave tem duração de <strong>15 dias</strong></p>
+      <p><strong>PIX: lourimarcos@outlook.com</strong></p>
+      <p>A chave tem duração de <strong>15 dias</strong>.</p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
-      <button onclick="sendToWhatsApp()">Enviar</button>
+      <button onclick="sendToWhatsApp()">Enviar Comprovante</button>
     </div>
   </div>
 
