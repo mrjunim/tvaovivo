@@ -60,7 +60,7 @@
 
   .container {
     display: flex;
-    flex-direction: column; /* Alterado para column */
+    flex-direction: row; /* Alterado para row para desktop */
     justify-content: center;
     align-items: center;
     width: 90%;
@@ -87,20 +87,20 @@
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     text-align: center;
-    width: 100%; /* Alterado para ocupar a largura total */
-    max-width: 600px; /* Defina um max-width para evitar que fique muito largo */
+    flex: 1; /* Permite que os containers cresçam igualmente */
     animation: fadeIn 1s ease-in-out;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-width: 300px; /* Define uma largura mínima */
   }
 
   .login-container {
-    max-width: 600px;
+    max-width: 300px;
   }
 
   .live-notification {
-    max-width: 600px;
+    max-width: 630px;
   }
 
   h1 {
@@ -270,99 +270,108 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo mais escuro e transparente */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     justify-content: center;
     align-items: center;
     z-index: 10000;
   }
 
   .modal-content {
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    padding: 40px;
+    background: linear-gradient(to bottom, #2c2c2c, #1a1a1a); /* Fundo gradiente */
+    border-radius: 20px;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5); /* Sombra mais intensa */
+    padding: 50px;
     text-align: center;
     position: relative;
     width: 90%;
-    max-width: 500px;
-    animation: fadeIn 0.3s ease-out;
+    max-width: 600px; /* Aumenta o tamanho máximo */
+    animation: fadeIn 0.4s ease-out;
+    border: 1px solid #333; /* Adiciona uma borda sutil */
   }
 
   .modal-content h2 {
     color: #e50914;
-    font-size: 2.2em;
+    font-size: 2.5em;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Sombra no texto */
   }
 
   .modal-content p {
-    color: #555;
-    font-size: 1.1em;
-    line-height: 1.6;
-    margin-bottom: 25px;
+    color: #ddd;
+    font-size: 1.2em;
+    line-height: 1.7;
+    margin-bottom: 30px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* Sombra no texto */
   }
 
   .modal-content input[type="text"] {
     width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    font-size: 1em;
-    color: #333;
-    transition: border-color 0.3s ease;
+    padding: 18px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1); /* Fundo levemente transparente */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Sombra no input */
   }
 
   .modal-content input[type="text"]:focus {
-    outline: none;
-    border-color: #e50914;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.2); /* Fundo mais claro ao focar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Sombra mais intensa ao focar */
   }
 
   .modal-content button {
     width: 100%;
-    padding: 16px;
+    padding: 18px;
     background-color: #e50914;
     color: white;
     border: none;
-    border-radius: 10px;
-    font-size: 1.1em;
+    border-radius: 12px;
+    font-size: 1.2em;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Sombra no botão */
   }
 
   .modal-content button:hover {
     background-color: #c6000b;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4); /* Sombra mais intensa no hover */
   }
 
   .modal-content button:active {
     transform: scale(0.98);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); /* Sombra menor ao clicar */
   }
 
   .close {
     position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 30px;
-    color: #aaa;
+    top: 20px;
+    right: 30px;
+    font-size: 35px;
+    color: #bbb;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
   }
 
   .close:hover {
-    color: #888;
+    color: #ddd;
+    transform: scale(1.1);
   }
 
   /* Animação de Fade */
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(-30px);
+      transform: translateY(-50px);
     }
     to {
       opacity: 1;
@@ -372,16 +381,22 @@
 
   /* Media Queries para Responsividade */
   @media (max-width: 768px) {
-    .container {
-      flex-direction: column; /* Mantém a direção como coluna */
-      justify-content: center;
-      align-items: center;
+    .modal-content {
+      padding: 40px;
     }
 
-    .login-container,
-    .live-notification {
-      width: 90%; /* Ocupa 90% da largura em telas menores */
-      max-width: none; /* Remove o max-width para melhor responsividade */
+    .modal-content h2 {
+      font-size: 2.2em;
+    }
+
+    .modal-content p {
+      font-size: 1.1em;
+    }
+
+    .close {
+      font-size: 30px;
+      top: 15px;
+      right: 25px;
     }
   }
 
@@ -391,17 +406,27 @@
     }
 
     .modal-content h2 {
-      font-size: 1.8em;
+      font-size: 2em;
     }
 
     .modal-content p {
       font-size: 1em;
     }
 
+     .modal-content input[type="text"] {
+        padding: 15px;
+        font-size: 1em;
+     }
+
+     .modal-content button {
+        padding: 15px;
+        font-size: 1.1em;
+     }
+
     .close {
-      font-size: 26px;
+      font-size: 28px;
       top: 10px;
-      right: 15px;
+      right: 20px;
     }
   }
 
@@ -416,59 +441,6 @@
     25% { transform: translateX(-5px); }
     50% { transform: translateX(5px); }
     75% { transform: translateX(-5px); }
-  }
-
-  /* Responsividade */
-  @media (max-width: 768px) {
-    .container {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-    }
-    .login-container,
-    .live-notification {
-      width: 100%;
-      max-width: 100%;
-    }
-    .player {
-      height: auto;
-    }
-  }
-  @media (max-width: 480px) {
-    .login-container,
-    .live-notification {
-      padding: 10px;
-      width: 100%;
-    }
-    h1 {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-    }
-    .subtitle {
-      font-size: 0.8em;
-      margin-bottom: 10px;
-    }
-    input {
-      padding: 8px;
-      font-size: 0.8em;
-    }
-    button {
-      padding: 8px;
-      font-size: 0.8em;
-    }
-    .error-message {
-      font-size: 0.7em;
-    }
-    .whatsapp-info {
-      font-size: 0.7em;
-    }
-    .player {
-      height: auto;
-    }
-    .live-notification h2 {
-      font-size: 1em;
-    }
   }
 </style>
 </head>
