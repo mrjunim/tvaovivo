@@ -565,12 +565,6 @@
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
-      <div id="poll-container">
-    <h2>Enquete</h2>
-    <div id="poll">
-        <p>Carregando enquete...</p>
-    </div>
-</div>
     </div>
 
     <!-- Notificação de Live -->
@@ -623,68 +617,6 @@
       });
     }
 
-    async function loadPoll() {
-    try {
-        const response = await fetch('https://mrjunim.github.io/tvaovivo/'); // Altere para o URL do seu servidor
-        const data = await response.json();
-        displayPoll(data);
-    } catch (error) {
-        console.error('Erro ao carregar enquete:', error);
-        document.getElementById('poll').innerHTML = '<p>Erro ao carregar enquete.</p>';
-    }
-}
-
-function displayPoll(pollData) {
-    const pollContainer = document.getElementById('poll');
-    let html = '';
-
-    // Agrupe as opções por enquete
-    const groupedPolls = {};
-    pollData.forEach(item => {
-        if (!groupedPolls[item.enquete]) {
-            groupedPolls[item.enquete] = [];
-        }
-        groupedPolls[item.enquete].push(item);
-    });
-
-    // Para cada enquete, crie um bloco de opções
-    for (const enquete in groupedPolls) {
-        html += `<p>${enquete}</p>`;
-        groupedPolls[enquete].forEach(option => {
-            html += `
-                <button onclick="vote('${enquete}', '${option.opcao}')">
-                    ${option.opcao} (Votos: ${option.votos})
-                </button><br>
-            `;
-        });
-    }
-
-    pollContainer.innerHTML = html;
-}
-
-async function vote(enquete, opcao) {
-    try {
-        const response = await fetch('https://mrjunim.github.io/tvaovivo/', {  // Altere para o URL do seu servidor
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ enquete: enquete, opcao: opcao }),
-        });
-
-        const result = await response.json();
-        alert(result.message);
-
-        // Recarregue a enquete para atualizar a contagem de votos
-        loadPoll();
-    } catch (error) {
-        console.error('Erro ao votar:', error);
-        alert('Erro ao registrar o voto.');
-    }
-}
-
-// Carregar a enquete ao carregar a página
-window.onload = loadPoll;
     // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
