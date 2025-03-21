@@ -547,19 +547,38 @@
     }
 
     #poll-container {
-      margin-top: 20px;
-      padding: 15px;
-      background: rgba(20, 20, 20, 0.8);
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-      text-align: center;
-    }
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
 
-    #poll-container h2 {
-      font-size: 1.2em;
-      margin-bottom: 10px;
-      color: #f1f1f1;
-    }
+#poll-container h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #f1f1f1;
+}
+
+#poll button {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #e50914;
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#poll button:hover {
+    background: #b20710;
+}
+    
   </style>
 </head>
 
@@ -580,14 +599,12 @@
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
-
       <div id="poll-container">
-        <h2>Enquete</h2>
-        <div id="poll">
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe2VzKGaOCcpMe9tWiuIUjz2KwCK1LOz8meiSxcdk9E6A03-g/viewform?usp=header" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">Carregando…</iframe>
-        </div>
-      </div>
-
+    <h2>Enquete</h2>
+    <div id="poll">
+        <p>Carregando enquete...</p>
+    </div>
+</div>
     </div>
 
     <!-- Notificação de Live -->
@@ -868,6 +885,67 @@
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
 
+   function loadPoll() {
+    fetch('https://mrjunim.github.io/tvaovivo/enquetes.txt')
+        .then(response => response.text())
+        .then(data => {
+            const pollData = parsePollData(data);
+            displayPoll(pollData);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar enquete:', error);
+            document.getElementById('poll').innerHTML = '<p>Erro ao carregar enquete.</p>';
+        });
+}
+
+function parsePollData(data) {
+    const lines = data.split('\n');
+    let poll = {
+        question: '',
+        options: []
+    };
+    let currentOption = null;
+
+    for (const line of lines) {
+        if (line.startsWith('ENQUETE:')) {
+            poll.question = line.substring(8).trim();
+        } else if (line.startsWith('OPÇÃO:')) {
+            const parts = line.substring(6).trim().split(' - ');
+            currentOption = {
+                code: parts[0].trim(),
+                text: parts[1].trim(),
+                votes: 0
+            };
+            poll.options.push(currentOption);
+        } else if (line.startsWith('VOTOS:') && currentOption) {
+            currentOption.votes = parseInt(line.substring(6).trim());
+        }
+    }
+
+    return poll;
+}
+
+function displayPoll(pollData) {
+    const pollContainer = document.getElementById('poll');
+    let html = `<p>${pollData.question}</p>`;
+    pollData.options.forEach(option => {
+        html += `
+            <button onclick="vote('${option.code}')">${option.code} - ${option.text} (Votos: ${option.votes})</button><br>
+        `;
+    });
+    pollContainer.innerHTML = html;
+}
+
+function vote(optionCode) {
+    // Simula o registro do voto (não atualiza o arquivo no servidor)
+    alert(`Você votou em ${optionCode}. Obrigado!`);
+    // Você pode adicionar lógica aqui para atualizar a contagem de votos localmente (na página),
+    // mas lembre-se que isso não persistirá após o recarregamento da página.
+}
+
+// Carregar a enquete ao carregar a página
+window.onload = loadPoll;
+    
     function copyEmail() {
       const emailText = document.getElementById("pix-email").innerText;
       navigator.clipboard.writeText(emailText)
