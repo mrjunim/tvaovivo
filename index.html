@@ -207,7 +207,8 @@
       pointer-events: none;
     }
 
-    .live-notification .player iframe {
+    .live-notification .player iframe,
+    .live-notification .player video {
       position: absolute;
       top: 0;
       left: 0;
@@ -544,6 +545,22 @@
     #copy-email:hover {
       background-color: #367c39;
     }
+
+    /* Estilo para o player offline */
+    #offline-video-notification {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Esconde o player do Twitch e o vídeo offline inicialmente */
+    #live-player iframe,
+    #offline-video-notification {
+      display: none;
+    }
   </style>
 </head>
 
@@ -576,7 +593,12 @@
     <!-- Notificação de Live -->
     <div class="live-notification">
       <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
-      <div class="player" id="live-player"></div>
+      <div class="player" id="live-player">
+        <iframe id="twitch-embed-notification"></iframe>
+        <video autoplay loop muted playsinline id="offline-video-notification">
+          <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+        </video>
+      </div>
     </div>
   </div>
 
@@ -610,6 +632,7 @@
     let player;
     let livePlayer;
     let offlineVideoURL = "https://i.gifer.com/1fq5.mp4"; // URL do vídeo offline
+    let isOnline = true; // Variável para rastrear o status online
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -695,23 +718,15 @@
     }
 
     function createLiveNotificationPlayer() {
-      const livePlayerContainer = document.getElementById("live-player");
-      // Remove o player do Twitch
-      livePlayerContainer.innerHTML = "";
-
-      // Cria o elemento de vídeo
-      let offlineVideo = document.createElement("video");
-      offlineVideo.src = offlineVideoURL;
-      offlineVideo.autoplay = true;
-      offlineVideo.loop = true;
-      offlineVideo.muted = true;
-      offlineVideo.style.width = "100%";
-      offlineVideo.style.height = "100%";
-      offlineVideo.id = "offline-video-notification";
-
-      // Adiciona o vídeo ao container
-      livePlayerContainer.appendChild(offlineVideo);
-      playVideo(offlineVideo);
+      // Cria o player do Twitch
+      livePlayer = new Twitch.Player("twitch-embed-notification", {
+        channel: "lourimarcos",
+        width: "100%",
+        height: "100%",
+        muted: true,
+        autoplay: true,
+        parent: ["localhost"]
+      });
     }
 
     // Carrega guia de programação do arquivo de texto e atualiza ambos os spans
@@ -823,6 +838,7 @@
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
+    setInitialPlayerState();
 
     function copyEmail() {
       const emailText = document.getElementById("pix-email").innerText;
@@ -837,29 +853,28 @@
     }
 
     function setOfflineVideo(isOffline) {
-      let livePlayerContainer = document.getElementById("live-player");
+      const twitchPlayer = document.getElementById("twitch-embed-notification");
+      const offlineVideo = document.getElementById("offline-video-notification");
+      isOnline = !isOffline;
+
       if (isOffline) {
-        // Remove o player do Twitch
-        livePlayerContainer.innerHTML = "";
-
-        // Cria o elemento de vídeo
-        let offlineVideo = document.createElement("video");
-        offlineVideo.src = offlineVideoURL;
-        offlineVideo.autoplay = true;
-        offlineVideo.loop = true;
-        offlineVideo.muted = true;
-        offlineVideo.style.width = "100%";
-        offlineVideo.style.height = "100%";
-        offlineVideo.id = "offline-video-notification";
-
-        // Adiciona o vídeo ao container
-        livePlayerContainer.appendChild(offlineVideo);
+        // Mostra o vídeo offline e esconde o player do Twitch
+        twitchPlayer.style.display = "none";
+        offlineVideo.style.display = "block";
         playVideo(offlineVideo);
       } else {
-        // Remove o vídeo offline
-        livePlayerContainer.innerHTML = "";
-        // Recria o player do Twitch
-        createLiveNotificationPlayer();
+        // Esconde o vídeo offline e mostra o player do Twitch
+        twitchPlayer.style.display = "block";
+        offlineVideo.style.display = "none";
+      }
+    }
+
+    function setInitialPlayerState() {
+      // Define o estado inicial do player de notificação
+      if (isOnline) {
+        setOfflineVideo(false); // Garante que o player do Twitch seja exibido inicialmente
+      } else {
+        setOfflineVideo(true); // Garante que o vídeo offline seja exibido inicialmente
       }
     }
   </script>
