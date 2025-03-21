@@ -545,40 +545,6 @@
     #copy-email:hover {
       background-color: #367c39;
     }
-
-    #poll-container {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(20, 20, 20, 0.8);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    text-align: center;
-}
-
-#poll-container h2 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: #f1f1f1;
-}
-
-#poll button {
-    width: 80%;
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #e50914;
-    color: white;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#poll button:hover {
-    background: #b20710;
-}
-    
   </style>
 </head>
 
@@ -657,6 +623,68 @@
       });
     }
 
+    async function loadPoll() {
+    try {
+        const response = await fetch('/api/poll'); // Altere para o URL do seu servidor
+        const data = await response.json();
+        displayPoll(data);
+    } catch (error) {
+        console.error('Erro ao carregar enquete:', error);
+        document.getElementById('poll').innerHTML = '<p>Erro ao carregar enquete.</p>';
+    }
+}
+
+function displayPoll(pollData) {
+    const pollContainer = document.getElementById('poll');
+    let html = '';
+
+    // Agrupe as opções por enquete
+    const groupedPolls = {};
+    pollData.forEach(item => {
+        if (!groupedPolls[item.enquete]) {
+            groupedPolls[item.enquete] = [];
+        }
+        groupedPolls[item.enquete].push(item);
+    });
+
+    // Para cada enquete, crie um bloco de opções
+    for (const enquete in groupedPolls) {
+        html += `<p>${enquete}</p>`;
+        groupedPolls[enquete].forEach(option => {
+            html += `
+                <button onclick="vote('${enquete}', '${option.opcao}')">
+                    ${option.opcao} (Votos: ${option.votos})
+                </button><br>
+            `;
+        });
+    }
+
+    pollContainer.innerHTML = html;
+}
+
+async function vote(enquete, opcao) {
+    try {
+        const response = await fetch('/api/vote', {  // Altere para o URL do seu servidor
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ enquete: enquete, opcao: opcao }),
+        });
+
+        const result = await response.json();
+        alert(result.message);
+
+        // Recarregue a enquete para atualizar a contagem de votos
+        loadPoll();
+    } catch (error) {
+        console.error('Erro ao votar:', error);
+        alert('Erro ao registrar o voto.');
+    }
+}
+
+// Carregar a enquete ao carregar a página
+window.onload = loadPoll;
     // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
@@ -885,67 +913,6 @@
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
 
-   function loadPoll() {
-    fetch('https://mrjunim.github.io/tvaovivo/enquetes.txt')
-        .then(response => response.text())
-        .then(data => {
-            const pollData = parsePollData(data);
-            displayPoll(pollData);
-        })
-        .catch(error => {
-            console.error('Erro ao carregar enquete:', error);
-            document.getElementById('poll').innerHTML = '<p>Erro ao carregar enquete.</p>';
-        });
-}
-
-function parsePollData(data) {
-    const lines = data.split('\n');
-    let poll = {
-        question: '',
-        options: []
-    };
-    let currentOption = null;
-
-    for (const line of lines) {
-        if (line.startsWith('ENQUETE:')) {
-            poll.question = line.substring(8).trim();
-        } else if (line.startsWith('OPÇÃO:')) {
-            const parts = line.substring(6).trim().split(' - ');
-            currentOption = {
-                code: parts[0].trim(),
-                text: parts[1].trim(),
-                votes: 0
-            };
-            poll.options.push(currentOption);
-        } else if (line.startsWith('VOTOS:') && currentOption) {
-            currentOption.votes = parseInt(line.substring(6).trim());
-        }
-    }
-
-    return poll;
-}
-
-function displayPoll(pollData) {
-    const pollContainer = document.getElementById('poll');
-    let html = `<p>${pollData.question}</p>`;
-    pollData.options.forEach(option => {
-        html += `
-            <button onclick="vote('${option.code}')">${option.code} - ${option.text} (Votos: ${option.votes})</button><br>
-        `;
-    });
-    pollContainer.innerHTML = html;
-}
-
-function vote(optionCode) {
-    // Simula o registro do voto (não atualiza o arquivo no servidor)
-    alert(`Você votou em ${optionCode}. Obrigado!`);
-    // Você pode adicionar lógica aqui para atualizar a contagem de votos localmente (na página),
-    // mas lembre-se que isso não persistirá após o recarregamento da página.
-}
-
-// Carregar a enquete ao carregar a página
-window.onload = loadPoll;
-    
     function copyEmail() {
       const emailText = document.getElementById("pix-email").innerText;
       navigator.clipboard.writeText(emailText)
