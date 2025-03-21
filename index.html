@@ -207,8 +207,7 @@
       pointer-events: none;
     }
 
-    .live-notification .player iframe,
-    .live-notification .player video {
+    .live-notification .player iframe {
       position: absolute;
       top: 0;
       left: 0;
@@ -312,12 +311,11 @@
       border-radius: 20px;
       box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
       /* Sombra mais intensa */
-      padding: 30px;
-      /* Reduzido o padding */
+      padding: 50px;
       text-align: center;
       position: relative;
       width: 90%;
-      max-width: 500px;
+      max-width: 600px;
       /* Aumenta o tamanho máximo */
       animation: fadeIn 0.4s ease-out;
       border: 1px solid #333;
@@ -326,11 +324,9 @@
 
     .modal-content h2 {
       color: #e50914;
-      font-size: 2em;
-      /* Reduzido o tamanho da fonte */
+      font-size: 2.5em;
       font-weight: 700;
-      margin-bottom: 15px;
-      /* Reduzido o margin-bottom */
+      margin-bottom: 20px;
       text-transform: uppercase;
       letter-spacing: 2px;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -339,26 +335,20 @@
 
     .modal-content p {
       color: #ddd;
-      font-size: 1em;
-      /* Reduzido o tamanho da fonte */
-      line-height: 1.5;
-      /* Reduzido o line-height */
-      margin-bottom: 20px;
-      /* Reduzido o margin-bottom */
+      font-size: 1.2em;
+      line-height: 1.7;
+      margin-bottom: 30px;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       /* Sombra no texto */
     }
 
     .modal-content input[type="text"] {
       width: 100%;
-      padding: 12px;
-      /* Reduzido o padding */
-      margin: 10px 0;
-      /* Reduzido o margin */
+      padding: 18px;
+      margin: 15px 0;
       border: none;
-      border-radius: 8px;
-      font-size: 0.9em;
-      /* Reduzido o tamanho da fonte */
+      border-radius: 12px;
+      font-size: 1.1em;
       color: #fff;
       background-color: rgba(255, 255, 255, 0.1);
       /* Fundo levemente transparente */
@@ -377,17 +367,16 @@
 
     .modal-content button {
       width: 100%;
-      padding: 12px;
-      /* Reduzido o padding */
+      padding: 18px;
       background-color: #e50914;
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
-      /* Reduzido o tamanho da fonte */
+      border-radius: 12px;
+      font-size: 1.2em;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0 3px 6px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       /* Sombra no botão */
     }
 
@@ -405,12 +394,9 @@
 
     .close {
       position: absolute;
-      top: 15px;
-      /* Reduzido o top */
-      right: 20px;
-      /* Reduzido o right */
-      font-size: 30px;
-      /* Reduzido o tamanho da fonte */
+      top: 20px;
+      right: 30px;
+      font-size: 35px;
       color: #bbb;
       cursor: pointer;
       transition: color 0.3s ease, transform 0.2s ease;
@@ -460,27 +446,21 @@
 
     @media (max-width: 576px) {
       .modal-content {
-        padding: 25px;
-        /* Reduzido o padding */
+        padding: 40px;
       }
 
       .modal-content h2 {
-        font-size: 2em;
-        /* Reduzido o tamanho da fonte */
+        font-size: 2.2em;
       }
 
       .modal-content p {
-        font-size: 1em;
-        /* Reduzido o tamanho da fonte */
+        font-size: 1.1em;
       }
 
       .close {
-        font-size: 28px;
-        /* Reduzido o tamanho da fonte */
-        top: 10px;
-        /* Reduzido o top */
-        right: 15px;
-        /* Reduzido o right */
+        font-size: 30px;
+        top: 15px;
+        right: 25px;
       }
     }
 
@@ -515,52 +495,6 @@
         transform: translateX(-5px);
       }
     }
-
-    /* Estilo para o email e botão de copiar */
-    .email-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 15px;
-    }
-
-    .email-container p {
-      margin-right: 10px;
-      font-size: 1em;
-      color: #ddd;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-    }
-
-    #copy-email {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4CAF50;
-      color: white;
-      font-size: 0.8em;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    #copy-email:hover {
-      background-color: #367c39;
-    }
-
-    /* Estilo para o player offline */
-    #offline-video-notification {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    /* Esconde o player do Twitch e o vídeo offline inicialmente */
-    #live-player iframe,
-    #offline-video-notification {
-      display: none;
-    }
   </style>
 </head>
 
@@ -593,12 +527,7 @@
     <!-- Notificação de Live -->
     <div class="live-notification">
       <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
-      <div class="player" id="live-player">
-        <iframe id="twitch-embed-notification"></iframe>
-        <video autoplay loop muted playsinline id="offline-video-notification">
-          <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-        </video>
-      </div>
+      <div class="player" id="live-player"></div>
     </div>
   </div>
 
@@ -617,10 +546,7 @@
       <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
         envie o comprovante para liberação imediata.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
-      <div class="email-container">
-        <p id="pix-email">Pix: lourimarcos@outlook.com</p>
-        <button id="copy-email" onclick="copyEmail()">Copiar</button>
-      </div>
+      <p><strong>Pix: lourimarcos@outlook.com</strong></p>
       <p>A chave tem duração de <strong>15 dias</strong></p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
       <button onclick="sendToWhatsApp()">Enviar</button>
@@ -631,8 +557,6 @@
   <script>
     let player;
     let livePlayer;
-    let offlineVideoURL = "https://i.gifer.com/1fq5.mp4"; // URL do vídeo offline
-    let isOnline = true; // Variável para rastrear o status online
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -703,30 +627,59 @@
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
-        setOfflineVideo(true);
+        document.getElementById('player-container').innerHTML = ` 
+          <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+          </video>
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+          </div>
+        `;
+        const offlineVideo = document.getElementById('offline-video');
+        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+        playVideo(offlineVideo);
       });
 
       setInterval(() => {
         if (player.isLive()) {
           document.getElementById('player-container').innerHTML = `<div id="twitch-embed"></div>`;
           createTwitchPlayer();
-          setOfflineVideo(false);
         } else {
-          setOfflineVideo(true);
+          document.getElementById('player-container').innerHTML = `
+            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+              <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+            </video>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+              <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+            </div>
+          `;
+          const offlineVideo = document.getElementById('offline-video');
+          offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+          playVideo(offlineVideo);
         }
       }, 60000);
     }
 
     function createLiveNotificationPlayer() {
-      // Cria o player do Twitch
-      livePlayer = new Twitch.Player("twitch-embed-notification", {
+      const livePlayerContainer = document.getElementById("live-player");
+      livePlayer = new Twitch.Player("live-player", {
         channel: "lourimarcos",
-        width: "100%",
         height: "100%",
+        width: "100%",
         muted: true,
         autoplay: true,
+        controls: false,
         parent: ["localhost"]
       });
+      livePlayer.addEventListener(Twitch.Player.READY, () => {
+        const iframe = livePlayer.getIframe();
+        iframe.style.pointerEvents = "none";
+      });
+
+      function reloadLivePlayer() {
+        livePlayer.seek(0);
+      }
+      setInterval(reloadLivePlayer, 30000);
     }
 
     // Carrega guia de programação do arquivo de texto e atualiza ambos os spans
@@ -754,11 +707,11 @@
         console.error('Erro ao carregar as chaves:', error);
       });
 
-    function verifyKey() {
+     function verifyKey() {
       const keyInput = document.getElementById('key-input').value;
       const errorMessage = document.getElementById('error-message');
 
-      if (keyInput && validKeys.includes(keyInput)) {
+      if (keyInput && validKeys.includes(keyInput)) { // Adicionado keyInput &&
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('player-container').style.display = 'flex';
 
@@ -799,7 +752,7 @@
         alert("Por favor, preencha seu nome antes de enviar.");
         return;
       }
-      const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
+       const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
@@ -838,45 +791,6 @@
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
-    setInitialPlayerState();
-
-    function copyEmail() {
-      const emailText = document.getElementById("pix-email").innerText;
-      navigator.clipboard.writeText(emailText)
-        .then(() => {
-          alert("Email copiado para a área de transferência!");
-        })
-        .catch(err => {
-          console.error('Falha ao copiar email: ', err);
-          alert("Falha ao copiar o email. Por favor, copie manualmente.");
-        });
-    }
-
-    function setOfflineVideo(isOffline) {
-      const twitchPlayer = document.getElementById("twitch-embed-notification");
-      const offlineVideo = document.getElementById("offline-video-notification");
-      isOnline = !isOffline;
-
-      if (isOffline) {
-        // Mostra o vídeo offline e esconde o player do Twitch
-        twitchPlayer.style.display = "none";
-        offlineVideo.style.display = "block";
-        playVideo(offlineVideo);
-      } else {
-        // Esconde o vídeo offline e mostra o player do Twitch
-        twitchPlayer.style.display = "block";
-        offlineVideo.style.display = "none";
-      }
-    }
-
-    function setInitialPlayerState() {
-      // Define o estado inicial do player de notificação
-      if (isOnline) {
-        setOfflineVideo(false); // Garante que o player do Twitch seja exibido inicialmente
-      } else {
-        setOfflineVideo(true); // Garante que o vídeo offline seja exibido inicialmente
-      }
-    }
   </script>
 
 </body>
