@@ -610,6 +610,7 @@
   <script>
     let player;
     let livePlayer;
+    let offlineVideoURL = "https://i.gifer.com/1fq5.mp4"; // URL do vídeo offline
 
     function playVideo(videoElement) {
       videoElement.play().catch(error => {
@@ -680,35 +681,16 @@
       });
 
       player.addEventListener(Twitch.Player.OFFLINE, () => {
-        document.getElementById('player-container').innerHTML = ` 
-          <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-          </video>
-          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-          </div>
-        `;
-        const offlineVideo = document.getElementById('offline-video');
-        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-        playVideo(offlineVideo);
+        setOfflineVideo(true);
       });
 
       setInterval(() => {
         if (player.isLive()) {
           document.getElementById('player-container').innerHTML = `<div id="twitch-embed"></div>`;
           createTwitchPlayer();
+          setOfflineVideo(false);
         } else {
-          document.getElementById('player-container').innerHTML = `
-            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-              <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-            </video>
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-              <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-            </div>
-          `;
-          const offlineVideo = document.getElementById('offline-video');
-          offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-          playVideo(offlineVideo);
+          setOfflineVideo(true);
         }
       }, 60000);
     }
@@ -727,6 +709,10 @@
       livePlayer.addEventListener(Twitch.Player.READY, () => {
         const iframe = livePlayer.getIframe();
         iframe.style.pointerEvents = "none";
+      });
+
+      livePlayer.addEventListener(Twitch.Player.OFFLINE, () => {
+        setOfflineVideo(true);
       });
 
       function reloadLivePlayer() {
@@ -855,6 +841,23 @@
           console.error('Falha ao copiar email: ', err);
           alert("Falha ao copiar o email. Por favor, copie manualmente.");
         });
+    }
+
+    function setOfflineVideo(isOffline) {
+      let livePlayerContainer = document.getElementById("live-player");
+      if (isOffline) {
+        livePlayerContainer.innerHTML = `
+          <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video-notification">
+            <source src="${offlineVideoURL}" type="video/mp4">
+          </video>
+        `;
+        const offlineVideo = document.getElementById('offline-video-notification');
+        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+        playVideo(offlineVideo);
+      } else {
+        livePlayerContainer.innerHTML = ''; // Limpa o conteúdo
+        createLiveNotificationPlayer(); // Recria o player do Twitch
+      }
     }
   </script>
 
