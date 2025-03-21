@@ -311,11 +311,12 @@
       border-radius: 20px;
       box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
       /* Sombra mais intensa */
-      padding: 50px;
+      padding: 30px;
+      /* Reduzido o padding */
       text-align: center;
       position: relative;
       width: 90%;
-      max-width: 600px;
+      max-width: 500px;
       /* Aumenta o tamanho máximo */
       animation: fadeIn 0.4s ease-out;
       border: 1px solid #333;
@@ -324,9 +325,11 @@
 
     .modal-content h2 {
       color: #e50914;
-      font-size: 2.5em;
+      font-size: 2em;
+      /* Reduzido o tamanho da fonte */
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      /* Reduzido o margin-bottom */
       text-transform: uppercase;
       letter-spacing: 2px;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -335,20 +338,26 @@
 
     .modal-content p {
       color: #ddd;
-      font-size: 1.2em;
-      line-height: 1.7;
-      margin-bottom: 30px;
+      font-size: 1em;
+      /* Reduzido o tamanho da fonte */
+      line-height: 1.5;
+      /* Reduzido o line-height */
+      margin-bottom: 20px;
+      /* Reduzido o margin-bottom */
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
       /* Sombra no texto */
     }
 
     .modal-content input[type="text"] {
       width: 100%;
-      padding: 18px;
-      margin: 15px 0;
+      padding: 12px;
+      /* Reduzido o padding */
+      margin: 10px 0;
+      /* Reduzido o margin */
       border: none;
-      border-radius: 12px;
-      font-size: 1.1em;
+      border-radius: 8px;
+      font-size: 0.9em;
+      /* Reduzido o tamanho da fonte */
       color: #fff;
       background-color: rgba(255, 255, 255, 0.1);
       /* Fundo levemente transparente */
@@ -367,12 +376,14 @@
 
     .modal-content button {
       width: 100%;
-      padding: 18px;
+      padding: 12px;
+      /* Reduzido o padding */
       background-color: #e50914;
       color: white;
       border: none;
-      border-radius: 12px;
-      font-size: 1.2em;
+      border-radius: 8px;
+      font-size: 1em;
+      /* Reduzido o tamanho da fonte */
       font-weight: 600;
       cursor: pointer;
       transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
@@ -394,9 +405,12 @@
 
     .close {
       position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 35px;
+      top: 15px;
+      /* Reduzido o top */
+      right: 20px;
+      /* Reduzido o right */
+      font-size: 30px;
+      /* Reduzido o tamanho da fonte */
       color: #bbb;
       cursor: pointer;
       transition: color 0.3s ease, transform 0.2s ease;
@@ -446,21 +460,27 @@
 
     @media (max-width: 576px) {
       .modal-content {
-        padding: 40px;
+        padding: 25px;
+        /* Reduzido o padding */
       }
 
       .modal-content h2 {
-        font-size: 2.2em;
+        font-size: 2em;
+        /* Reduzido o tamanho da fonte */
       }
 
       .modal-content p {
-        font-size: 1.1em;
+        font-size: 1em;
+        /* Reduzido o tamanho da fonte */
       }
 
       .close {
-        font-size: 30px;
-        top: 15px;
-        right: 25px;
+        font-size: 28px;
+        /* Reduzido o tamanho da fonte */
+        top: 10px;
+        /* Reduzido o top */
+        right: 15px;
+        /* Reduzido o right */
       }
     }
 
@@ -494,6 +514,36 @@
       75% {
         transform: translateX(-5px);
       }
+    }
+
+    /* Estilo para o email e botão de copiar */
+    .email-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .email-container p {
+      margin-right: 10px;
+      font-size: 1em;
+      color: #ddd;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    #copy-email {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #copy-email:hover {
+      background-color: #367c39;
     }
   </style>
 </head>
@@ -546,7 +596,10 @@
       <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
         envie o comprovante para liberação imediata.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
-      <p><strong>Pix: lourimarcos@outlook.com</strong></p>
+      <div class="email-container">
+        <p id="pix-email">Pix: lourimarcos@outlook.com</p>
+        <button id="copy-email" onclick="copyEmail()">Copiar</button>
+      </div>
       <p>A chave tem duração de <strong>15 dias</strong></p>
       <input type="text" id="user-name" placeholder="Seu Nome" />
       <button onclick="sendToWhatsApp()">Enviar</button>
@@ -707,11 +760,11 @@
         console.error('Erro ao carregar as chaves:', error);
       });
 
-     function verifyKey() {
+    function verifyKey() {
       const keyInput = document.getElementById('key-input').value;
       const errorMessage = document.getElementById('error-message');
 
-      if (keyInput && validKeys.includes(keyInput)) { // Adicionado keyInput &&
+      if (keyInput && validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('player-container').style.display = 'flex';
 
@@ -752,7 +805,7 @@
         alert("Por favor, preencha seu nome antes de enviar.");
         return;
       }
-       const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
+      const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
       window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
     }
 
@@ -791,6 +844,18 @@
 
     playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
+
+    function copyEmail() {
+      const emailText = document.getElementById("pix-email").innerText;
+      navigator.clipboard.writeText(emailText)
+        .then(() => {
+          alert("Email copiado para a área de transferência!");
+        })
+        .catch(err => {
+          console.error('Falha ao copiar email: ', err);
+          alert("Falha ao copiar o email. Por favor, copie manualmente.");
+        });
+    }
   </script>
 
 </body>
