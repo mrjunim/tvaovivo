@@ -1,0 +1,7 @@
+ENQUETE: Qual seu filme favorito?
+OPÇÃO: A - Vingadores
+VOTOS: 10
+OPÇÃO: B - Senhor dos Anéis
+VOTOS: 5
+OPÇÃO: C - Star Wars
+VOTOS: 7
