@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 // Suas credenciais do Google Sheets API
 const SPREADSHEET_ID = '1SNnepUIupKm5XKqKkdUsCZtcNSLM_jTEPbd5kvvB0L8';
 const SHEET_NAME = 'Enquete'; // Nome da sua aba
-const API_KEY = 'SUA_API_KEY'; // Substitua pela sua API Key
+const API_KEY = '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'; // Substitua pela sua API Key
 
 // Inicialize o cliente da API do Google Sheets
 const sheets = google.sheets({ version: 'v4', auth: API_KEY });
