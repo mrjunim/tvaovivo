@@ -545,7 +545,63 @@
     #copy-email:hover {
       background-color: #367c39;
     }
+
+    /* Estilos para usuários online */
+    #online-users {
+      font-size: 0.9em;
+      color: #bbb;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #online-users::before {
+      content: '\f007';
+      /* Ícone de usuário */
+      font-family: FontAwesome;
+      color: #4CAF50;
+      /* Verde */
+      margin-right: 5px;
+    }
+
+    /* Estilos para notificações */
+    #notification-container {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      z-index: 1000;
+      display: none;
+      /* Inicialmente escondido */
+      animation: slideIn 0.5s forwards;
+    }
+
+    #notification-container::before {
+      content: '\f007';
+      /* Ícone de usuário */
+      font-family: FontAwesome;
+      color: #4CAF50;
+      /* Verde */
+      margin-right: 5px;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -565,6 +621,7 @@
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
+      <div id="online-users"></div>
     </div>
 
     <!-- Notificação de Live -->
@@ -605,6 +662,9 @@
       <button onclick="sendToWhatsApp()">Enviar</button>
     </div>
   </div>
+
+  <!-- Container de Notificação -->
+  <div id="notification-container"></div>
 
   <script src="https://player.twitch.tv/js/embed/v1.js"></script>
   <script>
@@ -856,8 +916,61 @@
           alert("Falha ao copiar o email. Por favor, copie manualmente.");
         });
     }
+
+    // ----------------------------------------------------------------------------------------------------
+    //  NOVAS FUNÇÕES PARA USUÁRIOS ONLINE E NOTIFICAÇÕES
+    // ----------------------------------------------------------------------------------------------------
+
+    // Função para gerar número aleatório de usuários online
+    function getRandomOnlineUsers() {
+      return Math.floor(Math.random() * (100 - 10 + 1)) + 10;
+    }
+
+    // Função para atualizar o número de usuários online na tela
+    function updateOnlineUsers() {
+      const onlineUsers = getRandomOnlineUsers();
+      document.getElementById('online-users').textContent = `${onlineUsers} usuários assistindo agora`;
+    }
+
+    // Lista de nomes de usuários fictícios
+    const fakeUsers = [
+      "StreamMaster", "EliteGamer", "ProPlayerX", "LiveKing", "QueenOfStreams",
+      "TheRealJunim", "MarcosGamer", "LourimarcosLive", "StreamNinja", "LegendaryPlayer",
+      "MasterOfGames", "TheStreamingOne", "EpicGamerX", "LiveAddict", "GamerForLife"
+    ];
+
+        // Função para exibir notificação de novo usuário
+    function showNotification(username) {
+      const notificationContainer = document.getElementById('notification-container');
+      notificationContainer.textContent = `${username} acabou de entrar`;
+      notificationContainer.style.display = 'block';
+
+      setTimeout(() => {
+        notificationContainer.style.display = 'none';
+      }, 3000);
+    }
+
+    // Função para exibir um novo usuário aleatoriamente
+    function showRandomUserNotification() {
+      const randomUser = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+      showNotification(randomUser);
+    }
+
+    // Inicializar sistema de usuários online e notificações
+    function initializeUserSystem() {
+      // Atualizar número de usuários online a cada 5-10 segundos
+      setInterval(updateOnlineUsers, Math.random() * 5000 + 5000);
+
+      // Mostrar notificação de novo usuário a cada 8-15 segundos
+      setInterval(showRandomUserNotification, Math.random() * 7000 + 8000);
+
+      // Primeira execução imediata
+      updateOnlineUsers();
+      setTimeout(showRandomUserNotification, 2000);
+    }
+
+    // Iniciar o sistema quando a página carregar
+    window.addEventListener('load', initializeUserSystem);
   </script>
-
 </body>
-
 </html>
