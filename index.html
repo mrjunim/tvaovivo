@@ -386,8 +386,7 @@
       /* Reduzido o tamanho da fonte */
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0 3px 6px rgba(0, 0, 0, 0.3);
       /* Sombra no botão */
     }
 
@@ -697,28 +696,22 @@
 
     function createLiveNotificationPlayer() {
       const livePlayerContainer = document.getElementById("live-player");
-      livePlayer = new Twitch.Player("live-player", {
-        channel: "lourimarcos",
-        height: "100%",
-        width: "100%",
-        muted: true,
-        autoplay: true,
-        controls: false,
-        parent: ["localhost"]
-      });
-      livePlayer.addEventListener(Twitch.Player.READY, () => {
-        const iframe = livePlayer.getIframe();
-        iframe.style.pointerEvents = "none";
-      });
+      // Remove o player do Twitch
+      livePlayerContainer.innerHTML = "";
 
-      livePlayer.addEventListener(Twitch.Player.OFFLINE, () => {
-        setOfflineVideo(true);
-      });
+      // Cria o elemento de vídeo
+      let offlineVideo = document.createElement("video");
+      offlineVideo.src = offlineVideoURL;
+      offlineVideo.autoplay = true;
+      offlineVideo.loop = true;
+      offlineVideo.muted = true;
+      offlineVideo.style.width = "100%";
+      offlineVideo.style.height = "100%";
+      offlineVideo.id = "offline-video-notification";
 
-      function reloadLivePlayer() {
-        livePlayer.seek(0);
-      }
-      setInterval(reloadLivePlayer, 30000);
+      // Adiciona o vídeo ao container
+      livePlayerContainer.appendChild(offlineVideo);
+      playVideo(offlineVideo);
     }
 
     // Carrega guia de programação do arquivo de texto e atualiza ambos os spans
@@ -846,17 +839,27 @@
     function setOfflineVideo(isOffline) {
       let livePlayerContainer = document.getElementById("live-player");
       if (isOffline) {
-        livePlayerContainer.innerHTML = `
-          <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video-notification">
-            <source src="${offlineVideoURL}" type="video/mp4">
-          </video>
-        `;
-        const offlineVideo = document.getElementById('offline-video-notification');
-        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+        // Remove o player do Twitch
+        livePlayerContainer.innerHTML = "";
+
+        // Cria o elemento de vídeo
+        let offlineVideo = document.createElement("video");
+        offlineVideo.src = offlineVideoURL;
+        offlineVideo.autoplay = true;
+        offlineVideo.loop = true;
+        offlineVideo.muted = true;
+        offlineVideo.style.width = "100%";
+        offlineVideo.style.height = "100%";
+        offlineVideo.id = "offline-video-notification";
+
+        // Adiciona o vídeo ao container
+        livePlayerContainer.appendChild(offlineVideo);
         playVideo(offlineVideo);
       } else {
-        livePlayerContainer.innerHTML = ''; // Limpa o conteúdo
-        createLiveNotificationPlayer(); // Recria o player do Twitch
+        // Remove o vídeo offline
+        livePlayerContainer.innerHTML = "";
+        // Recria o player do Twitch
+        createLiveNotificationPlayer();
       }
     }
   </script>
