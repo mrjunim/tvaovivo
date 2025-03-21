@@ -625,7 +625,7 @@
 
     async function loadPoll() {
     try {
-        const response = await fetch('/api/poll'); // Altere para o URL do seu servidor
+        const response = await fetch('https://mrjunim.github.io/tvaovivo/'); // Altere para o URL do seu servidor
         const data = await response.json();
         displayPoll(data);
     } catch (error) {
@@ -664,7 +664,7 @@ function displayPoll(pollData) {
 
 async function vote(enquete, opcao) {
     try {
-        const response = await fetch('/api/vote', {  // Altere para o URL do seu servidor
+        const response = await fetch('https://mrjunim.github.io/tvaovivo/', {  // Altere para o URL do seu servidor
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
