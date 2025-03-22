@@ -11,7 +11,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background-color: #0a0a0a; /* Cor de fundo escura para quando a imagem não carregar */
+      background-color: #0a0a0a;
       color: white;
       display: flex;
       justify-content: center;
@@ -20,16 +20,17 @@
       overflow-x: hidden;
     }
 
-    /* Imagem de Fundo */
+    /* Imagem de Fundo (Inicialmente oculta) */
     .background-image {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Garante que a imagem cubra todo o fundo */
+      object-fit: cover;
       z-index: -1;
-      transition: opacity 1s ease-in-out; /* Transição suave para o efeito de fade-in */
+      opacity: 0; /* Inicialmente invisível */
+      transition: opacity 1s ease-in-out;
     }
 
     /* Guia de Programação - Barra com rolagem contínua */
@@ -236,7 +237,7 @@
     }
 
     #player-container.active {
-      display: flex; /* Garante que o player seja exibido */
+      display: flex;
     }
 
     .player {
@@ -788,16 +789,15 @@
       if (keyInput && validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
 
-        // Adiciona a classe 'active' para exibir o player
-        const playerContainer = document.getElementById('player-container');
-        playerContainer.classList.add('active');
-
-        // Inicia a animação de zoom na imagem de fundo
+        // Exibe a imagem de fundo com efeito de zoom
         const backgroundImage = document.getElementById('background-image');
+        backgroundImage.style.opacity = 1; // Torna a imagem visível
         backgroundImage.style.animation = 'zoomOut 2s forwards';
 
-        // Remove a imagem após a animação
+        // Adiciona a classe 'active' para exibir o player após a animação
         setTimeout(() => {
+          const playerContainer = document.getElementById('player-container');
+          playerContainer.classList.add('active');
           backgroundImage.remove();
         }, 2000);
 
