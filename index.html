@@ -11,13 +11,25 @@
       margin: 0;
       padding: 0;
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      background-color: #0a0a0a; /* Cor de fundo escura para quando a imagem não carregar */
       color: white;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       overflow-x: hidden;
+    }
+
+    /* Imagem de Fundo */
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Garante que a imagem cubra todo o fundo */
+      z-index: -1;
+      transition: opacity 1s ease-in-out; /* Transição suave para o efeito de fade-in */
     }
 
     /* Guia de Programação - Barra com rolagem contínua */
@@ -92,16 +104,6 @@
       padding: 20px;
       gap: 20px;
       z-index: 1;
-    }
-
-    .background-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
     }
 
     .login-container,
@@ -231,6 +233,10 @@
       top: 0;
       left: 0;
       z-index: 2;
+    }
+
+    #player-container.active {
+      display: flex; /* Garante que o player seja exibido */
     }
 
     .player {
@@ -425,7 +431,7 @@
     @keyframes fadeIn {
       from {
         opacity: 0;
-        transform: translateY(-50px);
+        transform: translateY(-10px);
       }
 
       to {
@@ -545,15 +551,30 @@
     #copy-email:hover {
       background-color: #367c39;
     }
+
+    /* Estilo para a imagem de fundo com zoom */
+    #background-image {
+      animation: zoomOut 2s forwards;
+    }
+
+    @keyframes zoomOut {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Vídeo de Fundo -->
-  <video autoplay muted loop playsinline class="background-video" id="background-video">
-    <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
-  </video>
+  <!-- Imagem de Fundo -->
+  <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" id="background-image">
 
   <!-- Container Principal -->
   <div class="container">
@@ -766,7 +787,19 @@
 
       if (keyInput && validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
-        document.getElementById('player-container').style.display = 'flex';
+
+        // Adiciona a classe 'active' para exibir o player
+        const playerContainer = document.getElementById('player-container');
+        playerContainer.classList.add('active');
+
+        // Inicia a animação de zoom na imagem de fundo
+        const backgroundImage = document.getElementById('background-image');
+        backgroundImage.style.animation = 'zoomOut 2s forwards';
+
+        // Remove a imagem após a animação
+        setTimeout(() => {
+          backgroundImage.remove();
+        }, 2000);
 
         const welcomeMessage = document.createElement('div');
         welcomeMessage.textContent = "Seja Bem vindo!!!";
@@ -842,7 +875,6 @@
       })();
     }, 1000);
 
-    playVideo(document.getElementById('background-video'));
     createLiveNotificationPlayer();
 
     function copyEmail() {
