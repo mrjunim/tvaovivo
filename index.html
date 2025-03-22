@@ -20,7 +20,7 @@
       overflow-x: hidden;
     }
 
-    /* Imagem de Fundo */
+    /* Imagem de Fundo Principal */
     .background-image {
       position: fixed;
       top: 0;
@@ -29,6 +29,38 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
+    }
+
+    /* Imagem de Zoom (oculta inicialmente) */
+    #zoom-image-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000; /* Cor de fundo preta */
+      z-index: 10; /* Garante que fique acima de outros elementos */
+      justify-content: center;
+      align-items: center;
+    }
+
+    #zoom-image {
+      max-width: 100%;
+      max-height: 100%;
+      animation: zoomOut 2s forwards;
+    }
+
+    @keyframes zoomOut {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
     }
 
     /* Guia de Programação - Barra com rolagem contínua */
@@ -555,8 +587,13 @@
 
 <body>
 
-  <!-- Imagem de Fundo -->
+  <!-- Imagem de Fundo Principal -->
   <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image">
+
+  <!-- Container para a Imagem de Zoom -->
+  <div id="zoom-image-container">
+    <img id="zoom-image" src="http://imgur.com/a/w830wEj" alt="Zoom Image">
+  </div>
 
   <!-- Container Principal -->
   <div class="container">
@@ -769,7 +806,17 @@
 
       if (keyInput && validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
-        document.getElementById('player-container').style.display = 'flex';
+
+        // Exibe a imagem com efeito de zoom
+        const zoomImageContainer = document.getElementById('zoom-image-container');
+        zoomImageContainer.style.display = 'flex';
+
+        // Aguarda a animação terminar e exibe o player
+        setTimeout(() => {
+          zoomImageContainer.style.display = 'none';
+          document.getElementById('player-container').style.display = 'flex';
+          createTwitchPlayer();
+        }, 2000);
 
         const welcomeMessage = document.createElement('div');
         welcomeMessage.textContent = "Seja Bem vindo!!!";
@@ -788,7 +835,7 @@
           welcomeMessage.remove();
         }, 6000);
 
-        createTwitchPlayer();
+
       } else {
         errorMessage.textContent = "Chave inválida. Tente novamente.";
       }
