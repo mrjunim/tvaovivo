@@ -20,7 +20,7 @@
       overflow-x: hidden;
     }
 
-    /* Imagem de Fundo (Inicialmente oculta) */
+    /* Imagem de Fundo */
     .background-image {
       position: fixed;
       top: 0;
@@ -29,8 +29,6 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
-      opacity: 0; /* Inicialmente invisível */
-      transition: opacity 1s ease-in-out;
     }
 
     /* Guia de Programação - Barra com rolagem contínua */
@@ -552,30 +550,13 @@
     #copy-email:hover {
       background-color: #367c39;
     }
-
-    /* Estilo para a imagem de fundo com zoom */
-    #background-image {
-      animation: zoomOut 2s forwards;
-    }
-
-    @keyframes zoomOut {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      100% {
-        transform: scale(1.2);
-        opacity: 0;
-      }
-    }
   </style>
 </head>
 
 <body>
 
   <!-- Imagem de Fundo -->
-  <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" id="background-image">
+  <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image">
 
   <!-- Container Principal -->
   <div class="container">
@@ -788,18 +769,7 @@
 
       if (keyInput && validKeys.includes(keyInput)) {
         document.getElementById('login-container').style.display = 'none';
-
-        // Exibe a imagem de fundo com efeito de zoom
-        const backgroundImage = document.getElementById('background-image');
-        backgroundImage.style.opacity = 1; // Torna a imagem visível
-        backgroundImage.style.animation = 'zoomOut 2s forwards';
-
-        // Adiciona a classe 'active' para exibir o player após a animação
-        setTimeout(() => {
-          const playerContainer = document.getElementById('player-container');
-          playerContainer.classList.add('active');
-          backgroundImage.remove();
-        }, 2000);
+        document.getElementById('player-container').style.display = 'flex';
 
         const welcomeMessage = document.createElement('div');
         welcomeMessage.textContent = "Seja Bem vindo!!!";
