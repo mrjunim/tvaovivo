@@ -39,8 +39,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: #000; /* Cor de fundo preta */
-      z-index: 10; /* Garante que fique acima de outros elementos */
+      background-color: #000;
+      /* Cor de fundo preta */
+      z-index: 10;
+      /* Garante que fique acima de outros elementos */
       justify-content: center;
       align-items: center;
     }
@@ -48,7 +50,7 @@
     #zoom-image {
       max-width: 100%;
       max-height: 100%;
-      animation: zoomOut 4s forwards;
+      animation: zoomOut 2s forwards;
     }
 
     @keyframes zoomOut {
@@ -592,7 +594,7 @@
 
   <!-- Container para a Imagem de Zoom -->
   <div id="zoom-image-container">
-    <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Zoom Image">
+    <img id="zoom-image" src="http://imgur.com/a/w830wEj" alt="Zoom Image">
   </div>
 
   <!-- Container Principal -->
@@ -637,7 +639,7 @@
         envie o comprovante para liberação imediata.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
       <div class="email-container">
-        <p id="pix-email">Pix: lourimarcos@outlook.com</p>
+        <p id="pix-email">Pix: mrjunim@outlook.com</p>
         <button id="copy-email" onclick="copyEmail()">Copiar</button>
       </div>
       <p>A chave tem duração de <strong>15 dias</strong></p>
@@ -692,35 +694,37 @@
     }
 
     function createTwitchPlayer() {
-      player = new Twitch.Player("twitch-embed", {
-        channel: "lourimarcos",
-        width: "100%",
-        height: "100%",
-        controls: false,
-        autoplay: true,
-        muted: false,
-        parent: ["localhost"]
-      });
-
-      player.addEventListener(Twitch.Player.READY, () => {
-        player.setVolume(1.0);
-        player.setMuted(false);
-        player.play();
-        const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true
+      // Check if the player already exists before creating a new one
+      if (!document.querySelector("#twitch-embed iframe")) {
+        player = new Twitch.Player("twitch-embed", {
+          channel: "lourimarcos",
+          width: "100%",
+          height: "100%",
+          controls: false,
+          autoplay: true,
+          muted: false,
+          parent: ["localhost"]
         });
-        playerElement.dispatchEvent(clickEvent);
 
-        if (/Mobi|Android/i.test(navigator.userAgent)) {
-          createVolumeControl(player);
-        }
-      });
+        player.addEventListener(Twitch.Player.READY, () => {
+          player.setVolume(1.0);
+          player.setMuted(false);
+          player.play();
+          const playerElement = player.getIframe();
+          const clickEvent = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+          });
+          playerElement.dispatchEvent(clickEvent);
 
-      player.addEventListener(Twitch.Player.OFFLINE, () => {
-        document.getElementById('player-container').innerHTML = ` 
+          if (/Mobi|Android/i.test(navigator.userAgent)) {
+            createVolumeControl(player);
+          }
+        });
+
+        player.addEventListener(Twitch.Player.OFFLINE, () => {
+          document.getElementById('player-container').innerHTML = ` 
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
@@ -728,30 +732,13 @@
             <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
           </div>
         `;
-        const offlineVideo = document.getElementById('offline-video');
-        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-        playVideo(offlineVideo);
-      });
-
-      setInterval(() => {
-        if (player.isLive()) {
-          document.getElementById('player-container').innerHTML = `<div id="twitch-embed"></div>`;
-          createTwitchPlayer();
-        } else {
-          document.getElementById('player-container').innerHTML = `
-            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-              <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-            </video>
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-              <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-            </div>
-          `;
           const offlineVideo = document.getElementById('offline-video');
           offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
           playVideo(offlineVideo);
-        }
-      }, 60000);
+        });
+      }
     }
+
 
     function createLiveNotificationPlayer() {
       const livePlayerContainer = document.getElementById("live-player");
@@ -862,6 +849,7 @@
     document.addEventListener('keydown', function (event) {
       if (
         event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
         (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
         (event.ctrlKey && event.key === 'U')
       ) {
