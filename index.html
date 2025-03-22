@@ -50,7 +50,7 @@
     #zoom-image {
       max-width: 100%;
       max-height: 100%;
-      animation: zoomOut 5s forwards;
+      animation: zoomOut 2s forwards;
     }
 
     @keyframes zoomOut {
@@ -610,7 +610,7 @@
     </div>
 
     <!-- Notificação de Live -->
-    <div class="live-notification">
+    <div class="live-notification" id="live-notification">
       <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
       <!-- Guia de Programação com duplicação para loop contínuo -->
       <div id="guide-container">
@@ -804,6 +804,9 @@
           document.getElementById('player-container').style.display = 'flex';
           createTwitchPlayer();
         }, 2000);
+
+        // Oculta o player de notificação
+        document.getElementById('live-notification').style.display = 'none';
 
         const welcomeMessage = document.createElement('div');
         welcomeMessage.textContent = "Seja Bem vindo!!!";
