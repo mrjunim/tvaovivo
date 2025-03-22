@@ -2,710 +2,685 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamXcellence 📺</title>
-    <style>
-        /* Estilo Geral */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Guia de Programação - Barra com rolagem contínua */
-        #guide-container {
-            width: 100%;
-            background: rgba(34, 34, 34, 0.9);
-            color: #fff;
-            padding: 12px 0;
-            margin-bottom: 20px;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .scrolling-text {
-            display: inline-flex;
-            width: max-content;
-            animation: scroll-text 30s linear infinite;
-            -webkit-animation: scroll-text 30s linear infinite;
-        }
-
-        .scrolling-text span {
-            white-space: nowrap;
-            padding-right: 60px;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes scroll-text {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        @-webkit-keyframes scroll-text {
-            0% {
-                -webkit-transform: translateX(0);
-            }
-
-            100% {
-                -webkit-transform: translateX(-50%);
-            }
-        }
-
-        /* Para dispositivos móveis, ajuste a duração se necessário */
-        @media (max-width: 480px) {
-            .scrolling-text {
-                animation-duration: 25s;
-                -webkit-animation-duration: 25s;
-                font-size: 14px;
-            }
-
-            .scrolling-text span {
-                padding-right: 40px;
-            }
-        }
-
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: stretch;
-            width: 90%;
-            max-width: 1200px;
-            padding: 20px;
-            gap: 20px;
-            z-index: 1;
-        }
-
-        .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-
-        .login-container,
-        .live-notification {
-            background: rgba(20, 20, 20, 0.8);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            flex: 1;
-            animation: fadeIn 1s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 300px;
-        }
-
-        .login-container {
-            max-width: 300px;
-        }
-
-        .live-notification {
-            max-width: 630px;
-        }
-
-        h1 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            color: #f1f1f1;
-        }
-
-        .subtitle {
-            margin-bottom: 20px;
-            color: #bbb;
-            font-size: 1em;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            background: #222;
-            color: white;
-            font-size: 1em;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 8px;
-            background: #e50914;
-            color: white;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #b20710;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        .error-message {
-            color: #ff3b3b;
-            font-size: 0.9em;
-            margin-top: 10px;
-            animation: shake 0.3s;
-        }
-
-        .whatsapp-info {
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #bbb;
-        }
-
-        .whatsapp-info strong {
-            color: #1db954;
-        }
-
-        .live-notification h2 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            color: #f1f1f1;
-        }
-
-        .live-notification .player {
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            /* Aspect ratio 16:9 */
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .live-notification .player iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Player */
-        #player-container {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            text-align: center;
-            border-radius: 0;
-            overflow: hidden;
-            box-shadow: none;
-            background: linear-gradient(45deg, #141414, #222222);
-            padding: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-        }
-
-        .player {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-            border-radius: 0;
-        }
-
-        #player-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .twitch-player iframe {
-            position: relative;
-        }
-
-        .twitch-player iframe::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: none;
-            pointer-events: none;
-        }
-
-        /* Esconde botões nativos, exceto fullscreen */
-        .player .player-controls__button {
-            display: none !important;
-        }
-
-        .player .player-controls__fullscreen-button {
-            display: block !important;
-        }
-
-        /* Estilo para o controle de volume */
-        #volume-control {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 150px;
-            opacity: 0.8;
-            z-index: 1000;
-            pointer-events: auto;
-            background: rgba(0, 0, 0, 0.3);
-            border: none;
-            border-radius: 8px;
-        }
-
-        /* Modal Estilo */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            /* Fundo mais escuro e transparente */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-        }
-
-        .modal-content {
-            background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
-            /* Fundo gradiente */
-            border-radius: 20px;
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-            /* Sombra mais intensa */
-            padding: 30px;
-            /* Reduzido o padding */
-            text-align: center;
-            position: relative;
-            width: 90%;
-            max-width: 500px;
-            /* Aumenta o tamanho máximo */
-            animation: fadeIn 0.4s ease-out;
-            border: 1px solid #333;
-            /* Adiciona uma borda sutil */
-        }
-
-        .modal-content h2 {
-            color: #e50914;
-            font-size: 2em;
-            /* Reduzido o tamanho da fonte */
-            font-weight: 700;
-            margin-bottom: 15px;
-            /* Reduzido o margin-bottom */
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            /* Sombra no texto */
-        }
-
-        .modal-content p {
-            color: #ddd;
-            font-size: 1em;
-            /* Reduzido o tamanho da fonte */
-            line-height: 1.5;
-            /* Reduzido o line-height */
-            margin-bottom: 20px;
-            /* Reduzido o margin-bottom */
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-            /* Sombra no texto */
-        }
-
-        .modal-content input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            /* Reduzido o padding */
-            margin: 10px 0;
-            /* Reduzido o margin */
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9em;
-            /* Reduzido o tamanho da fonte */
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
-            /* Fundo levemente transparente */
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            /* Sombra no input */
-        }
-
-        .modal-content input[type="text"]:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            /* Fundo mais claro ao focar */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            /* Sombra mais intensa ao focar */
-        }
-
-        .modal-content button {
-            width: 100%;
-            padding: 12px;
-            /* Reduzido o padding */
-            background-color: #e50914;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            /* Reduzido o tamanho da fonte */
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            /* Sombra no botão */
-        }
-
-        .modal-content button:hover {
-            background-color: #c6000b;
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
-            /* Sombra mais intensa no hover */
-        }
-
-        .modal-content button:active {
-            transform: scale(0.98);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-            /* Sombra menor ao clicar */
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            /* Reduzido o top */
-            right: 20px;
-            /* Reduzido o right */
-            font-size: 30px;
-            /* Reduzido o tamanho da fonte */
-            color: #bbb;
-            cursor: pointer;
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-
-        .close:hover {
-            color: #ddd;
-            transform: scale(1.1);
-        }
-
-        /* Animação de Fade */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Media Queries para Responsividade */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .login-container,
-            .live-notification {
-                width: 90%;
-                max-width: none;
-                min-width: auto;
-                margin-bottom: 20px;
-            }
-
-            .login-container {
-                max-width: none;
-            }
-
-            .live-notification {
-                max-width: none;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .modal-content {
-                padding: 25px;
-                /* Reduzido o padding */
-            }
-
-            .modal-content h2 {
-                font-size: 2em;
-                /* Reduzido o tamanho da fonte */
-            }
-
-            .modal-content p {
-                font-size: 1em;
-                /* Reduzido o tamanho da fonte */
-            }
-
-            .close {
-                font-size: 28px;
-                /* Reduzido o tamanho da fonte */
-                top: 10px;
-                /* Reduzido o top */
-                right: 15px;
-                /* Reduzido o right */
-            }
-        }
-
-        /* Animações */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            50% {
-                transform: translateX(5px);
-            }
-
-            75% {
-                transform: translateX(-5px);
-            }
-        }
-
-        /* Estilo para o email e botão de copiar */
-        .email-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .email-container p {
-            margin-right: 10px;
-            font-size: 1em;
-            color: #ddd;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-        }
-
-        #copy-email {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 6px;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 0.8em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #copy-email:hover {
-            background-color: #367c39;
-        }
-
-        /* Estilo para o contador de usuários ativos */
-        .active-users {
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #bbb;
-        }
-
-        #live-player {
-            position: relative;
-            z-index: 2;
-        }
-
-        .twitch-player {
-            position: relative;
-            z-index: 2;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamXcellence 📺</title>
+  <style>
+    /* Estilo Geral */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Guia de Programação - Barra com rolagem contínua */
+    #guide-container {
+      width: 100%;
+      background: rgba(34, 34, 34, 0.9);
+      color: #fff;
+      padding: 12px 0;
+      margin-bottom: 20px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .scrolling-text {
+      display: inline-flex;
+      width: max-content;
+      animation: scroll-text 30s linear infinite;
+      -webkit-animation: scroll-text 30s linear infinite;
+    }
+
+    .scrolling-text span {
+      white-space: nowrap;
+      padding-right: 60px;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes scroll-text {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @-webkit-keyframes scroll-text {
+      0% {
+        -webkit-transform: translateX(0);
+      }
+
+      100% {
+        -webkit-transform: translateX(-50%);
+      }
+    }
+
+    /* Para dispositivos móveis, ajuste a duração se necessário */
+    @media (max-width: 480px) {
+      .scrolling-text {
+        animation-duration: 25s;
+        -webkit-animation-duration: 25s;
+        font-size: 14px;
+      }
+
+      .scrolling-text span {
+        padding-right: 40px;
+      }
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: stretch;
+      width: 90%;
+      max-width: 1200px;
+      padding: 20px;
+      gap: 20px;
+      z-index: 1;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .login-container,
+    .live-notification {
+      background: rgba(20, 20, 20, 0.8);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      flex: 1;
+      animation: fadeIn 1s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 300px;
+    }
+
+    .login-container {
+      max-width: 300px;
+    }
+
+    .live-notification {
+      max-width: 630px;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #f1f1f1;
+    }
+
+    .subtitle {
+      margin-bottom: 20px;
+      color: #bbb;
+      font-size: 1em;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+      font-size: 1em;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 8px;
+      background: #e50914;
+      color: white;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #b20710;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .error-message {
+      color: #ff3b3b;
+      font-size: 0.9em;
+      margin-top: 10px;
+      animation: shake 0.3s;
+    }
+
+    .whatsapp-info {
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #bbb;
+    }
+
+    .whatsapp-info strong {
+      color: #1db954;
+    }
+
+    .live-notification h2 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #f1f1f1;
+    }
+
+    .live-notification .player {
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%;
+      /* Aspect ratio 16:9 */
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .live-notification .player iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Player */
+    #player-container {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      text-align: center;
+      border-radius: 0;
+      overflow: hidden;
+      box-shadow: none;
+      background: linear-gradient(45deg, #141414, #222222);
+      padding: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    }
+
+    .player {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    #player-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .twitch-player iframe {
+      position: relative;
+    }
+
+    .twitch-player iframe::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: none;
+      pointer-events: none;
+    }
+
+    /* Esconde botões nativos, exceto fullscreen */
+    .player .player-controls__button {
+      display: none !important;
+    }
+
+    .player .player-controls__fullscreen-button {
+      display: block !important;
+    }
+
+    /* Estilo para o controle de volume */
+    #volume-control {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: 150px;
+      opacity: 0.8;
+      z-index: 1000;
+      pointer-events: auto;
+      background: rgba(0, 0, 0, 0.3);
+      border: none;
+      border-radius: 8px;
+    }
+
+    /* Modal Estilo */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      /* Fundo mais escuro e transparente */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .modal-content {
+      background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+      /* Fundo gradiente */
+      border-radius: 20px;
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+      /* Sombra mais intensa */
+      padding: 30px;
+      /* Reduzido o padding */
+      text-align: center;
+      position: relative;
+      width: 90%;
+      max-width: 500px;
+      /* Aumenta o tamanho máximo */
+      animation: fadeIn 0.4s ease-out;
+      border: 1px solid #333;
+      /* Adiciona uma borda sutil */
+    }
+
+    .modal-content h2 {
+      color: #e50914;
+      font-size: 2em;
+      /* Reduzido o tamanho da fonte */
+      font-weight: 700;
+      margin-bottom: 15px;
+      /* Reduzido o margin-bottom */
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      /* Sombra no texto */
+    }
+
+    .modal-content p {
+      color: #ddd;
+      font-size: 1em;
+      /* Reduzido o tamanho da fonte */
+      line-height: 1.5;
+      /* Reduzido o line-height */
+      margin-bottom: 20px;
+      /* Reduzido o margin-bottom */
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      /* Sombra no texto */
+    }
+
+    .modal-content input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      /* Reduzido o padding */
+      margin: 10px 0;
+      /* Reduzido o margin */
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9em;
+      /* Reduzido o tamanho da fonte */
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.1);
+      /* Fundo levemente transparente */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      /* Sombra no input */
+    }
+
+    .modal-content input[type="text"]:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+      /* Fundo mais claro ao focar */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      /* Sombra mais intensa ao focar */
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 12px;
+      /* Reduzido o padding */
+      background-color: #e50914;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      /* Reduzido o tamanho da fonte */
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      /* Sombra no botão */
+    }
+
+    .modal-content button:hover {
+      background-color: #c6000b;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+      /* Sombra mais intensa no hover */
+    }
+
+    .modal-content button:active {
+      transform: scale(0.98);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      /* Sombra menor ao clicar */
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      /* Reduzido o top */
+      right: 20px;
+      /* Reduzido o right */
+      font-size: 30px;
+      /* Reduzido o tamanho da fonte */
+      color: #bbb;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    .close:hover {
+      color: #ddd;
+      transform: scale(1.1);
+    }
+
+    /* Animação de Fade */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Media Queries para Responsividade */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .login-container,
+      .live-notification {
+        width: 90%;
+        max-width: none;
+        min-width: auto;
+        margin-bottom: 20px;
+      }
+
+      .login-container {
+        max-width: none;
+      }
+
+      .live-notification {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .modal-content {
+        padding: 25px;
+        /* Reduzido o padding */
+      }
+
+      .modal-content h2 {
+        font-size: 2em;
+        /* Reduzido o tamanho da fonte */
+      }
+
+      .modal-content p {
+        font-size: 1em;
+        /* Reduzido o tamanho da fonte */
+      }
+
+      .close {
+        font-size: 28px;
+        /* Reduzido o tamanho da fonte */
+        top: 10px;
+        /* Reduzido o top */
+        right: 15px;
+        /* Reduzido o right */
+      }
+    }
+
+    /* Animações */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      50% {
+        transform: translateX(5px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
+    }
+
+    /* Estilo para o email e botão de copiar */
+    .email-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .email-container p {
+      margin-right: 10px;
+      font-size: 1em;
+      color: #ddd;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    #copy-email {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #copy-email:hover {
+      background-color: #367c39;
+    }
+  </style>
 </head>
 
 <body>
 
-    <!-- Imagem de Fundo -->
-    <img src="https://i.imgur.com/YOUR_IMAGE_ID.jpeg" alt="Background" class="background-image">
+  <!-- Vídeo de Fundo -->
+  <video autoplay muted loop playsinline class="background-video" id="background-video">
+    <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
+  </video>
 
-    <!-- Container Principal -->
-    <div class="container">
-        <!-- Tela de Login -->
-        <div class="login-container" id="login-container">
-            <h1> 📺 Bem-vindo ao StreamXcellence 🎬 </h1>
-            <p class="subtitle">Digite a chave de acesso para entrar</p>
-            <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
-            <button onclick="verifyKey()">Entrar</button>
-            <div class="error-message" id="error-message" role="alert"></div>
-            <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
-            <div class="active-users">
-                <p>Assistindo agora: <span id="active-users-count">2+</span></p>
-            </div>
-        </div>
-
-        <!-- Notificação de Live -->
-        <div class="live-notification">
-            <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
-            <!-- Guia de Programação com duplicação para loop contínuo -->
-            <div id="guide-container">
-                <div class="scrolling-text" id="scrolling-text">
-                    <span id="guide-text">Carregando guia...</span>
-                    <span id="guide-text-duplicate">Carregando guia...</span>
-                </div>
-            </div>
-            <div class="player" id="live-player"></div>
-        </div>
+  <!-- Container Principal -->
+  <div class="container">
+    <!-- Tela de Login -->
+    <div class="login-container" id="login-container">
+      <h1> 📺 Bem-vindo ao StreamXcellence 🎬 </h1>
+      <p class="subtitle">Digite a chave de acesso para entrar</p>
+      <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
+      <button onclick="verifyKey()">Entrar</button>
+      <div class="error-message" id="error-message" role="alert"></div>
+      <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
     </div>
 
-    <!-- Player -->
-    <div id="player-container">
-        <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
+    <!-- Notificação de Live -->
+    <div class="live-notification">
+      <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
+      <!-- Guia de Programação com duplicação para loop contínuo -->
+      <div id="guide-container">
+        <div class="scrolling-text" id="scrolling-text">
+          <span id="guide-text">Carregando guia...</span>
+          <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
+      </div>
+      <div class="player" id="live-player"></div>
     </div>
+  </div>
 
-    <!-- Modal para criação de chave -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Adquirir Chave para Acesso</h2>
-            <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo
-                e
-                envie o comprovante para liberação imediata.</p>
-            <p><strong>Valor Simbólico: R$ 2,00</strong></p>
-            <div class="email-container">
-                <p id="pix-email">Pix: lourimarcos@outlook.com</p>
-                <button id="copy-email" onclick="copyEmail()">Copiar</button>
-            </div>
-            <p>A chave tem duração de <strong>15 dias</strong></p>
-            <input type="text" id="user-name" placeholder="Seu Nome" />
-            <button onclick="sendToWhatsApp()">Enviar</button>
-        </div>
+  <!-- Player -->
+  <div id="player-container">
+    <div class="player twitch-player" id="player">
+      <div id="twitch-embed"></div>
     </div>
+  </div>
 
-    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
-    <script>
-        let player;
-        let livePlayer;
+  <!-- Modal para criação de chave -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Adquirir Chave para Acesso</h2>
+      <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
+        envie o comprovante para liberação imediata.</p>
+      <p><strong>Valor Simbólico: R$ 2,00</strong></p>
+      <div class="email-container">
+        <p id="pix-email">Pix: lourimarcos@outlook.com</p>
+        <button id="copy-email" onclick="copyEmail()">Copiar</button>
+      </div>
+      <p>A chave tem duração de <strong>15 dias</strong></p>
+      <input type="text" id="user-name" placeholder="Seu Nome" />
+      <button onclick="sendToWhatsApp()">Enviar</button>
+    </div>
+  </div>
 
-        function playVideo(videoElement) {
-            videoElement.play().catch(error => {
-                console.log('Erro ao reproduzir o vídeo:', error);
-            });
+  <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+  <script>
+    let player;
+    let livePlayer;
+
+    function playVideo(videoElement) {
+      videoElement.play().catch(error => {
+        console.log('Erro ao reproduzir o vídeo:', error);
+      });
+    }
+
+    // Cria o controle de volume apenas se o dispositivo for móvel.
+    function createVolumeControl(playerInstance) {
+      const volumeControl = document.createElement('input');
+      volumeControl.type = 'range';
+      volumeControl.min = 0;
+      volumeControl.max = 1;
+      volumeControl.step = 0.01;
+      volumeControl.value = playerInstance.getVolume();
+      volumeControl.id = 'volume-control';
+
+      volumeControl.style.position = 'absolute';
+      volumeControl.style.bottom = '20px';
+      volumeControl.style.left = '20px';
+      volumeControl.style.width = '150px';
+      volumeControl.style.opacity = '0.8';
+      volumeControl.style.zIndex = '1000';
+      volumeControl.style.pointerEvents = 'auto';
+      volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
+      volumeControl.style.border = 'none';
+      volumeControl.style.borderRadius = '8px';
+
+      const playerContainer = document.getElementById('player');
+      const existingControl = document.getElementById('volume-control');
+      if (existingControl) {
+        existingControl.parentNode.removeChild(existingControl);
+      }
+      playerContainer.appendChild(volumeControl);
+
+      volumeControl.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        playerInstance.setVolume(val);
+      });
+    }
+
+    function createTwitchPlayer() {
+      player = new Twitch.Player("twitch-embed", {
+        channel: "lourimarcos",
+        width: "100%",
+        height: "100%",
+        controls: false,
+        autoplay: true,
+        muted: false,
+        parent: ["localhost"]
+      });
+
+      player.addEventListener(Twitch.Player.READY, () => {
+        player.setVolume(1.0);
+        player.setMuted(false);
+        player.play();
+        const playerElement = player.getIframe();
+        const clickEvent = new MouseEvent('click', {
+          view: window,
+          bubbles: true,
+          cancelable: true
+        });
+        playerElement.dispatchEvent(clickEvent);
+
+        if (/Mobi|Android/i.test(navigator.userAgent)) {
+          createVolumeControl(player);
         }
+      });
 
-        // Cria o controle de volume apenas se o dispositivo for móvel.
-        function createVolumeControl(playerInstance) {
-            const volumeControl = document.createElement('input');
-            volumeControl.type = 'range';
-            volumeControl.min = 0;
-            volumeControl.max = 1;
-            volumeControl.step = 0.01;
-            volumeControl.value = playerInstance.getVolume();
-            volumeControl.id = 'volume-control';
-
-            volumeControl.style.position = 'absolute';
-            volumeControl.style.bottom = '20px';
-            volumeControl.style.left = '20px';
-            volumeControl.style.width = '150px';
-            volumeControl.style.opacity = '0.8';
-            volumeControl.style.zIndex = '1000';
-            volumeControl.style.pointerEvents = 'auto';
-            volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
-            volumeControl.style.border = 'none';
-            volumeControl.style.borderRadius = '8px';
-
-            const playerContainer = document.getElementById('player');
-            const existingControl = document.getElementById('volume-control');
-            if (existingControl) {
-                existingControl.parentNode.removeChild(existingControl);
-            }
-            playerContainer.appendChild(volumeControl);
-
-            volumeControl.addEventListener('input', (e) => {
-                const val = parseFloat(e.target.value);
-                playerInstance.setVolume(val);
-            });
-        }
-
-        function createTwitchPlayer() {
-            // Exibe a imagem de fundo antes de criar o player
-            document.getElementById('player-container').innerHTML = `
-          <img src="https://i.imgur.com/YOUR_IMAGE_ID.jpeg" alt="Background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
-          <div id="twitch-embed" style="position: relative; z-index: 2;"></div>
-        `;
-
-            player = new Twitch.Player("twitch-embed", {
-                channel: "lourimarcos",
-                width: "100%",
-                height: "100%",
-                controls: false,
-                autoplay: true,
-                muted: false,
-                parent: ["localhost"]
-            });
-
-            player.addEventListener(Twitch.Player.READY, () => {
-                player.setVolume(1.0);
-                player.setMuted(false);
-                player.play();
-                const playerElement = player.getIframe();
-                const clickEvent = new MouseEvent('click', {
-                    view: window,
-                    bubbles: true,
-                    cancelable: true
-                });
-                playerElement.dispatchEvent(clickEvent);
-
-                if (/Mobi|Android/i.test(navigator.userAgent)) {
-                    createVolumeControl(player);
-                }
-            });
-
-            player.addEventListener(Twitch.Player.OFFLINE, () => {
-                document.getElementById('player-container').innerHTML = ` 
+      player.addEventListener(Twitch.Player.OFFLINE, () => {
+        document.getElementById('player-container').innerHTML = ` 
           <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
             <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
           </video>
@@ -713,163 +688,175 @@
             <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
           </div>
         `;
-                const offlineVideo = document.getElementById('offline-video');
-                offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-                playVideo(offlineVideo);
-            });
+        const offlineVideo = document.getElementById('offline-video');
+        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+        playVideo(offlineVideo);
+      });
 
-            setInterval(() => {
-                if (player.isLive()) {
-                    document.getElementById('player-container').innerHTML = `
-          <img src="https://i.imgur.com/YOUR_IMAGE_ID.jpeg" alt="Background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
-          <div id="twitch-embed" style="position: relative; z-index: 2;"></div>
-        `;
-                    createTwitchPlayer();
-                } else {
-                    document.getElementById('player-container').innerHTML = `
+      setInterval(() => {
+        if (player.isLive()) {
+          document.getElementById('player-container').innerHTML = `<div id="twitch-embed"></div>`;
+          createTwitchPlayer();
+        } else {
+          document.getElementById('player-container').innerHTML = `
             <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
               <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-              </video>
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+            </video>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
               <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-              </div>
-              `;
-                    const offlineVideo = document.getElementById('offline-video');
-                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-                    playVideo(offlineVideo);
-                }
-            }, 60000);
+            </div>
+          `;
+          const offlineVideo = document.getElementById('offline-video');
+          offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+          playVideo(offlineVideo);
         }
+      }, 60000);
+    }
 
-        function createLiveNotificationPlayer() {
-            const livePlayerContainer = document.getElementById("live-player");
-            livePlayer = new Twitch.Player("live-player", {
-                channel: "lourimarcos",
-                height: "100%",
-                width: "100%",
-                muted: true,
-                autoplay: true,
-                controls: false,
-                parent: ["localhost"]
-            });
-            livePlayer.addEventListener(Twitch.Player.READY, () => {
-                const iframe = livePlayer.getIframe();
-                iframe.style.pointerEvents = "none";
-            });
+    function createLiveNotificationPlayer() {
+      const livePlayerContainer = document.getElementById("live-player");
+      livePlayer = new Twitch.Player("live-player", {
+        channel: "lourimarcos",
+        height: "100%",
+        width: "100%",
+        muted: true,
+        autoplay: true,
+        controls: false,
+        parent: ["localhost"]
+      });
+      livePlayer.addEventListener(Twitch.Player.READY, () => {
+        const iframe = livePlayer.getIframe();
+        iframe.style.pointerEvents = "none";
+      });
 
-            function reloadLivePlayer() {
-                livePlayer.seek(0);
-            }
-            setInterval(reloadLivePlayer, 30000);
+      function reloadLivePlayer() {
+        livePlayer.seek(0);
+      }
+      setInterval(reloadLivePlayer, 30000);
+    }
+
+    // Carrega guia de programação do arquivo de texto e atualiza ambos os spans
+    fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('guide-text').textContent = data;
+        document.getElementById('guide-text-duplicate').textContent = data;
+      })
+      .catch(error => {
+        console.error('Erro ao carregar guia de programação:', error);
+        document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
+        document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
+      });
+
+    let validKeys = [];
+
+    fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
+      .then(response => response.text())
+      .then(data => {
+        validKeys = data.split('\n').map(key => key.trim());
+        console.log('Chaves carregadas:', validKeys);
+      })
+      .catch(error => {
+        console.error('Erro ao carregar as chaves:', error);
+      });
+
+    function verifyKey() {
+      const keyInput = document.getElementById('key-input').value;
+      const errorMessage = document.getElementById('error-message');
+
+      if (keyInput && validKeys.includes(keyInput)) {
+        document.getElementById('login-container').style.display = 'none';
+        document.getElementById('player-container').style.display = 'flex';
+
+        const welcomeMessage = document.createElement('div');
+        welcomeMessage.textContent = "Seja Bem vindo!!!";
+        welcomeMessage.style.position = "absolute";
+        welcomeMessage.style.top = "20px";
+        welcomeMessage.style.left = "50%";
+        welcomeMessage.style.transform = "translateX(-50%)";
+        welcomeMessage.style.color = "white";
+        welcomeMessage.style.fontSize = "18px";
+        welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+        welcomeMessage.style.padding = "10px";
+        welcomeMessage.style.borderRadius = "8px";
+        document.body.appendChild(welcomeMessage);
+
+        setTimeout(() => {
+          welcomeMessage.remove();
+        }, 6000);
+
+        createTwitchPlayer();
+      } else {
+        errorMessage.textContent = "Chave inválida. Tente novamente.";
+      }
+    }
+
+    function openModal() {
+      document.getElementById("modal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function sendToWhatsApp() {
+      const name = document.getElementById("user-name").value;
+      if (!name) {
+        alert("Por favor, preencha seu nome antes de enviar.");
+        return;
+      }
+      const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
+      window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
+    }
+
+    document.addEventListener('keydown', function (event) {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+        (event.ctrlKey && event.key === 'U')
+      ) {
+        alert("isso não é permitido 😢");
+        event.preventDefault();
+        return false;
+      }
+    });
+
+    document.addEventListener('contextmenu', function (event) {
+      alert("isso não é permitido 😢");
+      event.preventDefault();
+      return false;
+    });
+
+    setInterval(function () {
+      (function () {
+        function logNop() {
+          alert("isso não é permitido 😢");
+          return false;
         }
+        console.log = logNop;
+        console.warn = logNop;
+        console.error = logNop;
+        console.info = logNop;
+        console.debug = logNop;
+        console.table = logNop;
+      })();
+    }, 1000);
 
-        // Carrega guia de programação do arquivo de texto e atualiza ambos os spans
-        fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('guide-text').textContent = data;
-                document.getElementById('guide-text-duplicate').textContent = data;
-            })
-            .catch(error => {
-                console.error('Erro ao carregar guia de programação:', error);
-                document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
-                document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
-            });
+    playVideo(document.getElementById('background-video'));
+    createLiveNotificationPlayer();
 
-        let validKeys = [];
-
-        fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
-            .then(response => response.text())
-            .then(data => {
-                validKeys = data.split('\n').map(key => key.trim());
-                console.log('Chaves carregadas:', validKeys);
-            })
-            .catch(error => {
-                console.error('Erro ao carregar as chaves:', error);
-            });
-
-        function verifyKey() {
-            const keyInput = document.getElementById('key-input').value;
-            const errorMessage = document.getElementById('error-message');
-
-            if (keyInput && validKeys.includes(keyInput)) {
-                document.getElementById('login-container').style.display = 'none';
-                document.getElementById('player-container').style.display = 'flex';
-
-                const welcomeMessage = document.createElement('div');
-                welcomeMessage.textContent = "Seja Bem vindo!!!";
-                welcomeMessage.style.position = "absolute";
-                welcomeMessage.style.top = "20px";
-                welcomeMessage.style.left = "50%";
-                welcomeMessage.style.transform = "translateX(-50%)";
-                welcomeMessage.style.color = "white";
-                welcomeMessage.style.fontSize = "18px";
-                welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-                welcomeMessage.style.padding = "10px";
-                welcomeMessage.style.borderRadius = "8px";
-                document.body.appendChild(welcomeMessage);
-
-                setTimeout(() => {
-                    welcomeMessage.remove();
-                }, 6000);
-
-                createTwitchPlayer();
-            } else {
-                errorMessage.textContent = "Chave inválida. Tente novamente.";
-            }
-        }
-
-        function openModal() {
-            document.getElementById("modal").style.display = "flex";
-        }
-
-        function closeModal() {
-            document.getElementById("modal").style.display = "none";
-        }
-
-        function sendToWhatsApp() {
-            const name = document.getElementById("user-name").value;
-            if (!name) {
-                alert("Por favor, preencha seu nome antes de enviar.");
-                return;
-            }
-            const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
-            window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
-        }
-
-        document.addEventListener('keydown', function (event) {
-            if (
-                event.key === 'F12' ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'U'))
-            ) {
-                alert("isso não é permitido 😢");
-                event.preventDefault();
-                return false;
-            }
+    function copyEmail() {
+      const emailText = document.getElementById("pix-email").innerText;
+      navigator.clipboard.writeText(emailText)
+        .then(() => {
+          alert("Email copiado para a área de transferência!");
+        })
+        .catch(err => {
+          console.error('Falha ao copiar email: ', err);
+          alert("Falha ao copiar o email. Por favor, copie manualmente.");
         });
-
-        document.addEventListener('contextmenu', function (event) {
-            alert("isso não é permitido 😢");
-            event.preventDefault();
-            return false;
-        });
-
-        setInterval(function () {
-            (function () {
-                function logNop() {
-                    alert("isso não é permitido 😢");
-                    return false;
-                }
-                console.log = logNop;
-                console.warn = logNop;
-                console.error = logNop;
-                console.info = logNop;
-                console.debug = logNop;
-                console.table = logNop;
-            })();
-        }, 1000);
-    </script>
+    }
+  </script>
 
 </body>
 
