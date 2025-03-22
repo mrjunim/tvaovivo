@@ -541,11 +541,7 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-.active-users {
-  margin-top: 10px;
-  font-size: 0.9em;
-  color: #bbb;
-}
+    
     #copy-email:hover {
       background-color: #367c39;
     }
@@ -570,7 +566,6 @@
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
       <div class="active-users">
-  <p>Assistindo agora: <span id="active-users-count">2</span>📺</p>
 </div>
     </div>
 
@@ -623,28 +618,7 @@
         console.log('Erro ao reproduzir o vídeo:', error);
       });
     }
-        // Função para gerar um número aleatório entre min e max
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
 
-    // Função para atualizar o número de usuários ativos
-    function updateActiveUsers() {
-      // Simula um número base de usuários ativos (você pode ajustar isso)
-      let baseUsers = getRandomInt(1, 5);
-      let extraUsers = Math.random() < 0.5 ? 2 : 5; // Alterna entre adicionar 2 ou 5
-      let activeUsers = baseUsers + extraUsers;
-
-      document.getElementById('active-users-count').textContent = activeUsers + '+';
-    }
-
-    // Atualiza o número de usuários ativos a cada 5 segundos (você pode ajustar o intervalo)
-    setInterval(updateActiveUsers, 5000);
-
-    // Chama a função updateActiveUsers() uma vez para exibir o número inicial
-    updateActiveUsers();
     // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
