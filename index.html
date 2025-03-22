@@ -50,7 +50,7 @@
     #zoom-image {
       max-width: 100%;
       max-height: 100%;
-      animation: zoomOut 6s forwards;
+      animation: zoomOut 2s forwards;
     }
 
     @keyframes zoomOut {
@@ -594,7 +594,7 @@
 
   <!-- Container para a Imagem de Zoom -->
   <div id="zoom-image-container">
-    <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Zoom Image">
+    <img id="zoom-image" src="http://imgur.com/a/w830wEj" alt="Zoom Image">
   </div>
 
   <!-- Container Principal -->
@@ -639,7 +639,7 @@
         envie o comprovante para liberação imediata.</p>
       <p><strong>Valor Simbólico: R$ 2,00</strong></p>
       <div class="email-container">
-        <p id="pix-email">Pix: lourimarcos@outlook.com</p>
+        <p id="pix-email">Pix: mrjunim@outlook.com</p>
         <button id="copy-email" onclick="copyEmail()">Copiar</button>
       </div>
       <p>A chave tem duração de <strong>15 dias</strong></p>
@@ -659,7 +659,7 @@
       });
     }
 
-    // Cria o controle de volume apenas se o dispositivo for móvel.
+    // Cria o controle de volume sempre
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
       volumeControl.type = 'range';
@@ -718,9 +718,8 @@
           });
           playerElement.dispatchEvent(clickEvent);
 
-          if (/Mobi|Android/i.test(navigator.userAgent)) {
-            createVolumeControl(player);
-          }
+          // Cria o controle de volume para todos os dispositivos
+          createVolumeControl(player);
         });
 
         player.addEventListener(Twitch.Player.OFFLINE, () => {
