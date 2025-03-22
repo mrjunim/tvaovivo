@@ -541,7 +541,15 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    
+    .background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
     #copy-email:hover {
       background-color: #367c39;
     }
@@ -551,9 +559,8 @@
 <body>
 
   <!-- Vídeo de Fundo -->
-  <video autoplay muted loop playsinline class="background-video" id="background-video">
-    <source src="https://i.gifer.com/HeWa.mp4" type="video/mp4">
-  </video>
+ <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image">
+
 
   <!-- Container Principal -->
   <div class="container">
@@ -618,7 +625,11 @@
         console.log('Erro ao reproduzir o vídeo:', error);
       });
     }
-
+        // Exibe a imagem de fundo antes de criar o player
+        document.getElementById('player-container').innerHTML = `
+          <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;">
+          <div id="twitch-embed" style="position: relative; z-index: 2;"></div>
+        `;
     // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
