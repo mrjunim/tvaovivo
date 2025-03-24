@@ -580,55 +580,7 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-.program-guide {
-    background: rgba(20, 20, 20, 0.8);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    text-align: center;
-    margin-top: 20px;
-}
 
-.program-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.program-item {
-    background: #222;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 10px;
-    width: 200px;
-    text-align: center;
-}
-
-.program-item img {
-    max-width: 100%;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-
-.program-item h3 {
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
-
-.program-item p {
-    font-size: 0.9em;
-    color: #bbb;
-}
-
-.program-item a {
-    display: inline-block;
-    background: #e50914;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-top: 10px;
-    text-decoration: none;
-}
     #copy-email:hover {
       background-color: #367c39;
     }
@@ -655,7 +607,6 @@
       <button onclick="verifyKey()">Entrar</button>
       <div class="error-message" id="error-message" role="alert"></div>
       <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
-      <button onclick="openInfoModal()">Informações Adicionais</button>
     </div>
 
     <!-- Notificação de Live -->
@@ -671,7 +622,7 @@
       <div class="player" id="live-player"></div>
     </div>
   </div>
- 
+
   <!-- Player -->
   <div id="player-container">
     <div class="player twitch-player" id="player">
@@ -697,25 +648,6 @@
     </div>
   </div>
 
-  
-<div class="container">
-    <div class="program-guide" id="program-guide">
-        <h2>Programação Completa</h2>
-        <div class="program-list" id="program-list">
-            </div>
-    </div>
-</div>
-
-<div id="info-modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeInfoModal()">&times;</span>
-        <h2 id="modal-title"></h2>
-        <p id="modal-description"></p>
-        <img id="modal-image" src="" alt="Imagem do programa">
-        <a id="modal-link" href="" target="_blank">Mais Informações</a>
-    </div>
-</div>
-  
   <script src="https://player.twitch.tv/js/embed/v1.js"></script>
   <script>
     let player;
@@ -727,47 +659,6 @@
       });
     }
 
-function openInfoModal() {
-    document.getElementById('info-modal').style.display = 'flex';
-}
-
-function closeInfoModal() {
-    document.getElementById('info-modal').style.display = 'none';
-}
-// ... (seu código JavaScript existente) ...
-
-function loadProgramGuide() {
-    fetch('programacaorobusta.txt') // Substitua pelo URL do seu arquivo
-        .then(response => response.text())
-        .then(data => {
-            const programs = data.split('\n');
-            const programList = document.getElementById('program-list');
-            programList.innerHTML = ''; // Limpa o conteúdo anterior
-
-            programs.forEach(program => {
-                const parts = program.split('|');
-                if (parts.length === 4) {
-                    const programItem = document.createElement('div');
-                    programItem.classList.add('program-item');
-                    programItem.innerHTML = `
-                        <img src="${parts[2]}" alt="${parts[0]}">
-                        <h3>${parts[0]}</h3>
-                        <p>${parts[1]}</p>
-                        <a href="${parts[3]}" target="_blank">Mais Informações</a>
-                    `;
-                    programList.appendChild(programItem);
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Erro ao carregar guia de programação:', error);
-            document.getElementById('program-list').textContent = "Erro ao carregar guia.";
-        });
-}
-
-loadProgramGuide(); // Carrega o guia de programação quando a página é carregada
-
-    
     // Cria o controle de volume apenas se o dispositivo for móvel.
     function createVolumeControl(playerInstance) {
       const volumeControl = document.createElement('input');
