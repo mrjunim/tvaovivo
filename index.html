@@ -679,8 +679,7 @@
             margin-bottom: 10px;
             /* Garante que a imagem tenha margem abaixo */
             max-height: 200px; /* Altura máxima para todas as imagens */
-            object-fit: contain;
-            /* Mantém a proporção e preenche o espaço */
+            object-fit: contain;  /* Mantém a proporção e preenche o espaço */
         }
 
         #programacao-modal-content .close-modal {
@@ -702,8 +701,7 @@
         @media (max-width: 600px) {
             #programacao-modal-content {
                 padding: 15px;
-                max-height: 90vh;
-                /* Aumenta a altura máxima em dispositivos móveis */
+                max-height: 90vh; /* Aumenta a altura máxima em dispositivos móveis */
             }
 
             #programacao-modal-content h2 {
@@ -745,17 +743,16 @@
             </div>
             <div class="player" id="live-player"></div>
         </div>
-    </div>
+<div>
 
-
+    
     <div id="player-container">
-        <div class="player" id="player">
-            <iframe src="https://www.dailymotion.com/embed/video/k1leGVmtqDKNokCJ7PO" width="100%" height="100%"
-                frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        <div class="player twitch-player" id="player">
+            <div id="twitch-embed"></div>
         </div>
     </div>
 
-
+    
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -773,13 +770,13 @@
         </div>
     </div>
 
-
+    
     <div id="programacao-modal" class="modal">
         <div id="programacao-modal-content">
             <span class="close-modal" onclick="closeProgramacaoModal()">&times;</span>
             <h2>StreamXcellence 📺|Guia de Programação</h2>
             <ul id="programacao-lista">
-
+                
             </ul>
         </div>
     </div>
@@ -795,7 +792,7 @@
             });
         }
 
-
+        
         function createVolumeControl(playerInstance) {
             const volumeControl = document.createElement('input');
             volumeControl.type = 'range';
@@ -830,7 +827,7 @@
         }
 
         function createTwitchPlayer() {
-
+            
             if (!document.querySelector("#twitch-embed iframe")) {
                 player = new Twitch.Player("twitch-embed", {
                     channel: "lourimarcos",
@@ -898,7 +895,7 @@
             setInterval(reloadLivePlayer, 30000);
         }
 
-
+        
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
                 .then(response => response.text())
@@ -936,18 +933,18 @@
             if (keyInput && validKeys.includes(keyInput)) {
                 document.getElementById('login-container').style.display = 'none';
 
-
+                
                 const zoomImageContainer = document.getElementById('zoom-image-container');
                 zoomImageContainer.style.display = 'flex';
 
-
+                
                 setTimeout(() => {
                     zoomImageContainer.style.display = 'none';
                     document.getElementById('player-container').style.display = 'flex';
-                    //createTwitchPlayer(); // Removido para usar o player Dailymotion
+                    createTwitchPlayer();
                 }, 2000);
 
-
+                
                 document.getElementById('live-notification').style.display = 'none';
 
                 const welcomeMessage = document.createElement('div');
@@ -1039,27 +1036,27 @@
                 });
         }
 
-
+        
         function openProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "flex";
-
+            
             carregarProgramacao();
         }
 
-
+        
         function closeProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "none";
         }
 
-
+        
         function carregarProgramacao() {
             const listaProgramacao = document.getElementById("programacao-lista");
-            listaProgramacao.innerHTML = '';
+            listaProgramacao.innerHTML = ''; 
 
             fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
                 .then(response => response.text())
                 .then(data => {
-                    const programas = data.trim().split('\n\n');
+                    const programas = data.trim().split('\n\n'); 
 
                     programas.forEach(programa => {
                         const detalhes = programa.split('\n');
