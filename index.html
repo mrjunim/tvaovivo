@@ -642,6 +642,8 @@
             margin: 20px;
             /* Adiciona margem ao redor do modal */
             text-align: left;
+            overflow-y: auto; /* Adiciona overflow-y para scroll */
+            max-height: 80vh;  /* Define altura máxima do conteúdo do modal */
         }
 
         #programacao-modal-content h2 {
@@ -699,6 +701,7 @@
         @media (max-width: 600px) {
             #programacao-modal-content {
                 padding: 15px;
+                max-height: 90vh; /* Aumenta a altura máxima em dispositivos móveis */
             }
 
             #programacao-modal-content h2 {
@@ -740,14 +743,16 @@
             </div>
             <div class="player" id="live-player"></div>
         </div>
-    </div>
+<div>
 
+    
     <div id="player-container">
         <div class="player twitch-player" id="player">
             <div id="twitch-embed"></div>
         </div>
     </div>
 
+    
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -765,12 +770,14 @@
         </div>
     </div>
 
+    
     <div id="programacao-modal" class="modal">
         <div id="programacao-modal-content">
             <span class="close-modal" onclick="closeProgramacaoModal()">&times;</span>
-            <h2>StreamXcellence 📺 |Guia de Programação</h2>
+            <h2>Guia de Programação Robusta</h2>
             <ul id="programacao-lista">
-                </ul>
+                
+            </ul>
         </div>
     </div>
 
@@ -785,7 +792,7 @@
             });
         }
 
-        // Cria o controle de volume apenas se o dispositivo for móvel.
+        
         function createVolumeControl(playerInstance) {
             const volumeControl = document.createElement('input');
             volumeControl.type = 'range';
@@ -820,7 +827,7 @@
         }
 
         function createTwitchPlayer() {
-            // Check if the player already exists before creating a new one
+            
             if (!document.querySelector("#twitch-embed iframe")) {
                 player = new Twitch.Player("twitch-embed", {
                     channel: "lourimarcos",
@@ -888,7 +895,7 @@
             setInterval(reloadLivePlayer, 30000);
         }
 
-        // Carrega guia de programação do arquivo de texto e atualiza ambos os spans
+        
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
                 .then(response => response.text())
@@ -926,18 +933,18 @@
             if (keyInput && validKeys.includes(keyInput)) {
                 document.getElementById('login-container').style.display = 'none';
 
-                // Exibe a imagem com efeito de zoom
+                
                 const zoomImageContainer = document.getElementById('zoom-image-container');
                 zoomImageContainer.style.display = 'flex';
 
-                // Aguarda a animação terminar e exibe o player
+                
                 setTimeout(() => {
                     zoomImageContainer.style.display = 'none';
                     document.getElementById('player-container').style.display = 'flex';
                     createTwitchPlayer();
                 }, 2000);
 
-                // Oculta o player de notificação
+                
                 document.getElementById('live-notification').style.display = 'none';
 
                 const welcomeMessage = document.createElement('div');
@@ -977,7 +984,7 @@
                 alert("Por favor, preencha seu nome antes de enviar.");
                 return;
             }
-            const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação.`;
+            const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação imediata.`;
             window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
         }
 
@@ -1029,27 +1036,27 @@
                 });
         }
 
-        // Função para abrir o modal do guia de programação
+        
         function openProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "flex";
-            // Carrega e exibe a lista de programas
+            
             carregarProgramacao();
         }
 
-        // Função para fechar o modal do guia de programação
+        
         function closeProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "none";
         }
 
-        // Função para carregar e exibir a programação
+        
         function carregarProgramacao() {
             const listaProgramacao = document.getElementById("programacao-lista");
-            listaProgramacao.innerHTML = ''; // Limpa qualquer conteúdo anterior
+            listaProgramacao.innerHTML = ''; 
 
             fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
                 .then(response => response.text())
                 .then(data => {
-                    const programas = data.trim().split('\n\n'); // Divide por blocos de programa
+                    const programas = data.trim().split('\n\n'); 
 
                     programas.forEach(programa => {
                         const detalhes = programa.split('\n');
