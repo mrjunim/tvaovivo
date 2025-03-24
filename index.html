@@ -742,7 +742,7 @@
                 </div>
             </div>
             <div class="player" id="live-player">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/DC31eSv-Hmk?autoplay=1&mute=1&controls=0&loop=1&playlist=DC31eSv-Hmk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/DC31eSv-Hmk?autoplay=1&mute=1&controls=0&loop=1&playlist=DC31eSv-Hmk&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
 <div>
@@ -810,7 +810,9 @@
                     disablekb: 1,
                     rel: 0,
                     showinfo: 0,
-                    modestbranding: 1
+                    modestbranding: 1,
+                    loop: 1,       
+                    playlist: 'DC31eSv-Hmk' 
                 },
                 events: {
                     'onReady': onYouTubePlayerReady,
@@ -826,17 +828,7 @@
 
         function onYouTubePlayerStateChange(event) {
             if (event.data === YT.PlayerState.ENDED) {
-                document.getElementById('player-container').innerHTML = `
-                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                    </video>
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                        <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-                    </div>
-                `;
-                const offlineVideo = document.getElementById('offline-video');
-                offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-                playVideo(offlineVideo);
+               event.target.playVideo();
             }
         }
 
@@ -969,7 +961,6 @@
 
        
 
-   
         function copyEmail() {
             const emailText = document.getElementById("pix-email").innerText;
             navigator.clipboard.writeText(emailText)
@@ -996,7 +987,7 @@
 
         
         function carregarProgramacao() {
-            const listaProgramacao = document.getElementById("programacao-lista");
+const listaProgramacao = document.getElementById("programacao-lista");
             listaProgramacao.innerHTML = ''; 
 
             fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
