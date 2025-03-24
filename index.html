@@ -289,11 +289,11 @@
             left: 0;
         }
 
-        .dailymotion-player iframe {
+        .twitch-player iframe {
             position: relative;
         }
 
-        .dailymotion-player iframe::before {
+        .twitch-player iframe::before {
             content: '';
             position: absolute;
             top: 0;
@@ -741,16 +741,14 @@
                     <span id="guide-text-duplicate">Carregando guia...</span>
                 </div>
             </div>
-            <div class="player" id="live-player">
-                <iframe src="https://www.dailymotion.com/embed/video/k1leGVmtqDKNokCJ7PO?autoplay=1&muted=1&loop=1" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-            </div>
+            <div class="player" id="live-player"></div>
         </div>
 <div>
 
     
     <div id="player-container">
-        <div class="player dailymotion-player" id="player">
-            <iframe src="https://www.dailymotion.com/embed/video/k1leGVmtqDKNokCJ7PO?autoplay=0&loop=1&controls=1&info=0" width="100%" height="100%" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        <div class="player twitch-player" id="player">
+            <div id="twitch-embed"></div>
         </div>
     </div>
 
@@ -783,9 +781,10 @@
         </div>
     </div>
 
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
-        let liveVideo = document.getElementById('live-video');
-        let mainVideo = document.getElementById('main-video');
+        let player;
+        let livePlayer;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -793,9 +792,124 @@
             });
         }
 
+        
         function createVolumeControl(playerInstance) {
-           
+            const volumeControl = document.createElement('input');
+            volumeControl.type = 'range';
+            volumeControl.min = 0;
+            volumeControl.max = 1;
+            volumeControl.step = 0.01;
+            volumeControl.value = playerInstance.getVolume();
+            volumeControl.id = 'volume-control';
+
+            volumeControl.style.position = 'absolute';
+            volumeControl.style.bottom = '20px';
+            volumeControl.style.left = '20px';
+            volumeControl.style.width = '150px';
+            volumeControl.style.opacity = '0.8';
+            volumeControl.style.zIndex = '1000';
+            volumeControl.style.pointerEvents = 'auto';
+            volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
+            volumeControl.style.border = 'none';
+            volumeControl.style.borderRadius = '8px';
+
+            const playerContainer = document.getElementById('player');
+            const existingControl = document.getElementById('volume-control');
+            if (existingControl) {
+                existingControl.parentNode.removeChild(existingControl);
+            }
+            playerContainer.appendChild(volumeControl);
+
+            volumeControl.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                playerInstance.setVolume(val);
+            });
         }
+
+        function createTwitchPlayer() {
+            
+            if (!document.querySelector("#twitch-embed iframe")) {
+                player = new Twitch.Player("twitch-embed", {
+                    channel: "lourimarcos",
+                    width: "100%",
+                    height: "100%",
+                    controls: false,
+                    autoplay: true,
+                    muted: false,
+                    parent: ["localhost"]
+                });
+
+                player.addEventListener(Twitch.Player.READY, () => {
+                    player.setVolume(1.0);
+                    player.setMuted(false);
+                    player.play();
+                    const playerElement = player.getIframe();
+                    const clickEvent = new MouseEvent('click', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true
+                    });
+                    playerElement.dispatchEvent(clickEvent);
+
+                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        createVolumeControl(player);
+                    }
+                });
+
+                player.addEventListener(Twitch.Player.OFFLINE, () => {
+                    document.getElementById('player-container').innerHTML = `
+                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                        </video>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                        </div>
+                    `;
+                    const offlineVideo = document.getElementById('offline-video');
+                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                    playVideo(offlineVideo);
+                });
+            }
+        }
+
+
+        function createLiveNotificationPlayer() {
+            const livePlayerContainer = document.getElementById("live-player");
+            livePlayer = new Twitch.Player("live-player", {
+                channel: "lourimarcos",
+                height: "100%",
+                width: "100%",
+                muted: true,
+                autoplay: true,
+                controls: false,
+                parent: ["localhost"]
+            });
+            livePlayer.addEventListener(Twitch.Player.READY, () => {
+                const iframe = livePlayer.getIframe();
+                iframe.style.pointerEvents = "none";
+            });
+
+            function reloadLivePlayer() {
+                livePlayer.seek(0);
+            }
+            setInterval(reloadLivePlayer, 30000);
+        }
+
+        
+        function loadProgramacao() {
+            fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('guide-text').textContent = data;
+                    document.getElementById('guide-text-duplicate').textContent = data;
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar guia de programação:', error);
+                    document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
+                    document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
+                });
+        }
+        loadProgramacao();
 
         let validKeys = [];
 
@@ -827,6 +941,7 @@
                 setTimeout(() => {
                     zoomImageContainer.style.display = 'none';
                     document.getElementById('player-container').style.display = 'flex';
+                    createTwitchPlayer();
                 }, 2000);
 
                 
@@ -907,7 +1022,7 @@
             })();
         }, 1000);
 
-       
+        createLiveNotificationPlayer();
 
         function copyEmail() {
             const emailText = document.getElementById("pix-email").innerText;
