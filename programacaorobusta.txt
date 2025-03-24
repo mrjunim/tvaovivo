@@ -1,14 +1,4 @@
 Título: Filme Ação Explosiva
 Sinopse: Um agente secreto embarca em uma missão perigosa para salvar o mundo.
 Horário: 21:00
-Imagem Capa: https://exemplo.com/imagem1.jpg
-
-Título: Série Mistério Sombrio
-Sinopse: Uma detetive investiga uma série de crimes misteriosos em uma pequena cidade.
-Horário: 22:00
-Imagem Capa: https://exemplo.com/imagem2.jpg
-
-Título: Documentário Natureza Selvagem
-Sinopse: Explore a vida selvagem de uma floresta tropical e descubra segredos da natureza.
-Horário: 20:00
-Imagem Capa: https://exemplo.com/imagem3.jpg
+Imagem Capa: https://jpimg.com.br/uploads/2020/07/chaves-sbt.jpg
