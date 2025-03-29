@@ -69,8 +69,14 @@
         
         function openModal(title, video) {
             document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-src').src = video;
-            document.getElementById('modal-video').load();
+            const videoElement = document.getElementById('modal-video');
+            const sourceElement = document.getElementById('modal-src');
+
+            videoElement.pause();  // Garante que qualquer vídeo em reprodução pare
+            sourceElement.src = video; // Atualiza o link do vídeo
+            videoElement.load();  // Recarrega o vídeo
+            videoElement.play();  // Inicia a reprodução automaticamente
+
             document.getElementById('modal').style.display = 'block';
         }
 
