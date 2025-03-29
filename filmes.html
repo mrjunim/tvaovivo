@@ -25,7 +25,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h2 id="modal-title"></h2>
-            <video id="modal-video" controls>
+            <video id="modal-video" controls muted>
                 Seu navegador não suporta vídeo.
             </video>
         </div>
@@ -69,12 +69,12 @@
         function openModal(title, video) {
             document.getElementById('modal-title').innerText = title;
             const videoElement = document.getElementById('modal-video');
-
-            videoElement.pause();  // Garante que qualquer vídeo em reprodução pare
-            videoElement.src = video; // Atualiza o link do vídeo diretamente
-            videoElement.load();  // Recarrega o vídeo
-            videoElement.play();  // Inicia a reprodução automaticamente
-
+            videoElement.src = video;
+            videoElement.load();
+            videoElement.play().catch(error => {
+                console.error("Erro ao iniciar a reprodução:", error);
+                // Lidar com o erro de autoplay aqui (ex: exibir uma mensagem ao usuário)
+            });
             document.getElementById('modal').style.display = 'block';
         }
 
