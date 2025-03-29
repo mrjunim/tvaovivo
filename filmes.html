@@ -45,7 +45,7 @@
                     if (!lines[i + 1]) continue; // Garante que há um link de vídeo correspondente
                     
                     const infoLine = lines[i];
-                    const videoUrl = lines[i + 1];
+                    let videoUrl = lines[i + 1];
                     
                     const nameMatch = infoLine.match(/tvg-name="([^"]+)"/);
                     const logoMatch = infoLine.match(/tvg-logo="([^"]+)"/);
@@ -69,11 +69,17 @@
         function openModal(title, video) {
             document.getElementById('modal-title').innerText = title;
             const videoElement = document.getElementById('modal-video');
+
+            // Tenta usar HTTPS, se possível
+            if (video.startsWith('http://')) {
+                video = video.replace('http://', 'https://');
+            }
+
             videoElement.src = video;
             videoElement.load();
             videoElement.play().catch(error => {
                 console.error("Erro ao iniciar a reprodução:", error);
-                // Lidar com o erro de autoplay aqui (ex: exibir uma mensagem ao usuário)
+                alert("Não foi possível carregar o vídeo. Verifique se o link está correto e se o navegador suporta o formato."); // Exibe uma mensagem de erro ao usuário
             });
             document.getElementById('modal').style.display = 'block';
         }
