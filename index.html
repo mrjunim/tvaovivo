@@ -1090,27 +1090,9 @@
             setInterval(reloadLivePlayer, 30000);
         }
 
-        function loadGuideText() {
-            fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('guide-text').textContent = data;
-                    document.getElementById('guide-text-duplicate').textContent = data;
-                    document.getElementById('guide-text-main').textContent = data;
-                    document.getElementById('guide-text-main-duplicate').textContent = data;
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar guia de programação:', error);
-                    const errorMessage = "Erro ao carregar guia.";
-                    document.getElementById('guide-text').textContent = errorMessage;
-                    document.getElementById('guide-text-duplicate').textContent = errorMessage;
-                    document.getElementById('guide-text-main').textContent = errorMessage;
-                    document.getElementById('guide-text-main-duplicate').textContent = errorMessage;
-                });
-        }
 
         function loadChannels() {
-            fetch('https://mrjunim.github.io/tvaovivo/filmes.txt')
+            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
                 .then(response => response.text())
                 .then(data => {
                     const lines = data.split('\n');
