@@ -676,6 +676,7 @@
             max-width: 100%;
             height: auto;
             border-radius: 8px;
+            border-radius: 8px;
             margin-bottom: 10px;
             /* Garante que a imagem tenha margem abaixo */
             max-height: 200px; /* Altura máxima para todas as imagens */
@@ -742,17 +743,20 @@
                 </div>
             </div>
             <div class="player" id="live-player"></div>
+            <div id="channelList" class="channel-list">
+                <!-- Os canais serão carregados aqui -->
+            </div>
         </div>
-<div>
+    </div>
 
-    
     <div id="player-container">
         <div class="player twitch-player" id="player">
             <div id="twitch-embed"></div>
         </div>
     </div>
 
-    
+    <button id="liveButton" class="live-button" style="position: fixed; top: 10px; left: 10px; z-index: 1000;">Assistir ao Vivo</button>
+
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -770,7 +774,6 @@
         </div>
     </div>
 
-    
     <div id="programacao-modal" class="modal">
         <div id="programacao-modal-content">
             <span class="close-modal" onclick="closeProgramacaoModal()">&times;</span>
@@ -792,7 +795,6 @@
             });
         }
 
-        
         function createVolumeControl(playerInstance) {
             const volumeControl = document.createElement('input');
             volumeControl.type = 'range';
@@ -827,7 +829,6 @@
         }
 
         function createTwitchPlayer() {
-            
             if (!document.querySelector("#twitch-embed iframe")) {
                 player = new Twitch.Player("twitch-embed", {
                     channel: "lourimarcos",
@@ -872,7 +873,6 @@
             }
         }
 
-
         function createLiveNotificationPlayer() {
             const livePlayerContainer = document.getElementById("live-player");
             livePlayer = new Twitch.Player("live-player", {
@@ -895,7 +895,6 @@
             setInterval(reloadLivePlayer, 30000);
         }
 
-        
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
                 .then(response => response.text())
@@ -933,18 +932,15 @@
             if (keyInput && validKeys.includes(keyInput)) {
                 document.getElementById('login-container').style.display = 'none';
 
-                
                 const zoomImageContainer = document.getElementById('zoom-image-container');
                 zoomImageContainer.style.display = 'flex';
 
-                
                 setTimeout(() => {
                     zoomImageContainer.style.display = 'none';
                     document.getElementById('player-container').style.display = 'flex';
                     createTwitchPlayer();
                 }, 2000);
 
-                
                 document.getElementById('live-notification').style.display = 'none';
 
                 const welcomeMessage = document.createElement('div');
@@ -963,7 +959,6 @@
                 setTimeout(() => {
                     welcomeMessage.remove();
                 }, 6000);
-
 
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
@@ -1036,19 +1031,15 @@
                 });
         }
 
-        
         function openProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "flex";
-            
             carregarProgramacao();
         }
 
-        
         function closeProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "none";
         }
 
-        
         function carregarProgramacao() {
             const listaProgramacao = document.getElementById("programacao-lista");
             listaProgramacao.innerHTML = ''; 
@@ -1087,6 +1078,66 @@
                     listaProgramacao.innerHTML = '<li>Erro ao carregar a programação.</li>';
                 });
         }
+
+        document.getElementById('liveButton').addEventListener('click', () => {
+            switchToMainPlayer();
+        });
+
+        function switchToMainPlayer() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = 'path/to/main-live-stream.mp4';
+            videoPlayer.play();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadChannels();
+
+            function loadChannels() {
+                fetch('filmes.txt')
+                    .then(response => response.text())
+                    .then(data => {
+                        const channels = parseChannels(data);
+                        displayChannels(channels);
+                    });
+            }
+
+            function parseChannels(data) {
+                const lines = data.split('\n');
+                const channels = [];
+                lines.forEach(line => {
+                    if (line.startsWith('#EXTINF:')) {
+                        const channelInfo = line.split(',');
+                        channels.push({
+                            name: channelInfo[1],
+                            url: lines[lines.indexOf(line) + 1]
+                        });
+                    }
+                });
+                return channels;
+            }
+
+            function displayChannels(channels) {
+                const channelList = document.getElementById('channelList');
+                channels.forEach(channel => {
+                    const channelElement = document.createElement('div');
+                    channelElement.classList.add('channel');
+                    channelElement.innerHTML = `
+                        <img src="path/to/channel/image.png" alt="${channel.name}">
+                        <p>${channel.name}</p>
+                    `;
+                    channelElement.addEventListener('click', () => {
+                        switchPlayer(channel.url);
+                    });
+                    channelList.appendChild(channelElement);
+                });
+            }
+
+            function switchPlayer(url) {
+                const videoPlayer = document.getElementById('videoPlayer');
+                videoPlayer.src = url;
+                videoPlayer.play();
+            }
+        });
     </script>
 </body>
 
