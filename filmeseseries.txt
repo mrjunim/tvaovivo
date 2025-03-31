@@ -1,2 +1,2 @@
-#EXTINF:-1 tvg-name="Canal Brasil" tvg-logo="https://exemplo.com/logo-canal-brasil.png"
+#EXTINF:-1 tvg-name="Canal Brasil" tvg-logo="https://imaginariodigital.org.br/sites/default/files/imagens/empresas/logo-canal-brasil.png"
 https://stream.exemplo.com/canal-brasil/index.m3u8
