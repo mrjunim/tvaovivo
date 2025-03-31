@@ -337,19 +337,88 @@
             top: 0;
             left: 0;
         }
-
-        /* Volume Control */
-        #volume-control {
+        
+        /* Controles do Player */
+        .player-controls {
             position: absolute;
             bottom: 20px;
-            left: 20px;
-            width: 150px;
-            opacity: 0.8;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
             z-index: 1000;
-            pointer-events: auto;
-            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        #player-container:hover .player-controls {
+            opacity: 1;
+        }
+        
+        /* Controle de Volume */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        #volume-btn {
+            background: none;
             border: none;
-            border-radius: 8px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 8px;
+            width: auto;
+            padding: 5px;
+        }
+        
+        #volume-control {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            border: none;
+        }
+        
+        #volume-control::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+        
+        #volume-control::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: none;
+        }
+        
+        /* Botão de Tela Cheia */
+        #fullscreen-btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 20px;
+            width: auto;
+        }
+        
+        #fullscreen-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
         }
 
         /* Modais */
@@ -555,6 +624,10 @@
                 animation-duration: 25s;
                 -webkit-animation-duration: 25s;
             }
+            
+            #volume-control {
+                width: 80px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -583,6 +656,10 @@
 
             .scrolling-text span {
                 padding-right: 40px;
+            }
+            
+            #volume-control {
+                width: 60px;
             }
         }
     </style>
@@ -643,6 +720,15 @@
         <div class="player twitch-player" id="player">
             <div id="twitch-embed"></div>
         </div>
+        
+        <!-- Controles personalizados para o player -->
+        <div class="player-controls">
+            <div class="volume-container">
+                <button id="volume-btn">🔊</button>
+                <input type="range" id="volume-control" min="0" max="1" step="0.05" value="0.5">
+            </div>
+            <button id="fullscreen-btn">⛶</button>
+        </div>
     </div>
 
     <!-- Modal de aquisição de chave -->
@@ -693,30 +779,7 @@
             });
         }
 
-        // Função para criar controle de volume
-        function createVolumeControl(playerInstance) {
-            const volumeControl = document.createElement('input');
-            volumeControl.type = 'range';
-            volumeControl.min = 0;
-            volumeControl.max = 1;
-            volumeControl.step = 0.01;
-            volumeControl.value = playerInstance.getVolume();
-            volumeControl.id = 'volume-control';
-
-            const playerContainer = document.getElementById('player');
-            const existingControl = document.getElementById('volume-control');
-            if (existingControl) {
-                existingControl.parentNode.removeChild(existingControl);
-            }
-            playerContainer.appendChild(volumeControl);
-
-            volumeControl.addEventListener('input', (e) => {
-                const val = parseFloat(e.target.value);
-                playerInstance.setVolume(val);
-            });
-        }
-
-        // Função para criar player do Twitch
+        // Função para criar player do Twitch com controles personalizados
         function createTwitchPlayer() {
             if (!document.querySelector("#twitch-embed iframe")) {
                 player = new Twitch.Player("twitch-embed", {
@@ -730,9 +793,13 @@
                 });
 
                 player.addEventListener(Twitch.Player.READY, () => {
-                    player.setVolume(1.0);
+                    player.setVolume(0.5);
                     player.setMuted(false);
                     player.play();
+                    
+                    // Inicializar controles personalizados
+                    initCustomControls();
+                    
                     const playerElement = player.getIframe();
                     const clickEvent = new MouseEvent('click', {
                         view: window,
@@ -740,10 +807,6 @@
                         cancelable: true
                     });
                     playerElement.dispatchEvent(clickEvent);
-
-                    if (/Mobi|Android/i.test(navigator.userAgent)) {
-                        createVolumeControl(player);
-                    }
                 });
 
                 player.addEventListener(Twitch.Player.OFFLINE, () => {
@@ -761,6 +824,76 @@
                     offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
                     playVideo(offlineVideo);
                 });
+            }
+        }
+
+        // Inicializar controles personalizados
+        function initCustomControls() {
+            const volumeBtn = document.getElementById('volume-btn');
+            const volumeControl = document.getElementById('volume-control');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            
+            // Definir volume inicial
+            volumeControl.value = player.getVolume();
+            updateVolumeIcon();
+            
+            // Adicionar eventos para os controles
+            volumeControl.addEventListener('input', () => {
+                const volume = parseFloat(volumeControl.value);
+                player.setVolume(volume);
+                player.setMuted(volume === 0);
+                updateVolumeIcon();
+            });
+            
+            volumeBtn.addEventListener('click', () => {
+                if (player.getMuted()) {
+                    player.setMuted(false);
+                    volumeControl.value = player.getVolume() || 0.5;
+                } else {
+                    player.setMuted(true);
+                    // Manter o valor do slider, só mudar visualmente o ícone
+                }
+                updateVolumeIcon();
+            });
+            
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+        }
+        
+        // Atualizar ícone de volume
+        function updateVolumeIcon() {
+            const volumeBtn = document.getElementById('volume-btn');
+            
+            if (!volumeBtn) return;
+            
+            if (player.getMuted() || player.getVolume() === 0) {
+                volumeBtn.textContent = '🔇';
+            } else if (player.getVolume() < 0.5) {
+                volumeBtn.textContent = '🔉';
+            } else {
+                volumeBtn.textContent = '🔊';
+            }
+        }
+        
+        // Função para alternar tela cheia
+        function toggleFullscreen() {
+            const container = document.getElementById('player-container');
+            
+            if (!document.fullscreenElement) {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) { /* Safari */
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) { /* IE11 */
+                    container.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
             }
         }
 
