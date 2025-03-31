@@ -1,2 +1,2 @@
-#EXTINF:-1 tvg-name="Canal Brasil" tvg-logo="https://imaginariodigital.org.br/sites/default/files/imagens/empresas/logo-canal-brasil.png"
-https://stream.exemplo.com/canal-brasil/index.m3u8
+#EXTINF:-1 tvg-name="cartoon network" tvg-logo="https://logospng.org/wp-content/uploads/cartoon-network.png"
+https://tiyec63769.tiyec63769.workers.dev/cartoonnetwork/tracks-v1a1/mono.m3u8
