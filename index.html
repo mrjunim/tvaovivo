@@ -251,6 +251,170 @@
             border: none;
         }
 
+        /* Player principal e canais */
+        #main-content {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            background-color: #0a0a0a;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        #main-content.active {
+            display: block;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 20px;
+            max-width: 1400px;
+            margin: 60px auto 0;
+        }
+
+        @media (min-width: 992px) {
+            .content-grid {
+                grid-template-columns: 3fr 1fr;
+            }
+        }
+
+        .main-player-container {
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* Aspect ratio 16:9 */
+        }
+
+        .main-player-container .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .main-player-container .play-overlay .play-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #e50914;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .main-player-container .play-overlay .play-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: #fff;
+        }
+
+        .main-player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .channels-grid {
+            background-color: rgba(20, 20, 20, 0.8);
+            border-radius: 12px;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 70vh;
+        }
+
+        .channels-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #f1f1f1;
+        }
+
+        .channels-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .channel-card {
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .channel-card img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .channel-card .channel-name {
+            padding: 8px;
+            font-size: 0.9em;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Botão de assistir ao vivo */
+        .live-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background-color: #e50914;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s;
+            width: auto;
+        }
+
+        .live-button:hover {
+            background-color: #b20710;
+        }
+
+        .live-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
         /* Player */
         #player-container {
             display: none;
@@ -495,6 +659,10 @@
             .live-notification {
                 max-width: none;
             }
+
+            .channels-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 576px) {
@@ -642,8 +810,10 @@
             margin: 20px;
             /* Adiciona margem ao redor do modal */
             text-align: left;
-            overflow-y: auto; /* Adiciona overflow-y para scroll */
-            max-height: 80vh;  /* Define altura máxima do conteúdo do modal */
+            overflow-y: auto;
+            /* Adiciona overflow-y para scroll */
+            max-height: 80vh;
+            /* Define altura máxima do conteúdo do modal */
         }
 
         #programacao-modal-content h2 {
@@ -679,8 +849,10 @@
             border-radius: 8px;
             margin-bottom: 10px;
             /* Garante que a imagem tenha margem abaixo */
-            max-height: 200px; /* Altura máxima para todas as imagens */
-            object-fit: contain;  /* Mantém a proporção e preenche o espaço */
+            max-height: 200px;
+            /* Altura máxima para todas as imagens */
+            object-fit: contain;
+            /* Mantém a proporção e preenche o espaço */
         }
 
         #programacao-modal-content .close-modal {
@@ -702,7 +874,8 @@
         @media (max-width: 600px) {
             #programacao-modal-content {
                 padding: 15px;
-                max-height: 90vh; /* Aumenta a altura máxima em dispositivos móveis */
+                max-height: 90vh;
+                /* Aumenta a altura máxima em dispositivos móveis */
             }
 
             #programacao-modal-content h2 {
@@ -744,16 +917,53 @@
             </div>
             <div class="player" id="live-player"></div>
         </div>
-<div>
+    </div>
 
-    
-    <div id="player-container">
-        <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
+    <!-- Novo layout para o conteúdo principal após login -->
+    <div id="main-content">
+        <!-- Botão Assistir ao Vivo (aparecerá após login) -->
+        <button class="live-button" id="live-button" onclick="switchToTwitch()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <circle cx="12" cy="12" r="1" />
+                <path d="M17 12l-5-3v6l5-3z" />
+            </svg>
+            Assistir ao Vivo
+        </button>
+
+        <div class="content-grid">
+            <!-- Player Principal -->
+            <div class="main-player-container">
+                <div class="play-overlay" id="play-overlay" onclick="playMainContent()">
+                    <div class="play-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                    </div>
+                    <h3>Clique para assistir ao vivo</h3>
+                    <p>StreamXcellence TV ao vivo</p>
+                </div>
+                <div id="main-player"></div>
+            </div>
+
+            <!-- Lista de Canais -->
+            <div class="channels-grid">
+                <div class="channels-title">Canais Disponíveis</div>
+                <div class="channels-list" id="channels-list">
+                    <!-- Canais serão carregados aqui dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de guia de programação no rodapé -->
+        <div id="guide-container-main" style="margin-top: 20px;">
+            <div class="scrolling-text">
+                <span id="guide-text-main">Carregando guia...</span>
+                <span id="guide-text-main-duplicate">Carregando guia...</span>
+            </div>
         </div>
     </div>
 
-    
     <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
@@ -771,21 +981,23 @@
         </div>
     </div>
 
-    
     <div id="programacao-modal" class="modal">
         <div id="programacao-modal-content">
             <span class="close-modal" onclick="closeProgramacaoModal()">&times;</span>
             <h2>StreamXcellence 📺|Guia de Programação</h2>
             <ul id="programacao-lista">
-                
+                <!-- Programação será carregada aqui dinamicamente -->
             </ul>
         </div>
     </div>
 
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
-        let player;
+        let mainPlayer;
         let livePlayer;
+        let twitchChannel = "lourimarcos";
+        let currentChannelUrl = "";
+        let channelsList = [];
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -793,7 +1005,6 @@
             });
         }
 
-        
         function createVolumeControl(playerInstance) {
             const volumeControl = document.createElement('input');
             volumeControl.type = 'range';
@@ -814,7 +1025,7 @@
             volumeControl.style.border = 'none';
             volumeControl.style.borderRadius = '8px';
 
-            const playerContainer = document.getElementById('player');
+            const playerContainer = document.getElementById('main-player');
             const existingControl = document.getElementById('volume-control');
             if (existingControl) {
                 existingControl.parentNode.removeChild(existingControl);
@@ -828,62 +1039,55 @@
         }
 
         function createTwitchPlayer() {
-            
-            if (!document.querySelector("#twitch-embed iframe")) {
-                player = new Twitch.Player("twitch-embed", {
-                    channel: "lourimarcos",
-                    width: "100%",
-                    height: "100%",
-                    controls: false,
-                    autoplay: true,
-                    muted: false,
-                    parent: ["localhost"]
-                });
-
-                player.addEventListener(Twitch.Player.READY, () => {
-                    player.setVolume(1.0);
-                    player.setMuted(false);
-                    player.play();
-                    const playerElement = player.getIframe();
-                    const clickEvent = new MouseEvent('click', {
-                        view: window,
-                        bubbles: true,
-                        cancelable: true
-                    });
-                    playerElement.dispatchEvent(clickEvent);
-
-                    if (/Mobi|Android/i.test(navigator.userAgent)) {
-                        createVolumeControl(player);
-                    }
-                });
-
-                player.addEventListener(Twitch.Player.OFFLINE, () => {
-                    document.getElementById('player-container').innerHTML = `
-                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-                            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                        </video>
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-                        </div>
-                    `;
-                    const offlineVideo = document.getElementById('offline-video');
-                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-                    playVideo(offlineVideo);
-                });
+            if (mainPlayer) {
+                mainPlayer.setChannel(twitchChannel);
+                return;
             }
-        }
 
+            mainPlayer = new Twitch.Player("main-player", {
+                channel: twitchChannel,
+                width: "100%",
+                height: "100%",
+                controls: false,
+                autoplay: false, // Começa pausado
+                muted: false,
+                parent: [window.location.hostname]
+            });
+
+            mainPlayer.addEventListener(Twitch.Player.READY, () => {
+                mainPlayer.setVolume(1.0);
+                mainPlayer.setMuted(false);
+                
+                if (/Mobi|Android/i.test(navigator.userAgent)) {
+                    createVolumeControl(mainPlayer);
+                }
+            });
+
+            mainPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
+                document.getElementById('main-player').innerHTML = `
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                    </video>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
+                        <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                    </div>
+                `;
+                const offlineVideo = document.getElementById('offline-video');
+                offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                playVideo(offlineVideo);
+            });
+        }
 
         function createLiveNotificationPlayer() {
             const livePlayerContainer = document.getElementById("live-player");
             livePlayer = new Twitch.Player("live-player", {
-                channel: "lourimarcos",
+                channel: twitchChannel,
                 height: "100%",
                 width: "100%",
                 muted: true,
                 autoplay: true,
                 controls: false,
-                parent: ["localhost"]
+                parent: [window.location.hostname]
             });
             livePlayer.addEventListener(Twitch.Player.READY, () => {
                 const iframe = livePlayer.getIframe();
@@ -896,21 +1100,77 @@
             setInterval(reloadLivePlayer, 30000);
         }
 
-        
-        function loadProgramacao() {
+        function loadGuideText() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('guide-text').textContent = data;
                     document.getElementById('guide-text-duplicate').textContent = data;
+                    document.getElementById('guide-text-main').textContent = data;
+                    document.getElementById('guide-text-main-duplicate').textContent = data;
                 })
                 .catch(error => {
                     console.error('Erro ao carregar guia de programação:', error);
-                    document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
-                    document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
+                    const errorMessage = "Erro ao carregar guia.";
+                    document.getElementById('guide-text').textContent = errorMessage;
+                    document.getElementById('guide-text-duplicate').textContent = errorMessage;
+                    document.getElementById('guide-text-main').textContent = errorMessage;
+                    document.getElementById('guide-text-main-duplicate').textContent = errorMessage;
                 });
         }
-        loadProgramacao();
+
+        function loadChannels() {
+            fetch('https://mrjunim.github.io/tvaovivo/filmes.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split('\n');
+                    channelsList = [];
+                    
+                    for (let i = 0; i < lines.length; i++) {
+                        if (lines[i].includes('#EXTINF:-1')) {
+                            const channelInfo = lines[i];
+                            const channelUrl = lines[i + 1] ? lines[i + 1].trim() : '';
+                            
+                            // Extrair nome do canal
+                            const nameMatch = channelInfo.match(/tvg-name="([^"]*)"/) || channelInfo.match(/,\s*(.*)$/);
+                            const channelName = nameMatch ? nameMatch[1] : 'Canal Sem Nome';
+                            
+                            // Extrair logo do canal
+                            const logoMatch = channelInfo.match(/tvg-logo="([^"]*)"/);
+                            const channelLogo = logoMatch ? logoMatch[1] : 'https://via.placeholder.com/100';
+                            
+                            if (channelUrl) {
+                                channelsList.push({
+                                    name: channelName,
+                                    logo: channelLogo,
+                                    url: channelUrl
+                                });
+                            }
+                        }
+                    }
+                    
+                    renderChannels();
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar canais:', error);
+                });
+        }
+
+        function renderChannels() {
+            const channelsContainer = document.getElementById('channels-list');
+            channelsContainer.innerHTML = '';
+            
+            channelsList.forEach(channel => {
+                const channelCard = document.createElement('div');
+                channelCard.className = 'channel-card';
+                channelCard.innerHTML = `
+                    <img src="${channel.logo || 'https://via.placeholder.com/100'}" alt="${channel.name}" onerror="this.src='https://via.placeholder.com/100'">
+                    <div class="channel-name">${channel.name}</div>
+                `;
+                channelCard.addEventListener('click', () => switchToChannel(channel.url));
+                channelsContainer.appendChild(channelCard);
+            });
+        }
 
         let validKeys = [];
 
@@ -925,7 +1185,6 @@
                     console.error('Erro ao carregar as chaves:', error);
                 });
         }
-        loadKeys();
 
         function verifyKey() {
             const keyInput = document.getElementById('key-input').value;
@@ -933,20 +1192,22 @@
 
             if (keyInput && validKeys.includes(keyInput)) {
                 document.getElementById('login-container').style.display = 'none';
-
+                document.getElementById('live-notification').style.display = 'none';
                 
+                // Mostrar zoom image
                 const zoomImageContainer = document.getElementById('zoom-image-container');
                 zoomImageContainer.style.display = 'flex';
-
                 
+                // Após 2 segundos, mostrar o conteúdo principal
                 setTimeout(() => {
                     zoomImageContainer.style.display = 'none';
-                    document.getElementById('player-container').style.display = 'flex';
+                    document.getElementById('main-content').classList.add('active');
+                    
+                    // Inicializar o player e carregar canais
                     createTwitchPlayer();
+                    loadChannels();
+                    loadGuideText();
                 }, 2000);
-
-                
-                document.getElementById('live-notification').style.display = 'none';
 
                 const welcomeMessage = document.createElement('div');
                 welcomeMessage.textContent = "Seja Bem vindo!!!";
@@ -964,10 +1225,54 @@
                 setTimeout(() => {
                     welcomeMessage.remove();
                 }, 6000);
-
-
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
+            }
+        }
+
+        function switchToChannel(channelUrl) {
+            // Remover o player da Twitch
+            document.getElementById('main-player').innerHTML = '';
+            
+            // Criar iframe para o canal selecionado
+            const iframe = document.createElement('iframe');
+            iframe.src = channelUrl;
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.allowFullscreen = true;
+            
+            // Adicionar iframe ao container
+            document.getElementById('main-player').appendChild(iframe);
+            
+            // Esconder overlay
+            document.getElementById('play-overlay').style.display = 'none';
+            
+            // Atualizar variável de canal atual
+            currentChannelUrl = channelUrl;
+        }
+
+        function switchToTwitch() {
+            // Remover qualquer iframe existente
+            document.getElementById('main-player').innerHTML = '';
+            
+            // Recriar o player da Twitch
+            createTwitchPlayer();
+            
+            // Esconder overlay
+            document.getElementById('play-overlay').style.display = 'none';
+            
+            // Atualizar variável de canal atual
+            currentChannelUrl = '';
+        }
+
+        function playMainContent() {
+            // Esconder overlay
+            document.getElementById('play-overlay').style.display = 'none';
+            
+            // Se não houver canal selecionado, inicia o player da Twitch
+            if (!currentChannelUrl) {
+                mainPlayer.play();
             }
         }
 
@@ -989,45 +1294,9 @@
             window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
         }
 
-        document.addEventListener('keydown', function (event) {
-            if (
-                event.key === 'F12' ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.key === 'U')
-            ) {
-                alert("isso não é permitido 😢");
-                event.preventDefault();
-                return false;
-            }
-        });
-
-        document.addEventListener('contextmenu', function (event) {
-            alert("isso não é permitido 😢");
-            event.preventDefault();
-            return false;
-        });
-
-        setInterval(function () {
-            (function () {
-                function logNop() {
-                    alert("isso não é permitido 😢");
-                    return false;
-                }
-                console.log = logNop;
-                console.warn = logNop;
-                console.error = logNop;
-                console.info = logNop;
-                console.debug = logNop;
-                console.table = logNop;
-            })();
-        }, 1000);
-
-        createLiveNotificationPlayer();
-
         function copyEmail() {
             const emailText = document.getElementById("pix-email").innerText;
-            navigator.clipboard.writeText(emailText)
+            navigator.clipboard.writeText("lourimarcos@outlook.com")
                 .then(() => {
                     alert("Email copiado para a área de transferência!");
                 })
@@ -1037,27 +1306,23 @@
                 });
         }
 
-        
         function openProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "flex";
-            
             carregarProgramacao();
         }
 
-        
         function closeProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "none";
         }
 
-        
         function carregarProgramacao() {
             const listaProgramacao = document.getElementById("programacao-lista");
-            listaProgramacao.innerHTML = ''; 
+            listaProgramacao.innerHTML = '';
 
             fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
                 .then(response => response.text())
                 .then(data => {
-                    const programas = data.trim().split('\n\n'); 
+                    const programas = data.trim().split('\n\n');
 
                     programas.forEach(programa => {
                         const detalhes = programa.split('\n');
@@ -1088,6 +1353,30 @@
                     listaProgramacao.innerHTML = '<li>Erro ao carregar a programação.</li>';
                 });
         }
+
+        // Proteção contra inspeção
+        document.addEventListener('keydown', function (event) {
+            if (
+                event.key === 'F12' ||
+                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+                (event.ctrlKey && event.key === 'U')
+            ) {
+                alert("isso não é permitido 😢");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('contextmenu', function (event) {
+            alert("isso não é permitido 😢");
+            event.preventDefault();
+            return false;
+        });
+
+        // Inicializar
+        loadKeys();
+        createLiveNotificationPlayer();
+        loadGuideText();
     </script>
 </body>
 
