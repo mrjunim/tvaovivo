@@ -4,23 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="StreamXcellence - Assista aos melhores canais online">
+    <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
+    <meta name="author" content="StreamXcellence">
+    
     <title>StreamXcellence 📺</title>
+    
+    <!-- Preconnect para melhorar o carregamento -->
+    <link rel="preconnect" href="https://i.imgur.com">
+    <link rel="preconnect" href="https://player.twitch.tv">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://streamxcellence.com/">
+    <meta property="og:title" content="StreamXcellence 📺">
+    <meta property="og:description" content="A melhor plataforma para assistir seus canais favoritos">
+    <meta property="og:image" content="https://i.imgur.com/sj6EMam.jpeg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://streamxcellence.com/">
+    <meta property="twitter:title" content="StreamXcellence 📺">
+    <meta property="twitter:description" content="A melhor plataforma para assistir seus canais favoritos">
+    <meta property="twitter:image" content="https://i.imgur.com/sj6EMam.jpeg">
+    
     <style>
-        /* Estilo Geral */
-        body {
+        /* Estilos Gerais */
+        :root {
+            --primary-color: #e50914;
+            --primary-hover: #b20710;
+            --secondary-color: #007bff;
+            --secondary-hover: #0056b3;
+            --text-color: #ffffff;
+            --background-dark: #0a0a0a;
+            --background-darker: #000000;
+            --card-background: rgba(20, 20, 20, 0.8);
+            --card-background-hover: rgba(30, 30, 30, 0.9);
+            --border-color: #333;
+            --success-color: #4CAF50;
+            --success-hover: #367c39;
+            --guide-bg: rgba(34, 34, 34, 0.9);
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             font-family: 'Arial', sans-serif;
-            background-color: #0a0a0a;
-            color: white;
+            background-color: var(--background-dark);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* Imagem de Fundo Principal */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Imagem de Fundo */
         .background-image {
             position: fixed;
             top: 0;
@@ -29,46 +84,158 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
+            filter: brightness(0.7);
         }
 
-        /* Imagem de Zoom (oculta inicialmente) */
-        #zoom-image-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            /* Cor de fundo preta */
-            z-index: 10;
-            /* Garante que fique acima de outros elementos */
+        /* Container Principal */
+        .container {
+            display: flex;
+            flex-direction: row;
             justify-content: center;
+            align-items: stretch;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            gap: 20px;
+            z-index: 1;
+        }
+
+        /* Componentes de Card */
+        .login-container,
+        .live-notification {
+            background: var(--card-background);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            flex: 1;
+            animation: fadeIn 1s ease-in-out;
+            display: flex;
+            flex-direction: column;
             align-items: center;
+            min-width: 300px;
+            transition: all 0.3s ease;
         }
 
-        #zoom-image {
-            max-width: 100%;
-            max-height: 100%;
-            animation: zoomOut 6s forwards;
+        .login-container:hover,
+        .live-notification:hover {
+            background: var(--card-background-hover);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
         }
 
-        @keyframes zoomOut {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(1.2);
-                opacity: 0;
-            }
+        .login-container {
+            max-width: 300px;
         }
 
-        /* Guia de Programação - Barra com rolagem contínua */
+        .live-notification {
+            max-width: 630px;
+        }
+
+        /* Tipografia */
+        h1 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #f1f1f1;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #f1f1f1;
+        }
+
+        .subtitle {
+            margin-bottom: 20px;
+            color: #bbb;
+            font-size: 1em;
+        }
+
+        /* Formulários e Inputs */
+        .input-group {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #222;
+            color: white;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        .button-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: #333;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #444;
+        }
+
+        .btn-info {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: var(--secondary-hover);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Mensagens de Erro */
+        .error-message {
+            color: #ff3b3b;
+            font-size: 0.9em;
+            margin-top: 10px;
+            animation: shake 0.3s;
+            min-height: 20px;
+        }
+
+        /* Guia de Programação Scrolling */
         #guide-container {
             width: 100%;
-            background: rgba(34, 34, 34, 0.9);
+            background: var(--guide-bg);
             color: #fff;
             padding: 12px 0;
             margin-bottom: 20px;
@@ -94,148 +261,31 @@
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        @keyframes scroll-text {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        @-webkit-keyframes scroll-text {
-            0% {
-                -webkit-transform: translateX(0);
-            }
-
-            100% {
-                -webkit-transform: translateX(-50%);
-            }
-        }
-
-        /* Para dispositivos móveis, ajuste a duração se necessário */
-        @media (max-width: 480px) {
-            .scrolling-text {
-                animation-duration: 25s;
-                -webkit-animation-duration: 25s;
-                font-size: 14px;
-            }
-
-            .scrolling-text span {
-                padding-right: 40px;
-            }
-        }
-
-        .container {
-            display: flex;
-            flex-direction: row;
+        /* Animação de Zoom */
+        #zoom-image-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-darker);
+            z-index: 10;
             justify-content: center;
-            align-items: stretch;
-            width: 90%;
-            max-width: 1200px;
-            padding: 20px;
-            gap: 20px;
-            z-index: 1;
-        }
-
-        .login-container,
-        .live-notification {
-            background: rgba(20, 20, 20, 0.8);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            flex: 1;
-            animation: fadeIn 1s ease-in-out;
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            min-width: 300px;
         }
 
-        .login-container {
-            max-width: 300px;
+        #zoom-image {
+            max-width: 100%;
+            max-height: 100%;
+            animation: zoomOut 6s forwards;
         }
 
-        .live-notification {
-            max-width: 630px;
-        }
-
-        h1 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            color: #f1f1f1;
-        }
-
-        .subtitle {
-            margin-bottom: 20px;
-            color: #bbb;
-            font-size: 1em;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            background: #222;
-            color: white;
-            font-size: 1em;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 8px;
-            background: #e50914;
-            color: white;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #b20710;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        .error-message {
-            color: #ff3b3b;
-            font-size: 0.9em;
-            margin-top: 10px;
-            animation: shake 0.3s;
-        }
-
-        .whatsapp-info {
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #bbb;
-        }
-
-        .whatsapp-info strong {
-            color: #1db954;
-        }
-
-        .live-notification h2 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            color: #f1f1f1;
-        }
-
+        /* Player Twitch */
         .live-notification .player {
             width: 100%;
             height: 0;
-            padding-bottom: 56.25%;
-            /* Aspect ratio 16:9 */
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
             position: relative;
             border-radius: 8px;
             overflow: hidden;
@@ -251,7 +301,6 @@
             border: none;
         }
 
-        /* Player */
         #player-container {
             display: none;
             width: 100%;
@@ -262,7 +311,7 @@
             box-shadow: none;
             background: linear-gradient(45deg, #141414, #222222);
             padding: 0;
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             z-index: 2;
@@ -289,31 +338,7 @@
             left: 0;
         }
 
-        .twitch-player iframe {
-            position: relative;
-        }
-
-        .twitch-player iframe::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: none;
-            pointer-events: none;
-        }
-
-        /* Esconde botões nativos, exceto fullscreen */
-        .player .player-controls__button {
-            display: none !important;
-        }
-
-        .player .player-controls__fullscreen-button {
-            display: block !important;
-        }
-
-        /* Estilo para o controle de volume */
+        /* Volume Control */
         #volume-control {
             position: absolute;
             bottom: 20px;
@@ -327,7 +352,7 @@
             border-radius: 8px;
         }
 
-        /* Modal Estilo */
+        /* Modais */
         .modal {
             display: none;
             position: fixed;
@@ -336,7 +361,6 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.7);
-            /* Fundo mais escuro e transparente */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             justify-content: center;
@@ -346,216 +370,74 @@
 
         .modal-content {
             background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
-            /* Fundo gradiente */
             border-radius: 20px;
             box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-            /* Sombra mais intensa */
             padding: 30px;
-            /* Reduzido o padding */
             text-align: center;
             position: relative;
             width: 90%;
             max-width: 500px;
-            /* Aumenta o tamanho máximo */
             animation: fadeIn 0.4s ease-out;
             border: 1px solid #333;
-            /* Adiciona uma borda sutil */
         }
 
-        .modal-content h2 {
+        #programacao-modal-content {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 95%;
+            max-width: 800px;
+            position: relative;
+            margin: 20px;
+            text-align: left;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .modal-content h2,
+        #programacao-modal-content h2 {
             color: #e50914;
-            font-size: 2em;
-            /* Reduzido o tamanho da fonte */
+            font-size: 1.5em;
             font-weight: 700;
             margin-bottom: 15px;
-            /* Reduzido o margin-bottom */
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            /* Sombra no texto */
+        }
+
+        #programacao-modal-content h2 {
+            color: #ffdb58;
+            text-align: center;
         }
 
         .modal-content p {
             color: #ddd;
             font-size: 1em;
-            /* Reduzido o tamanho da fonte */
             line-height: 1.5;
-            /* Reduzido o line-height */
             margin-bottom: 20px;
-            /* Reduzido o margin-bottom */
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-            /* Sombra no texto */
         }
 
-        .modal-content input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            /* Reduzido o padding */
-            margin: 10px 0;
-            /* Reduzido o margin */
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9em;
-            /* Reduzido o tamanho da fonte */
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
-            /* Fundo levemente transparente */
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            outline: none;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-            /* Sombra no input */
-        }
-
-        .modal-content input[type="text"]:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            /* Fundo mais claro ao focar */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            /* Sombra mais intensa ao focar */
-        }
-
-        .modal-content button {
-            width: 100%;
-            padding: 12px;
-            /* Reduzido o padding */
-            background-color: #e50914;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            /* Reduzido o tamanho da fonte */
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            /* Sombra no botão */
-        }
-
-        .modal-content button:hover {
-            background-color: #c6000b;
-            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
-            /* Sombra mais intensa no hover */
-        }
-
-        .modal-content button:active {
-            transform: scale(0.98);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-            /* Sombra menor ao clicar */
-        }
-
-        .close {
+        .close,
+        .close-modal {
             position: absolute;
             top: 15px;
-            /* Reduzido o top */
             right: 20px;
-            /* Reduzido o right */
             font-size: 30px;
-            /* Reduzido o tamanho da fonte */
             color: #bbb;
             cursor: pointer;
             transition: color 0.3s ease, transform 0.2s ease;
         }
 
-        .close:hover {
+        .close:hover,
+        .close-modal:hover {
             color: #ddd;
             transform: scale(1.1);
         }
 
-        /* Animação de Fade */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Media Queries para Responsividade */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .login-container,
-            .live-notification {
-                width: 90%;
-                max-width: none;
-                min-width: auto;
-                margin-bottom: 20px;
-            }
-
-            .login-container {
-                max-width: none;
-            }
-
-            .live-notification {
-                max-width: none;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .modal-content {
-                padding: 25px;
-                /* Reduzido o padding */
-            }
-
-            .modal-content h2 {
-                font-size: 2em;
-                /* Reduzido o tamanho da fonte */
-            }
-
-            .modal-content p {
-                font-size: 1em;
-                /* Reduzido o tamanho da fonte */
-            }
-
-            .close {
-                font-size: 28px;
-                /* Reduzido o tamanho da fonte */
-                top: 10px;
-                /* Reduzido o top */
-                right: 15px;
-                /* Reduzido o right */
-            }
-        }
-
-        /* Animações */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            50% {
-                transform: translateX(5px);
-            }
-
-            75% {
-                transform: translateX(-5px);
-            }
-        }
-
-        /* Estilo para o email e botão de copiar */
+        /* Email Container */
         .email-container {
             display: flex;
             align-items: center;
@@ -574,226 +456,244 @@
             padding: 8px 12px;
             border: none;
             border-radius: 6px;
-            background-color: #4CAF50;
+            background-color: var(--success-color);
             color: white;
             font-size: 0.8em;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            width: auto;
         }
 
         #copy-email:hover {
-            background-color: #367c39;
+            background-color: var(--success-hover);
         }
 
-        /* Estilo para o botão "Ver Guia de Programação" */
-        #view-guide-button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 8px;
-            background: #007bff;
-            /* Cor azul */
-            color: white;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        #view-guide-button:hover {
-            background: #0056b3;
-            /* Cor azul mais escura */
-        }
-
-        #view-guide-button:active {
-            transform: scale(0.95);
-        }
-
-        /* Estilo para o modal do guia de programação */
-        #programacao-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            /* Fundo escuro e semi-transparente */
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-            /* Permite rolagem se o conteúdo for muito longo */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        #programacao-modal-content {
-            background-color: #1a1a1a;
-            color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            width: 95%;
-            max-width: 800px;
-            /* Largura máxima para o modal */
-            position: relative;
-            margin: 20px;
-            /* Adiciona margem ao redor do modal */
-            text-align: left;
-            overflow-y: auto; /* Adiciona overflow-y para scroll */
-            max-height: 80vh;  /* Define altura máxima do conteúdo do modal */
-        }
-
-        #programacao-modal-content h2 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #ffdb58;
-            /* Cor amarela */
-            text-align: center;
-        }
-
-        #programacao-modal-content ul {
+        /* Programação Lista */
+        #programacao-lista {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        #programacao-modal-content li {
+        #programacao-lista li {
             margin-bottom: 15px;
             padding-bottom: 10px;
             border-bottom: 1px solid #333;
         }
 
-        #programacao-modal-content li:last-child {
+        #programacao-lista li:last-child {
             border-bottom: none;
             margin-bottom: 0;
             padding-bottom: 0;
         }
 
-        #programacao-modal-content img {
+        #programacao-lista img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
-            border-radius: 8px;
             margin-bottom: 10px;
-            /* Garante que a imagem tenha margem abaixo */
-            max-height: 200px; /* Altura máxima para todas as imagens */
-            object-fit: contain;  /* Mantém a proporção e preenche o espaço */
+            max-height: 200px;
+            object-fit: contain;
         }
 
-        #programacao-modal-content .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            color: #fff;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
+        /* Animações */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        #programacao-modal-content .close-modal:hover {
-            opacity: 1;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
         }
 
-        /* Estilos específicos para dispositivos móveis */
-        @media (max-width: 600px) {
+        @keyframes zoomOut {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes scroll-text {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @-webkit-keyframes scroll-text {
+            0% { -webkit-transform: translateX(0); }
+            100% { -webkit-transform: translateX(-50%); }
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .login-container,
+            .live-notification {
+                width: 90%;
+                max-width: none;
+                min-width: auto;
+                margin-bottom: 20px;
+            }
+            
+            .scrolling-text {
+                animation-duration: 25s;
+                -webkit-animation-duration: 25s;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .modal-content,
             #programacao-modal-content {
-                padding: 15px;
-                max-height: 90vh; /* Aumenta a altura máxima em dispositivos móveis */
+                padding: 20px;
             }
 
+            .modal-content h2,
             #programacao-modal-content h2 {
-                font-size: 1.2em;
+                font-size: 1.3em;
             }
 
-            #programacao-modal-content li {
-                font-size: 0.9em;
+            .close,
+            .close-modal {
+                font-size: 24px;
+                top: 10px;
+                right: 15px;
+            }
+
+            .scrolling-text {
+                animation-duration: 20s;
+                -webkit-animation-duration: 20s;
+                font-size: 14px;
+            }
+
+            .scrolling-text span {
+                padding-right: 40px;
             }
         }
     </style>
 </head>
 
 <body>
-    <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image">
+    <!-- Imagem de fundo -->
+    <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
 
+    <!-- Imagem de animação inicial -->
     <div id="zoom-image-container">
-        <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Zoom Image">
+        <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Imagem de boas-vindas">
     </div>
 
-    <div class="container">
-        <div class="login-container" id="login-container">
-            <h1> 📺 Bem-vindo ao StreamXcellence 🎬 </h1>
+    <main class="container">
+        <!-- Seção de login -->
+        <section class="login-container" id="login-container">
+            <h1>📺 Bem-vindo ao StreamXcellence 🎬</h1>
             <p class="subtitle">Digite a chave de acesso para entrar</p>
-            <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" />
-            <button onclick="verifyKey()">Entrar</button>
-            <button onclick="openModal()">OBTER CHAVE DE ACESSO</button>
-            <button id="view-guide-button" onclick="openProgramacaoModal()">Ver Guia de Programação</button>
-            <div class="error-message" id="error-message" role="alert"></div>
-        </div>
+            
+            <div class="input-group">
+                <label for="key-input" class="sr-only">Chave de acesso</label>
+                <input 
+                    type="text" 
+                    id="key-input" 
+                    placeholder="Digite a chave de acesso" 
+                    aria-label="Chave de acesso" 
+                    autocomplete="off"
+                />
+            </div>
+            
+            <div class="button-group">
+                <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
+                <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
+                <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
+            </div>
+            
+            <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
+        </section>
 
-        <div class="live-notification" id="live-notification">
-            <h2> 🔴 O QUE ESTÁ PASSANDO AGORA 📺 </h2>
-            <div id="guide-container">
+        <!-- Seção de notificação ao vivo -->
+        <section class="live-notification" id="live-notification">
+            <h2>🔴 O que está passando agora 📺</h2>
+            
+            <div id="guide-container" role="marquee">
                 <div class="scrolling-text" id="scrolling-text">
                     <span id="guide-text">Carregando guia...</span>
                     <span id="guide-text-duplicate">Carregando guia...</span>
                 </div>
             </div>
-            <div class="player" id="live-player"></div>
-        </div>
-<div>
+            
+            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
+        </section>
+    </main>
 
-    
-    <div id="player-container">
+    <!-- Container do player principal -->
+    <div id="player-container" aria-live="polite">
         <div class="player twitch-player" id="player">
             <div id="twitch-embed"></div>
         </div>
     </div>
 
-    
-    <div id="modal" class="modal">
+    <!-- Modal de aquisição de chave -->
+    <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Adquirir Chave para Acesso</h2>
+            <span class="close" onclick="closeModal()" aria-label="Fechar">&times;</span>
+            <h2 id="modal-title">Adquirir Chave para Acesso</h2>
             <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
                 envie o comprovante para liberação imediata.</p>
             <p><strong>Valor Simbólico: R$ 2,00</strong></p>
+            
             <div class="email-container">
                 <p id="pix-email">Pix: lourimarcos@outlook.com</p>
-                <button id="copy-email" onclick="copyEmail()">Copiar</button>
+                <button id="copy-email" onclick="copyEmail()" aria-label="Copiar email">Copiar</button>
             </div>
+            
             <p>A chave tem duração de <strong>15 dias</strong></p>
-            <input type="text" id="user-name" placeholder="Seu Nome" />
-            <button onclick="sendToWhatsApp()">Enviar</button>
+            
+            <div class="input-group">
+                <label for="user-name" class="sr-only">Seu Nome</label>
+                <input type="text" id="user-name" placeholder="Seu Nome" aria-required="true" />
+            </div>
+            
+            <button type="button" onclick="sendToWhatsApp()" class="btn-primary">Enviar</button>
         </div>
     </div>
 
-    
-    <div id="programacao-modal" class="modal">
+    <!-- Modal do guia de programação -->
+    <div id="programacao-modal" class="modal" role="dialog" aria-labelledby="programacao-title" aria-hidden="true">
         <div id="programacao-modal-content">
-            <span class="close-modal" onclick="closeProgramacaoModal()">&times;</span>
-            <h2>StreamXcellence 📺|Guia de Programação</h2>
-            <ul id="programacao-lista">
-                
-            </ul>
+            <span class="close-modal" onclick="closeProgramacaoModal()" aria-label="Fechar">&times;</span>
+            <h2 id="programacao-title">StreamXcellence 📺 | Guia de Programação</h2>
+            <ul id="programacao-lista" aria-live="polite"></ul>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
+        // Variáveis globais
         let player;
         let livePlayer;
 
+        // Função para reproduzir vídeo
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
                 console.log('Erro ao reproduzir o vídeo:', error);
             });
         }
 
-        
+        // Função para criar controle de volume
         function createVolumeControl(playerInstance) {
             const volumeControl = document.createElement('input');
             volumeControl.type = 'range';
@@ -802,17 +702,6 @@
             volumeControl.step = 0.01;
             volumeControl.value = playerInstance.getVolume();
             volumeControl.id = 'volume-control';
-
-            volumeControl.style.position = 'absolute';
-            volumeControl.style.bottom = '20px';
-            volumeControl.style.left = '20px';
-            volumeControl.style.width = '150px';
-            volumeControl.style.opacity = '0.8';
-            volumeControl.style.zIndex = '1000';
-            volumeControl.style.pointerEvents = 'auto';
-            volumeControl.style.background = 'rgba(0, 0, 0, 0.3)';
-            volumeControl.style.border = 'none';
-            volumeControl.style.borderRadius = '8px';
 
             const playerContainer = document.getElementById('player');
             const existingControl = document.getElementById('volume-control');
@@ -827,8 +716,8 @@
             });
         }
 
+        // Função para criar player do Twitch
         function createTwitchPlayer() {
-            
             if (!document.querySelector("#twitch-embed iframe")) {
                 player = new Twitch.Player("twitch-embed", {
                     channel: "lourimarcos",
@@ -837,7 +726,7 @@
                     controls: false,
                     autoplay: true,
                     muted: false,
-                    parent: ["localhost"]
+                    parent: ["localhost", window.location.hostname]
                 });
 
                 player.addEventListener(Twitch.Player.READY, () => {
@@ -859,11 +748,13 @@
 
                 player.addEventListener(Twitch.Player.OFFLINE, () => {
                     document.getElementById('player-container').innerHTML = `
-                        <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-                            <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                        </video>
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; text-align: center;">
-                            <p> 🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                        <div class="offline-container">
+                            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                                <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                            </video>
+                            <div class="offline-message">
+                                <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                            </div>
                         </div>
                     `;
                     const offlineVideo = document.getElementById('offline-video');
@@ -873,7 +764,7 @@
             }
         }
 
-
+        // Função para criar player de notificação ao vivo
         function createLiveNotificationPlayer() {
             const livePlayerContainer = document.getElementById("live-player");
             livePlayer = new Twitch.Player("live-player", {
@@ -883,23 +774,32 @@
                 muted: true,
                 autoplay: true,
                 controls: false,
-                parent: ["localhost"]
+                parent: ["localhost", window.location.hostname]
             });
+            
             livePlayer.addEventListener(Twitch.Player.READY, () => {
                 const iframe = livePlayer.getIframe();
                 iframe.style.pointerEvents = "none";
             });
 
+            // Recarregar o player de prévia periodicamente
             function reloadLivePlayer() {
-                livePlayer.seek(0);
+                if (livePlayer) {
+                    livePlayer.seek(0);
+                }
             }
             setInterval(reloadLivePlayer, 30000);
         }
 
-        
+        // Carregar o guia de programação
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Resposta da rede não foi ok');
+                    }
+                    return response.text();
+                })
                 .then(data => {
                     document.getElementById('guide-text').textContent = data;
                     document.getElementById('guide-text-duplicate').textContent = data;
@@ -910,67 +810,93 @@
                     document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
                 });
         }
-        loadProgramacao();
 
+        // Carregar as chaves válidas
         let validKeys = [];
 
         function loadKeys() {
             fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Resposta da rede não foi ok');
+                    }
+                    return response.text();
+                })
                 .then(data => {
-                    validKeys = data.split('\n').map(key => key.trim());
-                    console.log('Chaves carregadas:', validKeys);
+                    validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length > 0);
+                    console.log('Chaves carregadas com sucesso');
                 })
                 .catch(error => {
                     console.error('Erro ao carregar as chaves:', error);
+                    // Exibir mensagem de erro na interface se necessário
+                    const errorMessage = document.getElementById('error-message');
+                    if (errorMessage) {
+                        errorMessage.textContent = "Erro ao carregar chaves de acesso. Tente novamente mais tarde.";
+                    }
                 });
         }
-        loadKeys();
 
+        // Verificar a chave inserida
         function verifyKey() {
             const keyInput = document.getElementById('key-input').value;
             const errorMessage = document.getElementById('error-message');
 
-            if (keyInput && validKeys.includes(keyInput)) {
-                document.getElementById('login-container').style.display = 'none';
+            if (!keyInput) {
+                errorMessage.textContent = "Por favor, digite uma chave de acesso.";
+                return;
+            }
 
+            if (validKeys.includes(keyInput)) {
+                // Esconder o container de login
+                document.getElementById('login-container').style.display = 'none';
                 
+                // Mostrar a animação de zoom
                 const zoomImageContainer = document.getElementById('zoom-image-container');
                 zoomImageContainer.style.display = 'flex';
-
                 
+                // Após a animação, mostrar o player
                 setTimeout(() => {
                     zoomImageContainer.style.display = 'none';
                     document.getElementById('player-container').style.display = 'flex';
                     createTwitchPlayer();
                 }, 2000);
-
                 
+                // Esconder a notificação ao vivo
                 document.getElementById('live-notification').style.display = 'none';
-
-                const welcomeMessage = document.createElement('div');
-                welcomeMessage.textContent = "Seja Bem vindo!!!";
-                welcomeMessage.style.position = "absolute";
-                welcomeMessage.style.top = "20px";
-                welcomeMessage.style.left = "50%";
-                welcomeMessage.style.transform = "translateX(-50%)";
-                welcomeMessage.style.color = "white";
-                welcomeMessage.style.fontSize = "18px";
-                welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-                welcomeMessage.style.padding = "10px";
-                welcomeMessage.style.borderRadius = "8px";
-                document.body.appendChild(welcomeMessage);
-
-                setTimeout(() => {
-                    welcomeMessage.remove();
-                }, 6000);
-
-
+                
+                // Exibir mensagem de boas-vindas
+                showWelcomeMessage();
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
+                // Animação de shake no input
+                const keyInputElem = document.getElementById('key-input');
+                keyInputElem.classList.add('shake');
+                setTimeout(() => keyInputElem.classList.remove('shake'), 500);
             }
         }
 
+        // Exibir mensagem de boas-vindas
+        function showWelcomeMessage() {
+            const welcomeMessage = document.createElement('div');
+            welcomeMessage.textContent = "Seja Bem-vindo!!!";
+            welcomeMessage.style.position = "absolute";
+            welcomeMessage.style.top = "20px";
+            welcomeMessage.style.left = "50%";
+            welcomeMessage.style.transform = "translateX(-50%)";
+            welcomeMessage.style.color = "white";
+            welcomeMessage.style.fontSize = "18px";
+            welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+            welcomeMessage.style.padding = "10px";
+            welcomeMessage.style.borderRadius = "8px";
+            welcomeMessage.style.zIndex = "1000";
+            document.body.appendChild(welcomeMessage);
+
+            setTimeout(() => {
+                welcomeMessage.remove();
+            }, 6000);
+        }
+
+        // Funções para os modais
         function openModal() {
             document.getElementById("modal").style.display = "flex";
         }
@@ -989,75 +915,78 @@
             window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
         }
 
-        document.addEventListener('keydown', function (event) {
-            if (
-                event.key === 'F12' ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.key === 'U')
-            ) {
-                alert("isso não é permitido 😢");
-                event.preventDefault();
-                return false;
-            }
-        });
-
-        document.addEventListener('contextmenu', function (event) {
-            alert("isso não é permitido 😢");
-            event.preventDefault();
-            return false;
-        });
-
-        setInterval(function () {
-            (function () {
-                function logNop() {
-                    alert("isso não é permitido 😢");
-                    return false;
-                }
-                console.log = logNop;
-                console.warn = logNop;
-                console.error = logNop;
-                console.info = logNop;
-                console.debug = logNop;
-                console.table = logNop;
-            })();
-        }, 1000);
-
-        createLiveNotificationPlayer();
-
+        // Função para copiar email
         function copyEmail() {
             const emailText = document.getElementById("pix-email").innerText;
-            navigator.clipboard.writeText(emailText)
-                .then(() => {
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(emailText)
+                    .then(() => {
+                        // Feedback visual
+                        const copyButton = document.getElementById("copy-email");
+                        const originalText = copyButton.textContent;
+                        copyButton.textContent = "Copiado!";
+                        copyButton.style.backgroundColor = "#28a745";
+                        
+                        setTimeout(() => {
+                            copyButton.textContent = originalText;
+                            copyButton.style.backgroundColor = "";
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Falha ao copiar email: ', err);
+                        alert("Falha ao copiar o email. Por favor, copie manualmente.");
+                    });
+            } else {
+                // Fallback para navegadores que não suportam a API Clipboard
+                const textArea = document.createElement("textarea");
+                textArea.value = emailText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
                     alert("Email copiado para a área de transferência!");
-                })
-                .catch(err => {
+                } catch (err) {
                     console.error('Falha ao copiar email: ', err);
                     alert("Falha ao copiar o email. Por favor, copie manualmente.");
-                });
+                }
+                
+                document.body.removeChild(textArea);
+            }
         }
 
-        
+        // Funções para o modal de programação
         function openProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "flex";
-            
             carregarProgramacao();
         }
 
-        
         function closeProgramacaoModal() {
             document.getElementById("programacao-modal").style.display = "none";
         }
 
-        
+        // Carregar a programação detalhada
         function carregarProgramacao() {
             const listaProgramacao = document.getElementById("programacao-lista");
-            listaProgramacao.innerHTML = ''; 
+            listaProgramacao.innerHTML = '<li>Carregando programação...</li>';
 
             fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar a programação');
+                    }
+                    return response.text();
+                })
                 .then(data => {
-                    const programas = data.trim().split('\n\n'); 
+                    const programas = data.trim().split('\n\n');
+                    
+                    if (programas.length === 0) {
+                        listaProgramacao.innerHTML = '<li>Nenhuma programação disponível no momento.</li>';
+                        return;
+                    }
+                    
+                    listaProgramacao.innerHTML = '';
 
                     programas.forEach(programa => {
                         const detalhes = programa.split('\n');
@@ -1069,26 +998,75 @@
 
                             const listItem = document.createElement('li');
                             listItem.innerHTML = `
-                                <h2>${titulo}</h2>
-                                <img src="${imgLink}" alt="Capa de ${titulo}">
+                                <h3>${titulo}</h3>
+                                <img src="${imgLink}" alt="Capa de ${titulo}" loading="lazy">
                                 <p><strong>Sinopse:</strong> ${sinopse}</p>
                                 <p><strong>Horário:</strong> ${horario}</p>
                             `;
                             listaProgramacao.appendChild(listItem);
-                        } else {
-                            console.warn("Formato incorreto de programa:", detalhes);
-                            const listItem = document.createElement('li');
-                            listItem.innerHTML = `<p>Erro: Formato de programa incorreto.</p>`;
-                            listaProgramacao.appendChild(listItem);
                         }
                     });
+                    
+                    if (listaProgramacao.children.length === 0) {
+                        listaProgramacao.innerHTML = '<li>Formato de programação incorreto.</li>';
+                    }
                 })
                 .catch(error => {
                     console.error('Erro ao carregar programação:', error);
-                    listaProgramacao.innerHTML = '<li>Erro ao carregar a programação.</li>';
+                    listaProgramacao.innerHTML = '<li>Erro ao carregar a programação. Tente novamente mais tarde.</li>';
                 });
         }
+
+        // Proteção contra inspeção (mantido do código original)
+        document.addEventListener('keydown', function (event) {
+            if (
+                event.key === 'F12' ||
+                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+                (event.ctrlKey && event.key === 'U')
+            ) {
+                alert("Isso não é permitido 😢");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('contextmenu', function (event) {
+            alert("Isso não é permitido 😢");
+            event.preventDefault();
+            return false;
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgramacao();
+            loadKeys();
+            createLiveNotificationPlayer();
+            
+            // Adicionar evento de tecla Enter para o input de chave
+            const keyInput = document.getElementById('key-input');
+            if (keyInput) {
+                keyInput.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        verifyKey();
+                    }
+                });
+            }
+            
+            // Adicionar evento de tecla Enter para o input de nome
+            const userName = document.getElementById('user-name');
+            if (userName) {
+                userName.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        sendToWhatsApp();
+                    }
+                });
+            }
+        });
     </script>
+    
+    <!-- IMPORTANTE: NÃO REMOVA ESTA TAG DE SCRIPT OU ESTE COMENTÁRIO! -->
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 
 </html>
