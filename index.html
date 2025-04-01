@@ -1,1068 +1,901 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="StreamXcellence - Assista aos melhores canais online">
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
-    
     <title>StreamXcellence 📺</title>
-    
     <!-- Preconnect para melhorar o carregamento -->
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://streamxcellence.com/">
-    <meta property="og:title" content="StreamXcellence 📺">
-    <meta property="og:description" content="A melhor plataforma para assistir seus canais favoritos">
-    <meta property="og:image" content="https://i.imgur.com/sj6EMam.jpeg">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://streamxcellence.com/">
-    <meta property="twitter:title" content="StreamXcellence 📺">
-    <meta property="twitter:description" content="A melhor plataforma para assistir seus canais favoritos">
-    <meta property="twitter:image" content="https://i.imgur.com/sj6EMam.jpeg">
-    
     <style>
         /* Estilos Gerais */
         :root {
-            --primary-color: #e50914;
-            --primary-hover: #b20710;
-            --secondary-color: #007bff;
-            --secondary-hover: #0056b3;
-            --text-color: #ffffff;
-            --background-dark: #0a0a0a;
-            --background-darker: #000000;
-            --card-background: rgba(20, 20, 20, 0.8);
-            --card-background-hover: rgba(30, 30, 30, 0.9);
-            --border-color: #333;
-            --success-color: #4CAF50;
-            --success-hover: #367c39;
-            --guide-bg: rgba(34, 34, 34, 0.9);
+--primary-color: #e50914;
+--primary-hover: #b20710;
+--secondary-color: #007bff;
+--secondary-hover: #0056b3;
+--text-color: #ffffff;
+--background-dark: #0a0a0a;
+--background-darker: #000000;
+--card-background: rgba(20, 20, 20, 0.8);
+--card-background-hover: rgba(30, 30, 30, 0.9);
+--border-color: #333;
+--success-color: #4CAF50;
+--success-hover: #367c39;
+--guide-bg: rgba(34, 34, 34, 0.9);
         }
-
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+margin: 0;
+padding: 0;
+box-sizing: border-box;
         }
-
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: var(--background-dark);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            line-height: 1.6;
+font-family: 'Arial', sans-serif;
+background-color: var(--background-dark);
+color: var(--text-color);
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+overflow-x: hidden;
+line-height: 1.6;
         }
-
         .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
+position: absolute;
+width: 1px;
+height: 1px;
+padding: 0;
+margin: -1px;
+overflow: hidden;
+clip: rect(0, 0, 0, 0);
+border: 0;
         }
-
         /* Imagem de Fundo */
         .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            filter: brightness(0.7);
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+z-index: -1;
+filter: brightness(0.7);
         }
-
         /* Container Principal */
         .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: stretch;
-            width: 90%;
-            max-width: 1200px;
-            padding: 20px;
-            gap: 20px;
-            z-index: 1;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: stretch;
+width: 90%;
+max-width: 1200px;
+padding: 20px;
+gap: 20px;
+z-index: 1;
         }
-
         /* Componentes de Card */
         .login-container,
         .live-notification {
-            background: var(--card-background);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            text-align: center;
-            flex: 1;
-            animation: fadeIn 1s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 300px;
-            transition: all 0.3s ease;
+background: var(--card-background);
+padding: 20px;
+border-radius: 12px;
+box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+text-align: center;
+flex: 1;
+animation: fadeIn 1s ease-in-out;
+display: flex;
+flex-direction: column;
+align-items: center;
+min-width: 300px;
+transition: all 0.3s ease;
         }
-
         .login-container:hover,
         .live-notification:hover {
-            background: var(--card-background-hover);
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+background: var(--card-background-hover);
+box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
         }
-
         .login-container {
-            max-width: 300px;
+max-width: 300px;
         }
-
         .live-notification {
-            max-width: 630px;
+max-width: 630px;
         }
-
         /* Tipografia */
         h1 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            color: #f1f1f1;
+font-size: 1.8em;
+margin-bottom: 20px;
+color: #f1f1f1;
         }
-
         h2 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            color: #f1f1f1;
+font-size: 1.2em;
+margin-bottom: 10px;
+color: #f1f1f1;
         }
-
         .subtitle {
-            margin-bottom: 20px;
-            color: #bbb;
-            font-size: 1em;
+margin-bottom: 20px;
+color: #bbb;
+font-size: 1em;
         }
-
         /* Formulários e Inputs */
         .input-group {
-            width: 100%;
-            margin-bottom: 15px;
+width: 100%;
+margin-bottom: 15px;
         }
-
         input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: #222;
-            color: white;
-            font-size: 1em;
-            outline: none;
-            transition: all 0.3s ease;
+width: 100%;
+padding: 12px;
+margin-top: 10px;
+border: 1px solid var(--border-color);
+border-radius: 8px;
+background: #222;
+color: white;
+font-size: 1em;
+outline: none;
+transition: all 0.3s ease;
         }
-
         input:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+border-color: var(--secondary-color);
+box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
         }
-
         .button-group {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+width: 100%;
+display: flex;
+flex-direction: column;
+gap: 10px;
         }
-
         button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
+width: 100%;
+padding: 12px;
+border: none;
+border-radius: 8px;
+font-size: 1em;
+font-weight: bold;
+cursor: pointer;
+transition: all 0.3s ease;
         }
-
         .btn-primary {
-            background: var(--primary-color);
-            color: white;
+background: var(--primary-color);
+color: white;
         }
-
         .btn-primary:hover {
-            background: var(--primary-hover);
+background: var(--primary-hover);
         }
-
         .btn-secondary {
-            background: #333;
-            color: white;
+background: #333;
+color: white;
         }
-
         .btn-secondary:hover {
-            background: #444;
+background: #444;
         }
-
         .btn-info {
-            background: var(--secondary-color);
-            color: white;
+background: var(--secondary-color);
+color: white;
         }
-
         .btn-info:hover {
-            background: var(--secondary-hover);
+background: var(--secondary-hover);
         }
-
         button:active {
-            transform: scale(0.95);
+transform: scale(0.95);
         }
-
         /* Mensagens de Erro */
         .error-message {
-            color: #ff3b3b;
-            font-size: 0.9em;
-            margin-top: 10px;
-            animation: shake 0.3s;
-            min-height: 20px;
+color: #ff3b3b;
+font-size: 0.9em;
+margin-top: 10px;
+animation: shake 0.3s;
+min-height: 20px;
         }
-
         /* Guia de Programação Scrolling */
         #guide-container {
-            width: 100%;
-            background: var(--guide-bg);
-            color: #fff;
-            padding: 12px 0;
-            margin-bottom: 20px;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            overflow: hidden;
+width: 100%;
+background: var(--guide-bg);
+color: #fff;
+padding: 12px 0;
+margin-bottom: 20px;
+position: relative;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+border-radius: 8px;
+overflow: hidden;
         }
-
         .scrolling-text {
-            display: inline-flex;
-            width: max-content;
-            animation: scroll-text 30s linear infinite;
-            -webkit-animation: scroll-text 30s linear infinite;
+display: inline-flex;
+width: max-content;
+animation: scroll-text 30s linear infinite;
+-webkit-animation: scroll-text 30s linear infinite;
         }
-
         .scrolling-text span {
-            white-space: nowrap;
-            padding-right: 60px;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+white-space: nowrap;
+padding-right: 60px;
+font-size: 16px;
+font-weight: 500;
+letter-spacing: 0.5px;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
-
         /* Animação de Zoom */
         #zoom-image-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--background-darker);
-            z-index: 10;
-            justify-content: center;
-            align-items: center;
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: var(--background-darker);
+z-index: 10;
+justify-content: center;
+align-items: center;
         }
-
         #zoom-image {
-            max-width: 100%;
-            max-height: 100%;
-            animation: zoomOut 6s forwards;
+max-width: 100%;
+max-height: 100%;
+animation: zoomOut 6s forwards;
         }
-
         /* Player Twitch */
         .live-notification .player {
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            pointer-events: none;
+width: 100%;
+height: 0;
+padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+position: relative;
+border-radius: 8px;
+overflow: hidden;
+pointer-events: none;
         }
-
         .live-notification .player iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+border: none;
         }
-
         #player-container {
-            display: none;
-            width: 100%;
-            height: 100vh;
-            text-align: center;
-            border-radius: 0;
-            overflow: hidden;
-            box-shadow: none;
-            background: linear-gradient(45deg, #141414, #222222);
-            padding: 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 2;
+display: none;
+width: 100%;
+height: 100vh;
+text-align: center;
+border-radius: 0;
+overflow: hidden;
+box-shadow: none;
+background: linear-gradient(45deg, #141414, #222222);
+padding: 0;
+position: fixed;
+top: 0;
+left: 0;
+z-index: 2;
         }
-
         #player-container.active {
-            display: flex;
+display: flex;
         }
-
         .player {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-            border-radius: 0;
+width: 100%;
+height: 100%;
+position: relative;
+overflow: hidden;
+border-radius: 0;
         }
-
         #player-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+width: 100%;
+height: 100%;
+border: none;
+position: absolute;
+top: 0;
+left: 0;
         }
-        
         /* Canal Info */
         .channel-info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 1000;
+position: absolute;
+top: 20px;
+left: 20px;
+background: rgba(0, 0, 0, 0.7);
+padding: 10px 15px;
+border-radius: 5px;
+display: flex;
+align-items: center;
+gap: 10px;
+opacity: 0;
+transition: opacity 0.3s;
+z-index: 1000;
         }
-
         #player-container:hover .channel-info {
-            opacity: 1;
+opacity: 1;
         }
-
         .channel-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+object-fit: cover;
         }
-
         .channel-name {
-            font-weight: bold;
-            font-size: 16px;
+font-weight: bold;
+font-size: 16px;
         }
-
         .live-indicator {
-            background-color: #e50914;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
+background-color: #e50914;
+color: white;
+padding: 3px 8px;
+border-radius: 4px;
+font-size: 12px;
+font-weight: bold;
         }
-        
         /* Controles do Player */
         .player-controls {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: opacity 0.3s ease;
-            opacity: 0;
-            z-index: 1000;
+position: absolute;
+bottom: 0;
+left: 0;
+width: 100%;
+background: rgba(0, 0, 0, 0.7);
+padding: 15px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+transition: opacity 0.3s ease;
+opacity: 0;
+z-index: 1000;
         }
-
         #player-container:hover .player-controls {
-            opacity: 1;
+opacity: 1;
         }
-
         .controls-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+display: flex;
+align-items: center;
+gap: 15px;
         }
-
         .controls-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+display: flex;
+align-items: center;
+gap: 15px;
         }
-
         .control-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            width: auto;
-            padding: 8px;
-            border-radius: 50%;
-            transition: background-color 0.2s;
+background: none;
+border: none;
+color: white;
+font-size: 24px;
+cursor: pointer;
+width: auto;
+padding: 8px;
+border-radius: 50%;
+transition: background-color 0.2s;
         }
-
         .control-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+background-color: rgba(255, 255, 255, 0.1);
         }
-
         /* Volume Control */
         .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+display: flex;
+align-items: center;
+gap: 10px;
         }
-
         .volume-slider {
-            -webkit-appearance: none;
-            width: 80px;
-            height: 5px;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            outline: none;
-            transition: opacity 0.2s;
+-webkit-appearance: none;
+width: 80px;
+height: 5px;
+border-radius: 5px;
+background: rgba(255, 255, 255, 0.3);
+outline: none;
+transition: opacity 0.2s;
         }
-
         .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #e50914;
-            cursor: pointer;
+-webkit-appearance: none;
+width: 15px;
+height: 15px;
+border-radius: 50%;
+background: #e50914;
+cursor: pointer;
         }
-
         .volume-slider::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #e50914;
-            cursor: pointer;
+width: 15px;
+height: 15px;
+border-radius: 50%;
+background: #e50914;
+cursor: pointer;
         }
-        
         /* Menu de qualidade */
         .quality-menu {
-            position: absolute;
-            bottom: 70px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 8px;
-            padding: 10px;
-            display: none;
+position: absolute;
+bottom: 70px;
+right: 20px;
+background: rgba(0, 0, 0, 0.8);
+border-radius: 8px;
+padding: 10px;
+display: none;
         }
-
         .quality-menu.active {
-            display: block;
+display: block;
         }
-
         .quality-option {
-            color: white;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 4px;
+color: white;
+padding: 8px 12px;
+cursor: pointer;
+border-radius: 4px;
         }
-
         .quality-option:hover {
-            background: rgba(255, 255, 255, 0.1);
+background: rgba(255, 255, 255, 0.1);
         }
-
         .quality-option.active {
-            background: rgba(229, 9, 20, 0.6);
+background: rgba(229, 9, 20, 0.6);
         }
-
         /* Modais */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.7);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+justify-content: center;
+align-items: center;
+z-index: 10000;
         }
-
         .modal-content {
-            background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
-            border-radius: 20px;
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-            padding: 30px;
-            text-align: center;
-            position: relative;
-            width: 90%;
-            max-width: 500px;
-            animation: fadeIn 0.4s ease-out;
-            border: 1px solid #333;
+background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+border-radius: 20px;
+box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+padding: 30px;
+text-align: center;
+position: relative;
+width: 90%;
+max-width: 500px;
+animation: fadeIn 0.4s ease-out;
+border: 1px solid #333;
         }
-
         #programacao-modal-content {
-            background-color: #1a1a1a;
-            color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            width: 95%;
-            max-width: 800px;
-            position: relative;
-            margin: 20px;
-            text-align: left;
-            overflow-y: auto;
-            max-height: 80vh;
+background-color: #1a1a1a;
+color: #fff;
+padding: 20px;
+border-radius: 12px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+width: 95%;
+max-width: 800px;
+position: relative;
+margin: 20px;
+text-align: left;
+overflow-y: auto;
+max-height: 80vh;
         }
-
         .modal-content h2,
         #programacao-modal-content h2 {
-            color: #e50914;
-            font-size: 1.5em;
-            font-weight: 700;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+color: #e50914;
+font-size: 1.5em;
+font-weight: 700;
+margin-bottom: 15px;
+text-transform: uppercase;
+letter-spacing: 2px;
+text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
-
         #programacao-modal-content h2 {
-            color: #ffdb58;
-            text-align: center;
+color: #ffdb58;
+text-align: center;
         }
-
         .modal-content p {
-            color: #ddd;
-            font-size: 1em;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+color: #ddd;
+font-size: 1em;
+line-height: 1.5;
+margin-bottom: 20px;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
         }
-
         .close,
         .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 30px;
-            color: #bbb;
-            cursor: pointer;
-            transition: color 0.3s ease, transform 0.2s ease;
+position: absolute;
+top: 15px;
+right: 20px;
+font-size: 30px;
+color: #bbb;
+cursor: pointer;
+transition: color 0.3s ease, transform 0.2s ease;
         }
-
         .close:hover,
         .close-modal:hover {
-            color: #ddd;
-            transform: scale(1.1);
+color: #ddd;
+transform: scale(1.1);
         }
-
         /* Email Container */
         .email-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
+display: flex;
+align-items: center;
+justify-content: center;
+margin-bottom: 15px;
         }
-
         .email-container p {
-            margin-right: 10px;
-            font-size: 1em;
-            color: #ddd;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+margin-right: 10px;
+font-size: 1em;
+color: #ddd;
+text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
         }
-
         #copy-email {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 6px;
-            background-color: var(--success-color);
-            color: white;
-            font-size: 0.8em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: auto;
+padding: 8px 12px;
+border: none;
+border-radius: 6px;
+background-color: var(--success-color);
+color: white;
+font-size: 0.8em;
+cursor: pointer;
+transition: background-color 0.3s ease;
+width: auto;
         }
-
         #copy-email:hover {
-            background-color: var(--success-hover);
+background-color: var(--success-hover);
         }
-
         /* Programação Lista */
         #programacao-lista {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+list-style: none;
+padding: 0;
+margin: 0;
         }
-
         #programacao-lista li {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #333;
+margin-bottom: 15px;
+padding-bottom: 10px;
+border-bottom: 1px solid #333;
         }
-
         #programacao-lista li:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+border-bottom: none;
+margin-bottom: 0;
+padding-bottom: 0;
         }
-
         #programacao-lista img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            max-height: 200px;
-            object-fit: contain;
-        }
-        
+max-width: 100%;
+height: auto;
+border-radius: 8px;
+margin-bottom: 10px;
+max-height: 200px;
+object-fit: contain;
+        }       
         /* Notificações */
         #notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-        
+position: fixed;
+top: 20px;
+right: 20px;
+z-index: 9999;
+        }       
         .notification {
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
-            max-width: 300px;
+background: rgba(0, 0, 0, 0.8);
+color: white;
+padding: 12px 20px;
+border-radius: 8px;
+margin-bottom: 10px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
+max-width: 300px;
         }
-        
         .notification.success {
-            border-left: 4px solid var(--success-color);
+border-left: 4px solid var(--success-color);
         }
-        
         .notification.error {
-            border-left: 4px solid var(--primary-color);
+border-left: 4px solid var(--primary-color);
         }
-        
         .notification.info {
-            border-left: 4px solid var(--secondary-color);
+border-left: 4px solid var(--secondary-color);
         }
-
         /* Canais ao vivo */
         #canais-modal-content {
-            background-color: #1a1a1a;
-            color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            width: 95%;
-            max-width: 900px;
-            position: relative;
-            margin: 20px;
-            text-align: center;
-            overflow-y: auto;
-            max-height: 80vh;
+background-color: #1a1a1a;
+color: #fff;
+padding: 20px;
+border-radius: 12px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+width: 95%;
+max-width: 900px;
+position: relative;
+margin: 20px;
+text-align: center;
+overflow-y: auto;
+max-height: 80vh;
         }
-
         #canais-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+gap: 15px;
+margin-top: 20px;
         }
-
         .canal-item {
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #2a2a2a;
-            position: relative;
+cursor: pointer;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+border-radius: 8px;
+overflow: hidden;
+background: #2a2a2a;
+position: relative;
         }
-
         .canal-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+transform: scale(1.05);
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
-
         .canal-item img {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            display: block;
+width: 100%;
+aspect-ratio: 16/9;
+object-fit: cover;
+display: block;
         }
-
         .canal-info {
-            padding: 10px;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.7);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+padding: 10px;
+text-align: center;
+background: rgba(0, 0, 0, 0.7);
+position: absolute;
+bottom: 0;
+width: 100%;
         }
-
         .canal-nome {
-            font-size: 14px;
-            font-weight: bold;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+font-size: 14px;
+font-weight: bold;
+margin: 0;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
         }
-
         /* Login Modal */
         #login-modal {
-            z-index: 11000;
+z-index: 11000;
         }
-
         #login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
+display: flex;
+flex-direction: column;
+gap: 15px;
+margin-top: 20px;
         }
-
         /* Player de Video para m3u8 */
         #video-player {
-            width: 100%;
-            height: 100%;
-            background: #000;
+width: 100%;
+height: 100%;
+background: #000;
         }
-        
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+from {
+    transform: translateX(100%);
+    opacity: 0;
+}
+to {
+    transform: translateX(0);
+    opacity: 1;
+}
         }
-        
         @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-            }
+from {
+    opacity: 1;
+}
+to {
+    opacity: 0;
+}
         }
-
         /* Animações */
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+from {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+to {
+    opacity: 1;
+    transform: translateY(0);
+}
         }
-
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+0%, 100% { transform: translateX(0); }
+25% { transform: translateX(-5px); }
+50% { transform: translateX(5px); }
+75% { transform: translateX(-5px); }
         }
-
         @keyframes zoomOut {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.2);
-                opacity: 0;
-            }
+0% {
+    transform: scale(1);
+    opacity: 1;
+}
+100% {
+    transform: scale(1.2);
+    opacity: 0;
+}
         }
-
         @keyframes scroll-text {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+0% { transform: translateX(0); }
+100% { transform: translateX(-50%); }
         }
-
         @-webkit-keyframes scroll-text {
-            0% { -webkit-transform: translateX(0); }
-            100% { -webkit-transform: translateX(-50%); }
+0% { -webkit-transform: translateX(0); }
+100% { -webkit-transform: translateX(-50%); }
         }
-
         /* Media Queries */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .login-container,
-            .live-notification {
-                width: 90%;
-                max-width: none;
-                min-width: auto;
-                margin-bottom: 20px;
-            }
-            
-            .scrolling-text {
-                animation-duration: 25s;
-                -webkit-animation-duration: 25s;
-            }
-            
-            #volume-control {
-                width: 80px;
-            }
-            
-            .channel-info {
-                top: 10px;
-                left: 10px;
-                padding: 8px 10px;
-            }
-            
-            .channel-logo {
-                width: 30px;
-                height: 30px;
-            }
-
-            #canais-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
+.container {
+    flex-direction: column;
+    align-items: center;
+}
+.login-container,
+.live-notification {
+    width: 90%;
+    max-width: none;
+    min-width: auto;
+    margin-bottom: 20px;
+}
+.scrolling-text {
+    animation-duration: 25s;
+    -webkit-animation-duration: 25s;
+}
+#volume-control {
+    width: 80px;
+}
+.channel-info {
+    top: 10px;
+    left: 10px;
+    padding: 8px 10px;
+}
+.channel-logo {
+    width: 30px;
+    height: 30px;
+}
+#canais-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
         }
-
         @media (max-width: 576px) {
-            .modal-content,
-            #programacao-modal-content,
-            #canais-modal-content {
-                padding: 20px;
-            }
-
-            .modal-content h2,
-            #programacao-modal-content h2,
-            #canais-modal-content h2 {
-                font-size: 1.3em;
-            }
-
-            .close,
-            .close-modal {
-                font-size: 24px;
-                top: 10px;
-                right: 15px;
-            }
-
-            .scrolling-text {
-                animation-duration: 20s;
-                -webkit-animation-duration: 20s;
-                font-size: 14px;
-            }
-
-            .scrolling-text span {
-                padding-right: 40px;
-            }
-            
-            #volume-control {
-                width: 60px;
-            }
-
-            #canais-grid {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            }
+.modal-content,
+#programacao-modal-content,
+#canais-modal-content {
+    padding: 20px;
+}
+.modal-content h2,
+#programacao-modal-content h2,
+#canais-modal-content h2 {
+    font-size: 1.3em;
+}
+.close,
+.close-modal {
+    font-size: 24px;
+    top: 10px;
+    right: 15px;
+}
+.scrolling-text {
+    animation-duration: 20s;
+    -webkit-animation-duration: 20s;
+    font-size: 14px;
+}
+.scrolling-text span {
+    padding-right: 40px;
+}
+#volume-control {
+    width: 60px;
+}
+#canais-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
         }
     </style>
 </head>
-
 <body>
     <!-- Imagem de fundo -->
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
-
     <!-- Imagem de animação inicial -->
     <div id="zoom-image-container">
         <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Imagem de boas-vindas">
     </div>
-
     <!-- Container de notificações -->
     <div id="notification-container"></div>
-
     <main class="container">
         <!-- Seção de login -->
         <section class="login-container" id="login-container">
-            <h1>📺 Bem-vindo ao StreamXcellence 🎬</h1>
-            <p class="subtitle">Digite a chave de acesso para entrar</p>
-            
-            <div class="input-group">
-                <label for="key-input" class="sr-only">Chave de acesso</label>
-                <input 
-                    type="text" 
-                    id="key-input" 
-                    placeholder="Digite a chave de acesso" 
-                    aria-label="Chave de acesso" 
-                    autocomplete="off"
-                />
-            </div>
-            
-            <div class="button-group">
-                <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
-                <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
-                <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
-                <button type="button" id="live-channels-button" onclick="checkLoginForCanais()" class="btn-info">Canais ao vivo</button>
-            </div>
-            
-            <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
+<h1>📺 Bem-vindo ao StreamXcellence 🎬</h1>
+<p class="subtitle">Digite a chave de acesso para entrar</p>
+<div class="input-group">
+    <label for="key-input" class="sr-only">Chave de acesso</label>
+    <input 
+        type="text" 
+        id="key-input" 
+        placeholder="Digite a chave de acesso" 
+        aria-label="Chave de acesso" 
+        autocomplete="off"
+    />
+</div>
+<div class="button-group">
+    <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
+    <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
+    <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
+    <button type="button" id="live-channels-button" onclick="openCanaisModalWithKey()" class="btn-info">Canais ao vivo</button>
+</div>
+<div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
         </section>
-
         <!-- Seção de notificação ao vivo -->
         <section class="live-notification" id="live-notification">
-            <h2>🔴 O que está passando agora 📺</h2>
-            
-            <div id="guide-container" role="marquee">
-                <div class="scrolling-text" id="scrolling-text">
-                    <span id="guide-text">Carregando guia...</span>
-                    <span id="guide-text-duplicate">Carregando guia...</span>
-                </div>
-            </div>
-            
-            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
+<h2>🔴 O que está passando agora 📺</h2>
+<div id="guide-container" role="marquee">
+    <div class="scrolling-text" id="scrolling-text">
+        <span id="guide-text">Carregando guia...</span>
+        <span id="guide-text-duplicate">Carregando guia...</span>
+    </div>
+</div>
+<div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
         </section>
     </main>
-
     <!-- Container do player principal -->
     <div id="player-container" aria-live="polite">
         <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
+<div id="twitch-embed"></div>
         </div>
-        
         <!-- Canal Info -->
         <div class="channel-info">
-            <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
-            <div>
-                <div class="channel-name">StreamXcellence</div>
-                <span class="live-indicator">AO VIVO</span>
-            </div>
+<img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
+<div>
+    <div class="channel-name">StreamXcellence</div>
+    <span class="live-indicator">AO VIVO</span>
+</div>
         </div>
-        
         <!-- Menu de Qualidade -->
         <div id="quality-menu" class="quality-menu"></div>
-        
         <!-- Controles do Player -->
         <div class="player-controls">
-            <div class="controls-left">
-                <button id="play-pause-btn" class="control-btn">⏸️</button>
-                <div class="volume-container">
-                    <button id="mute-btn" class="control-btn">🔊</button>
-                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
-                </div>
-            </div>
-            <div class="controls-right">
-                <button id="quality-btn" class="control-btn">⚙️</button>
-                <button id="fullscreen-btn" class="control-btn">⛶</button>
-            </div>
+<div class="controls-left">
+    <button id="play-pause-btn" class="control-btn">⏸️</button>
+    <div class="volume-container">
+        <button id="mute-btn" class="control-btn">🔊</button>
+        <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+    </div>
+</div>
+<div class="controls-right">
+    <button id="quality-btn" class="control-btn">⚙️</button>
+    <button id="fullscreen-btn" class="control-btn">⛶</button>
+</div>
         </div>
     </div>
-
     <!-- Modal de aquisição de chave -->
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()" aria-label="Fechar">&times;</span>
-            <h2 id="modal-title">Adquirir Chave para Acesso</h2>
-            <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
-                envie o comprovante para liberação imediata.</p>
-            <p><strong>Valor Simbólico: R$ 2,00</strong></p>
-            
-            <div class="email-container">
-                <p id="pix-email">Pix: lourimarcos@outlook.com</p>
-                <button id="copy-email" onclick="copyEmail()" aria-label="Copiar email">Copiar</button>
-            </div>
-            
-            <p>A chave tem duração de <strong>15 dias</strong></p>
-            
-            <div class="input-group">
-                <label for="user-name" class="sr-only">Seu Nome</label>
-                <input type="text" id="user-name" placeholder="Seu Nome" aria-required="true" />
-            </div>
-            
-            <button type="button" onclick="sendToWhatsApp()" class="btn-primary">Enviar</button>
+<span class="close" onclick="closeModal()" aria-label="Fechar">&times;</span>
+<h2 id="modal-title">Adquirir Chave para Acesso</h2>
+<p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
+    envie o comprovante para liberação imediata.</p>
+<p><strong>Valor Simbólico: R$ 2,00</strong></p>
+<div class="email-container">
+    <p id="pix-email">Pix: lourimarcos@outlook.com</p>
+    <button id="copy-email" onclick="copyEmail()" aria-label="Copiar email">Copiar</button>
+</div>
+<p>A chave tem duração de <strong>15 dias</strong></p>
+<div class="input-group">
+    <label for="user-name" class="sr-only">Seu Nome</label>
+    <input type="text" id="user-name" placeholder="Seu Nome" aria-required="true" />
+</div>
+<button type="button" onclick="sendToWhatsApp()" class="btn-primary">Enviar</button>
         </div>
     </div>
-
     <!-- Modal do guia de programação -->
     <div id="programacao-modal" class="modal" role="dialog" aria-labelledby="programacao-title" aria-hidden="true">
         <div id="programacao-modal-content">
-            <span class="close-modal" onclick="closeProgramacaoModal()" aria-label="Fechar">&times;</span>
-            <h2 id="programacao-title">StreamXcellence 📺 | Guia de Programação</h2>
-            <ul id="programacao-lista" aria-live="polite"></ul>
+<span class="close-modal" onclick="closeProgramacaoModal()" aria-label="Fechar">&times;</span>
+<h2 id="programacao-title">StreamXcellence 📺 | Guia de Programação</h2>
+<ul id="programacao-lista" aria-live="polite"></ul>
         </div>
     </div>
-
     <!-- Novo modal para canais ao vivo -->
     <div id="canais-modal" class="modal" role="dialog" aria-labelledby="canais-title" aria-hidden="true">
         <div id="canais-modal-content">
-            <span class="close-modal" onclick="closeCanaisModal()" aria-label="Fechar">&times;</span>
-            <h2 id="canais-title">StreamXcellence 📺 | Canais ao Vivo</h2>
-            <div id="canais-grid" aria-live="polite">
-                <p>Carregando canais...</p>
-            </div>
+<span class="close-modal" onclick="closeCanaisModal()" aria-label="Fechar">&times;</span>
+<h2 id="canais-title">StreamXcellence 📺 | Canais ao Vivo</h2>
+<div id="canais-grid" aria-live="polite">
+    <p>Carregando canais...</p>
+</div>
         </div>
     </div>
-
-    <!-- Modal de login para canais -->
-    <div id="login-modal" class="modal" role="dialog" aria-labelledby="login-modal-title" aria-hidden="true">
+    <!-- Modal para verificação de chave para canais -->
+    <div id="canais-key-modal" class="modal" role="dialog" aria-labelledby="canais-key-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeLoginModal()" aria-label="Fechar">&times;</span>
-            <h2 id="login-modal-title">Login para Acesso aos Canais</h2>
-            <p>Para acessar os canais ao vivo, faça login com suas credenciais</p>
-            
-            <form id="login-form">
-                <div class="input-group">
-                    <label for="login-username" class="sr-only">Usuário</label>
-                    <input 
-                        type="text" 
-                        id="login-username" 
-                        placeholder="Nome de usuário" 
-                        aria-label="Nome de usuário" 
-                        autocomplete="off"
-                        required
-                    />
-                </div>
-                
-                <div class="input-group">
-                    <label for="login-password" class="sr-only">Senha</label>
-                    <input 
-                        type="password" 
-                        id="login-password" 
-                        placeholder="Senha" 
-                        aria-label="Senha" 
-                        autocomplete="off"
-                        required
-                    />
-                </div>
-                
-                <div class="error-message" id="login-error-message" role="alert" aria-live="assertive"></div>
-                
-                <button type="button" onclick="verificarLogin()" class="btn-primary">Entrar</button>
-            </form>
+<span class="close-modal" onclick="closeCanaisKeyModal()" aria-label="Fechar">&times;</span>
+<h2 id="canais-key-title">Verificação de Acesso</h2>
+<p>Digite sua chave de acesso para ver os canais ao vivo</p>
+<div class="input-group">
+    <label for="canais-key-input" class="sr-only">Chave de acesso</label>
+    <input 
+        type="text" 
+        id="canais-key-input" 
+        placeholder="Digite a chave de acesso" 
+        aria-label="Chave de acesso" 
+        autocomplete="off"
+        required
+    />
+</div>
+<div class="error-message" id="canais-key-error-message" role="alert" aria-live="assertive"></div>
+<button type="button" onclick="verificarChaveCanais()" class="btn-primary">Acessar Canais</button>
         </div>
     </div>
-
     <!-- Script para hls.js -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    
     <!-- Scripts -->
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
@@ -1073,805 +906,680 @@
         let currentQuality = 'auto';
         let isQualityMenuOpen = false;
         let notificationTimeout;
-        let isLoggedIn = false;
         let keyVerified = false;
+        let currentKey = "";
         let videoPlayer = null;
-
         // Função para reproduzir vídeo
         function playVideo(videoElement) {
-            videoElement.play().catch(error => {
-                console.log('Erro ao reproduzir o vídeo:', error);
-            });
+videoElement.play().catch(error => {
+    console.log('Erro ao reproduzir o vídeo:', error);
+});
         }
-
         // Função para mostrar notificações
         function showNotification(message, type = 'info') {
-            const container = document.getElementById('notification-container');
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            container.appendChild(notification);
-            
-            // Remover notificação após 3 segundos
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
+const container = document.getElementById('notification-container');
+const notification = document.createElement('div');
+notification.className = `notification ${type}`;
+notification.textContent = message;
+container.appendChild(notification);
+// Remover notificação após 3 segundos
+setTimeout(() => {
+    notification.remove();
+}, 3000);
         }
-        
         // Atualizar menu de qualidade
         function updateQualityMenu() {
-            const qualityMenu = document.getElementById('quality-menu');
-            qualityMenu.innerHTML = '';
-            
-            if (!player || !qualities.length) return;
-            
-            // Opção auto
-            const autoOption = document.createElement('div');
-            autoOption.className = `quality-option ${currentQuality === 'auto' ? 'active' : ''}`;
-            autoOption.textContent = 'Auto';
-            autoOption.onclick = () => {
-                player.setQuality('auto');
-                currentQuality = 'auto';
-                updateQualityMenu();
-                showNotification('Qualidade alterada para Automático', 'info');
-                toggleQualityMenu();
-            };
-            qualityMenu.appendChild(autoOption);
-            
-            // Outras opções de qualidade
-            qualities.forEach(quality => {
-                const option = document.createElement('div');
-                option.className = `quality-option ${currentQuality === quality.name ? 'active' : ''}`;
-                option.textContent = quality.name;
-                option.onclick = () => {
-                    player.setQuality(quality.name);
-                    currentQuality = quality.name;
-                    updateQualityMenu();
-                    showNotification(`Qualidade alterada para ${quality.name}`, 'info');
-                    toggleQualityMenu();
-                };
-                qualityMenu.appendChild(option);
-            });
+const qualityMenu = document.getElementById('quality-menu');
+qualityMenu.innerHTML = '';
+if (!player || !qualities.length) return;
+// Opção auto
+const autoOption = document.createElement('div');
+autoOption.className = `quality-option ${currentQuality === 'auto' ? 'active' : ''}`;
+autoOption.textContent = 'Auto';
+autoOption.onclick = () => {
+    player.setQuality('auto');
+    currentQuality = 'auto';
+    updateQualityMenu();
+    showNotification('Qualidade alterada para Automático', 'info');
+    toggleQualityMenu();
+};
+qualityMenu.appendChild(autoOption);
+// Outras opções de qualidade
+qualities.forEach(quality => {
+    const option = document.createElement('div');
+    option.className = `quality-option ${currentQuality === quality.name ? 'active' : ''}`;
+    option.textContent = quality.name;
+    option.onclick = () => {
+        player.setQuality(quality.name);
+        currentQuality = quality.name;
+        updateQualityMenu();
+        showNotification(`Qualidade alterada para ${quality.name}`, 'info');
+        toggleQualityMenu();
+    };
+    qualityMenu.appendChild(option);
+});
         }
-        
         // Alternar menu de qualidade
         function toggleQualityMenu() {
-            const qualityMenu = document.getElementById('quality-menu');
-            isQualityMenuOpen = !isQualityMenuOpen;
-            
-            if (isQualityMenuOpen) {
-                qualityMenu.classList.add('active');
-            } else {
-                qualityMenu.classList.remove('active');
-            }
+const qualityMenu = document.getElementById('quality-menu');
+isQualityMenuOpen = !isQualityMenuOpen;
+if (isQualityMenuOpen) {
+    qualityMenu.classList.add('active');
+} else {
+    qualityMenu.classList.remove('active');
+}
         }
-
         // Função para criar player do Twitch com controles personalizados
         function createTwitchPlayer() {
-            if (!document.querySelector("#twitch-embed iframe")) {
-                player = new Twitch.Player("twitch-embed", {
-                    channel: "lourimarcos",
-                    width: "100%",
-                    height: "100%",
-                    controls: false,
-                    autoplay: true,
-                    muted: false,
-                    parent: ["localhost", window.location.hostname]
-                });
-
-                player.addEventListener(Twitch.Player.READY, () => {
-                    player.setVolume(0.5);
-                    player.setMuted(false);
-                    player.play();
-                    
-                    // Obter qualidades disponíveis
-                    setTimeout(() => {
-                        qualities = player.getQualities();
-                        updateQualityMenu();
-                    }, 2000);
-                    
-                    // Inicializar controles personalizados
-                    initCustomControls();
-                    
-                    const playerElement = player.getIframe();
-                    const clickEvent = new MouseEvent('click', {
-                        view: window,
-                        bubbles: true,
-                        cancelable: true
-                    });
-                    playerElement.dispatchEvent(clickEvent);
-                    
-                    showNotification('Reprodução iniciada', 'success');
-                });
-
-                player.addEventListener(Twitch.Player.PLAY, () => {
-                    const playPauseBtn = document.getElementById('play-pause-btn');
-                    if (playPauseBtn) playPauseBtn.textContent = '⏸️';
-                });
-                
-                player.addEventListener(Twitch.Player.PAUSE, () => {
-                    const playPauseBtn = document.getElementById('play-pause-btn');
-                    if (playPauseBtn) playPauseBtn.textContent = '▶️';
-                });
-
-                player.addEventListener(Twitch.Player.OFFLINE, () => {
-                    document.getElementById('player-container').innerHTML = `
-                        <div class="offline-container">
-                            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-                                <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                            </video>
-                            <div class="offline-message">
-                                <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-                            </div>
-                        </div>
-                    `;
-                    const offlineVideo = document.getElementById('offline-video');
-                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-                    playVideo(offlineVideo);
-                    
-                    showNotification('O canal está offline no momento', 'error');
-                });
-            }
+if (!document.querySelector("#twitch-embed iframe")) {
+    player = new Twitch.Player("twitch-embed", {
+        channel: "lourimarcos",
+        width: "100%",
+        height: "100%",
+        controls: false,
+        autoplay: true,
+        muted: false,
+        parent: ["localhost", window.location.hostname]
+    });
+    player.addEventListener(Twitch.Player.READY, () => {
+        player.setVolume(0.5);
+        player.setMuted(false);
+        player.play();
+        // Obter qualidades disponíveis
+        setTimeout(() => {
+qualities = player.getQualities();
+updateQualityMenu();
+        }, 2000);
+        // Inicializar controles personalizados
+        initCustomControls();
+        const playerElement = player.getIframe();
+        const clickEvent = new MouseEvent('click', {
+view: window,
+bubbles: true,
+cancelable: true
+        });
+        playerElement.dispatchEvent(clickEvent);
+        showNotification('Reprodução iniciada', 'success');
+    });
+    player.addEventListener(Twitch.Player.PLAY, () => {
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        if (playPauseBtn) playPauseBtn.textContent = '⏸️';
+    });
+    player.addEventListener(Twitch.Player.PAUSE, () => {
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        if (playPauseBtn) playPauseBtn.textContent = '▶️';
+    });
+    player.addEventListener(Twitch.Player.OFFLINE, () => {
+        document.getElementById('player-container').innerHTML = `
+<div class="offline-container">
+    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+    </video>
+    <div class="offline-message">
+        <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+    </div>
+</div>
+        `;
+        const offlineVideo = document.getElementById('offline-video');
+        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+        playVideo(offlineVideo);
+        showNotification('O canal está offline no momento', 'error');
+    });
+}
         }
-
         // Inicializar controles personalizados
         function initCustomControls() {
-            const playPauseBtn = document.getElementById('play-pause-btn');
-            const muteBtn = document.getElementById('mute-btn');
-            const volumeSlider = document.getElementById('volume-slider');
-            const qualityBtn = document.getElementById('quality-btn');
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
-            
-            // Definir volume inicial
-            volumeSlider.value = player.getVolume();
-            updateVolumeIcon();
-            
-            // Adicionar eventos para os controles
-            playPauseBtn.addEventListener('click', togglePlay);
-            
-            volumeSlider.addEventListener('input', () => {
-                const volume = parseFloat(volumeSlider.value);
-                player.setVolume(volume);
-                player.setMuted(volume === 0);
-                updateVolumeIcon();
-            });
-            
-            muteBtn.addEventListener('click', toggleMute);
-            qualityBtn.addEventListener('click', toggleQualityMenu);
-            fullscreenBtn.addEventListener('click', toggleFullscreen);
-            
-            // Adicionar listener para teclas
-            document.addEventListener('keydown', handleKeyPress);
+const playPauseBtn = document.getElementById('play-pause-btn');
+const muteBtn = document.getElementById('mute-btn');
+const volumeSlider = document.getElementById('volume-slider');
+const qualityBtn = document.getElementById('quality-btn');
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+// Definir volume inicial
+volumeSlider.value = player.getVolume();
+updateVolumeIcon();
+// Adicionar eventos para os controles
+playPauseBtn.addEventListener('click', togglePlay);
+volumeSlider.addEventListener('input', () => {
+    const volume = parseFloat(volumeSlider.value);
+    player.setVolume(volume);
+    player.setMuted(volume === 0);
+    updateVolumeIcon();
+});
+muteBtn.addEventListener('click', toggleMute);
+qualityBtn.addEventListener('click', toggleQualityMenu);
+fullscreenBtn.addEventListener('click', toggleFullscreen);
+// Adicionar listener para teclas
+document.addEventListener('keydown', handleKeyPress);
         }
-        
         // Alternar reprodução
         function togglePlay() {
-            if (player) {
-                if (player.isPaused()) {
-                    player.play();
-                    showNotification('Reproduzindo', 'info');
-                } else {
-                    player.pause();
-                    showNotification('Pausado', 'info');
-                }
-            }
+if (player) {
+    if (player.isPaused()) {
+        player.play();
+        showNotification('Reproduzindo', 'info');
+    } else {
+        player.pause();
+        showNotification('Pausado', 'info');
+    }
+}
         }
-        
         // Alternar mudo
         function toggleMute() {
-            if (player) {
-                const muted = player.getMuted();
-                player.setMuted(!muted);
-                updateVolumeIcon();
-                showNotification(muted ? 'Som ativado' : 'Som desativado', 'info');
-            }
+if (player) {
+    const muted = player.getMuted();
+    player.setMuted(!muted);
+    updateVolumeIcon();
+    showNotification(muted ? 'Som ativado' : 'Som desativado', 'info');
+}
         }
-        
         // Atualizar ícone de volume
         function updateVolumeIcon() {
-            const muteBtn = document.getElementById('mute-btn');
-            
-            if (!muteBtn || !player) return;
-            
-            if (player.getMuted() || player.getVolume() === 0) {
-                muteBtn.textContent = '🔇';
-            } else if (player.getVolume() < 0.5) {
-                muteBtn.textContent = '🔉';
-            } else {
-                muteBtn.textContent = '🔊';
-            }
+const muteBtn = document.getElementById('mute-btn');
+if (!muteBtn || !player) return;
+if (player.getMuted() || player.getVolume() === 0) {
+    muteBtn.textContent = '🔇';
+} else if (player.getVolume() < 0.5) {
+    muteBtn.textContent = '🔉';
+} else {
+    muteBtn.textContent = '🔊';
+}
         }
-        
         // Função para alternar tela cheia
         function toggleFullscreen() {
-            const container = document.getElementById('player-container');
-            
-            if (!document.fullscreenElement) {
-                if (container.requestFullscreen) {
-                    container.requestFullscreen();
-                } else if (container.webkitRequestFullscreen) { /* Safari */
-                    container.webkitRequestFullscreen();
-                } else if (container.msRequestFullscreen) { /* IE11 */
-                    container.msRequestFullscreen();
-                }
-                showNotification('Tela cheia ativada', 'info');
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { /* Safari */
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE11 */
-                    document.msExitFullscreen();
-                }
-                showNotification('Tela cheia desativada', 'info');
-            }
+const container = document.getElementById('player-container');
+if (!document.fullscreenElement) {
+    if (container.requestFullscreen) {
+        container.requestFullscreen();
+    } else if (container.webkitRequestFullscreen) { /* Safari */
+        container.webkitRequestFullscreen();
+    } else if (container.msRequestFullscreen) { /* IE11 */
+        container.msRequestFullscreen();
+    }
+    showNotification('Tela cheia ativada', 'info');
+} else {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+        document.msExitFullscreen();
+    }
+    showNotification('Tela cheia desativada', 'info');
+}
         }
-        
         // Manipular teclas de atalho
         function handleKeyPress(event) {
-            // Só processar atalhos quando o player estiver visível
-            if (!document.getElementById('player-container').style.display === 'flex') return;
-            
-            switch(event.key) {
-                case ' ':
-                case 'k':
-                    togglePlay();
-                    event.preventDefault();
-                    break;
-                case 'm':
-                    toggleMute();
-                    event.preventDefault();
-                    break;
-                case 'f':
-                    toggleFullscreen();
-                    event.preventDefault();
-                    break;
-                case 'ArrowUp':
-                    if (player) {
-                        const newVolume = Math.min(1, player.getVolume() + 0.05);
-                        player.setVolume(newVolume);
-                        player.setMuted(false);
-                        document.getElementById('volume-slider').value = newVolume;
-                        updateVolumeIcon();
-                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
-                    }
-                    event.preventDefault();
-                    break;
-                case 'ArrowDown':
-                    if (player) {
-                        const newVolume = Math.max(0, player.getVolume() - 0.05);
-                        player.setVolume(newVolume);
-                        player.setMuted(newVolume === 0);
-                        document.getElementById('volume-slider').value = newVolume;
-                        updateVolumeIcon();
-                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
-                    }
-                    event.preventDefault();
-                    break;
-            }
+// Só processar atalhos quando o player estiver visível
+if (!document.getElementById('player-container').style.display === 'flex') return;
+switch(event.key) {
+    case ' ':
+    case 'k':
+        togglePlay();
+        event.preventDefault();
+        break;
+    case 'm':
+        toggleMute();
+        event.preventDefault();
+        break;
+    case 'f':
+        toggleFullscreen();
+        event.preventDefault();
+        break;
+    case 'ArrowUp':
+        if (player) {
+const newVolume = Math.min(1, player.getVolume() + 0.05);
+player.setVolume(newVolume);
+player.setMuted(false);
+document.getElementById('volume-slider').value = newVolume;
+updateVolumeIcon();
+showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
         }
-
+        event.preventDefault();
+        break;
+    case 'ArrowDown':
+        if (player) {
+const newVolume = Math.max(0, player.getVolume() - 0.05);
+player.setVolume(newVolume);
+player.setMuted(newVolume === 0);
+document.getElementById('volume-slider').value = newVolume;
+updateVolumeIcon();
+showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
+        }
+        event.preventDefault();
+        break;
+}
+        }
         // Função para criar player de notificação ao vivo
         function createLiveNotificationPlayer() {
-            const livePlayerContainer = document.getElementById("live-player");
-            livePlayer = new Twitch.Player("live-player", {
-                channel: "lourimarcos",
-                height: "100%",
-                width: "100%",
-                muted: true,
-                autoplay: true,
-                controls: false,
-                parent: ["localhost", window.location.hostname]
-            });
-            
-            livePlayer.addEventListener(Twitch.Player.READY, () => {
-                const iframe = livePlayer.getIframe();
-                iframe.style.pointerEvents = "none";
-            });
-
-            // Recarregar o player de prévia periodicamente
-            function reloadLivePlayer() {
-                if (livePlayer) {
-                    livePlayer.seek(0);
-                }
-            }
-            setInterval(reloadLivePlayer, 30000);
+const livePlayerContainer = document.getElementById("live-player");
+livePlayer = new Twitch.Player("live-player", {
+    channel: "lourimarcos",
+    height: "100%",
+    width: "100%",
+    muted: true,
+    autoplay: true,
+    controls: false,
+    parent: ["localhost", window.location.hostname]
+});
+livePlayer.addEventListener(Twitch.Player.READY, () => {
+    const iframe = livePlayer.getIframe();
+    iframe.style.pointerEvents = "none";
+});
+// Recarregar o player de prévia periodicamente
+function reloadLivePlayer() {
+    if (livePlayer) {
+        livePlayer.seek(0);
+    }
+}
+setInterval(reloadLivePlayer, 30000);
         }
-
         // Carregar o guia de programação
         function loadProgramacao() {
-            fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Resposta da rede não foi ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('guide-text').textContent = data;
-                    document.getElementById('guide-text-duplicate').textContent = data;
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar guia de programação:', error);
-                    document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
-                    document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
-                });
+fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
+    .then(response => {
+        if (!response.ok) {
+throw new Error('Resposta da rede não foi ok');
         }
-
+        return response.text();
+    })
+    .then(data => {
+        document.getElementById('guide-text').textContent = data;
+        document.getElementById('guide-text-duplicate').textContent = data;
+    })
+    .catch(error => {
+        console.error('Erro ao carregar guia de programação:', error);
+        document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
+        document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
+    });
+        }
         // Carregar as chaves válidas
         let validKeys = [];
-
         function loadKeys() {
-            fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Resposta da rede não foi ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length > 0);
-                    console.log('Chaves carregadas com sucesso');
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar as chaves:', error);
-                    // Exibir mensagem de erro na interface se necessário
-                    const errorMessage = document.getElementById('error-message');
-                    if (errorMessage) {
-                        errorMessage.textContent = "Erro ao carregar chaves de acesso. Tente novamente mais tarde.";
-                    }
-                });
+fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
+    .then(response => {
+        if (!response.ok) {
+throw new Error('Resposta da rede não foi ok');
         }
-
+        return response.text();
+    })
+    .then(data => {
+        validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length > 0);
+        console.log('Chaves carregadas com sucesso');
+    })
+    .catch(error => {
+        console.error('Erro ao carregar as chaves:', error);
+        // Exibir mensagem de erro na interface se necessário
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) {
+errorMessage.textContent = "Erro ao carregar chaves de acesso. Tente novamente mais tarde.";
+        }
+    });
+        }
         // Verificar a chave inserida
         function verifyKey() {
-            const keyInput = document.getElementById('key-input').value;
-            const errorMessage = document.getElementById('error-message');
-
-            if (!keyInput) {
-                errorMessage.textContent = "Por favor, digite uma chave de acesso.";
-                return;
-            }
-
-            if (validKeys.includes(keyInput) || keyInput === "12345") { // Adicionei uma chave de teste
-                // Chave válida
-                keyVerified = true;
-                
-                // Esconder o container de login
-                document.getElementById('login-container').style.display = 'none';
-                
-                // Mostrar a animação de zoom
-                const zoomImageContainer = document.getElementById('zoom-image-container');
-                zoomImageContainer.style.display = 'flex';
-                
-                // Após a animação, mostrar o player
-                setTimeout(() => {
-                    zoomImageContainer.style.display = 'none';
-                    document.getElementById('player-container').style.display = 'flex';
-                    createTwitchPlayer();
-                }, 2000);
-                
-                // Esconder a notificação ao vivo
-                document.getElementById('live-notification').style.display = 'none';
-                
-                // Exibir mensagem de boas-vindas
-                showWelcomeMessage();
-            } else {
-                errorMessage.textContent = "Chave inválida. Tente novamente.";
-                showNotification("Chave inválida. Tente novamente.", "error");
-                // Animação de shake no input
-                const keyInputElem = document.getElementById('key-input');
-                keyInputElem.classList.add('shake');
-                setTimeout(() => keyInputElem.classList.remove('shake'), 500);
-            }
+const keyInput = document.getElementById('key-input').value;
+const errorMessage = document.getElementById('error-message');
+if (!keyInput) {
+    errorMessage.textContent = "Por favor, digite uma chave de acesso.";
+    return;
+}
+if (validKeys.includes(keyInput) || keyInput === "12345") { // Adicionei uma chave de teste
+    // Chave válida
+    keyVerified = true;
+    currentKey = keyInput; // Armazenar a chave atual para uso posterior
+    // Esconder o container de login
+    document.getElementById('login-container').style.display = 'none';
+    // Mostrar a animação de zoom
+    const zoomImageContainer = document.getElementById('zoom-image-container');
+    zoomImageContainer.style.display = 'flex';
+    // Após a animação, mostrar o player
+    setTimeout(() => {
+        zoomImageContainer.style.display = 'none';
+        document.getElementById('player-container').style.display = 'flex';
+        createTwitchPlayer();
+    }, 2000);
+    // Esconder a notificação ao vivo
+    document.getElementById('live-notification').style.display = 'none';
+    // Exibir mensagem de boas-vindas
+    showWelcomeMessage();
+} else {
+    errorMessage.textContent = "Chave inválida. Tente novamente.";
+    showNotification("Chave inválida. Tente novamente.", "error");
+    // Animação de shake no input
+    const keyInputElem = document.getElementById('key-input');
+    keyInputElem.classList.add('shake');
+    setTimeout(() => keyInputElem.classList.remove('shake'), 500);
+}
         }
-
-        // Exibir mensagem de boas-vindas
+        // Mostrar mensagem de boas-vindas
         function showWelcomeMessage() {
-            showNotification("Seja Bem-vindo!!!", "success");
-            
-            const welcomeMessage = document.createElement('div');
-            welcomeMessage.textContent = "Seja Bem-vindo!!!";
-            welcomeMessage.style.position = "absolute";
-            welcomeMessage.style.top = "20px";
-            welcomeMessage.style.left = "50%";
-            welcomeMessage.style.transform = "translateX(-50%)";
-            welcomeMessage.style.color = "white";
-            welcomeMessage.style.fontSize = "18px";
-            welcomeMessage.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-            welcomeMessage.style.padding = "10px";
-            welcomeMessage.style.borderRadius = "8px";
-            welcomeMessage.style.zIndex = "1000";
-            document.body.appendChild(welcomeMessage);
-
-            setTimeout(() => {
-                welcomeMessage.remove();
-            }, 6000);
+showNotification("Bem-vindo ao StreamXcellence! Aproveite o conteúdo.", "success");
         }
-
         // Funções para os modais
         function openModal() {
-            document.getElementById("modal").style.display = "flex";
+document.getElementById("modal").style.display = "flex";
         }
-
         function closeModal() {
-            document.getElementById("modal").style.display = "none";
+document.getElementById("modal").style.display = "none";
         }
-
         function sendToWhatsApp() {
-            const name = document.getElementById("user-name").value;
-            if (!name) {
-                alert("Por favor, preencha seu nome antes de enviar.");
-                showNotification("Por favor, preencha seu nome antes de enviar.", "error");
-                return;
-            }
-            const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação imediata.`;
-            window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
+const name = document.getElementById("user-name").value;
+if (!name) {
+    alert("Por favor, preencha seu nome antes de enviar.");
+    showNotification("Por favor, preencha seu nome antes de enviar.", "error");
+    return;
+}
+const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação imediata.`;
+window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
         }
-
         // Função para copiar email
         function copyEmail() {
-            const emailText = document.getElementById("pix-email").innerText;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(emailText)
-                    .then(() => {
-                        // Feedback visual
-                        const copyButton = document.getElementById("copy-email");
-                        const originalText = copyButton.textContent;
-                        copyButton.textContent = "Copiado!";
-                        copyButton.style.backgroundColor = "#28a745";
-                        
-                        showNotification("Email copiado para a área de transferência!", "success");
-                        
-                        setTimeout(() => {
-                            copyButton.textContent = originalText;
-                            copyButton.style.backgroundColor = "";
-                        }, 2000);
-                    })
-                    .catch(err => {
-                        console.error('Falha ao copiar email: ', err);
-                        showNotification("Falha ao copiar o email. Por favor, copie manualmente.", "error");
-                    });
-            } else {
-                // Fallback para navegadores que não suportam a API Clipboard
-                const textArea = document.createElement("textarea");
-                textArea.value = emailText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                
-                try {
-                    document.execCommand('copy');
-                    showNotification("Email copiado para a área de transferência!", "success");
-                } catch (err) {
-                    console.error('Falha ao copiar email: ', err);
-                    showNotification("Falha ao copiar o email. Por favor, copie manualmente.", "error");
-                }
-                
-                document.body.removeChild(textArea);
-            }
+const emailText = document.getElementById("pix-email").innerText;
+if (navigator.clipboard) {
+    navigator.clipboard.writeText(emailText)
+        .then(() => {
+// Feedback visual
+const copyButton = document.getElementById("copy-email");
+const originalText = copyButton.textContent;
+copyButton.textContent = "Copiado!";
+copyButton.style.backgroundColor = "#28a745";
+showNotification("Email copiado para a área de transferência!", "success");
+setTimeout(() => {
+    copyButton.textContent = originalText;
+    copyButton.style.backgroundColor = "";
+}, 2000);
+        })
+        .catch(err => {
+console.error('Falha ao copiar email: ', err);
+showNotification("Falha ao copiar o email. Por favor, copie manualmente.", "error");
+        });
+} else {
+    // Fallback para navegadores que não suportam a API Clipboard
+    const textArea = document.createElement("textarea");
+    textArea.value = emailText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        document.execCommand('copy');
+        showNotification("Email copiado para a área de transferência!", "success");
+    } catch (err) {
+        console.error('Falha ao copiar email: ', err);
+        showNotification("Falha ao copiar o email. Por favor, copie manualmente.", "error");
+    }
+    document.body.removeChild(textArea);
+}
         }
-
         // Funções para o modal de programação
         function openProgramacaoModal() {
-            document.getElementById("programacao-modal").style.display = "flex";
-            carregarProgramacao();
+document.getElementById("programacao-modal").style.display = "flex";
+carregarProgramacao();
         }
-
         function closeProgramacaoModal() {
-            document.getElementById("programacao-modal").style.display = "none";
+document.getElementById("programacao-modal").style.display = "none";
         }
-
         // Carregar a programação detalhada
         function carregarProgramacao() {
-            const listaProgramacao = document.getElementById("programacao-lista");
-            listaProgramacao.innerHTML = '<li>Carregando programação...</li>';
-
-            fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar a programação');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    const programas = data.trim().split('\n\n');
-                    
-                    if (programas.length === 0) {
-                        listaProgramacao.innerHTML = '<li>Nenhuma programação disponível no momento.</li>';
-                        return;
-                    }
-                    
-                    listaProgramacao.innerHTML = '';
-
-                    programas.forEach(programa => {
-                        const detalhes = programa.split('\n');
-                        if (detalhes.length >= 4) {
-                            const titulo = detalhes[0].replace("Título: ", "").trim();
-                            const sinopse = detalhes[1].replace("Sinopse: ", "").trim();
-                            const horario = detalhes[2].replace("Horário: ", "").trim();
-                            const imgLink = detalhes[3].replace("Imagem Capa: ", "").trim();
-
-                            const listItem = document.createElement('li');
-                            listItem.innerHTML = `
-                                <h3>${titulo}</h3>
-                                <img src="${imgLink}" alt="Capa de ${titulo}" loading="lazy">
-                                <p><strong>Sinopse:</strong> ${sinopse}</p>
-                                <p><strong>Horário:</strong> ${horario}</p>
-                            `;
-                            listaProgramacao.appendChild(listItem);
-                        }
-                    });
-                    
-                    if (listaProgramacao.children.length === 0) {
-                        listaProgramacao.innerHTML = '<li>Formato de programação incorreto.</li>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar programação:', error);
-                    listaProgramacao.innerHTML = '<li>Erro ao carregar a programação. Tente novamente mais tarde.</li>';
-                    showNotification("Erro ao carregar a programação", "error");
-                });
+const listaProgramacao = document.getElementById("programacao-lista");
+listaProgramacao.innerHTML = '<li>Carregando programação...</li>';
+fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
+    .then(response => {
+        if (!response.ok) {
+throw new Error('Erro ao carregar a programação');
         }
-
-        // Funções para canais ao vivo
-        function checkLoginForCanais() {
-            if (!keyVerified) {
-                showNotification("Você precisa inserir uma chave de acesso válida primeiro.", "error");
-                document.getElementById('error-message').textContent = "Insira uma chave de acesso válida antes de acessar os canais.";
-                return;
-            }
-            
-            if (isLoggedIn) {
-                openCanaisModal();
-            } else {
-                openLoginModal();
-            }
+        return response.text();
+    })
+    .then(data => {
+        const programas = data.trim().split('\n\n');
+        if (programas.length === 0) {
+listaProgramacao.innerHTML = '<li>Nenhuma programação disponível no momento.</li>';
+return;
         }
-
-        function openLoginModal() {
-            document.getElementById("login-modal").style.display = "flex";
+        listaProgramacao.innerHTML = '';
+        programas.forEach(programa => {
+const detalhes = programa.split('\n');
+if (detalhes.length >= 4) {
+    const titulo = detalhes[0].replace("Título: ", "").trim();
+    const sinopse = detalhes[1].replace("Sinopse: ", "").trim();
+    const horario = detalhes[2].replace("Horário: ", "").trim();
+    const imgLink = detalhes[3].replace("Imagem Capa: ", "").trim();
+    const listItem = document.createElement('li');
+    listItem.innerHTML = `
+        <h3>${titulo}</h3>
+        <img src="${imgLink}" alt="Capa de ${titulo}" loading="lazy">
+        <p><strong>Sinopse:</strong> ${sinopse}</p>
+        <p><strong>Horário:</strong> ${horario}</p>
+    `;
+    listaProgramacao.appendChild(listItem);
+}
+        });
+        if (listaProgramacao.children.length === 0) {
+listaProgramacao.innerHTML = '<li>Formato de programação incorreto.</li>';
         }
-
-        function closeLoginModal() {
-            document.getElementById("login-modal").style.display = "none";
+    })
+    .catch(error => {
+        console.error('Erro ao carregar programação:', error);
+        listaProgramacao.innerHTML = '<li>Erro ao carregar a programação. Tente novamente mais tarde.</li>';
+        showNotification("Erro ao carregar a programação", "error");
+    });
         }
-
-        function verificarLogin() {
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-            const errorMessage = document.getElementById('login-error-message');
-            
-            if (!username || !password) {
-                errorMessage.textContent = "Preencha todos os campos.";
-                return;
-            }
-            
-            // Credenciais para teste (em ambiente real, isso seria feito no servidor)
-            if (username === "admin" && password === "admin") {
-                isLoggedIn = true;
-                closeLoginModal();
-                openCanaisModal();
-                showNotification("Login realizado com sucesso!", "success");
-            } else {
-                errorMessage.textContent = "Credenciais inválidas.";
-                showNotification("Credenciais inválidas. Tente novamente.", "error");
-            }
+        // Nova função para verificação de chave para acesso aos canais
+        function openCanaisModalWithKey() {
+if (keyVerified) {
+    // Se a chave já foi verificada para o player principal, usar a mesma chave
+    openCanaisModal();
+} else {
+    // Abrir modal para verificação de chave
+    document.getElementById("canais-key-modal").style.display = "flex";
+    // Se houver uma chave no input principal, preencher automaticamente
+    const mainKeyInput = document.getElementById('key-input').value;
+    if (mainKeyInput) {
+        document.getElementById('canais-key-input').value = mainKeyInput;
+    }
+}
         }
-
+        // Verificar chave digitada no modal de canais
+        function verificarChaveCanais() {
+const keyInput = document.getElementById('canais-key-input').value;
+const errorMessage = document.getElementById('canais-key-error-message');
+if (!keyInput) {
+    errorMessage.textContent = "Por favor, digite uma chave de acesso.";
+    return;
+}
+if (validKeys.includes(keyInput) || keyInput === "12345") { // Usando a mesma validação do player principal
+    // Chave válida
+    keyVerified = true;
+    currentKey = keyInput;
+    closeCanaisKeyModal();
+    openCanaisModal();
+    showNotification("Acesso aos canais liberado!", "success");
+} else {
+    errorMessage.textContent = "Chave inválida. Tente novamente.";
+    showNotification("Chave inválida. Tente novamente.", "error");
+    // Animação de shake no input
+    const keyInputElem = document.getElementById('canais-key-input');
+    keyInputElem.classList.add('shake');
+    setTimeout(() => keyInputElem.classList.remove('shake'), 500);
+}
+        }
+        // Fechar modal de verificação de chave
+        function closeCanaisKeyModal() {
+document.getElementById("canais-key-modal").style.display = "none";
+        }
         function openCanaisModal() {
-            document.getElementById("canais-modal").style.display = "flex";
-            carregarCanais();
+document.getElementById("canais-modal").style.display = "flex";
+carregarCanais();
         }
-
         function closeCanaisModal() {
-            document.getElementById("canais-modal").style.display = "none";
+document.getElementById("canais-modal").style.display = "none";
         }
-
         // Carregar os canais disponíveis do arquivo filmeseseries.txt
         function carregarCanais() {
-            const canaisGrid = document.getElementById("canais-grid");
-            canaisGrid.innerHTML = '<p>Carregando canais...</p>';
-
-            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar os canais');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    canaisGrid.innerHTML = '';
-                    
-                    // Procurar por entradas de canais no formato #EXTINF:-1
-                    const linhas = data.split('\n');
-                    
-                    for (let i = 0; i < linhas.length; i++) {
-                        if (linhas[i].includes('#EXTINF:-1')) {
-                            // Extrair informações do canal
-                            const infoLinha = linhas[i];
-                            let nomeCanal = "Canal";
-                            
-                            // Tentar extrair o nome do canal
-                            if (infoLinha.includes(',')) {
-                                nomeCanal = infoLinha.split(',')[1].trim();
-                            } else if (infoLinha.includes('tvg-name="')) {
-                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                                if (match && match[1]) {
-                                    nomeCanal = match[1];
-                                }
-                            }
-                            
-                            // Procurar URL do logo
-                            let logoUrl = "https://i.imgur.com/QsrJDbX.png"; // Logo padrão
-                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                            if (logoMatch && logoMatch[1]) {
-                                logoUrl = logoMatch[1];
-                            }
-                            
-                            // Procurar URL do stream na próxima linha
-                            let streamUrl = "";
-                            if (i + 1 < linhas.length && !linhas[i + 1].startsWith('#')) {
-                                streamUrl = linhas[i + 1].trim();
-                            }
-                            
-                            if (streamUrl) {
-                                // Criar item do canal
-                                const canalItem = document.createElement('div');
-                                canalItem.className = 'canal-item';
-                                canalItem.setAttribute('data-stream-url', streamUrl);
-                                canalItem.onclick = function() {
-                                    reproduzirCanal(streamUrl, nomeCanal, logoUrl);
-                                };
-                                
-                                canalItem.innerHTML = `
-                                    <img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                                    <div class="canal-info">
-                                        <p class="canal-nome">${nomeCanal}</p>
-                                    </div>
-                                `;
-                                
-                                canaisGrid.appendChild(canalItem);
-                            }
-                        }
-                    }
-                    
-                    if (canaisGrid.children.length === 0) {
-                        canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar canais:', error);
-                    canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
-                    showNotification("Erro ao carregar os canais", "error");
-                });
+const canaisGrid = document.getElementById("canais-grid");
+canaisGrid.innerHTML = '<p>Carregando canais...</p>';
+fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
+    .then(response => {
+        if (!response.ok) {
+throw new Error('Erro ao carregar os canais');
         }
-
+        return response.text();
+    })
+    .then(data => {
+        canaisGrid.innerHTML = '';
+        // Procurar por entradas de canais no formato #EXTINF:-1
+        const linhas = data.split('\n');
+        for (let i = 0; i < linhas.length; i++) {
+if (linhas[i].includes('#EXTINF:-1')) {
+    // Extrair informações do canal
+    const infoLinha = linhas[i];
+    let nomeCanal = "Canal";
+    // Tentar extrair o nome do canal
+    if (infoLinha.includes(',')) {
+        nomeCanal = infoLinha.split(',')[1].trim();
+    } else if (infoLinha.includes('tvg-name="')) {
+        const match = infoLinha.match(/tvg-name="([^"]+)"/);
+        if (match && match[1]) {
+nomeCanal = match[1];
+        }
+    }
+    // Procurar URL do logo
+    let logoUrl = "https://i.imgur.com/QsrJDbX.png"; // Logo padrão
+    const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
+    if (logoMatch && logoMatch[1]) {
+        logoUrl = logoMatch[1];
+    }
+    // Procurar URL do stream na próxima linha
+    let streamUrl = "";
+    if (i + 1 < linhas.length && !linhas[i + 1].startsWith('#')) {
+        streamUrl = linhas[i + 1].trim();
+    }
+    if (streamUrl) {
+        // Criar item do canal
+        const canalItem = document.createElement('div');
+        canalItem.className = 'canal-item';
+        canalItem.setAttribute('data-stream-url', streamUrl);
+        canalItem.onclick = function() {
+reproduzirCanal(streamUrl, nomeCanal, logoUrl);
+        };
+        canalItem.innerHTML = `
+<img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+<div class="canal-info">
+    <p class="canal-nome">${nomeCanal}</p>
+</div>
+        `;
+        canaisGrid.appendChild(canalItem);
+    }
+}
+        }
+        if (canaisGrid.children.length === 0) {
+canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao carregar canais:', error);
+        canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
+        showNotification("Erro ao carregar os canais", "error");
+    });
+        }
         // Reproduzir canal selecionado
         function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
-            // Fechar o modal de canais
-            closeCanaisModal();
-            
-            // Mostrar o player container
-            const playerContainer = document.getElementById('player-container');
-            playerContainer.style.display = 'flex';
-            
-            // Configurar o player para HLS
-            playerContainer.innerHTML = `
-                <div class="player hls-player">
-                    <video id="video-player" controls></video>
-                </div>
-                
-                <!-- Canal Info -->
-                <div class="channel-info">
-                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <div>
-                        <div class="channel-name">${nomeCanal}</div>
-                        <span class="live-indicator">AO VIVO</span>
-                    </div>
-                </div>
-            `;
-            
-            // Inicializar o player HLS
-            const video = document.getElementById('video-player');
-            
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(streamUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(err => {
-                        console.error('Erro ao iniciar reprodução:', err);
-                        showNotification("Erro ao iniciar reprodução", "error");
-                    });
-                });
-                
-                videoPlayer = hls;
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Para Safari/iOS
-                video.src = streamUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(err => {
-                        console.error('Erro ao iniciar reprodução:', err);
-                        showNotification("Erro ao iniciar reprodução", "error");
-                    });
-                });
-            } else {
-                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
-            }
-            
-            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
+// Fechar o modal de canais
+closeCanaisModal();
+// Mostrar o player container
+const playerContainer = document.getElementById('player-container');
+playerContainer.style.display = 'flex';
+// Configurar o player para HLS
+playerContainer.innerHTML = `
+    <div class="player hls-player">
+        <video id="video-player" controls></video>
+    </div>
+    <!-- Canal Info -->
+    <div class="channel-info">
+        <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+        <div>
+<div class="channel-name">${nomeCanal}</div>
+<span class="live-indicator">AO VIVO</span>
+        </div>
+    </div>
+`;
+// Inicializar o player HLS
+const video = document.getElementById('video-player');
+if (Hls.isSupported()) {
+    const hls = new Hls();
+    hls.loadSource(streamUrl);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+        video.play().catch(err => {
+console.error('Erro ao iniciar reprodução:', err);
+showNotification("Erro ao iniciar reprodução", "error");
+        });
+    });
+    videoPlayer = hls;
+} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Para Safari/iOS
+    video.src = streamUrl;
+    video.addEventListener('loadedmetadata', function() {
+        video.play().catch(err => {
+console.error('Erro ao iniciar reprodução:', err);
+showNotification("Erro ao iniciar reprodução", "error");
+        });
+    });
+} else {
+    showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
+}
+showNotification(`Reproduzindo: ${nomeCanal}`, "success");
         }
-
         // Proteção contra inspeção (mantido do código original)
         document.addEventListener('keydown', function (event) {
-            if (
-                event.key === 'F12' ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.key === 'U')
-            ) {
-                alert("Isso não é permitido 😢");
-                event.preventDefault();
-                return false;
-            }
+if (
+    event.key === 'F12' ||
+    (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
+    (event.ctrlKey && event.key === 'U')
+) {
+    alert("Isso não é permitido 😢");
+    event.preventDefault();
+    return false;
+}
         });
-
         document.addEventListener('contextmenu', function (event) {
-            alert("Isso não é permitido 😢");
-            event.preventDefault();
-            return false;
+alert("Isso não é permitido 😢");
+event.preventDefault();
+return false;
         });
-
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            loadProgramacao();
-            loadKeys();
-            createLiveNotificationPlayer();
-            
-            // Adicionar evento de tecla Enter para o input de chave
-            const keyInput = document.getElementById('key-input');
-            if (keyInput) {
-                keyInput.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        verifyKey();
-                    }
-                });
-            }
-            
-            // Adicionar evento de tecla Enter para o input de nome
-            const userName = document.getElementById('user-name');
-            if (userName) {
-                userName.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        sendToWhatsApp();
-                    }
-                });
-            }
-            
-            // Adicionar evento de tecla Enter para os campos de login
-            const loginUsername = document.getElementById('login-username');
-            const loginPassword = document.getElementById('login-password');
-            
-            if (loginUsername) {
-                loginUsername.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        verificarLogin();
-                    }
-                });
-            }
-            
-            if (loginPassword) {
-                loginPassword.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        verificarLogin();
-                    }
-                });
-            }
+loadProgramacao();
+loadKeys();
+createLiveNotificationPlayer();
+// Adicionar evento de tecla Enter para o input de chave
+const keyInput = document.getElementById('key-input');
+if (keyInput) {
+    keyInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+verifyKey();
+        }
+    });
+}
+// Adicionar evento de tecla Enter para o input de nome
+const userName = document.getElementById('user-name');
+if (userName) {
+    userName.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+sendToWhatsApp();
+        }
+    });
+}
+// Adicionar evento de tecla Enter para verificação de chave de canais
+const canaisKeyInput = document.getElementById('canais-key-input');
+if (canaisKeyInput) {
+    canaisKeyInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+verificarChaveCanais();
+        }
+    });
+}
         });
     </script>
-    
     <!-- IMPORTANTE: NÃO REMOVA ESTA TAG DE SCRIPT OU ESTE COMENTÁRIO! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
 </body>
-
 </html>
