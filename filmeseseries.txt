@@ -16,3 +16,5 @@ https://5b33b873179a2.streamlock.net:1443/live/livestream/chunklist_w849669884.m
 https://stream.ads.ottera.tv/playlist.m3u8?network_id=5442
 #EXTINF:-1 tvg-name="SporTV" tvg-logo="https://i.imgur.com/bwqLqyg.png"
 https://cr7v.short.gy/manoiTVOP2/sptvextra/75991634025/index.m3u8
+#EXTINF:-1 tvg-name="CNN BRASIL" tvg-logo="https://i.imgur.com/4dfmnBs.png"
+https://d25usgadhphvwi.cloudfront.net/hls/stv-plus-960x540/playlist.m3u8
