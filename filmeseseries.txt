@@ -1,2 +1,2 @@
-#EXTINF:-1 tvg-id="A&E" tvg-name="A&E" tvg-logo="https://imgur.com/EYAmbe4.png" group-title="Canais | FILMES E SERIES",A&E HD
+#EXTINF:-1 tvg-name="A&E" tvg-logo="https://i.imgur.com/EYAmbe4.png" group-title="FILMES • TERROR",Você Deveria Ter Partido (2020)
 http://178.162.225.117:2082/Tourobox2-6fBzdxRyKO/4nb4t6jIp4/225
