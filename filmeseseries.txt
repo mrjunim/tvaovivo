@@ -8,3 +8,9 @@ https://stream.ads.ottera.tv/playlist.m3u8?network_id=2553
 https://alanza.iptv2022.com/sh/RecordTV/index.m3u8?
 #EXTINF:-1 tvg-name="COMBATV" tvg-logo="https://i.imgur.com/kVyHCec.jpeg"
 https://aym-cbtv.otteravision.com/aym/cbtv/cbtv_480p.m3u8
+#EXTINF:-1 tvg-name="Globo RJ" tvg-logo="https://i.imgur.com/waZJG1M.png"
+https://new.m3u8.one/globorj/index.m3u8
+#EXTINF:-1 tvg-name="TV Brasil Central" tvg-logo="https://i.imgur.com/tbxAkds.png"
+https://tbc.zoeweb.tv:443/tbc/tbc/playlist.m3u8
+#EXTINF:-1 tvg-name="Toon Googles" tvg-logo="https://i.imgur.com/QyAPwBx.png"
+https://stream.ads.ottera.tv/playlist.m3u8?network_id=5442
