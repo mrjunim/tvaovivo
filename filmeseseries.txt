@@ -6,5 +6,5 @@ https://video01.soultv.com.br/cinemonde/cinemonde/playlist.m3u8
 https://stream.ads.ottera.tv/playlist.m3u8?network_id=2553
 #EXTINF:-1 tvg-name="RecordTV" tvg-logo="https://i.imgur.com/lyQ1v9M.png"
 https://alanza.iptv2022.com/sh/RecordTV/index.m3u8?
-#EXTINF:-1 tvg-name="HBO SIGNATURE" tvg-logo="https://i.imgur.com/OzINH3M.png"
-https://new.m3u8.one/hbosig/index.m3u8
+#EXTINF:-1 tvg-name="COMBATV" tvg-logo="https://i.imgur.com/kVyHCec.jpeg"
+https://aym-cbtv.otteravision.com/aym/cbtv/cbtv_480p.m3u8
