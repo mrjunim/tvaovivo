@@ -1,2 +1,4 @@
 #EXTINF:-1 tvg-name="Runtime Comédia HD" tvg-logo="https://i.imgur.com/TZ7LfjB.jpeg"
 https://stream.ads.ottera.tv/playlist.m3u8?network_id=2553
+#EXTINF:-1 tvg-name="TNT HD" tvg-logo="https://i.imgur.com/kA3ov0x.png"
+https://cr7v.short.gy/live/JOGOO8/Index.m3u8
