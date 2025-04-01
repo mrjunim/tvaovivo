@@ -1,2 +1,2 @@
-#EXTINF:-1 tvg-name="A&E" tvg-logo="https://i.imgur.com/EYAmbe4.png" group-title="FILMES • TERROR",Você Deveria Ter Partido (2020)
-http://178.162.225.117:2082/Tourobox2-6fBzdxRyKO/4nb4t6jIp4/225
+#EXTINF:-1 tvg-name="cartoon network" tvg-logo="https://logospng.org/wp-content/uploads/cartoon-network.png"
+https://tiyec63769.tiyec63769.workers.dev/cartoonnetwork/tracks-v1a1/mono.m3u8
