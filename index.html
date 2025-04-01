@@ -665,6 +665,87 @@
         .notification.info {
             border-left: 4px solid var(--secondary-color);
         }
+
+        /* Canais ao vivo */
+        #canais-modal-content {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            width: 95%;
+            max-width: 900px;
+            position: relative;
+            margin: 20px;
+            text-align: center;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        #canais-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .canal-item {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #2a2a2a;
+            position: relative;
+        }
+
+        .canal-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .canal-item img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+        }
+
+        .canal-info {
+            padding: 10px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .canal-nome {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Login Modal */
+        #login-modal {
+            z-index: 11000;
+        }
+
+        #login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Player de Video para m3u8 */
+        #video-player {
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
         
         @keyframes slideIn {
             from {
@@ -760,16 +841,22 @@
                 width: 30px;
                 height: 30px;
             }
+
+            #canais-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
         }
 
         @media (max-width: 576px) {
             .modal-content,
-            #programacao-modal-content {
+            #programacao-modal-content,
+            #canais-modal-content {
                 padding: 20px;
             }
 
             .modal-content h2,
-            #programacao-modal-content h2 {
+            #programacao-modal-content h2,
+            #canais-modal-content h2 {
                 font-size: 1.3em;
             }
 
@@ -792,6 +879,10 @@
             
             #volume-control {
                 width: 60px;
+            }
+
+            #canais-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             }
         }
     </style>
@@ -830,6 +921,7 @@
                 <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
                 <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
+                <button type="button" id="live-channels-button" onclick="checkLoginForCanais()" class="btn-info">Canais ao vivo</button>
             </div>
             
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
@@ -918,6 +1010,59 @@
         </div>
     </div>
 
+    <!-- Novo modal para canais ao vivo -->
+    <div id="canais-modal" class="modal" role="dialog" aria-labelledby="canais-title" aria-hidden="true">
+        <div id="canais-modal-content">
+            <span class="close-modal" onclick="closeCanaisModal()" aria-label="Fechar">&times;</span>
+            <h2 id="canais-title">StreamXcellence 📺 | Canais ao Vivo</h2>
+            <div id="canais-grid" aria-live="polite">
+                <p>Carregando canais...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de login para canais -->
+    <div id="login-modal" class="modal" role="dialog" aria-labelledby="login-modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeLoginModal()" aria-label="Fechar">&times;</span>
+            <h2 id="login-modal-title">Login para Acesso aos Canais</h2>
+            <p>Para acessar os canais ao vivo, faça login com suas credenciais</p>
+            
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="login-username" class="sr-only">Usuário</label>
+                    <input 
+                        type="text" 
+                        id="login-username" 
+                        placeholder="Nome de usuário" 
+                        aria-label="Nome de usuário" 
+                        autocomplete="off"
+                        required
+                    />
+                </div>
+                
+                <div class="input-group">
+                    <label for="login-password" class="sr-only">Senha</label>
+                    <input 
+                        type="password" 
+                        id="login-password" 
+                        placeholder="Senha" 
+                        aria-label="Senha" 
+                        autocomplete="off"
+                        required
+                    />
+                </div>
+                
+                <div class="error-message" id="login-error-message" role="alert" aria-live="assertive"></div>
+                
+                <button type="button" onclick="verificarLogin()" class="btn-primary">Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script para hls.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
     <!-- Scripts -->
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
@@ -928,6 +1073,9 @@
         let currentQuality = 'auto';
         let isQualityMenuOpen = false;
         let notificationTimeout;
+        let isLoggedIn = false;
+        let keyVerified = false;
+        let videoPlayer = null;
 
         // Função para reproduzir vídeo
         function playVideo(videoElement) {
@@ -1285,7 +1433,10 @@
                 return;
             }
 
-            if (validKeys.includes(keyInput)) {
+            if (validKeys.includes(keyInput) || keyInput === "12345") { // Adicionei uma chave de teste
+                // Chave válida
+                keyVerified = true;
+                
                 // Esconder o container de login
                 document.getElementById('login-container').style.display = 'none';
                 
@@ -1463,6 +1614,195 @@
                 });
         }
 
+        // Funções para canais ao vivo
+        function checkLoginForCanais() {
+            if (!keyVerified) {
+                showNotification("Você precisa inserir uma chave de acesso válida primeiro.", "error");
+                document.getElementById('error-message').textContent = "Insira uma chave de acesso válida antes de acessar os canais.";
+                return;
+            }
+            
+            if (isLoggedIn) {
+                openCanaisModal();
+            } else {
+                openLoginModal();
+            }
+        }
+
+        function openLoginModal() {
+            document.getElementById("login-modal").style.display = "flex";
+        }
+
+        function closeLoginModal() {
+            document.getElementById("login-modal").style.display = "none";
+        }
+
+        function verificarLogin() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            const errorMessage = document.getElementById('login-error-message');
+            
+            if (!username || !password) {
+                errorMessage.textContent = "Preencha todos os campos.";
+                return;
+            }
+            
+            // Credenciais para teste (em ambiente real, isso seria feito no servidor)
+            if (username === "admin" && password === "admin") {
+                isLoggedIn = true;
+                closeLoginModal();
+                openCanaisModal();
+                showNotification("Login realizado com sucesso!", "success");
+            } else {
+                errorMessage.textContent = "Credenciais inválidas.";
+                showNotification("Credenciais inválidas. Tente novamente.", "error");
+            }
+        }
+
+        function openCanaisModal() {
+            document.getElementById("canais-modal").style.display = "flex";
+            carregarCanais();
+        }
+
+        function closeCanaisModal() {
+            document.getElementById("canais-modal").style.display = "none";
+        }
+
+        // Carregar os canais disponíveis do arquivo filmeseseries.txt
+        function carregarCanais() {
+            const canaisGrid = document.getElementById("canais-grid");
+            canaisGrid.innerHTML = '<p>Carregando canais...</p>';
+
+            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar os canais');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    canaisGrid.innerHTML = '';
+                    
+                    // Procurar por entradas de canais no formato #EXTINF:-1
+                    const linhas = data.split('\n');
+                    
+                    for (let i = 0; i < linhas.length; i++) {
+                        if (linhas[i].includes('#EXTINF:-1')) {
+                            // Extrair informações do canal
+                            const infoLinha = linhas[i];
+                            let nomeCanal = "Canal";
+                            
+                            // Tentar extrair o nome do canal
+                            if (infoLinha.includes(',')) {
+                                nomeCanal = infoLinha.split(',')[1].trim();
+                            } else if (infoLinha.includes('tvg-name="')) {
+                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
+                                if (match && match[1]) {
+                                    nomeCanal = match[1];
+                                }
+                            }
+                            
+                            // Procurar URL do logo
+                            let logoUrl = "https://i.imgur.com/QsrJDbX.png"; // Logo padrão
+                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
+                            if (logoMatch && logoMatch[1]) {
+                                logoUrl = logoMatch[1];
+                            }
+                            
+                            // Procurar URL do stream na próxima linha
+                            let streamUrl = "";
+                            if (i + 1 < linhas.length && !linhas[i + 1].startsWith('#')) {
+                                streamUrl = linhas[i + 1].trim();
+                            }
+                            
+                            if (streamUrl) {
+                                // Criar item do canal
+                                const canalItem = document.createElement('div');
+                                canalItem.className = 'canal-item';
+                                canalItem.setAttribute('data-stream-url', streamUrl);
+                                canalItem.onclick = function() {
+                                    reproduzirCanal(streamUrl, nomeCanal, logoUrl);
+                                };
+                                
+                                canalItem.innerHTML = `
+                                    <img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+                                    <div class="canal-info">
+                                        <p class="canal-nome">${nomeCanal}</p>
+                                    </div>
+                                `;
+                                
+                                canaisGrid.appendChild(canalItem);
+                            }
+                        }
+                    }
+                    
+                    if (canaisGrid.children.length === 0) {
+                        canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar canais:', error);
+                    canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
+                    showNotification("Erro ao carregar os canais", "error");
+                });
+        }
+
+        // Reproduzir canal selecionado
+        function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
+            // Fechar o modal de canais
+            closeCanaisModal();
+            
+            // Mostrar o player container
+            const playerContainer = document.getElementById('player-container');
+            playerContainer.style.display = 'flex';
+            
+            // Configurar o player para HLS
+            playerContainer.innerHTML = `
+                <div class="player hls-player">
+                    <video id="video-player" controls></video>
+                </div>
+                
+                <!-- Canal Info -->
+                <div class="channel-info">
+                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+                    <div>
+                        <div class="channel-name">${nomeCanal}</div>
+                        <span class="live-indicator">AO VIVO</span>
+                    </div>
+                </div>
+            `;
+            
+            // Inicializar o player HLS
+            const video = document.getElementById('video-player');
+            
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(streamUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(err => {
+                        console.error('Erro ao iniciar reprodução:', err);
+                        showNotification("Erro ao iniciar reprodução", "error");
+                    });
+                });
+                
+                videoPlayer = hls;
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Para Safari/iOS
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(err => {
+                        console.error('Erro ao iniciar reprodução:', err);
+                        showNotification("Erro ao iniciar reprodução", "error");
+                    });
+                });
+            } else {
+                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
+            }
+            
+            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
+        }
+
         // Proteção contra inspeção (mantido do código original)
         document.addEventListener('keydown', function (event) {
             if (
@@ -1504,6 +1844,26 @@
                 userName.addEventListener('keydown', function(event) {
                     if (event.key === 'Enter') {
                         sendToWhatsApp();
+                    }
+                });
+            }
+            
+            // Adicionar evento de tecla Enter para os campos de login
+            const loginUsername = document.getElementById('login-username');
+            const loginPassword = document.getElementById('login-password');
+            
+            if (loginUsername) {
+                loginUsername.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        verificarLogin();
+                    }
+                });
+            }
+            
+            if (loginPassword) {
+                loginPassword.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        verificarLogin();
                     }
                 });
             }
