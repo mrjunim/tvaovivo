@@ -940,7 +940,7 @@
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
-            notification.className = \`notification \${type}\`;
+            notification.className = `notification ${type}`;
             notification.textContent = message;
             container.appendChild(notification);
             
@@ -959,7 +959,7 @@
             
             // Opção auto
             const autoOption = document.createElement('div');
-            autoOption.className = \`quality-option \${currentQuality === 'auto' ? 'active' : ''}\`;
+            autoOption.className = `quality-option ${currentQuality === 'auto' ? 'active' : ''}`;
             autoOption.textContent = 'Auto';
             autoOption.onclick = () => {
                 player.setQuality('auto');
@@ -973,13 +973,13 @@
             // Outras opções de qualidade
             qualities.forEach(quality => {
                 const option = document.createElement('div');
-                option.className = \`quality-option \${currentQuality === quality.name ? 'active' : ''}\`;
+                option.className = `quality-option ${currentQuality === quality.name ? 'active' : ''}`;
                 option.textContent = quality.name;
                 option.onclick = () => {
                     player.setQuality(quality.name);
                     currentQuality = quality.name;
                     updateQualityMenu();
-                    showNotification(\`Qualidade alterada para \${quality.name}\`, 'info');
+                    showNotification(`Qualidade alterada para ${quality.name}`, 'info');
                     toggleQualityMenu();
                 };
                 qualityMenu.appendChild(option);
@@ -1047,7 +1047,7 @@
                 });
 
                 player.addEventListener(Twitch.Player.OFFLINE, () => {
-                    document.getElementById('player-container').innerHTML = \`
+                    document.getElementById('player-container').innerHTML = `
                         <div class="offline-container">
                             <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
                                 <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
@@ -1056,7 +1056,7 @@
                                 <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
                             </div>
                         </div>
-                    \`;
+                    `;
                     const offlineVideo = document.getElementById('offline-video');
                     offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
                     playVideo(offlineVideo);
@@ -1185,7 +1185,7 @@
                         player.setMuted(false);
                         document.getElementById('volume-slider').value = newVolume;
                         updateVolumeIcon();
-                        showNotification(\`Volume: \${Math.round(newVolume * 100)}%\`, 'info');
+                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
                     }
                     event.preventDefault();
                     break;
@@ -1196,7 +1196,7 @@
                         player.setMuted(newVolume === 0);
                         document.getElementById('volume-slider').value = newVolume;
                         updateVolumeIcon();
-                        showNotification(\`Volume: \${Math.round(newVolume * 100)}%\`, 'info');
+                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
                     }
                     event.preventDefault();
                     break;
@@ -1262,7 +1262,7 @@
                     return response.text();
                 })
                 .then(data => {
-                    validKeys = data.split('\\n').map(key => key.trim()).filter(key => key.length > 0);
+                    validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length > 0);
                     console.log('Chaves carregadas com sucesso');
                 })
                 .catch(error => {
@@ -1354,8 +1354,8 @@
                 showNotification("Por favor, preencha seu nome antes de enviar.", "error");
                 return;
             }
-            const message = \`Olá StreamXcellence, me chamo \${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação imediata.\`;
-            window.location.href = \`https://wa.me/5564996718993?text=\${encodeURIComponent(message)}\`;
+            const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação imediata.`;
+            window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
         }
 
         // Função para copiar email
@@ -1424,7 +1424,7 @@
                     return response.text();
                 })
                 .then(data => {
-                    const programas = data.trim().split('\\n\\n');
+                    const programas = data.trim().split('\n\n');
                     
                     if (programas.length === 0) {
                         listaProgramacao.innerHTML = '<li>Nenhuma programação disponível no momento.</li>';
@@ -1434,7 +1434,7 @@
                     listaProgramacao.innerHTML = '';
 
                     programas.forEach(programa => {
-                        const detalhes = programa.split('\\n');
+                        const detalhes = programa.split('\n');
                         if (detalhes.length >= 4) {
                             const titulo = detalhes[0].replace("Título: ", "").trim();
                             const sinopse = detalhes[1].replace("Sinopse: ", "").trim();
@@ -1442,12 +1442,12 @@
                             const imgLink = detalhes[3].replace("Imagem Capa: ", "").trim();
 
                             const listItem = document.createElement('li');
-                            listItem.innerHTML = \`
-                                <h3>\${titulo}</h3>
-                                <img src="\${imgLink}" alt="Capa de \${titulo}" loading="lazy">
-                                <p><strong>Sinopse:</strong> \${sinopse}</p>
-                                <p><strong>Horário:</strong> \${horario}</p>
-                            \`;
+                            listItem.innerHTML = `
+                                <h3>${titulo}</h3>
+                                <img src="${imgLink}" alt="Capa de ${titulo}" loading="lazy">
+                                <p><strong>Sinopse:</strong> ${sinopse}</p>
+                                <p><strong>Horário:</strong> ${horario}</p>
+                            `;
                             listaProgramacao.appendChild(listItem);
                         }
                     });
