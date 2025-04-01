@@ -909,12 +909,14 @@ to {
         let keyVerified = false;
         let currentKey = "";
         let videoPlayer = null;
+
         // Função para reproduzir vídeo
         function playVideo(videoElement) {
 videoElement.play().catch(error => {
     console.log('Erro ao reproduzir o vídeo:', error);
 });
         }
+
         // Função para mostrar notificações
         function showNotification(message, type = 'info') {
 const container = document.getElementById('notification-container');
@@ -927,6 +929,7 @@ setTimeout(() => {
     notification.remove();
 }, 3000);
         }
+
         // Atualizar menu de qualidade
         function updateQualityMenu() {
 const qualityMenu = document.getElementById('quality-menu');
@@ -959,6 +962,7 @@ qualities.forEach(quality => {
     qualityMenu.appendChild(option);
 });
         }
+
         // Alternar menu de qualidade
         function toggleQualityMenu() {
 const qualityMenu = document.getElementById('quality-menu');
@@ -969,6 +973,7 @@ if (isQualityMenuOpen) {
     qualityMenu.classList.remove('active');
 }
         }
+
         // Função para criar player do Twitch com controles personalizados
         function createTwitchPlayer() {
 if (!document.querySelector("#twitch-embed iframe")) {
@@ -1027,6 +1032,7 @@ cancelable: true
     });
 }
         }
+
         // Inicializar controles personalizados
         function initCustomControls() {
 const playPauseBtn = document.getElementById('play-pause-btn');
@@ -1051,6 +1057,7 @@ fullscreenBtn.addEventListener('click', toggleFullscreen);
 // Adicionar listener para teclas
 document.addEventListener('keydown', handleKeyPress);
         }
+
         // Alternar reprodução
         function togglePlay() {
 if (player) {
@@ -1063,6 +1070,7 @@ if (player) {
     }
 }
         }
+
         // Alternar mudo
         function toggleMute() {
 if (player) {
@@ -1072,6 +1080,7 @@ if (player) {
     showNotification(muted ? 'Som ativado' : 'Som desativado', 'info');
 }
         }
+
         // Atualizar ícone de volume
         function updateVolumeIcon() {
 const muteBtn = document.getElementById('mute-btn');
@@ -1084,6 +1093,7 @@ if (player.getMuted() || player.getVolume() === 0) {
     muteBtn.textContent = '🔊';
 }
         }
+
         // Função para alternar tela cheia
         function toggleFullscreen() {
 const container = document.getElementById('player-container');
@@ -1107,6 +1117,7 @@ if (!document.fullscreenElement) {
     showNotification('Tela cheia desativada', 'info');
 }
         }
+
         // Manipular teclas de atalho
         function handleKeyPress(event) {
 // Só processar atalhos quando o player estiver visível
@@ -1149,6 +1160,7 @@ showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
         break;
 }
         }
+
         // Função para criar player de notificação ao vivo
         function createLiveNotificationPlayer() {
 const livePlayerContainer = document.getElementById("live-player");
@@ -1173,6 +1185,7 @@ function reloadLivePlayer() {
 }
 setInterval(reloadLivePlayer, 30000);
         }
+
         // Carregar o guia de programação
         function loadProgramacao() {
 fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -1192,6 +1205,7 @@ throw new Error('Resposta da rede não foi ok');
         document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
     });
         }
+
         // Carregar as chaves válidas
         let validKeys = [];
         function loadKeys() {
@@ -1215,6 +1229,7 @@ errorMessage.textContent = "Erro ao carregar chaves de acesso. Tente novamente m
         }
     });
         }
+
         // Verificar a chave inserida
         function verifyKey() {
 const keyInput = document.getElementById('key-input').value;
@@ -1251,17 +1266,21 @@ if (validKeys.includes(keyInput) || keyInput === "12345") { // Adicionei uma cha
     setTimeout(() => keyInputElem.classList.remove('shake'), 500);
 }
         }
+
         // Mostrar mensagem de boas-vindas
         function showWelcomeMessage() {
 showNotification("Bem-vindo ao StreamXcellence! Aproveite o conteúdo.", "success");
         }
+
         // Funções para os modais
         function openModal() {
 document.getElementById("modal").style.display = "flex";
         }
+
         function closeModal() {
 document.getElementById("modal").style.display = "none";
         }
+
         function sendToWhatsApp() {
 const name = document.getElementById("user-name").value;
 if (!name) {
@@ -1272,6 +1291,7 @@ if (!name) {
 const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação imediata.`;
 window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
         }
+
         // Função para copiar email
         function copyEmail() {
 const emailText = document.getElementById("pix-email").innerText;
@@ -1309,14 +1329,17 @@ showNotification("Falha ao copiar o email. Por favor, copie manualmente.", "erro
     document.body.removeChild(textArea);
 }
         }
+
         // Funções para o modal de programação
         function openProgramacaoModal() {
 document.getElementById("programacao-modal").style.display = "flex";
 carregarProgramacao();
         }
+
         function closeProgramacaoModal() {
 document.getElementById("programacao-modal").style.display = "none";
         }
+
         // Carregar a programação detalhada
         function carregarProgramacao() {
 const listaProgramacao = document.getElementById("programacao-lista");
@@ -1362,6 +1385,7 @@ listaProgramacao.innerHTML = '<li>Formato de programação incorreto.</li>';
         showNotification("Erro ao carregar a programação", "error");
     });
         }
+
         // Nova função para verificação de chave para acesso aos canais
         function openCanaisModalWithKey() {
 if (keyVerified) {
@@ -1377,6 +1401,7 @@ if (keyVerified) {
     }
 }
         }
+
         // Verificar chave digitada no modal de canais
         function verificarChaveCanais() {
 const keyInput = document.getElementById('canais-key-input').value;
@@ -1401,17 +1426,21 @@ if (validKeys.includes(keyInput) || keyInput === "12345") { // Usando a mesma va
     setTimeout(() => keyInputElem.classList.remove('shake'), 500);
 }
         }
+
         // Fechar modal de verificação de chave
         function closeCanaisKeyModal() {
 document.getElementById("canais-key-modal").style.display = "none";
         }
+
         function openCanaisModal() {
 document.getElementById("canais-modal").style.display = "flex";
 carregarCanais();
         }
+
         function closeCanaisModal() {
 document.getElementById("canais-modal").style.display = "none";
         }
+
         // Carregar os canais disponíveis do arquivo filmeseseries.txt
         function carregarCanais() {
 const canaisGrid = document.getElementById("canais-grid");
@@ -1427,51 +1456,67 @@ throw new Error('Erro ao carregar os canais');
         canaisGrid.innerHTML = '';
         // Procurar por entradas de canais no formato #EXTINF:-1
         const linhas = data.split('\n');
-        for (let i = 0; i < linhas.length; i++) {
-if (linhas[i].includes('#EXTINF:-1')) {
-    // Extrair informações do canal
-    const infoLinha = linhas[i];
-    let nomeCanal = "Canal";
-    // Tentar extrair o nome do canal
-    if (infoLinha.includes(',')) {
-        nomeCanal = infoLinha.split(',')[1].trim();
-    } else if (infoLinha.includes('tvg-name="')) {
-        const match = infoLinha.match(/tvg-name="([^"]+)"/);
-        if (match && match[1]) {
-nomeCanal = match[1];
+        let i = 0;
+        while (i < linhas.length) {
+            const linha = linhas[i].trim();
+            if (linha.startsWith('#EXTINF:-1')) {
+                // Extrair informações do canal
+                const infoLinha = linha;
+                let nomeCanal = "Canal";
+                
+                // Tentar extrair o nome do canal
+                if (infoLinha.includes('tvg-name="')) {
+                    const match = infoLinha.match(/tvg-name="([^"]+)"/);
+                    if (match && match[1]) {
+                        nomeCanal = match[1];
+                    }
+                } else if (infoLinha.includes(',')) {
+                    const commaIndex = infoLinha.lastIndexOf(',');
+                    if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
+                        nomeCanal = infoLinha.substring(commaIndex + 1).trim();
+                    }
+                }
+                
+                // Procurar URL do logo
+                let logoUrl = "https://i.imgur.com/QsrJDbX.png"; // Logo padrão
+                const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
+                if (logoMatch && logoMatch[1]) {
+                    logoUrl = logoMatch[1];
+                }
+                
+                // Procurar URL do stream na próxima linha
+                let streamUrl = "";
+                if (i + 1 < linhas.length) {
+                    streamUrl = linhas[i + 1].trim();
+                    // Pular para a próxima entrada
+                    i += 2;
+                } else {
+                    i++;
+                }
+                
+                if (streamUrl && !streamUrl.startsWith('#')) {
+                    // Criar item do canal
+                    const canalItem = document.createElement('div');
+                    canalItem.className = 'canal-item';
+                    canalItem.setAttribute('data-stream-url', streamUrl);
+                    canalItem.onclick = function() {
+                        reproduzirCanal(streamUrl, nomeCanal, logoUrl);
+                    };
+                    canalItem.innerHTML = `
+                        <img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+                        <div class="canal-info">
+                            <p class="canal-nome">${nomeCanal}</p>
+                        </div>
+                    `;
+                    canaisGrid.appendChild(canalItem);
+                }
+            } else {
+                i++;
+            }
         }
-    }
-    // Procurar URL do logo
-    let logoUrl = "https://i.imgur.com/QsrJDbX.png"; // Logo padrão
-    const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-    if (logoMatch && logoMatch[1]) {
-        logoUrl = logoMatch[1];
-    }
-    // Procurar URL do stream na próxima linha
-    let streamUrl = "";
-    if (i + 1 < linhas.length && !linhas[i + 1].startsWith('#')) {
-        streamUrl = linhas[i + 1].trim();
-    }
-    if (streamUrl) {
-        // Criar item do canal
-        const canalItem = document.createElement('div');
-        canalItem.className = 'canal-item';
-        canalItem.setAttribute('data-stream-url', streamUrl);
-        canalItem.onclick = function() {
-reproduzirCanal(streamUrl, nomeCanal, logoUrl);
-        };
-        canalItem.innerHTML = `
-<img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-<div class="canal-info">
-    <p class="canal-nome">${nomeCanal}</p>
-</div>
-        `;
-        canaisGrid.appendChild(canalItem);
-    }
-}
-        }
+        
         if (canaisGrid.children.length === 0) {
-canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
+            canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
         }
     })
     .catch(error => {
@@ -1480,54 +1525,111 @@ canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
         showNotification("Erro ao carregar os canais", "error");
     });
         }
+
         // Reproduzir canal selecionado
         function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
-// Fechar o modal de canais
-closeCanaisModal();
-// Mostrar o player container
-const playerContainer = document.getElementById('player-container');
-playerContainer.style.display = 'flex';
-// Configurar o player para HLS
-playerContainer.innerHTML = `
-    <div class="player hls-player">
-        <video id="video-player" controls></video>
-    </div>
-    <!-- Canal Info -->
-    <div class="channel-info">
-        <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-        <div>
-<div class="channel-name">${nomeCanal}</div>
-<span class="live-indicator">AO VIVO</span>
-        </div>
-    </div>
-`;
-// Inicializar o player HLS
-const video = document.getElementById('video-player');
-if (Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(streamUrl);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-        video.play().catch(err => {
-console.error('Erro ao iniciar reprodução:', err);
-showNotification("Erro ao iniciar reprodução", "error");
-        });
-    });
-    videoPlayer = hls;
-} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    // Para Safari/iOS
-    video.src = streamUrl;
-    video.addEventListener('loadedmetadata', function() {
-        video.play().catch(err => {
-console.error('Erro ao iniciar reprodução:', err);
-showNotification("Erro ao iniciar reprodução", "error");
-        });
-    });
-} else {
-    showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
-}
-showNotification(`Reproduzindo: ${nomeCanal}`, "success");
+console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
+            
+            // Fechar o modal de canais
+            closeCanaisModal();
+            
+            // Mostrar o player container
+            const playerContainer = document.getElementById('player-container');
+            playerContainer.style.display = 'flex';
+            
+            // Configurar o player para HLS
+            playerContainer.innerHTML = `
+                <div class="player hls-player">
+                    <video id="video-player" controls></video>
+                </div>
+                <!-- Canal Info -->
+                <div class="channel-info">
+                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+                    <div>
+                        <div class="channel-name">${nomeCanal}</div>
+                        <span class="live-indicator">AO VIVO</span>
+                    </div>
+                </div>
+            `;
+            
+            // Inicializar o player HLS
+            const video = document.getElementById('video-player');
+            
+            if (Hls.isSupported()) {
+                const hls = new Hls({
+                    maxBufferLength: 30,
+                    maxMaxBufferLength: 60,
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    testBandwidth: true,
+                    progressive: true,
+                    xhrSetup: function(xhr) {
+                        xhr.withCredentials = false; // Desabilitar credenciais para CORS
+                    }
+                });
+                
+                try {
+                    hls.loadSource(streamUrl);
+                    hls.attachMedia(video);
+                    
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        console.log('Manifest parsed, attempting to play');
+                        video.play().catch(err => {
+                            console.error('Erro ao iniciar reprodução:', err);
+                            showNotification("Erro ao iniciar reprodução: " + err.message, "error");
+                        });
+                    });
+                    
+                    hls.on(Hls.Events.ERROR, function(event, data) {
+                        console.error('Erro HLS:', data.type, data.details);
+                        if (data.fatal) {
+                            switch(data.type) {
+                                case Hls.ErrorTypes.NETWORK_ERROR:
+                                    console.error('Erro de rede, tentando recuperar...');
+                                    showNotification("Erro de rede. Tentando reconectar...", "error");
+                                    hls.startLoad();
+                                    break;
+                                case Hls.ErrorTypes.MEDIA_ERROR:
+                                    console.error('Erro de mídia, tentando recuperar...');
+                                    showNotification("Erro de mídia. Tentando recuperar...", "error");
+                                    hls.recoverMediaError();
+                                    break;
+                                default:
+                                    console.error('Erro fatal, não é possível recuperar');
+                                    showNotification("Não foi possível carregar o stream", "error");
+                                    hls.destroy();
+                                    break;
+                            }
+                        }
+                    });
+                    
+                    videoPlayer = hls;
+                } catch (error) {
+                    console.error('Erro ao configurar HLS:', error);
+                    showNotification("Erro ao configurar reprodução: " + error.message, "error");
+                }
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Para Safari/iOS
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    console.log('Metadados carregados, tentando reproduzir');
+                    video.play().catch(err => {
+                        console.error('Erro ao iniciar reprodução (Safari):', err);
+                        showNotification("Erro ao iniciar reprodução: " + err.message, "error");
+                    });
+                });
+                
+                video.addEventListener('error', function(e) {
+                    console.error('Erro no elemento de vídeo:', video.error);
+                    showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
+                });
+            } else {
+                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
+            }
+            
+            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
         }
+
         // Proteção contra inspeção (mantido do código original)
         document.addEventListener('keydown', function (event) {
 if (
@@ -1540,11 +1642,13 @@ if (
     return false;
 }
         });
+
         document.addEventListener('contextmenu', function (event) {
 alert("Isso não é permitido 😢");
 event.preventDefault();
 return false;
         });
+
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
 loadProgramacao();
