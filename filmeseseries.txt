@@ -14,3 +14,5 @@ https://stream.ads.ottera.tv/cl/250401cvm2h3imsvhjl4j9m7qg/848x480_1686360_2_f.m
 https://5b33b873179a2.streamlock.net:1443/live/livestream/chunklist_w849669884.m3u8
 #EXTINF:-1 tvg-name="Toon Googles" tvg-logo="https://i.imgur.com/QyAPwBx.png"
 https://stream.ads.ottera.tv/playlist.m3u8?network_id=5442
+#EXTINF:-1 tvg-name="SporTV" tvg-logo="https://i.imgur.com/bwqLqyg.png"
+https://cr7v.short.gy/manoiTVOP2/sptvextra/75991634025/index.m3u8
