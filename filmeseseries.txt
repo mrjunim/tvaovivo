@@ -1,3 +1,7 @@
+#EXTINF:-1 tvg-name="Discovery Turbo" tvg-logo="https://i.imgur.com/lH1Srp9.png"
+https://new.m3u8.one/discoveryturbo/index.m3u8
+#EXTINF:-1 tvg-name="Cine Monde" tvg-logo="https://i.imgur.com/dpat1CH.png"
+https://video01.soultv.com.br/cinemonde/cinemonde/playlist.m3u8
 #EXTINF:-1 tvg-name="Runtime Comédia HD" tvg-logo="https://i.imgur.com/TZ7LfjB.jpeg"
 https://stream.ads.ottera.tv/playlist.m3u8?network_id=2553
 #EXTINF:-1 tvg-name="RecordTV" tvg-logo="https://i.imgur.com/lyQ1v9M.png"
