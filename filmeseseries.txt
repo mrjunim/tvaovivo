@@ -8,14 +8,14 @@ https://stream.ads.ottera.tv/playlist.m3u8?network_id=2553
 https://alanza.iptv2022.com/sh/RecordTV/index.m3u8?
 #EXTINF:-1 tvg-name="COMBATV" tvg-logo="https://i.imgur.com/kVyHCec.jpeg"
 https://aym-cbtv.otteravision.com/aym/cbtv/cbtv_480p.m3u8
-#EXTINF:-1 tvg-name="CinePIX TV Ao Vivo" tvg-logo="https://imag.malavida.com/mvimgbig/download-fs/cinepix-33359-0.jpg"
-https://stream.ads.ottera.tv/cl/250401cvm2h3imsvhjl4j9m7qg/848x480_1686360_2_f.m3u8?i=728_6178
+#EXTINF:-1 tvg-name="RedeTV!" tvg-logo="https://i.imgur.com/2vYqKX5.png"
+https://59e4b6c1beddc.streamlock.net/tvodia/tvodia/chunklist_w157393531.m3u8?ManoTV
 #EXTINF:-1 tvg-name="TV Cultura Ao Vivo" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/8/82/Cultura_logo_2013.svg"
 https://5b33b873179a2.streamlock.net:1443/live/livestream/chunklist_w849669884.m3u8
 #EXTINF:-1 tvg-name="Toon Googles" tvg-logo="https://i.imgur.com/QyAPwBx.png"
 https://stream.ads.ottera.tv/playlist.m3u8?network_id=5442
-#EXTINF:-1 tvg-name="SporTV" tvg-logo="https://i.imgur.com/bwqLqyg.png"
-https://cr7v.short.gy/manoiTVOP2/sptvextra/75991634025/index.m3u8
+#EXTINF:-1 tvg-name="MEGAPIX" tvg-logo="https://imgur.com/H03jUu1.png"
+http://178.162.225.117:2082/Tourobox2-6fBzdxRyKO/4nb4t6jIp4/270
 #EXTINF:-1 tvg-name="TOP TV" tvg-logo="https://i.imgur.com/G5SWqHS.png"
 https://isaocorp.cloudecast.com/toptv/index.m3u8?ManoTV
 #EXTINF:-1 tvg-name="Hallo Anime" tvg-logo="https://i.imgur.com/2HaiovZ.jpeg"
