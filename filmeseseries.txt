@@ -1,3 +1,15 @@
+#EXTINF:-1 tvg-name="TELECINE ACTION" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/59/TelecineAction2021.png"
+https://embedcanaisdetv.site/tcaction/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-name="TELECINE CULT" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/9a/Telecine_Cult%282021%29.png"
+https://embedcanaisdetv.site/tccult/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-name="TELECINE FUN" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/4/4e/Telecine_Fun_2.png"
+https://embedcanaisdetv.site/tcfun/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-name="TELECINE PREMIUM" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/09/Telecine_Premium.png"
+https://embedcanaisdetv.site/tcpremium/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-name="TELECINE TOUCH" tvg-logo="https://i.imgur.com/Nky0hRo.png"
+https://embedcanaisdetv.site/tctouch/tracks-v1a1a2/mono.ts.m3u8
+#EXTINF:-1 tvg-name="CINEMAX" tvg-logo="https://cdn.mitvstatic.com/channels/br_cinemax-basic_m.png"
+https://embedcanaisdetv.site/cinemax/tracks-v1a1l1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="Discovery Turbo" tvg-logo="https://i.imgur.com/lH1Srp9.png"
 https://new.m3u8.one/discoveryturbo/index.m3u8
 #EXTINF:-1 tvg-name="Cine Monde" tvg-logo="https://i.imgur.com/dpat1CH.png"
