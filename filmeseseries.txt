@@ -14,8 +14,8 @@ https://59e4b6c1beddc.streamlock.net/tvodia/tvodia/chunklist_w157393531.m3u8?Man
 https://5b33b873179a2.streamlock.net:1443/live/livestream/chunklist_w849669884.m3u8
 #EXTINF:-1 tvg-name="Toon Googles" tvg-logo="https://i.imgur.com/QyAPwBx.png"
 https://stream.ads.ottera.tv/playlist.m3u8?network_id=5442
-#EXTINF:-1 tvg-name="MEGAPIX" tvg-logo="https://imgur.com/H03jUu1.png"
-http://178.162.225.117:2082/Tourobox2-6fBzdxRyKO/4nb4t6jIp4/270
+#EXTINF:-1 tvg-name="MULTISHOW" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/4/4a/Multishow.png"
+https://embedcanaisdetv.site/multishow/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="TOP TV" tvg-logo="https://i.imgur.com/G5SWqHS.png"
 https://isaocorp.cloudecast.com/toptv/index.m3u8?ManoTV
 #EXTINF:-1 tvg-name="Hallo Anime" tvg-logo="https://i.imgur.com/2HaiovZ.jpeg"
