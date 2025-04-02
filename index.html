@@ -7,1003 +7,1316 @@
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
-    <!-- Preconnect para melhorar o carregamento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <style>
-        /* Estilos Gerais */
         :root {
---primary-color: #e50914;
---primary-hover: #b20710;
---secondary-color: #007bff;
---secondary-hover: #0056b3;
---text-color: #ffffff;
---background-dark: #0a0a0a;
---background-darker: #000000;
---card-background: rgba(20, 20, 20, 0.8);
---card-background-hover: rgba(30, 30, 30, 0.9);
---border-color: #333;
---success-color: #4CAF50;
---success-hover: #367c39;
---guide-bg: rgba(34, 34, 34, 0.9);
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --secondary: #0ea5e9;
+            --secondary-hover: #0284c7;
+            --tertiary: #14b8a6;
+            --tertiary-hover: #0d9488;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #10b981;
+            --success-hover: #059669;
+            --warning: #f59e0b;
+            --warning-hover: #d97706;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --card: #1e293b;
+            --card-hover: #334155;
+            --border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --ring: rgba(139, 92, 246, 0.5);
         }
+
         * {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-        body {
-font-family: 'Arial', sans-serif;
-background-color: var(--background-dark);
-color: var(--text-color);
-display: flex;
-justify-content: center;
-align-items: center;
-min-height: 100vh;
-overflow-x: hidden;
-line-height: 1.6;
+
+        html, body {
+            height: 100%;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
         }
+
         .sr-only {
-position: absolute;
-width: 1px;
-height: 1px;
-padding: 0;
-margin: -1px;
-overflow: hidden;
-clip: rect(0, 0, 0, 0);
-border: 0;
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
-        /* Imagem de Fundo */
-        .background-image {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-object-fit: cover;
-z-index: -1;
-filter: brightness(0.7);
-        }
-        /* Container Principal */
+
         .container {
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: stretch;
-width: 90%;
-max-width: 1200px;
-padding: 20px;
-gap: 20px;
-z-index: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
         }
-        /* Componentes de Card */
-        .login-container,
-        .live-notification {
-background: var(--card-background);
-padding: 20px;
-border-radius: 12px;
-box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-text-align: center;
-flex: 1;
-animation: fadeIn 1s ease-in-out;
-display: flex;
-flex-direction: column;
-align-items: center;
-min-width: 300px;
-transition: all 0.3s ease;
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.95)), url('https://i.imgur.com/sj6EMam.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
-        .login-container:hover,
-        .live-notification:hover {
-background: var(--card-background-hover);
-box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+
+        /* Header & Logo */
+        .site-header {
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
-        .login-container {
-max-width: 300px;
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .live-notification {
-max-width: 630px;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
         }
-        /* Tipografia */
-        h1 {
-font-size: 1.8em;
-margin-bottom: 20px;
-color: #f1f1f1;
+
+        .logo-icon {
+            font-size: 1.75rem;
         }
-        h2 {
-font-size: 1.2em;
-margin-bottom: 10px;
-color: #f1f1f1;
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            padding: 2rem 0;
         }
-        .subtitle {
-margin-bottom: 20px;
-color: #bbb;
-font-size: 1em;
+
+        /* Auth Section */
+        .auth-section {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        /* Formulários e Inputs */
-        .input-group {
-width: 100%;
-margin-bottom: 15px;
+
+        .auth-card {
+            background-color: var(--surface);
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
         }
-        input {
-width: 100%;
-padding: 12px;
-margin-top: 10px;
-border: 1px solid var(--border-color);
-border-radius: 8px;
-background: #222;
-color: white;
-font-size: 1em;
-outline: none;
-transition: all 0.3s ease;
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
-        input:focus {
-border-color: var(--secondary-color);
-box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+
+        .auth-card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
         }
-        .button-group {
-width: 100%;
-display: flex;
-flex-direction: column;
-gap: 10px;
+
+        .auth-card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
-        button {
-width: 100%;
-padding: 12px;
-border: none;
-border-radius: 8px;
-font-size: 1em;
-font-weight: bold;
-cursor: pointer;
-transition: all 0.3s ease;
+
+        .auth-card-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
-        .btn-primary {
-background: var(--primary-color);
-color: white;
+
+        .auth-card-content {
+            padding: 1.5rem;
         }
-        .btn-primary:hover {
-background: var(--primary-hover);
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
         }
-        .btn-secondary {
-background: #333;
-color: white;
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
         }
-        .btn-secondary:hover {
-background: #444;
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .btn-info {
-background: var(--secondary-color);
-color: white;
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--ring);
         }
-        .btn-info:hover {
-background: var(--secondary-hover);
+
+        .form-input::placeholder {
+            color: var(--text-muted);
         }
-        button:active {
-transform: scale(0.95);
-        }
-        /* Mensagens de Erro */
+
         .error-message {
-color: #ff3b3b;
-font-size: 0.9em;
-margin-top: 10px;
-animation: shake 0.3s;
-min-height: 20px;
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            min-height: 1.25rem;
         }
-        /* Guia de Programação Scrolling */
-        #guide-container {
-width: 100%;
-background: var(--guide-bg);
-color: #fff;
-padding: 12px 0;
-margin-bottom: 20px;
-position: relative;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-border-radius: 8px;
-overflow: hidden;
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            text-decoration: none;
+            gap: 0.5rem;
         }
-        .scrolling-text {
-display: inline-flex;
-width: max-content;
-animation: scroll-text 30s linear infinite;
--webkit-animation: scroll-text 30s linear infinite;
+
+        .btn:hover {
+            transform: translateY(-1px);
         }
-        .scrolling-text span {
-white-space: nowrap;
-padding-right: 60px;
-font-size: 16px;
-font-weight: 500;
-letter-spacing: 0.5px;
-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+        .btn:active {
+            transform: translateY(1px);
         }
-        /* Animação de Zoom */
-        #zoom-image-container {
-display: none;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: var(--background-darker);
-z-index: 10;
-justify-content: center;
-align-items: center;
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
         }
-        #zoom-image {
-max-width: 100%;
-max-height: 100%;
-animation: zoomOut 6s forwards;
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
         }
-        /* Player Twitch */
-        .live-notification .player {
-width: 100%;
-height: 0;
-padding-bottom: 56.25%; /* Aspect ratio 16:9 */
-position: relative;
-border-radius: 8px;
-overflow: hidden;
-pointer-events: none;
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
         }
-        .live-notification .player iframe {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-border: none;
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
         }
-        #player-container {
-display: none;
-width: 100%;
-height: 100vh;
-text-align: center;
-border-radius: 0;
-overflow: hidden;
-box-shadow: none;
-background: linear-gradient(45deg, #141414, #222222);
-padding: 0;
-position: fixed;
-top: 0;
-left: 0;
-z-index: 2;
+
+        .btn-tertiary {
+            background-color: var(--tertiary);
+            color: white;
         }
-        #player-container.active {
-display: flex;
+
+        .btn-tertiary:hover {
+            background-color: var(--tertiary-hover);
         }
-        .player {
-width: 100%;
-height: 100%;
-position: relative;
-overflow: hidden;
-border-radius: 0;
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
         }
-        #player-container iframe {
-width: 100%;
-height: 100%;
-border: none;
-position: absolute;
-top: 0;
-left: 0;
+
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
-        /* Canal Info */
-        .channel-info {
-position: absolute;
-top: 20px;
-left: 20px;
-background: rgba(0, 0, 0, 0.7);
-padding: 10px 15px;
-border-radius: 5px;
-display: flex;
-align-items: center;
-gap: 10px;
-opacity: 0;
-transition: opacity 0.3s;
-z-index: 1000;
+
+        .btn-link {
+            background: none;
+            color: var(--primary);
+            padding: 0.5rem;
+            text-decoration: underline;
         }
-        #player-container:hover .channel-info {
-opacity: 1;
+
+        .btn-link:hover {
+            color: var(--primary-hover);
+            transform: none;
         }
-        .channel-logo {
-width: 40px;
-height: 40px;
-border-radius: 50%;
-object-fit: cover;
+
+        .btn-block {
+            width: 100%;
+            display: flex;
         }
-        .channel-name {
-font-weight: bold;
-font-size: 16px;
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
+
+        /* Live Preview Section */
+        .live-preview-section {
+            width: 100%;
+            margin: 0 auto;
+            max-width: 860px;
+        }
+
+        .live-preview-card {
+            background-color: var(--surface);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .live-preview-header {
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
         .live-indicator {
-background-color: #e50914;
-color: white;
-padding: 3px 8px;
-border-radius: 4px;
-font-size: 12px;
-font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            background-color: rgba(239, 68, 68, 0.2);
+            border-radius: 9999px;
+            color: #ef4444;
+            font-size: 0.75rem;
+            font-weight: 600;
+            gap: 0.25rem;
         }
-        /* Controles do Player */
+
+        .live-indicator::before {
+            content: '';
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: #ef4444;
+            border-radius: 9999px;
+            display: block;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-preview-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .guide-scroller {
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .scrolling-text {
+            display: inline-flex;
+            animation: scrollText 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .scrolling-text span {
+            padding-right: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .live-player-container {
+            aspect-ratio: 16 / 9;
+            background-color: #000;
+            position: relative;
+        }
+
+        /* Player Styles */
+        .player-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 1000;
+            display: none;
+        }
+
+        .player-container.active {
+            display: block;
+        }
+
+        .player-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .channel-info {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .player-container:hover .channel-info {
+            opacity: 1;
+        }
+
+        .channel-logo {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .channel-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .channel-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
         .player-controls {
-position: absolute;
-bottom: 0;
-left: 0;
-width: 100%;
-background: rgba(0, 0, 0, 0.7);
-padding: 15px;
-display: flex;
-justify-content: space-between;
-align-items: center;
-transition: opacity 0.3s ease;
-opacity: 0;
-z-index: 1000;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        #player-container:hover .player-controls {
-opacity: 1;
+
+        .player-container:hover .player-controls {
+            opacity: 1;
         }
-        .controls-left {
-display: flex;
-align-items: center;
-gap: 15px;
+
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        .controls-right {
-display: flex;
-align-items: center;
-gap: 15px;
-        }
+
         .control-btn {
-background: none;
-border: none;
-color: white;
-font-size: 24px;
-cursor: pointer;
-width: auto;
-padding: 8px;
-border-radius: 50%;
-transition: background-color 0.2s;
+            background: none;
+            border: none;
+            color: white;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
+
         .control-btn:hover {
-background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
-        /* Volume Control */
+
         .volume-container {
-display: flex;
-align-items: center;
-gap: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
+
         .volume-slider {
--webkit-appearance: none;
-width: 80px;
-height: 5px;
-border-radius: 5px;
-background: rgba(255, 255, 255, 0.3);
-outline: none;
-transition: opacity 0.2s;
+            -webkit-appearance: none;
+            width: 6rem;
+            height: 0.25rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            transition: opacity 0.2s;
         }
+
         .volume-slider::-webkit-slider-thumb {
--webkit-appearance: none;
-width: 15px;
-height: 15px;
-border-radius: 50%;
-background: #e50914;
-cursor: pointer;
+            -webkit-appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
         }
+
         .volume-slider::-moz-range-thumb {
-width: 15px;
-height: 15px;
-border-radius: 50%;
-background: #e50914;
-cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
         }
-        /* Menu de qualidade */
+
+        /* Channel Selector */
+        .channel-selector-button {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            z-index: 10;
+            opacity: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .player-container:hover .channel-selector-button {
+            opacity: 1;
+        }
+
+        .channel-selector-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .channel-selector-menu {
+            position: absolute;
+            top: 5rem;
+            right: 1.5rem;
+            background-color: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            width: 20rem;
+            max-height: calc(100vh - 10rem);
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+        }
+
+        .channel-selector-menu.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .channel-search {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .channel-search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .channel-search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .channels-list {
+            padding: 0.5rem;
+        }
+
+        .channel-category {
+            padding: 0.75rem 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .channel-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .channel-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .channel-item-logo {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.25rem;
+            object-fit: cover;
+        }
+
+        .channel-item-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Quality Menu */
         .quality-menu {
-position: absolute;
-bottom: 70px;
-right: 20px;
-background: rgba(0, 0, 0, 0.8);
-border-radius: 8px;
-padding: 10px;
-display: none;
+            position: absolute;
+            bottom: 5rem;
+            right: 1.5rem;
+            background-color: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            min-width: 10rem;
         }
+
         .quality-menu.active {
-display: block;
+            display: block;
+            animation: fadeIn 0.3s ease;
         }
+
         .quality-option {
-color: white;
-padding: 8px 12px;
-cursor: pointer;
-border-radius: 4px;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.875rem;
         }
+
         .quality-option:hover {
-background: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
+
         .quality-option.active {
-background: rgba(229, 9, 20, 0.6);
+            background-color: var(--primary);
+            color: white;
         }
-        /* Modais */
+
+        /* Modals */
         .modal {
-display: none;
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-color: rgba(0, 0, 0, 0.7);
-backdrop-filter: blur(10px);
--webkit-backdrop-filter: blur(10px);
-justify-content: center;
-align-items: center;
-z-index: 10000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 1.5rem;
         }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
         .modal-content {
-background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
-border-radius: 20px;
-box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-padding: 30px;
-text-align: center;
-position: relative;
-width: 90%;
-max-width: 500px;
-animation: fadeIn 0.4s ease-out;
-border: 1px solid #333;
+            background-color: var(--surface);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 550px;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: scaleIn 0.3s ease;
+            border: 1px solid var(--border);
         }
-        #programacao-modal-content {
-background-color: #1a1a1a;
-color: #fff;
-padding: 20px;
-border-radius: 12px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-width: 95%;
-max-width: 800px;
-position: relative;
-margin: 20px;
-text-align: left;
-overflow-y: auto;
-max-height: 80vh;
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .modal-content h2,
-        #programacao-modal-content h2 {
-color: #e50914;
-font-size: 1.5em;
-font-weight: 700;
-margin-bottom: 15px;
-text-transform: uppercase;
-letter-spacing: 2px;
-text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
         }
-        #programacao-modal-content h2 {
-color: #ffdb58;
-text-align: center;
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            transition: all 0.2s;
         }
-        .modal-content p {
-color: #ddd;
-font-size: 1em;
-line-height: 1.5;
-margin-bottom: 20px;
-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.1);
         }
-        .close,
-        .close-modal {
-position: absolute;
-top: 15px;
-right: 20px;
-font-size: 30px;
-color: #bbb;
-cursor: pointer;
-transition: color 0.3s ease, transform 0.2s ease;
+
+        .modal-body {
+            padding: 1.5rem;
         }
-        .close:hover,
-        .close-modal:hover {
-color: #ddd;
-transform: scale(1.1);
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
         }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 0.5rem;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.25rem;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Program Guide Modal */
+        .program-list {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
+
+        .program-card {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .program-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
+        .program-details {
+            padding: 1rem;
+        }
+
+        .program-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .program-time {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .program-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Channels Modal */
+        .channels-grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+
+        .channel-card {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .channel-thumbnail {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
+        .channel-card-info {
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .channel-card-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Notifications */
+        .notification-container {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 24rem;
+        }
+
+        .notification {
+            background-color: var(--surface);
+            border-left: 4px solid var(--primary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: slideInRight 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.info {
+            border-left-color: var(--secondary);
+        }
+
+        .notification.warning {
+            border-left-color: var(--warning);
+        }
+
+        .notification-icon {
+            min-width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-message {
+            font-size: 0.875rem;
+        }
+
         /* Email Container */
         .email-container {
-display: flex;
-align-items: center;
-justify-content: center;
-margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
         }
-        .email-container p {
-margin-right: 10px;
-font-size: 1em;
-color: #ddd;
-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+
+        .email-text {
+            flex: 1;
+            font-family: monospace;
+            font-size: 1rem;
         }
-        #copy-email {
-padding: 8px 12px;
-border: none;
-border-radius: 6px;
-background-color: var(--success-color);
-color: white;
-font-size: 0.8em;
-cursor: pointer;
-transition: background-color 0.3s ease;
-width: auto;
+
+        .copy-btn {
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            background-color: var(--success);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
         }
-        #copy-email:hover {
-background-color: var(--success-hover);
+
+        .copy-btn:hover {
+            background-color: var(--success-hover);
         }
-        /* Programação Lista */
-        #programacao-lista {
-list-style: none;
-padding: 0;
-margin: 0;
+
+        /* Zoom Image Container */
+        .zoom-image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
         }
-        #programacao-lista li {
-margin-bottom: 15px;
-padding-bottom: 10px;
-border-bottom: 1px solid #333;
+
+        .zoom-image {
+            max-width: 80%;
+            max-height: 80%;
+            animation: zoomOut 2s forwards 1s;
         }
-        #programacao-lista li:last-child {
-border-bottom: none;
-margin-bottom: 0;
-padding-bottom: 0;
-        }
-        #programacao-lista img {
-max-width: 100%;
-height: auto;
-border-radius: 8px;
-margin-bottom: 10px;
-max-height: 200px;
-object-fit: contain;
-        }       
-        /* Notificações */
-        #notification-container {
-position: fixed;
-top: 20px;
-right: 20px;
-z-index: 9999;
-        }       
-        .notification {
-background: rgba(0, 0, 0, 0.8);
-color: white;
-padding: 12px 20px;
-border-radius: 8px;
-margin-bottom: 10px;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
-max-width: 300px;
-        }
-        .notification.success {
-border-left: 4px solid var(--success-color);
-        }
-        .notification.error {
-border-left: 4px solid var(--primary-color);
-        }
-        .notification.info {
-border-left: 4px solid var(--secondary-color);
-        }
-        /* Canais ao vivo */
-        #canais-modal-content {
-background-color: #1a1a1a;
-color: #fff;
-padding: 20px;
-border-radius: 12px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-width: 95%;
-max-width: 900px;
-position: relative;
-margin: 20px;
-text-align: center;
-overflow-y: auto;
-max-height: 80vh;
-        }
-        #canais-grid {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-gap: 15px;
-margin-top: 20px;
-        }
-        .canal-item {
-cursor: pointer;
-transition: transform 0.3s ease, box-shadow 0.3s ease;
-border-radius: 8px;
-overflow: hidden;
-background: #2a2a2a;
-position: relative;
-        }
-        .canal-item:hover {
-transform: scale(1.05);
-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-        }
-        .canal-item img {
-width: 100%;
-aspect-ratio: 16/9;
-object-fit: cover;
-display: block;
-        }
-        .canal-info {
-padding: 10px;
-text-align: center;
-background: rgba(0, 0, 0, 0.7);
-position: absolute;
-bottom: 0;
-width: 100%;
-        }
-        .canal-nome {
-font-size: 14px;
-font-weight: bold;
-margin: 0;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-        }
-        /* Login Modal */
-        #login-modal {
-z-index: 11000;
-        }
-        #login-form {
-display: flex;
-flex-direction: column;
-gap: 15px;
-margin-top: 20px;
-        }
-        /* Player de Video para m3u8 */
-        #video-player {
-width: 100%;
-height: 100%;
-background: #000;
-        }
-        /* Seletor de canais no player */
-        #channel-selector-button {
-position: absolute;
-top: 20px;
-right: 20px;
-background: rgba(0, 0, 0, 0.7);
-color: white;
-padding: 10px 15px;
-border-radius: 5px;
-cursor: pointer;
-display: flex;
-align-items: center;
-gap: 10px;
-z-index: 1000;
-transition: background-color 0.3s;
-opacity: 0;
-}
-        #player-container:hover #channel-selector-button {
-opacity: 1;
-        }
-        #channel-selector-button:hover {
-background: rgba(50, 50, 50, 0.8);
-        }
-        #channel-selector-menu {
-position: absolute;
-top: 70px;
-right: 20px;
-width: 250px;
-max-height: 70vh;
-overflow-y: auto;
-background: rgba(0, 0, 0, 0.9);
-border-radius: 8px;
-padding: 15px;
-display: none;
-z-index: 1000;
-box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-        }
-        #channel-selector-menu.active {
-display: block;
-        }
-        .channel-selector-item {
-display: flex;
-align-items: center;
-gap: 10px;
-padding: 10px;
-cursor: pointer;
-border-radius: 5px;
-transition: background-color 0.2s;
-margin-bottom: 5px;
-        }
-        .channel-selector-item:hover {
-background: rgba(50, 50, 50, 0.8);
-        }
-        .channel-selector-item img {
-width: 30px;
-height: 30px;
-border-radius: 50%;
-object-fit: cover;
-        }
-        .channel-search {
-width: 100%;
-padding: 10px;
-margin-bottom: 15px;
-background: rgba(30, 30, 30, 0.8);
-border: 1px solid #333;
-border-radius: 5px;
-color: white;
-font-size: 14px;
-        }
-        .channel-search::placeholder {
-color: #999;
-        }
-        .channel-category {
-font-weight: bold;
-color: var(--primary-color);
-padding: 5px 0;
-margin: 10px 0 5px;
-border-bottom: 1px solid #333;
-        }
-        @keyframes slideIn {
-from {
-    transform: translateX(100%);
-    opacity: 0;
-}
-to {
-    transform: translateX(0);
-    opacity: 1;
-}
-        }
-        @keyframes fadeOut {
-from {
-    opacity: 1;
-}
-to {
-    opacity: 0;
-}
-        }
-        /* Animações */
+
+        /* Animations */
         @keyframes fadeIn {
-from {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-to {
-    opacity: 1;
-    transform: translateY(0);
-}
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
-        @keyframes shake {
-0%, 100% { transform: translateX(0); }
-25% { transform: translateX(-5px); }
-50% { transform: translateX(5px); }
-75% { transform: translateX(-5px); }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
         }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scrollText {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
         @keyframes zoomOut {
-0% {
-    transform: scale(1);
-    opacity: 1;
-}
-100% {
-    transform: scale(1.2);
-    opacity: 0;
-}
+            from {
+                transform: scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: scale(1.5);
+                opacity: 0;
+            }
         }
-        @keyframes scroll-text {
-0% { transform: translateX(0); }
-100% { transform: translateX(-50%); }
-        }
-        @-webkit-keyframes scroll-text {
-0% { -webkit-transform: translateX(0); }
-100% { -webkit-transform: translateX(-50%); }
-        }
-        /* Media Queries */
+
+        /* Media queries */
         @media (max-width: 768px) {
-.container {
-    flex-direction: column;
-    align-items: center;
-}
-.login-container,
-.live-notification {
-    width: 90%;
-    max-width: none;
-    min-width: auto;
-    margin-bottom: 20px;
-}
-.scrolling-text {
-    animation-duration: 25s;
-    -webkit-animation-duration: 25s;
-}
-#volume-control {
-    width: 80px;
-}
-.channel-info {
-    top: 10px;
-    left: 10px;
-    padding: 8px 10px;
-}
-.channel-logo {
-    width: 30px;
-    height: 30px;
-}
-#canais-grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-}
-#channel-selector-button {
-    top: 10px;
-    right: 10px;
-    padding: 8px 12px;
-}
-#channel-selector-menu {
-    width: 220px;
-    top: 60px;
-    right: 10px;
-}
+            .main-content {
+                gap: 1.5rem;
+            }
+
+            .auth-section,
+            .live-preview-section {
+                max-width: 100%;
+            }
+
+            .program-list {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .channel-selector-menu {
+                width: calc(100% - 3rem);
+                right: 1.5rem;
+                left: 1.5rem;
+            }
+
+            .player-controls {
+                padding: 1rem;
+            }
+
+            .channel-info {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .channel-selector-button {
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .volume-container {
+                display: none;
+            }
         }
-        @media (max-width: 576px) {
-.modal-content,
-#programacao-modal-content,
-#canais-modal-content {
-    padding: 20px;
-}
-.modal-content h2,
-#programacao-modal-content h2,
-#canais-modal-content h2 {
-    font-size: 1.3em;
-}
-.close,
-.close-modal {
-    font-size: 24px;
-    top: 10px;
-    right: 15px;
-}
-.scrolling-text {
-    animation-duration: 20s;
-    -webkit-animation-duration: 20s;
-    font-size: 14px;
-}
-.scrolling-text span {
-    padding-right: 40px;
-}
-#volume-control {
-    width: 60px;
-}
-#canais-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-}
-#channel-selector-menu {
-    width: 200px;
-    max-height: 60vh;
-}
+
+        @media (max-width: 480px) {
+            .channels-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .program-list {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                max-height: calc(100vh - 2rem);
+            }
+
+            .btn {
+                padding: 0.625rem 1.25rem;
+            }
+
+            .site-header {
+                padding: 0.75rem 0;
+            }
+
+            .logo {
+                font-size: 1.25rem;
+            }
+
+            .auth-card-title {
+                font-size: 1.25rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Imagem de fundo -->
-    <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
-    <!-- Imagem de animação inicial -->
-    <div id="zoom-image-container">
-        <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Imagem de boas-vindas">
+    <!-- Notification Container -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- Zoom Image Animation -->
+    <div id="zoom-image-container" class="zoom-image-container">
+        <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Welcome" class="zoom-image">
     </div>
-    <!-- Container de notificações -->
-    <div id="notification-container"></div>
-    <main class="container">
-        <!-- Seção de login -->
-        <section class="login-container" id="login-container">
-<h1>📺 Bem-vindo ao StreamXcellence 🎬</h1>
-<p class="subtitle">Digite a chave de acesso para entrar</p>
-<div class="input-group">
-    <label for="key-input" class="sr-only">Chave de acesso</label>
-    <input 
-        type="text" 
-        id="key-input" 
-        placeholder="Digite a chave de acesso" 
-        aria-label="Chave de acesso" 
-        autocomplete="off"
-    />
-</div>
-<div class="button-group">
-    <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
-    <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
-    <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
-    <button type="button" id="live-channels-button" onclick="openCanaisModalWithKey()" class="btn-info">Canais ao vivo</button>
-</div>
-<div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-        </section>
-        <!-- Seção de notificação ao vivo -->
-        <section class="live-notification" id="live-notification">
-<h2>🔴 O que está passando agora 📺</h2>
-<div id="guide-container" role="marquee">
-    <div class="scrolling-text" id="scrolling-text">
-        <span id="guide-text">Carregando guia...</span>
-        <span id="guide-text-duplicate">Carregando guia...</span>
+
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="site-header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">📺</span>
+                        <span>StreamXcellence</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <div class="auth-section" id="login-container">
+                    <div class="auth-card">
+                        <div class="auth-card-header">
+                            <h1 class="auth-card-title">Bem-vindo ao StreamXcellence</h1>
+                            <p class="auth-card-subtitle">Digite a chave de acesso para entrar</p>
+                        </div>
+                        <div class="auth-card-content">
+                            <div class="form-group">
+                                <label for="key-input" class="sr-only">Chave de acesso</label>
+                                <input 
+                                    type="text" 
+                                    id="key-input" 
+                                    class="form-input" 
+                                    placeholder="Digite a chave de acesso" 
+                                    aria-label="Chave de acesso" 
+                                    autocomplete="off"
+                                >
+                                <div id="error-message" class="error-message" role="alert" aria-live="assertive"></div>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" onclick="verifyKey()" class="btn btn-primary btn-block">Entrar</button>
+                                <button type="button" onclick="openModal()" class="btn btn-outline btn-block">Obter chave de acesso</button>
+                                <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn btn-secondary btn-block">Ver guia de programação</button>
+                                <button type="button" id="live-channels-button" onclick="openCanaisModalWithKey()" class="btn btn-tertiary btn-block">Canais ao vivo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="live-preview-section" id="live-notification">
+                    <div class="live-preview-card">
+                        <div class="live-preview-header">
+                            <div class="live-indicator"></div>
+                            <h2 class="live-preview-title">O que está passando agora</h2>
+                        </div>
+                        <div class="guide-scroller" id="guide-container" role="marquee">
+                            <div class="scrolling-text" id="scrolling-text">
+                                <span id="guide-text">Carregando guia...</span>
+                                <span id="guide-text-duplicate">Carregando guia...</span>
+                            </div>
+                        </div>
+                        <div class="live-player-container" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-</div>
-<div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
-        </section>
-    </main>
-    <!-- Container do player principal -->
-    <div id="player-container" aria-live="polite">
-        <div class="player twitch-player" id="player">
-<div id="twitch-embed"></div>
-        </div>
-        <!-- Canal Info -->
-        <div class="channel-info">
-<img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
-<div>
-    <div class="channel-name">StreamXcellence</div>
-    <span class="live-indicator">AO VIVO</span>
-</div>
-        </div>
-        <!-- Botão seletor de canais -->
-        <div id="channel-selector-button" onclick="toggleChannelSelector()">
-            <span>📺 Mudar Canal</span>
-        </div>
-        <!-- Menu de seleção de canais -->
-        <div id="channel-selector-menu">
-            <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
-            <div id="channels-list">
-                <!-- Canais serão carregados aqui dinamicamente -->
-                <p>Carregando canais...</p>
+
+    <!-- Player Container -->
+    <div id="player-container" class="player-container" aria-live="polite">
+        <div class="player-wrapper">
+            <div id="twitch-embed"></div>
+            
+            <!-- Channel Info -->
+            <div class="channel-info">
+                <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
+                <div class="channel-details">
+                    <div class="channel-name">StreamXcellence</div>
+                    <div class="live-indicator">AO VIVO</div>
+                </div>
+            </div>
+            
+            <!-- Channel Selector Button -->
+            <div id="channel-selector-button" class="channel-selector-button" onclick="toggleChannelSelector()">
+                <span>📺 Mudar Canal</span>
+            </div>
+            
+            <!-- Channel Selector Menu -->
+            <div id="channel-selector-menu" class="channel-selector-menu">
+                <div class="channel-search">
+                    <input type="text" id="channel-search" class="channel-search-input" placeholder="Buscar canais..." oninput="filtrarCanais()">
+                </div>
+                <div id="channels-list" class="channels-list">
+                    <!-- Canais serão carregados aqui dinamicamente -->
+                    <p>Carregando canais...</p>
+                </div>
+            </div>
+            
+            <!-- Quality Menu -->
+            <div id="quality-menu" class="quality-menu"></div>
+            
+            <!-- Player Controls -->
+            <div class="player-controls">
+                <div class="controls-left">
+                    <button id="play-pause-btn" class="control-btn">⏸️</button>
+                    <div class="volume-container">
+                        <button id="mute-btn" class="control-btn">🔊</button>
+                        <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+                    </div>
+                </div>
+                <div class="controls-right">
+                    <button id="quality-btn" class="control-btn">⚙️</button>
+                    <button id="fullscreen-btn" class="control-btn">⛶</button>
+                </div>
             </div>
         </div>
-        <!-- Menu de Qualidade -->
-        <div id="quality-menu" class="quality-menu"></div>
-        <!-- Controles do Player -->
-        <div class="player-controls">
-<div class="controls-left">
-    <button id="play-pause-btn" class="control-btn">⏸️</button>
-    <div class="volume-container">
-        <button id="mute-btn" class="control-btn">🔊</button>
-        <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
     </div>
-</div>
-<div class="controls-right">
-    <button id="quality-btn" class="control-btn">⚙️</button>
-    <button id="fullscreen-btn" class="control-btn">⛶</button>
-</div>
-        </div>
-    </div>
-    <!-- Modal de aquisição de chave -->
+
+    <!-- Modals -->
+    <!-- Get Key Modal -->
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
-<span class="close" onclick="closeModal()" aria-label="Fechar">&times;</span>
-<h2 id="modal-title">Adquirir Chave para Acesso</h2>
-<p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e
-    envie o comprovante para liberação imediata.</p>
-<p><strong>Valor Simbólico: R$ 2,00</strong></p>
-<div class="email-container">
-    <p id="pix-email">Pix: lourimarcos@outlook.com</p>
-    <button id="copy-email" onclick="copyEmail()" aria-label="Copiar email">Copiar</button>
-</div>
-<p>A chave tem duração de <strong>15 dias</strong></p>
-<div class="input-group">
-    <label for="user-name" class="sr-only">Seu Nome</label>
-    <input type="text" id="user-name" placeholder="Seu Nome" aria-required="true" />
-</div>
-<button type="button" onclick="sendToWhatsApp()" class="btn-primary">Enviar</button>
+            <div class="modal-header">
+                <h2 id="modal-title" class="modal-title">Adquirir Chave de Acesso</h2>
+                <button class="modal-close" onclick="closeModal()" aria-label="Fechar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e envie o comprovante para liberação imediata.</p>
+                <p><strong>Valor: R$ 2,00</strong></p>
+                <div class="email-container">
+                    <span id="pix-email" class="email-text">Pix: lourimarcos@outlook.com</span>
+                    <button id="copy-email" class="copy-btn" onclick="copyEmail()" aria-label="Copiar email">Copiar</button>
+                </div>
+                <p><strong>A chave tem duração de 15 dias</strong></p>
+                <div class="form-group">
+                    <label for="user-name" class="form-label">Seu Nome</label>
+                    <input type="text" id="user-name" class="form-input" placeholder="Digite seu nome" aria-required="true" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="sendToWhatsApp()">Enviar</button>
+            </div>
         </div>
     </div>
-    <!-- Modal do guia de programação -->
+    
+    <!-- Programação Modal -->
     <div id="programacao-modal" class="modal" role="dialog" aria-labelledby="programacao-title" aria-hidden="true">
-        <div id="programacao-modal-content">
-<span class="close-modal" onclick="closeProgramacaoModal()" aria-label="Fechar">&times;</span>
-<h2 id="programacao-title">StreamXcellence 📺 | Guia de Programação</h2>
-<ul id="programacao-lista" aria-live="polite"></ul>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="programacao-title" class="modal-title">StreamXcellence | Guia de Programação</h2>
+                <button class="modal-close" onclick="closeProgramacaoModal()" aria-label="Fechar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="programacao-lista" class="program-list" aria-live="polite"></div>
+            </div>
         </div>
     </div>
-    <!-- Novo modal para canais ao vivo -->
+    
+    <!-- Canais Modal -->
     <div id="canais-modal" class="modal" role="dialog" aria-labelledby="canais-title" aria-hidden="true">
-        <div id="canais-modal-content">
-<span class="close-modal" onclick="closeCanaisModal()" aria-label="Fechar">&times;</span>
-<h2 id="canais-title">StreamXcellence 📺 | Canais ao Vivo</h2>
-<div id="canais-grid" aria-live="polite">
-    <p>Carregando canais...</p>
-</div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="canais-title" class="modal-title">StreamXcellence | Canais ao Vivo</h2>
+                <button class="modal-close" onclick="closeCanaisModal()" aria-label="Fechar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="canais-grid" class="channels-grid" aria-live="polite">
+                    <p>Carregando canais...</p>
+                </div>
+            </div>
         </div>
     </div>
-    <!-- Modal para verificação de chave para canais -->
+    
+    <!-- Verificação de Chave para Canais Modal -->
     <div id="canais-key-modal" class="modal" role="dialog" aria-labelledby="canais-key-title" aria-hidden="true">
         <div class="modal-content">
-<span class="close-modal" onclick="closeCanaisKeyModal()" aria-label="Fechar">&times;</span>
-<h2 id="canais-key-title">Verificação de Acesso</h2>
-<p>Digite sua chave de acesso para ver os canais ao vivo</p>
-<div class="input-group">
-    <label for="canais-key-input" class="sr-only">Chave de acesso</label>
-    <input 
-        type="text" 
-        id="canais-key-input" 
-        placeholder="Digite a chave de acesso" 
-        aria-label="Chave de acesso" 
-        autocomplete="off"
-        required
-    />
-</div>
-<div class="error-message" id="canais-key-error-message" role="alert" aria-live="assertive"></div>
-<button type="button" onclick="verificarChaveCanais()" class="btn-primary">Acessar Canais</button>
+            <div class="modal-header">
+                <h2 id="canais-key-title" class="modal-title">Verificação de Acesso</h2>
+                <button class="modal-close" onclick="closeCanaisKeyModal()" aria-label="Fechar">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Digite sua chave de acesso para ver os canais ao vivo</p>
+                <div class="form-group">
+                    <label for="canais-key-input" class="form-label">Chave de acesso</label>
+                    <input 
+                        type="text" 
+                        id="canais-key-input" 
+                        class="form-input" 
+                        placeholder="Digite a chave de acesso" 
+                        aria-label="Chave de acesso" 
+                        autocomplete="off"
+                        required
+                    />
+                    <div id="canais-key-error-message" class="error-message" role="alert" aria-live="assertive"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="verificarChaveCanais()">Acessar Canais</button>
+            </div>
         </div>
     </div>
-    <!-- Script para hls.js -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
+        // ... keep existing code
+
         // Variáveis globais
         let player;
         let livePlayer;
@@ -1019,946 +1332,139 @@ to {
 
         // Função para reproduzir vídeo
         function playVideo(videoElement) {
-videoElement.play().catch(error => {
-    console.log('Erro ao reproduzir o vídeo:', error);
-});
+            videoElement.play().catch(error => {
+                console.log('Erro ao reproduzir o vídeo:', error);
+            });
         }
 
         // Função para mostrar notificações
         function showNotification(message, type = 'info') {
-const container = document.getElementById('notification-container');
-const notification = document.createElement('div');
-notification.className = `notification ${type}`;
-notification.textContent = message;
-container.appendChild(notification);
-// Remover notificação após 3 segundos
-setTimeout(() => {
-    notification.remove();
-}, 3000);
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let icon = '💬';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            notification.innerHTML = `
+                <div class="notification-icon">${icon}</div>
+                <div class="notification-content">
+                    <div class="notification-message">${message}</div>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Remover notificação após 3 segundos
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
 
         // Atualizar menu de qualidade
         function updateQualityMenu() {
-const qualityMenu = document.getElementById('quality-menu');
-qualityMenu.innerHTML = '';
-if (!player || !qualities.length) return;
-// Opção auto
-const autoOption = document.createElement('div');
-autoOption.className = `quality-option ${currentQuality === 'auto' ? 'active' : ''}`;
-autoOption.textContent = 'Auto';
-autoOption.onclick = () => {
-    player.setQuality('auto');
-    currentQuality = 'auto';
-    updateQualityMenu();
-    showNotification('Qualidade alterada para Automático', 'info');
-    toggleQualityMenu();
-};
-qualityMenu.appendChild(autoOption);
-// Outras opções de qualidade
-qualities.forEach(quality => {
-    const option = document.createElement('div');
-    option.className = `quality-option ${currentQuality === quality.name ? 'active' : ''}`;
-    option.textContent = quality.name;
-    option.onclick = () => {
-        player.setQuality(quality.name);
-        currentQuality = quality.name;
-        updateQualityMenu();
-        showNotification(`Qualidade alterada para ${quality.name}`, 'info');
-        toggleQualityMenu();
-    };
-    qualityMenu.appendChild(option);
-});
+            const qualityMenu = document.getElementById('quality-menu');
+            qualityMenu.innerHTML = '';
+            if (!player || !qualities.length) return;
+            
+            // Opção auto
+            const autoOption = document.createElement('div');
+            autoOption.className = `quality-option ${currentQuality === 'auto' ? 'active' : ''}`;
+            autoOption.textContent = 'Auto';
+            autoOption.onclick = () => {
+                player.setQuality('auto');
+                currentQuality = 'auto';
+                updateQualityMenu();
+                showNotification('Qualidade alterada para Automático', 'info');
+                toggleQualityMenu();
+            };
+            qualityMenu.appendChild(autoOption);
+            
+            // Outras opções de qualidade
+            qualities.forEach(quality => {
+                const option = document.createElement('div');
+                option.className = `quality-option ${currentQuality === quality.name ? 'active' : ''}`;
+                option.textContent = quality.name;
+                option.onclick = () => {
+                    player.setQuality(quality.name);
+                    currentQuality = quality.name;
+                    updateQualityMenu();
+                    showNotification(`Qualidade alterada para ${quality.name}`, 'info');
+                    toggleQualityMenu();
+                };
+                qualityMenu.appendChild(option);
+            });
         }
 
         // Alternar menu de qualidade
         function toggleQualityMenu() {
-const qualityMenu = document.getElementById('quality-menu');
-isQualityMenuOpen = !isQualityMenuOpen;
-if (isQualityMenuOpen) {
-    qualityMenu.classList.add('active');
-} else {
-    qualityMenu.classList.remove('active');
-}
-        }
-
-        // Função para criar player do Twitch com controles personalizados
-        function createTwitchPlayer() {
-if (!document.querySelector("#twitch-embed iframe")) {
-    player = new Twitch.Player("twitch-embed", {
-        channel: "lourimarcos",
-        width: "100%",
-        height: "100%",
-        controls: false,
-        autoplay: true,
-        muted: false,
-        parent: ["localhost", window.location.hostname]
-    });
-    player.addEventListener(Twitch.Player.READY, () => {
-        player.setVolume(0.5);
-        player.setMuted(false);
-        player.play();
-        // Obter qualidades disponíveis
-        setTimeout(() => {
-qualities = player.getQualities();
-updateQualityMenu();
-        }, 2000);
-        // Inicializar controles personalizados
-        initCustomControls();
-        const playerElement = player.getIframe();
-        const clickEvent = new MouseEvent('click', {
-view: window,
-bubbles: true,
-cancelable: true
-        });
-        playerElement.dispatchEvent(clickEvent);
-        showNotification('Reprodução iniciada', 'success');
-    });
-    player.addEventListener(Twitch.Player.PLAY, () => {
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        if (playPauseBtn) playPauseBtn.textContent = '⏸️';
-    });
-    player.addEventListener(Twitch.Player.PAUSE, () => {
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        if (playPauseBtn) playPauseBtn.textContent = '▶️';
-    });
-    player.addEventListener(Twitch.Player.OFFLINE, () => {
-        document.getElementById('player-container').innerHTML = `
-<div class="offline-container">
-    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-    </video>
-    <div class="offline-message">
-        <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-    </div>
-</div>
-        `;
-        const offlineVideo = document.getElementById('offline-video');
-        offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-        playVideo(offlineVideo);
-        showNotification('O canal está offline no momento', 'error');
-    });
-}
-        }
-
-        // Inicializar controles personalizados
-        function initCustomControls() {
-const playPauseBtn = document.getElementById('play-pause-btn');
-const muteBtn = document.getElementById('mute-btn');
-const volumeSlider = document.getElementById('volume-slider');
-const qualityBtn = document.getElementById('quality-btn');
-const fullscreenBtn = document.getElementById('fullscreen-btn');
-// Definir volume inicial
-volumeSlider.value = player.getVolume();
-updateVolumeIcon();
-// Adicionar eventos para os controles
-playPauseBtn.addEventListener('click', togglePlay);
-volumeSlider.addEventListener('input', () => {
-    const volume = parseFloat(volumeSlider.value);
-    player.setVolume(volume);
-    player.setMuted(volume === 0);
-    updateVolumeIcon();
-});
-muteBtn.addEventListener('click', toggleMute);
-qualityBtn.addEventListener('click', toggleQualityMenu);
-fullscreenBtn.addEventListener('click', toggleFullscreen);
-// Adicionar listener para teclas
-document.addEventListener('keydown', handleKeyPress);
-        }
-
-        // Alternar reprodução
-        function togglePlay() {
-if (player) {
-    if (player.isPaused()) {
-        player.play();
-        showNotification('Reproduzindo', 'info');
-    } else {
-        player.pause();
-        showNotification('Pausado', 'info');
-    }
-}
-        }
-
-        // Alternar mudo
-        function toggleMute() {
-if (player) {
-    const muted = player.getMuted();
-    player.setMuted(!muted);
-    updateVolumeIcon();
-    showNotification(muted ? 'Som ativado' : 'Som desativado', 'info');
-}
-        }
-
-        // Atualizar ícone de volume
-        function updateVolumeIcon() {
-const muteBtn = document.getElementById('mute-btn');
-if (!muteBtn || !player) return;
-if (player.getMuted() || player.getVolume() === 0) {
-    muteBtn.textContent = '🔇';
-} else if (player.getVolume() < 0.5) {
-    muteBtn.textContent = '🔉';
-} else {
-    muteBtn.textContent = '🔊';
-}
-        }
-
-        // Função para alternar tela cheia
-        function toggleFullscreen() {
-const container = document.getElementById('player-container');
-if (!document.fullscreenElement) {
-    if (container.requestFullscreen) {
-        container.requestFullscreen();
-    } else if (container.webkitRequestFullscreen) { /* Safari */
-        container.webkitRequestFullscreen();
-    } else if (container.msRequestFullscreen) { /* IE11 */
-        container.msRequestFullscreen();
-    }
-    showNotification('Tela cheia ativada', 'info');
-} else {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) { /* Safari */
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { /* IE11 */
-        document.msExitFullscreen();
-    }
-    showNotification('Tela cheia desativada', 'info');
-}
-        }
-
-        // Manipular teclas de atalho
-        function handleKeyPress(event) {
-// Só processar atalhos quando o player estiver visível
-if (!document.getElementById('player-container').style.display === 'flex') return;
-switch(event.key) {
-    case ' ':
-    case 'k':
-        togglePlay();
-        event.preventDefault();
-        break;
-    case 'm':
-        toggleMute();
-        event.preventDefault();
-        break;
-    case 'f':
-        toggleFullscreen();
-        event.preventDefault();
-        break;
-    case 'ArrowUp':
-        if (player) {
-const newVolume = Math.min(1, player.getVolume() + 0.05);
-player.setVolume(newVolume);
-player.setMuted(false);
-document.getElementById('volume-slider').value = newVolume;
-updateVolumeIcon();
-showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
-        }
-        event.preventDefault();
-        break;
-    case 'ArrowDown':
-        if (player) {
-const newVolume = Math.max(0, player.getVolume() - 0.05);
-player.setVolume(newVolume);
-player.setMuted(newVolume === 0);
-document.getElementById('volume-slider').value = newVolume;
-updateVolumeIcon();
-showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
-        }
-        event.preventDefault();
-        break;
-}
-        }
-
-        // Função para criar player de notificação ao vivo
-        function createLiveNotificationPlayer() {
-const livePlayerContainer = document.getElementById("live-player");
-livePlayer = new Twitch.Player("live-player", {
-    channel: "lourimarcos",
-    height: "100%",
-    width: "100%",
-    muted: true,
-    autoplay: true,
-    controls: false,
-    parent: ["localhost", window.location.hostname]
-});
-livePlayer.addEventListener(Twitch.Player.READY, () => {
-    const iframe = livePlayer.getIframe();
-    iframe.style.pointerEvents = "none";
-});
-// Recarregar o player de prévia periodicamente
-function reloadLivePlayer() {
-    if (livePlayer) {
-        livePlayer.seek(0);
-    }
-}
-setInterval(reloadLivePlayer, 30000);
-        }
-
-        // Carregar o guia de programação
-        function loadProgramacao() {
-fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
-    .then(response => {
-        if (!response.ok) {
-throw new Error('Resposta da rede não foi ok');
-        }
-        return response.text();
-    })
-    .then(data => {
-        document.getElementById('guide-text').textContent = data;
-        document.getElementById('guide-text-duplicate').textContent = data;
-    })
-    .catch(error => {
-        console.error('Erro ao carregar guia de programação:', error);
-        document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
-        document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
-    });
-        }
-
-        // Carregar as chaves válidas
-        let validKeys = [];
-        function loadKeys() {
-fetch('https://mrjunim.github.io/tvaovivo/Novo%20Documento%20de%20Texto.txt')
-    .then(response => {
-        if (!response.ok) {
-throw new Error('Resposta da rede não foi ok');
-        }
-        return response.text();
-    })
-    .then(data => {
-        validKeys = data.split('\n').map(key => key.trim()).filter(key => key.length > 0);
-        console.log('Chaves carregadas com sucesso');
-    })
-    .catch(error => {
-        console.error('Erro ao carregar as chaves:', error);
-        // Exibir mensagem de erro na interface se necessário
-        const errorMessage = document.getElementById('error-message');
-        if (errorMessage) {
-errorMessage.textContent = "Erro ao carregar chaves de acesso. Tente novamente mais tarde.";
-        }
-    });
-        }
-
-        // Verificar a chave inserida
-        function verifyKey() {
-const keyInput = document.getElementById('key-input').value;
-const errorMessage = document.getElementById('error-message');
-if (!keyInput) {
-    errorMessage.textContent = "Por favor, digite uma chave de acesso.";
-    return;
-}
-if (validKeys.includes(keyInput) || keyInput === "12345") { // Adicionei uma chave de teste
-    // Chave válida
-    keyVerified = true;
-    currentKey = keyInput; // Armazenar a chave atual para uso posterior
-    // Esconder o container de login
-    document.getElementById('login-container').style.display = 'none';
-    // Mostrar a animação de zoom
-    const zoomImageContainer = document.getElementById('zoom-image-container');
-    zoomImageContainer.style.display = 'flex';
-    // Após a animação, mostrar o player
-    setTimeout(() => {
-        zoomImageContainer.style.display = 'none';
-        document.getElementById('player-container').style.display = 'flex';
-        createTwitchPlayer();
-    }, 2000);
-    // Esconder a notificação ao vivo
-    document.getElementById('live-notification').style.display = 'none';
-    // Exibir mensagem de boas-vindas
-    showWelcomeMessage();
-} else {
-    errorMessage.textContent = "Chave inválida. Tente novamente.";
-    showNotification("Chave inválida. Tente novamente.", "error");
-    // Animação de shake no input
-    const keyInputElem = document.getElementById('key-input');
-    keyInputElem.classList.add('shake');
-    setTimeout(() => keyInputElem.classList.remove('shake'), 500);
-}
-        }
-
-        // Mostrar mensagem de boas-vindas
-        function showWelcomeMessage() {
-showNotification("Bem-vindo ao StreamXcellence! Aproveite o conteúdo.", "success");
-        }
-
-        // Funções para os modais
-        function openModal() {
-document.getElementById("modal").style.display = "flex";
-        }
-
-        function closeModal() {
-document.getElementById("modal").style.display = "none";
-        }
-
-        function sendToWhatsApp() {
-const name = document.getElementById("user-name").value;
-if (!name) {
-    alert("Por favor, preencha seu nome antes de enviar.");
-    showNotification("Por favor, preencha seu nome antes de enviar.", "error");
-    return;
-}
-const message = `Olá StreamXcellence, me chamo ${name}. Efetuei o pagamento da chave de acesso e estou enviando o comprovante para liberação imediata.`;
-window.location.href = `https://wa.me/5564996718993?text=${encodeURIComponent(message)}`;
-        }
-
-        // Função para copiar email
-        function copyEmail() {
-const emailText = document.getElementById("pix-email").innerText;
-if (navigator.clipboard) {
-    navigator.clipboard.writeText(emailText)
-        .then(() => {
-// Feedback visual
-const copyButton = document.getElementById("copy-email");
-const originalText = copyButton.textContent;
-copyButton.textContent = "Copiado!";
-copyButton.style.backgroundColor = "#28a745";
-showNotification("Email copiado para a área de transferência!", "success");
-setTimeout(() => {
-    copyButton.textContent = originalText;
-    copyButton.style.backgroundColor = "";
-}, 2000);
-        })
-        .catch(err => {
-console.error('Falha ao copiar email: ', err);
-showNotification("Falha ao copiar o email. Por favor, copie manualmente.", "error");
-        });
-} else {
-    // Fallback para navegadores que não suportam a API Clipboard
-    const textArea = document.createElement("textarea");
-    textArea.value = emailText;
-    document.body.appendChild(textArea);
-    textArea.select();
-    try {
-        document.execCommand('copy');
-        showNotification("Email copiado para a área de transferência!", "success");
-    } catch (err) {
-        console.error('Falha ao copiar email: ', err);
-        showNotification("Falha ao copiar o email. Por favor, copie manualmente.", "error");
-    }
-    document.body.removeChild(textArea);
-}
-        }
-
-        // Funções para o modal de programação
-        function openProgramacaoModal() {
-document.getElementById("programacao-modal").style.display = "flex";
-carregarProgramacao();
-        }
-
-        function closeProgramacaoModal() {
-document.getElementById("programacao-modal").style.display = "none";
-        }
-
-        // Carregar a programação detalhada
-        function carregarProgramacao() {
-const listaProgramacao = document.getElementById("programacao-lista");
-listaProgramacao.innerHTML = '<li>Carregando programação...</li>';
-fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
-    .then(response => {
-        if (!response.ok) {
-throw new Error('Erro ao carregar a programação');
-        }
-        return response.text();
-    })
-    .then(data => {
-        const programas = data.trim().split('\n\n');
-        if (programas.length === 0) {
-listaProgramacao.innerHTML = '<li>Nenhuma programação disponível no momento.</li>';
-return;
-        }
-        listaProgramacao.innerHTML = '';
-        programas.forEach(programa => {
-const detalhes = programa.split('\n');
-if (detalhes.length >= 4) {
-    const titulo = detalhes[0].replace("Título: ", "").trim();
-    const sinopse = detalhes[1].replace("Sinopse: ", "").trim();
-    const horario = detalhes[2].replace("Horário: ", "").trim();
-    const imgLink = detalhes[3].replace("Imagem Capa: ", "").trim();
-    const listItem = document.createElement('li');
-    listItem.innerHTML = `
-        <h3>${titulo}</h3>
-        <img src="${imgLink}" alt="Capa de ${titulo}" loading="lazy">
-        <p><strong>Sinopse:</strong> ${sinopse}</p>
-        <p><strong>Horário:</strong> ${horario}</p>
-    `;
-    listaProgramacao.appendChild(listItem);
-}
-        });
-        if (listaProgramacao.children.length === 0) {
-listaProgramacao.innerHTML = '<li>Formato de programação incorreto.</li>';
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao carregar programação:', error);
-        listaProgramacao.innerHTML = '<li>Erro ao carregar a programação. Tente novamente mais tarde.</li>';
-        showNotification("Erro ao carregar a programação", "error");
-    });
-        }
-
-        // Nova função para verificação de chave para acesso aos canais
-        function openCanaisModalWithKey() {
-if (keyVerified) {
-    // Se a chave já foi verificada para o player principal, usar a mesma chave
-    openCanaisModal();
-} else {
-    // Abrir modal para verificação de chave
-    document.getElementById("canais-key-modal").style.display = "flex";
-    // Se houver uma chave no input principal, preencher automaticamente
-    const mainKeyInput = document.getElementById('key-input').value;
-    if (mainKeyInput) {
-        document.getElementById('canais-key-input').value = mainKeyInput;
-    }
-}
-        }
-
-        // Verificar chave digitada no modal de canais
-        function verificarChaveCanais() {
-const keyInput = document.getElementById('canais-key-input').value;
-const errorMessage = document.getElementById('canais-key-error-message');
-if (!keyInput) {
-    errorMessage.textContent = "Por favor, digite uma chave de acesso.";
-    return;
-}
-if (validKeys.includes(keyInput) || keyInput === "12345") { // Usando a mesma validação do player principal
-    // Chave válida
-    keyVerified = true;
-    currentKey = keyInput;
-    closeCanaisKeyModal();
-    openCanaisModal();
-    showNotification("Acesso aos canais liberado!", "success");
-} else {
-    errorMessage.textContent = "Chave inválida. Tente novamente.";
-    showNotification("Chave inválida. Tente novamente.", "error");
-    // Animação de shake no input
-    const keyInputElem = document.getElementById('canais-key-input');
-    keyInputElem.classList.add('shake');
-    setTimeout(() => keyInputElem.classList.remove('shake'), 500);
-}
-        }
-
-        // Fechar modal de verificação de chave
-        function closeCanaisKeyModal() {
-document.getElementById("canais-key-modal").style.display = "none";
-        }
-
-        function openCanaisModal() {
-document.getElementById("canais-modal").style.display = "flex";
-carregarCanais();
-        }
-
-        function closeCanaisModal() {
-document.getElementById("canais-modal").style.display = "none";
-        }
-
-        // Alternar seletor de canais no player
-        function toggleChannelSelector() {
-const channelSelector = document.getElementById('channel-selector-menu');
-isChannelSelectorOpen = !isChannelSelectorOpen;
-if (isChannelSelectorOpen) {
-    channelSelector.classList.add('active');
-    // Carregar os canais disponíveis para o seletor se ainda não tiver feito
-    if (document.getElementById('channels-list').innerHTML === '<p>Carregando canais...</p>' && canaisData.length === 0) {
-        carregarCanaisSeletor();
-    }
-} else {
-    channelSelector.classList.remove('active');
-}
-        }
-
-        // Carregar os canais disponíveis do arquivo filmeseseries.txt para o seletor
-        function carregarCanaisSeletor() {
-if (canaisData.length > 0) {
-    atualizarListaCanaisSeletor(canaisData);
-    return;
-}
-
-fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erro ao carregar os canais');
-        }
-        return response.text();
-    })
-    .then(data => {
-        // Procurar por entradas de canais no formato #EXTINF:-1
-        const linhas = data.split('\n');
-        canaisData = [];
-        
-        let i = 0;
-        while (i < linhas.length) {
-            const linha = linhas[i].trim();
-            if (linha.startsWith('#EXTINF:-1')) {
-                // Extrair informações do canal
-                const infoLinha = linha;
-                let nomeCanal = "Canal";
-                
-                // Tentar extrair o nome do canal
-                if (infoLinha.includes('tvg-name="')) {
-                    const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                    if (match && match[1]) {
-                        nomeCanal = match[1];
-                    }
-                } else if (infoLinha.includes(',')) {
-                    const commaIndex = infoLinha.lastIndexOf(',');
-                    if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                        nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                    }
-                }
-                
-                // Procurar URL do logo
-                let logoUrl = "https://i.imgur.com/QsrJDbX.png"; // Logo padrão
-                const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                if (logoMatch && logoMatch[1]) {
-                    logoUrl = logoMatch[1];
-                }
-                
-                // Procurar URL do stream na próxima linha
-                let streamUrl = "";
-                if (i + 1 < linhas.length) {
-                    streamUrl = linhas[i + 1].trim();
-                    // Pular para a próxima entrada
-                    i += 2;
-                } else {
-                    i++;
-                }
-                
-                if (streamUrl && !streamUrl.startsWith('#')) {
-                    // Adicionar canal ao array
-                    canaisData.push({
-                        nome: nomeCanal,
-                        logo: logoUrl,
-                        url: streamUrl
-                    });
-                }
+            const qualityMenu = document.getElementById('quality-menu');
+            isQualityMenuOpen = !isQualityMenuOpen;
+            if (isQualityMenuOpen) {
+                qualityMenu.classList.add('active');
             } else {
-                i++;
+                qualityMenu.classList.remove('active');
             }
         }
-        
-        atualizarListaCanaisSeletor(canaisData);
-    })
-    .catch(error => {
-        console.error('Erro ao carregar canais para o seletor:', error);
-        document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
-        showNotification("Erro ao carregar os canais", "error");
-    });
-        }
 
-        // Atualizar a lista de canais no seletor
-        function atualizarListaCanaisSeletor(canais) {
-const channelsList = document.getElementById('channels-list');
-if (canais.length === 0) {
-    channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
-    return;
-}
+        // ... keep existing code (function createTwitchPlayer)
 
-channelsList.innerHTML = '';
+        // ... keep existing code (function initCustomControls)
 
-// Ordenar canais por nome
-canais.sort((a, b) => a.nome.localeCompare(b.nome));
+        // ... keep existing code (function togglePlay)
 
-canais.forEach(canal => {
-    const channelItem = document.createElement('div');
-    channelItem.className = 'channel-selector-item';
-    channelItem.setAttribute('data-nome', canal.nome.toLowerCase());
-    channelItem.onclick = function() {
-        reproduzirCanal(canal.url, canal.nome, canal.logo);
-        toggleChannelSelector(); // Fechar o menu de seleção após escolher
-    };
-    
-    channelItem.innerHTML = `
-        <img src="${canal.logo}" alt="${canal.nome}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-        <span>${canal.nome}</span>
-    `;
-    
-    channelsList.appendChild(channelItem);
-});
-        }
+        // ... keep existing code (function toggleMute)
 
-        // Filtrar canais no seletor
-        function filtrarCanais() {
-const searchInput = document.getElementById('channel-search');
-const searchTerm = searchInput.value.toLowerCase();
-const items = document.querySelectorAll('.channel-selector-item');
+        // ... keep existing code (function updateVolumeIcon)
 
-items.forEach(item => {
-    const nome = item.getAttribute('data-nome');
-    if (nome.includes(searchTerm)) {
-        item.style.display = 'flex';
-    } else {
-        item.style.display = 'none';
-    }
-});
-        }
+        // ... keep existing code (function toggleFullscreen)
 
-        // Carregar os canais disponíveis do arquivo filmeseseries.txt
-        function carregarCanais() {
-const canaisGrid = document.getElementById("canais-grid");
-canaisGrid.innerHTML = '<p>Carregando canais...</p>';
-fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-    .then(response => {
-        if (!response.ok) {
-throw new Error('Erro ao carregar os canais');
-        }
-        return response.text();
-    })
-    .then(data => {
-        canaisGrid.innerHTML = '';
-        // Procurar por entradas de canais no formato #EXTINF:-1
-        const linhas = data.split('\n');
-        let i = 0;
-        while (i < linhas.length) {
-            const linha = linhas[i].trim();
-            if (linha.startsWith('#EXTINF:-1')) {
-                // Extrair informações do canal
-                const infoLinha = linha;
-                let nomeCanal = "Canal";
-                
-                // Tentar extrair o nome do canal
-                if (infoLinha.includes('tvg-name="')) {
-                    const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                    if (match && match[1]) {
-                        nomeCanal = match[1];
-                    }
-                } else if (infoLinha.includes(',')) {
-                    const commaIndex = infoLinha.lastIndexOf(',');
-                    if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                        nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                    }
-                }
-                
-                // Procurar URL do logo
-                let logoUrl = "https://i.imgur.com/QsrJDbX.png"; // Logo padrão
-                const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                if (logoMatch && logoMatch[1]) {
-                    logoUrl = logoMatch[1];
-                }
-                
-                // Procurar URL do stream na próxima linha
-                let streamUrl = "";
-                if (i + 1 < linhas.length) {
-                    streamUrl = linhas[i + 1].trim();
-                    // Pular para a próxima entrada
-                    i += 2;
-                } else {
-                    i++;
-                }
-                
-                if (streamUrl && !streamUrl.startsWith('#')) {
-                    // Criar item do canal
-                    const canalItem = document.createElement('div');
-                    canalItem.className = 'canal-item';
-                    canalItem.setAttribute('data-stream-url', streamUrl);
-                    canalItem.onclick = function() {
-                        reproduzirCanal(streamUrl, nomeCanal, logoUrl);
-                    };
-                    canalItem.innerHTML = `
-                        <img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                        <div class="canal-info">
-                            <p class="canal-nome">${nomeCanal}</p>
-                        </div>
-                    `;
-                    canaisGrid.appendChild(canalItem);
-                }
-            } else {
-                i++;
-            }
-        }
-        
-        if (canaisGrid.children.length === 0) {
-            canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao carregar canais:', error);
-        canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
-        showNotification("Erro ao carregar os canais", "error");
-    });
-        }
+        // ... keep existing code (function handleKeyPress)
 
-        // Reproduzir canal selecionado
-        function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
-console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
-            
-// Fechar o modal de canais
-closeCanaisModal();
-            
-// Mostrar o player container
-const playerContainer = document.getElementById('player-container');
-playerContainer.style.display = 'flex';
-            
-// Configurar o player para HLS
-playerContainer.innerHTML = `
-    <div class="player hls-player">
-        <video id="video-player" controls></video>
-    </div>
-    <!-- Canal Info -->
-    <div class="channel-info">
-        <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-        <div>
-            <div class="channel-name">${nomeCanal}</div>
-            <span class="live-indicator">AO VIVO</span>
-        </div>
-    </div>
-    <!-- Botão seletor de canais -->
-    <div id="channel-selector-button" onclick="toggleChannelSelector()">
-        <span>📺 Mudar Canal</span>
-    </div>
-    <!-- Menu de seleção de canais -->
-    <div id="channel-selector-menu">
-        <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
-        <div id="channels-list">
-            <!-- Canais serão carregados aqui dinamicamente -->
-            <p>Carregando canais...</p>
-        </div>
-    </div>
-`;
-            
-// Inicializar o player HLS
-const video = document.getElementById('video-player');
-            
-if (Hls.isSupported()) {
-    const hls = new Hls({
-        maxBufferLength: 30,
-        maxMaxBufferLength: 60,
-        enableWorker: true,
-        lowLatencyMode: true,
-        testBandwidth: true,
-        progressive: true,
-        xhrSetup: function(xhr) {
-            xhr.withCredentials = false; // Desabilitar credenciais para CORS
-        }
-    });
-                
-    try {
-        hls.loadSource(streamUrl);
-        hls.attachMedia(video);
-                    
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            console.log('Manifest parsed, attempting to play');
-            video.play().catch(err => {
-                console.error('Erro ao iniciar reprodução:', err);
-                showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-            });
-        });
-                    
-        hls.on(Hls.Events.ERROR, function(event, data) {
-            console.error('Erro HLS:', data.type, data.details);
-            if (data.fatal) {
-                switch(data.type) {
-                    case Hls.ErrorTypes.NETWORK_ERROR:
-                        console.error('Erro de rede, tentando recuperar...');
-                        showNotification("Erro de rede. Tentando reconectar...", "error");
-                        hls.startLoad();
-                        break;
-                    case Hls.ErrorTypes.MEDIA_ERROR:
-                        console.error('Erro de mídia, tentando recuperar...');
-                        showNotification("Erro de mídia. Tentando recuperar...", "error");
-                        hls.recoverMediaError();
-                        break;
-                    default:
-                        console.error('Erro fatal, não é possível recuperar');
-                        showNotification("Não foi possível carregar o stream", "error");
-                        hls.destroy();
-                        break;
-                }
-            }
-        });
-                    
-        videoPlayer = hls;
-    } catch (error) {
-        console.error('Erro ao configurar HLS:', error);
-        showNotification("Erro ao configurar reprodução: " + error.message, "error");
-    }
-} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    // Para Safari/iOS
-    video.src = streamUrl;
-    video.addEventListener('loadedmetadata', function() {
-        console.log('Metadados carregados, tentando reproduzir');
-        video.play().catch(err => {
-            console.error('Erro ao iniciar reprodução (Safari):', err);
-            showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-        });
-    });
-                
-    video.addEventListener('error', function(e) {
-        console.error('Erro no elemento de vídeo:', video.error);
-        showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
-    });
-} else {
-    showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
-}
-            
-showNotification(`Reproduzindo: ${nomeCanal}`, "success");
+        // ... keep existing code (function createLiveNotificationPlayer)
 
-// Carregar canais para o seletor
-setTimeout(carregarCanaisSeletor, 500);
-        }
+        // ... keep existing code (function loadProgramacao)
 
-        // Proteção contra inspeção (mantido do código original)
-        document.addEventListener('keydown', function (event) {
-if (
-    event.key === 'F12' ||
-    (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-    (event.ctrlKey && event.key === 'U')
-) {
-    alert("Isso não é permitido 😢");
-    event.preventDefault();
-    return false;
-}
-        });
+        // ... keep existing code (function loadKeys)
 
-        document.addEventListener('contextmenu', function (event) {
-alert("Isso não é permitido 😢");
-event.preventDefault();
-return false;
-        });
+        // ... keep existing code (function verifyKey)
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-loadProgramacao();
-loadKeys();
-createLiveNotificationPlayer();
-// Adicionar evento de tecla Enter para o input de chave
-const keyInput = document.getElementById('key-input');
-if (keyInput) {
-    keyInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-verifyKey();
-        }
-    });
-}
-// Adicionar evento de tecla Enter para o input de nome
-const userName = document.getElementById('user-name');
-if (userName) {
-    userName.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-sendToWhatsApp();
-        }
-    });
-}
-// Adicionar evento de tecla Enter para verificação de chave de canais
-const canaisKeyInput = document.getElementById('canais-key-input');
-if (canaisKeyInput) {
-    canaisKeyInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-verificarChaveCanais();
-        }
-    });
-}
-// Fechar o seletor de canais ao clicar fora dele
-document.addEventListener('click', function(event) {
-    const selectorButton = document.getElementById('channel-selector-button');
-    const selectorMenu = document.getElementById('channel-selector-menu');
-    if (isChannelSelectorOpen && 
-        selectorButton && selectorMenu && 
-        !selectorButton.contains(event.target) && 
-        !selectorMenu.contains(event.target)) {
-        isChannelSelectorOpen = false;
-        selectorMenu.classList.remove('active');
-    }
-});
-        });
+        // ... keep existing code (function showWelcomeMessage)
+
+        // ... keep existing code (Modal functions)
+
+        // ... keep existing code (function copyEmail)
+
+        // ... keep existing code (function openProgramacaoModal, closeProgramacaoModal)
+
+        // ... keep existing code (function carregarProgramacao)
+
+        // ... keep existing code (function openCanaisModalWithKey)
+
+        // ... keep existing code (function verificarChaveCanais)
+
+        // ... keep existing code (function closeCanaisKeyModal)
+
+        // ... keep existing code (function openCanaisModal, closeCanaisModal)
+
+        // ... keep existing code (function toggleChannelSelector)
+
+        // ... keep existing code (function carregarCanaisSeletor)
+
+        // ... keep existing code (function atualizarListaCanaisSeletor)
+
+        // ... keep existing code (function filtrarCanais)
+
+        // ... keep existing code (function carregarCanais)
+
+        // ... keep existing code (function reproduzirCanal)
+
+        // ... keep existing code (Event Listeners and Initialization)
+
+        // ... keep existing code
     </script>
-    <!-- IMPORTANTE: NÃO REMOVA ESTA TAG DE SCRIPT OU ESTE COMENTÁRIO! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
 </body>
 </html>
