@@ -2,12 +2,12 @@
 https://embedcanaisdetv.site/tcaction/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="TELECINE CULT" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/9a/Telecine_Cult%282021%29.png"
 https://embedcanaisdetv.site/tccult/tracks-v1a1/mono.ts.m3u8
-#EXTINF:-1 tvg-name="TELECINE FUN" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/4/4e/Telecine_Fun_2.png"
-https://embedcanaisdetv.site/tcfun/tracks-v1a1/mono.ts.m3u8
-#EXTINF:-1 tvg-name="TELECINE PREMIUM" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/0/09/Telecine_Premium.png"
-https://embedcanaisdetv.site/tcpremium/tracks-v1a1/mono.ts.m3u8
-#EXTINF:-1 tvg-name="TELECINE TOUCH" tvg-logo="https://i.imgur.com/Nky0hRo.png"
-https://embedcanaisdetv.site/tctouch/tracks-v1a1a2/mono.ts.m3u8
+#EXTINF:-1 tvg-name="starchannel" tvg-logo="https://lumiere-a.akamaihd.net/v1/images/about-sc_1d87858d.png"
+https://embedcanaisdetv.site/starchannel/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-name="Animal Planet" tvg-logo="https://vetores.org/wp-content/uploads/animal-planet.png"
+https://embedcanaisdetv.site/animalplanet/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-name="HBO" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/1200px-HBO_logo.svg.png"
+https://embedcanaisdetv.site/hbo/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="CINEMAX" tvg-logo="https://cdn.mitvstatic.com/channels/br_cinemax-basic_m.png"
 https://embedcanaisdetv.site/cinemax/tracks-v1a1l1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="Discovery Turbo" tvg-logo="https://i.imgur.com/lH1Srp9.png"
