@@ -2,46 +2,57 @@ Título: CANAL TNT
 Sinopse: 
 Horário: 🔴12:00 ÁS 14:55
 Imagem Capa: https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/TNT_Logo_2016.svg/1200px-TNT_Logo_2016.svg.png
+
 Título: BOB ESPONJA CALÇA QUADRADA
 Sinopse: 
 Horário: 🔴 15:00
 Imagem Capa: https://images.justwatch.com/poster/304437009/s718/temporada-3.jpg
+
 Título: CHAVES
 Sinopse: 
 Horário: 🔴 16:00
 Imagem Capa: https://aventurasnahistoria.com.br/media/uploads/turma_do_chaves_capa.jpg
+
 Título: EU A PATROA E AS CRIANÇAS
 Sinopse: 
 Horário: 🔴17:00
 Imagem Capa: https://i0.wp.com/heroisx.com/wp-content/uploads/2015/01/eu-a-patroa-e-as-criancas-logo.jpg
+
 Título: OS SIMPSONS
 Sinopse: 
 Horário: 🔴18:00
 Imagem Capa: https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/79/96/51/19694367.jpg
+
 Título: TOM & JERRY
 Sinopse: 
 Horário: 🔴 19:00
 Imagem Capa: https://images.justwatch.com/poster/310410860/s718/tom-e-jerry.jpg
+
 Título: UM MALUCO NO PEDAÇO 
 Sinopse: 
 Horário: 🔴 20:00h
 Imagem Capa: https://blog.starterbr.com.br/wp-content/uploads/2021/08/20200917-fresh-05-2-1024x699.jpeg
+
 Título: A GRANDE FAMILIA
 Sinopse: 
 Horário: 🔴 21:00h
 Imagem Capa: https://m.media-amazon.com/images/M/MV5BZDAzMzU4NWMtNGI1My00NjZlLTlhOTctZjljN2MzNGFiYzZjXkEyXkFqcGc@._V1_.jpg
+
 Título: CHAPOLIN COLORADO
 Sinopse: 
 Horário: 🔴 22:00h
 Imagem Capa: https://images.justwatch.com/poster/323622646/s718/chapolin-colorado.jpg
+
 Título:  OS DEZ MANDAMENTOS
 Sinopse: 
 Horário: 🔴 23:00h
 Imagem Capa: https://upload.wikimedia.org/wikipedia/pt/9/91/Logotipo_de_Os_Dez_Mandamentos.png
+
 Título:  VIVA NOVELAS
 Sinopse: 
 Horário: 🔴 00:00
 Imagem Capa: https://i.imgur.com/P2xB7uZ.png
+
 Título: TODO MUNDO ODEIA O CHRIS
 Sinopse: 
 Horário: 🔴 09:00h
