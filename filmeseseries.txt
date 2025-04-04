@@ -1,3 +1,14 @@
+#EXTINF:-1 tvg-name="URBAN KIDS" tvg-logo="https://d14z5zgripclfw.cloudfront.net/account351-i1091/archive/19/public/1666632636/urban_kids-1666632636.png"
+https://cdn-3.nxplay.com.br/URBAN_KIDS_TK/tracks-v1a1/mono.m3u8
+#EXTINF:-1 tvg-name="URBAN RETRO" tvg-logo="https://d14z5zgripclfw.cloudfront.net/account351-i1091/archive/17/public/1666632625/retro-1666632625.png"
+https://cdn-3.nxplay.com.br/URBAN_RETRO/tracks-v1a1/mono.m3u8
+#EXTINF:-1 tvg-name="SONY CLASSICS" tvg-logo="https://pbs.twimg.com/profile_images/1267896122392997888/EZQV4xUS_400x400.jpg"
+https://spt-sonyoneclassicas-1-br.samsung.wurl.tv/playlist.m3u8
+#EXTINF:-1 tvg-name="DARK FLIX" tvg-logo="https://upload.wikimedia.org/wikipedia/pt/d/dc/Logo_do_Darkflix.png"
+https://video01.soultv.com.br/darkflix/darkflix/playlist.m3u8?
+#EXTINF:-1 tvg-name="Play TV" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/6/6c/PlayTV20062020.png"
+https://video01.soultv.com.br/darkflix/darkflix/playlist.m3u8?
+https://isaocorp.cloudecast.com/playtv/index.m3u8
 #EXTINF:-1 tvg-name="TELECINE ACTION" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/59/TelecineAction2021.png"
 https://embedcanaisdetv.site/tcaction/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="TELECINE CULT" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/9a/Telecine_Cult%282021%29.png"
