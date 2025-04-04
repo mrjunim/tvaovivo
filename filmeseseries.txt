@@ -1,3 +1,9 @@
+#EXTINF:-1 tvg-name="BAND" tvg-logo=""
+https://stream1.freetv.fun/9696dda55fe5c38a0867e52b7a4ed45425f902755bcbb60fb450274b6b857405.m3u8
+#EXTINF:-1 tvg-name="SPACE" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/1/1a/SpaceLogo.svg"
+https://stream1.freetv.fun/d780d85ffb8ce3b8e233739370a05d4a5900dc2c696c2765bde2df23132751fa.m3u8
+#EXTINF:-1 tvg-name="Sport TV" tvg-logo="https://auvaromaia.com/wp-content/uploads/2018/02/Sportv.png"
+SporTV 1,https://stream1.freetv.fun/2b37ccef1c6334cc915c4d6746518c7fad7e6fd4cc78cd17a5bcc0ac5b979e01.m3u
 #EXTINF:-1 tvg-name="URBAN KIDS" tvg-logo="https://d14z5zgripclfw.cloudfront.net/account351-i1091/archive/19/public/1666632636/urban_kids-1666632636.png"
 https://cdn-3.nxplay.com.br/URBAN_KIDS_TK/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-name="URBAN RETRO" tvg-logo="https://d14z5zgripclfw.cloudfront.net/account351-i1091/archive/17/public/1666632625/retro-1666632625.png"
@@ -13,6 +19,10 @@ https://isaocorp.cloudecast.com/playtv/index.m3u8
 https://embedcanaisdetv.site/tcaction/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="TELECINE CULT" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/9a/Telecine_Cult%282021%29.png"
 https://embedcanaisdetv.site/tccult/tracks-v1a1/mono.ts.m3u8
+#EXTINF:-1 tvg-name="TELECINE CULT 2" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/9/9a/Telecine_Cult%282021%29.png"
+https://stream1.freetv.fun/43a2f2ab6c7c66b0deaedd8ae08fefe5af3ce94addc78b62e22f9f536625c1cb.m3u
+#EXTINF:-1 tvg-name="TELECINE PREMIUM" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/a/a1/Telecine_Premium_%282021%29.png"
+https://stream1.freetv.fun/0ac2cd0906485e97d6e400336504d013f3a95a96b6a66c824f91e53e2fb2542f.m3u
 #EXTINF:-1 tvg-name="starchannel" tvg-logo="https://lumiere-a.akamaihd.net/v1/images/about-sc_1d87858d.png"
 https://embedcanaisdetv.site/starchannel/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="Animal Planet" tvg-logo="https://vetores.org/wp-content/uploads/animal-planet.png"
