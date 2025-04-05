@@ -1,9 +1,13 @@
-#EXTINF:-1 tvg-name="SKY GLOBO" tvg-logo="https://www.minhaoperadora.com.br/wp-content/uploads/2020/06/SKY-adiciona-emissoras-afiliadas-na-programa%C3%A7%C3%A3o.jpg"
-http://wanicelife.com:8880/live/D12m4383/60388774/28930.m3u8
-#EXTINF:-1 tvg-name="BAND" tvg-logo=""
+#EXTINF:-1 tvg-name="discovery id" tvg-logo="https://cdn.mitvstatic.com/channels/br_investigac-o-discovery_m.png"
+https://livst.site/discoveryid/tracks-v1a1/mono.m3u8
+#EXTINF:-1 tvg-name="discovery h&h" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/f/ff/Discovery_H%26H.png"
+https://livst.site/discoveryheh/tracks-v1a1/mono.m3u8
+#EXTINF:-1 tvg-name="BAND" tvg-logo="https://seeklogo.com/images/B/band-logo-B923FE7226-seeklogo.com.png"
 https://stream1.freetv.fun/9696dda55fe5c38a0867e52b7a4ed45425f902755bcbb60fb450274b6b857405.m3u8
-#EXTINF:-1 tvg-name="TV FILMES" tvg-logo="https://seeklogo.com/images/B/band-logo-B923FE7226-seeklogo.com.png"
+#EXTINF:-1 tvg-name="TV FILMES" tvg-logo=""
 https://stmv1.srvif.com/canal29/canal29/chunklist_w156210184.m3u8
+#EXTINF:-1 tvg-name="TELECINE FUN" tvg-logo=""
+https://s2.choraporco.icu/token/a058d075c969136b60aa00cb93c771e1/embedtv.m3u8
 #EXTINF:-1 tvg-name="Sport TV" tvg-logo="https://auvaromaia.com/wp-content/uploads/2018/02/Sportv.png"
 SporTV 1,https://stream1.freetv.fun/2b37ccef1c6334cc915c4d6746518c7fad7e6fd4cc78cd17a5bcc0ac5b979e01.m3u
 #EXTINF:-1 tvg-name="URBAN KIDS" tvg-logo="https://d14z5zgripclfw.cloudfront.net/account351-i1091/archive/19/public/1666632636/urban_kids-1666632636.png"
