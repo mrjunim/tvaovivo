@@ -4,7 +4,7 @@ https://livst.site/discoveryid/tracks-v1a1/mono.m3u8
 https://s2.choraporco.icu/token/cea435ea13083e4624f2c02cdce94017/nossoplayer.m3u8
 #EXTINF:-1 tvg-name="BAND" tvg-logo="https://seeklogo.com/images/B/band-logo-B923FE7226-seeklogo.com.png"
 https://stream1.freetv.fun/9696dda55fe5c38a0867e52b7a4ed45425f902755bcbb60fb450274b6b857405.m3u8
-#EXTINF:-1 tvg-name="TV FILMES" tvg-logo=""
+#EXTINF:-1 tvg-name="CANAL 29 series antigas" tvg-logo="https://programacao.tv/imagens/canal-29.png"
 https://stmv1.srvif.com/canal29/canal29/chunklist_w156210184.m3u8
 #EXTINF:-1 tvg-name="TELECINE FUN" tvg-logo=""
 https://s2.choraporco.icu/token/a058d075c969136b60aa00cb93c771e1/embedtv.m3u8
