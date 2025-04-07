@@ -142,6 +142,41 @@ a:hover {
   from { background-position: 0 0; }
   to { background-position: 1000px 0; }
 }
+        .suporte-flutuante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ff003c;
+  color: white;
+  font-size: 28px;
+  text-align: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #ff003c, 0 0 30px #ff003c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  z-index: 10000;
+  animation: pulsar 2s infinite;
+}
+
+@keyframes pulsar {
+  0%, 100% {
+    box-shadow: 0 0 10px #ff003c, 0 0 20px #ff003c;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px #ff003c, 0 0 50px #ff003c;
+    transform: scale(1.1);
+  }
+}
+
+.suporte-flutuante:hover {
+  background-color: #cc002f;
+}
+
         #sobre {
   margin-top: 40px;
   padding: 20px;
@@ -1297,6 +1332,7 @@ a:hover {
     </style>
 </head>
 <body>
+    
     <!-- Adicionado dentro do <body>, antes do fechamento da tag -->
 <div id="alerta-visual"></div>
     
@@ -2448,6 +2484,8 @@ document.getElementById("alerta-visual").style.opacity = "1";
 
   window.onload = digitarTexto;
 </script>
-    
+    <a href="mailto:lourimarcos@outlook.com" class="suporte-flutuante" title="Suporte por e-mail">
+  ❓
+</a>
 </body>
 </html>
