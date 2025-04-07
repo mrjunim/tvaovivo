@@ -1294,7 +1294,48 @@ a:hover {
                 height: 60px;
             }
         }
+
+	    .botao-terror {
+  display: inline-block;
+  background: linear-gradient(145deg, #200000, #4a0000);
+  color: #ff3b3b;
+  font-family: 'Creepster', cursive; /* Sugestão de fonte com tema de terror */
+  font-size: 1.2rem;
+  padding: 15px 25px;
+  border: 2px solid #ff0000;
+  text-decoration: none;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #ff0000, 0 0 5px #000 inset;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.botao-terror::before {
+  content: '';
+  position: absolute;
+  width: 150%;
+  height: 100%;
+  background: rgba(255, 0, 0, 0.1);
+  top: -50%;
+  left: -25%;
+  transform: rotate(45deg);
+  transition: all 0.5s ease-in-out;
+}
+
+.botao-terror:hover::before {
+  top: 150%;
+}
+
+.botao-terror:hover {
+  background: #4a0000;
+  color: #ffffff;
+  box-shadow: 0 0 20px #ff0000, 0 0 10px #000 inset;
+  transform: scale(1.05);
+}
     </style>
+ <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+
 </head>
 <body>
     
@@ -1342,6 +1383,9 @@ a:hover {
         
         <!-- Seção de notificação ao vivo -->
         <section class="live-notification" id="live-notification">
+		<a href="https://chat.whatsapp.com/DhbWCqqmV8O2Jh1nT3xdBO" target="_blank" class="botao-terror">
+  🩸 Entrar na Comunidade WhatsApp
+</a>
 		<div id="sobre">
   <h2>Sobre o StreamXcellence</h2>
   <p id="texto-sobre"></p>
