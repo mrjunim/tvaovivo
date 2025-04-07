@@ -1297,6 +1297,9 @@ a:hover {
     </style>
 </head>
 <body>
+    <!-- Adicionado dentro do <body>, antes do fechamento da tag -->
+<div id="alerta-visual"></div>
+    
     <!-- Imagem de fundo -->
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
     
@@ -1469,7 +1472,8 @@ a:hover {
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         // ... keep existing code (all JavaScript functionality)
-        
+        // Adicionado dentro da função verificarChave(), logo após mostrar o conteúdo
+document.getElementById("alerta-visual").style.opacity = "1";
         // Variáveis globais
         let player;
         let livePlayer;
