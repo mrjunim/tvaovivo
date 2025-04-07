@@ -1350,7 +1350,24 @@ a:hover {
                     <span id="guide-text-duplicate">Carregando guia...</span>
                 </div>
             </div>
-            
+            <div id="sobre">
+  <h2>Sobre o StreamXcellence</h2>
+  <p id="texto-sobre"></p>
+</div>
+<script>
+  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror. Mergulhe em uma programação assustadora, com filmes aterrorizantes, canais ao vivo e recomendações baseadas no seu pior pesadelo.";
+  let i = 0;
+
+  function digitarTexto() {
+    if (i < textoSobre.length) {
+      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
+      i++;
+      setTimeout(digitarTexto, 50);
+    }
+  }
+
+  window.onload = digitarTexto;
+</scritp>
             <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
         </section>
     </main>
@@ -1756,23 +1773,7 @@ document.getElementById("alerta-visual").style.opacity = "1";
                 const iframe = livePlayer.getIframe();
                 iframe.style.pointerEvents = "none";
             });
-            <div id="sobre">
-  <h2>Sobre o StreamXcellence</h2>
-  <p id="texto-sobre"></p>
-</div>
-
-  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror. Mergulhe em uma programação assustadora, com filmes aterrorizantes, canais ao vivo e recomendações baseadas no seu pior pesadelo.";
-  let i = 0;
-
-  function digitarTexto() {
-    if (i < textoSobre.length) {
-      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
-      i++;
-      setTimeout(digitarTexto, 50);
-    }
-  }
-
-  window.onload = digitarTexto;
+            
 
             // Recarregar o player de prévia periodicamente
             function reloadLivePlayer() {
