@@ -1,7 +1,9 @@
+#EXTINF:-1 tvg-name="Space" tvg-logo=""
+https://futebolhoje.org/space/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="discovery id" tvg-logo="https://cdn.mitvstatic.com/channels/br_investigac-o-discovery_m.png"
-http://supersonictv.live:8080/682537/231637/84968
+https://futebolhoje.org/discoveryid/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="discovery h&h" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/f/ff/Discovery_H%26H.png"
-https://s2.choraporco.icu/token/cea435ea13083e4624f2c02cdce94017/nossoplayer.m3u8
+https://futebolhoje.org/discoveryhh/tracks-v1a1/mono.ts.m3u8
 #EXTINF:-1 tvg-name="BAND" tvg-logo="https://seeklogo.com/images/B/band-logo-B923FE7226-seeklogo.com.png"
 https://stream1.freetv.fun/9696dda55fe5c38a0867e52b7a4ed45425f902755bcbb60fb450274b6b857405.m3u8
 #EXTINF:-1 tvg-name="CANAL 29 series antigas" tvg-logo="https://programacao.tv/imagens/canal-29.png"
