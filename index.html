@@ -14,6 +14,134 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        body {
+  background: url('https://images.unsplash.com/photo-1544551763-ced7a53677aa?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+  background-size: cover;
+  color: #e6e6e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: fadeIn 3s ease-in-out;
+  overflow-x: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+  color: #ff003c;
+  text-shadow: 2px 2px 10px rgba(255, 0, 60, 0.9);
+  font-family: 'Creepster', cursive;
+  animation: flicker 2s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+input[type="text"] {
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: #1c1c1c;
+  color: #fff;
+  box-shadow: 0 0 10px #ff003c;
+}
+
+button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff003c;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #cc002f;
+  transform: scale(1.05);
+}
+
+#conteudo, #guia, #canais, #ultimos-filmes, #recomendacoes {
+  margin-top: 30px;
+  padding: 20px;
+  width: 100%;
+  max-width: 900px;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(255, 0, 60, 0.4);
+  animation: fadeInUp 1s ease-in forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+a {
+  color: #ff003c;
+  text-decoration: none;
+}
+
+a:hover {
+  text-shadow: 0 0 5px #ff003c;
+}
+
+#intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  color: red;
+  font-family: 'Creepster', cursive;
+  font-size: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeOutIntro 3s 3s forwards;
+}
+
+@keyframes fadeOutIntro {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.nevoa {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://i.gifer.com/7VE.gif') repeat;
+  opacity: 0.15;
+  z-index: 1;
+  pointer-events: none;
+  animation: moverNevoa 30s linear infinite;
+}
+
+@keyframes moverNevoa {
+  from { background-position: 0 0; }
+  to { background-position: 1000px 0; }
+}
         #sobre {
   margin-top: 40px;
   padding: 20px;
