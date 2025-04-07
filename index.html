@@ -1342,10 +1342,10 @@ a:hover {
         
         <!-- Seção de notificação ao vivo -->
         <section class="live-notification" id="live-notification">
-            <div id="sobre">
+		<div id="sobre">
   <h2>Sobre o StreamXcellence</h2>
   <p id="texto-sobre"></p>
-  </div>
+</div>
             <h2>🔴 O que está passando agora 📺</h2>
             
             <div id="guide-container" role="marquee">
@@ -1354,9 +1354,9 @@ a:hover {
                     <span id="guide-text-duplicate">Carregando guia...</span>
                 </div>
             </div>
+            
             <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
         </section>
-
     </main>
     
     <!-- Container do player principal -->
@@ -1499,21 +1499,6 @@ document.getElementById("alerta-visual").style.opacity = "1";
             });
         }
 
-<script>
-  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror. Mergulhe em uma programação assustadora, com filmes aterrorizantes, canais ao vivo e recomendações baseadas no seu pior pesadelo.";
-  let i = 0;
-
-  function digitarTexto() {
-    if (i < textoSobre.length) {
-      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
-      i++;
-      setTimeout(digitarTexto, 50);
-    }
-  }
-
-  window.onload = digitarTexto;
-</scritp>
-        
         // Função para mostrar notificações
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
@@ -1769,14 +1754,11 @@ document.getElementById("alerta-visual").style.opacity = "1";
                 autoplay: true,
                 controls: false,
                 parent: ["localhost", window.location.hostname]
-
             });
             livePlayer.addEventListener(Twitch.Player.READY, () => {
                 const iframe = livePlayer.getIframe();
                 iframe.style.pointerEvents = "none";
             });
-            
-
             // Recarregar o player de prévia periodicamente
             function reloadLivePlayer() {
                 if (livePlayer) {
@@ -2454,5 +2436,20 @@ document.getElementById("alerta-visual").style.opacity = "1";
 
 
 
+
+<script>
+  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror. Mergulhe em uma programação assustadora, com filmes aterrorizantes, canais ao vivo e recomendações baseadas no seu pior pesadelo.";
+  let i = 0;
+
+  function digitarTexto() {
+    if (i < textoSobre.length) {
+      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
+      i++;
+      setTimeout(digitarTexto, 50);
+    }
+  }
+
+  window.onload = digitarTexto;
+</script>
 </body>
 </html>
