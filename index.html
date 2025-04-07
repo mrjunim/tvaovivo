@@ -1350,26 +1350,15 @@ a:hover {
                     <span id="guide-text-duplicate">Carregando guia...</span>
                 </div>
             </div>
-            <div id="sobre">
+            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
+        </section>
+   <br>
+        <div id="sobre">
   <h2>Sobre o StreamXcellence</h2>
   <p id="texto-sobre"></p>
 </div>
-<script>
-  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror. Mergulhe em uma programação assustadora, com filmes aterrorizantes, canais ao vivo e recomendações baseadas no seu pior pesadelo.";
-  let i = 0;
-
-  function digitarTexto() {
-    if (i < textoSobre.length) {
-      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
-      i++;
-      setTimeout(digitarTexto, 50);
-    }
-  }
-
-  window.onload = digitarTexto;
-</scritp>
-            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
-        </section>
+    </br>
+        
     </main>
     
     <!-- Container do player principal -->
@@ -1512,6 +1501,21 @@ document.getElementById("alerta-visual").style.opacity = "1";
             });
         }
 
+<script>
+  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror. Mergulhe em uma programação assustadora, com filmes aterrorizantes, canais ao vivo e recomendações baseadas no seu pior pesadelo.";
+  let i = 0;
+
+  function digitarTexto() {
+    if (i < textoSobre.length) {
+      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
+      i++;
+      setTimeout(digitarTexto, 50);
+    }
+  }
+
+  window.onload = digitarTexto;
+</scritp>
+        
         // Função para mostrar notificações
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
