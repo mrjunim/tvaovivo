@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afiliados - StreamXcellence</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0d0d0d, #1a1a1a);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: #111;
+      border: 1px solid #8800ff44;
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 30px #8800ff33;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      color: #e60073;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #ccc;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background: #1f1f1f;
+      border: 1px solid #8800ff;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background: #8800ff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <h1>Convite Sombrio</h1>
+    <p>De qual perfil do Instagram você veio?</p>
+    <select id="perfil">
+      <option value="">Escolha um perfil</option>
+      <option value="@terrorhorrorbr">@terrorhorrorbr</option>
+      <option value="@suspense_oculto">@suspense_oculto</option>
+      <option value="@cultosproibidos">@cultosproibidos</option>
+      <option value="@streamxcellenceofc">@streamxcellenceofc</option>
+    </select>
+    <button onclick="registrarClique()">Confirmar</button>
+    <div class="footer">Apenas uma vez por visitante.</div>
+  </div>
+
+  <script>
+    // Impede múltiplos acessos
+    if (localStorage.getItem('afiliado_visitado')) {
+      document.getElementById('app').innerHTML = `
+        <h1>Você já acessou</h1>
+        <p>Aproveite o conteúdo sombrio.</p>
+        <button onclick="window.location.href='https://streamxcellence.vercel.app'">Ir para o site</button>
+      `;
+    }
+
+    function registrarClique() {
+      const perfil = document.getElementById('perfil').value;
+      if (!perfil) {
+        alert('Escolha um perfil antes de continuar.');
+        return;
+      }
+
+      // Salva no localStorage
+      localStorage.setItem('afiliado_visitado', '1');
+
+      // Contador local por perfil (apenas visual)
+      let count = localStorage.getItem(perfil) || 0;
+      localStorage.setItem(perfil, parseInt(count) + 1);
+
+      // Salvar em arquivo .txt (simulação via download de arquivo)
+      const data = `Perfil: ${perfil}\nData: ${new Date().toLocaleString()}\n---\n`;
+      const blob = new Blob([data], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'perguntadeondeveio.txt';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Redireciona
+      setTimeout(() => {
+        window.location.href = 'https://streamxcellence.vercel.app';
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
