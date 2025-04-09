@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- Mantém todos os meta tags, links e estilos originais -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="StreamXcellence - Assista aos melhores canais online">
@@ -13,8 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
-    <!-- Estilos mantidos intactos -->
-    <style>
+     <style>
         /* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
@@ -1237,21 +1235,55 @@
         </div>
     </div>
 
-    <!-- Modais mantidos -->
-    <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
-        <!-- Conteúdo original do modal -->
+        <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()" aria-label="Fechar">×</span>
+            <h2 id="modal-title">Adquirir Chave para Acesso</h2>
+            <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e envie o comprovante para liberação imediata.</p>
+            <p><strong>Valor Simbólico: R$ 2,00</strong></p>
+            <div class="email-container">
+                <p id="pix-email">Pix: lourimarcos@outlook.com</p>
+                <button id="copy-email" onclick="copyEmail()" aria-label="Copiar email">Copiar</button>
+            </div>
+            <p>A chave tem duração de <strong>15 dias</strong></p>
+            <div class="input-group">
+                <label for="user-name" class="sr-only">Seu Nome</label>
+                <input type="text" id="user-name" placeholder="Seu Nome" aria-required="true" />
+            </div>
+            <button type="button" onclick="sendToWhatsApp()" class="btn-primary">Enviar</button>
+        </div>
     </div>
 
     <div id="programacao-modal" class="modal" role="dialog" aria-labelledby="programacao-title" aria-hidden="true">
-        <!-- Conteúdo original do modal -->
+        <div id="programacao-modal-content">
+            <span class="close-modal" onclick="closeProgramacaoModal()" aria-label="Fechar">×</span>
+            <h2 id="programacao-title">StreamXcellence 📺 | Guia de Programação</h2>
+            <ul id="programacao-lista" aria-live="polite"></ul>
+        </div>
     </div>
 
     <div id="canais-modal" class="modal" role="dialog" aria-labelledby="canais-title" aria-hidden="true">
-        <!-- Conteúdo original do modal -->
+        <div id="canais-modal-content">
+            <span class="close-modal" onclick="closeCanaisModal()" aria-label="Fechar">×</span>
+            <h2 id="canais-title">StreamXcellence 📺 | Canais ao Vivo</h2>
+            <div id="canais-grid" aria-live="polite">
+                <p>Carregando canais...</p>
+            </div>
+        </div>
     </div>
 
     <div id="canais-key-modal" class="modal" role="dialog" aria-labelledby="canais-key-title" aria-hidden="true">
-        <!-- Conteúdo original do modal -->
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCanaisKeyModal()" aria-label="Fechar">×</span>
+            <h2 id="canais-key-title">Verificação de Acesso</h2>
+            <p>Digite sua chave de acesso para ver os canais ao vivo</p>
+            <div class="input-group">
+                <label for="canais-key-input" class="sr-only">Chave de acesso</label>
+                <input type="text" id="canais-key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" autocomplete="off" required/>
+            </div>
+            <div class="error-message" id="canais-key-error-message" role="alert" aria-live="assertive"></div>
+            <button type="button" onclick="verificarChaveCanais()" class="btn-primary">Acessar Canais</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -1300,6 +1332,7 @@
                             zoomImageContainer.style.display = 'none';
                             document.getElementById('player-container').style.display = 'flex';
                             createTwitchPlayer();
+                            createLiveNotificationPlayer(); // Carrega o player de notificação após login
                         }, 2000);
                         document.getElementById('live-notification').style.display = 'none';
                         showWelcomeMessage();
@@ -1340,9 +1373,11 @@
         }
 
         function createLiveNotificationPlayer() {
+            if (!keyVerified) return; // Só carrega após login
             const livePlayerContainer = document.getElementById("live-player");
+            const channelEncoded = btoa("lourimarcos"); // Ofusca o nome do canal
             livePlayer = new Twitch.Player("live-player", {
-                channel: "lourimarcos",
+                channel: atob(channelEncoded), // Decodifica apenas em runtime
                 height: "100%",
                 width: "100%",
                 muted: true,
@@ -1353,6 +1388,7 @@
             livePlayer.addEventListener(Twitch.Player.READY, () => {
                 const iframe = livePlayer.getIframe();
                 iframe.style.pointerEvents = "none";
+                iframe.setAttribute('data-protected', 'true'); // Marca para proteção
             });
         }
 
@@ -1410,7 +1446,7 @@
                             if (streamUrl && !streamUrl.startsWith('#')) {
                                 const canalItem = document.createElement('div');
                                 canalItem.className = 'canal-item';
-                                canalItem.setAttribute('data-stream-url', btoa(streamUrl)); // Codifica o URL em base64
+                                canalItem.setAttribute('data-stream-url', btoa(streamUrl));
                                 canalItem.onclick = function() {
                                     const url = atob(this.getAttribute('data-stream-url'));
                                     reproduzirCanal(url, nomeCanal, logoUrl);
@@ -1660,34 +1696,55 @@
             });
         }
 
-        // Bloqueio de captura na página inicial
-        function protectInitialPage() {
+        // Proteção contra captura e acesso ao código-fonte
+        function protectPage() {
+            // Bloqueia teclas de atalho para código-fonte
+            document.addEventListener('keydown', (event) => {
+                if (
+                    event.key === 'F12' ||
+                    (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) ||
+                    (event.ctrlKey && event.key === 'U') ||
+                    (event.ctrlKey && event.key === 'S')
+                ) {
+                    event.preventDefault();
+                    window.location.reload(); // Recarrega a página
+                }
+            });
+
+            // Bloqueia clique direito
+            document.addEventListener('contextmenu', (event) => {
+                event.preventDefault();
+                window.location.reload(); // Recarrega a página
+            });
+
+            // Bloqueia atalhos de seleção de texto que podem revelar código
+            document.addEventListener('keydown', (event) => {
+                if (event.ctrlKey && event.key === 'A') {
+                    event.preventDefault();
+                    window.location.reload(); // Recarrega a página
+                }
+            });
+
+            // Ofusca o player de notificação Twitch antes do login
             if (!sessionStorage.getItem('authenticated')) {
-                // Impede carregamento de links m3u8 antes do login
-                document.getElementById('live-channels-button').addEventListener('click', (e) => {
-                    if (!keyVerified) {
-                        e.preventDefault();
-                        showNotification("Faça login para acessar os canais.", "error");
-                    }
-                });
-                // Ofusca qualquer tentativa de acesso direto ao DOM
-                Object.defineProperty(window, 'canaisData', {
+                Object.defineProperty(window, 'livePlayer', {
                     get: () => {
-                        if (!keyVerified) {
-                            console.warn("Acesso não autorizado aos dados dos canais.");
-                            return [];
-                        }
-                        return canaisData;
+                        console.warn("Acesso não autorizado ao player de notificação.");
+                        return null;
                     }
                 });
+                document.getElementById('live-player').innerHTML = '<p>Faça login para ver a prévia ao vivo.</p>';
             }
         }
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
             loadProgramacao();
-            createLiveNotificationPlayer();
-            protectInitialPage();
+            if (sessionStorage.getItem('authenticated')) {
+                keyVerified = true;
+                createLiveNotificationPlayer(); // Carrega apenas se já autenticado
+            }
+            protectPage();
             document.getElementById('key-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyKey(); });
             document.getElementById('user-name').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendToWhatsApp(); });
             document.getElementById('canais-key-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') verificarChaveCanais(); });
@@ -1699,18 +1756,6 @@
                     selectorMenu.classList.remove('active');
                 }
             });
-        });
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) || (event.ctrlKey && event.key === 'U')) {
-                alert("Isso não é permitido 😢");
-                event.preventDefault();
-            }
-        });
-
-        document.addEventListener('contextmenu', (event) => {
-            alert("Isso não é permitido 😢");
-            event.preventDefault();
         });
     </script>
 
