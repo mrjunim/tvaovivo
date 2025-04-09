@@ -909,8 +909,8 @@
         </section>
     </main>
     <div id="player-container" aria-live="polite">
-        <div class="player hls-player">
-            <video id="video-player" controls></video>
+        <div class="player twitch-player" id="player">
+            <div id="twitch-embed"></div>
         </div>
         <div class="channel-info">
             <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo" id="channel-logo">
@@ -969,13 +969,14 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
-        let player;
+        let twitchPlayer;
         let livePlayer;
         let keyVerified = false;
         let currentKey = "";
-        let videoPlayer = null;
+        let hlsPlayer = null;
         let canaisData = [];
         let isChannelSelectorOpen = false;
+        let isTwitchActive = true;
 
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
@@ -986,48 +987,97 @@
             setTimeout(() => notification.remove(), 3000);
         }
 
-        function initCustomControls(video) {
+        function createTwitchPlayer() {
+            if (!document.querySelector("#twitch-embed iframe")) {
+                twitchPlayer = new Twitch.Player("twitch-embed", {
+                    channel: "lourimarcos",
+                    width: "100%",
+                    height: "100%",
+                    controls: false,
+                    autoplay: true,
+                    muted: false,
+                    parent: ["localhost", window.location.hostname]
+                });
+                twitchPlayer.addEventListener(Twitch.Player.READY, () => {
+                    twitchPlayer.setVolume(0.5);
+                    twitchPlayer.setMuted(false);
+                    twitchPlayer.play();
+                    initTwitchControls();
+                    showNotification('Reprodução iniciada', 'success');
+                });
+                twitchPlayer.addEventListener(Twitch.Player.PLAY, () => document.getElementById('play-pause-btn').textContent = '⏸️');
+                twitchPlayer.addEventListener(Twitch.Player.PAUSE, () => document.getElementById('play-pause-btn').textContent = '▶️');
+                twitchPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
+                    document.getElementById('player').innerHTML = `
+                        <div class="offline-container">
+                            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                                <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                            </video>
+                            <div class="offline-message">
+                                <p>🔴 ESTAMOS OFFLINE 🔴</p>
+                            </div>
+                        </div>`;
+                    const offlineVideo = document.getElementById('offline-video');
+                    offlineVideo.addEventListener('click', () => offlineVideo.play());
+                    offlineVideo.play();
+                    showNotification('Canal offline', 'error');
+                });
+            }
+        }
+
+        function initTwitchControls() {
             const playPauseBtn = document.getElementById('play-pause-btn');
             const muteBtn = document.getElementById('mute-btn');
             const volumeSlider = document.getElementById('volume-slider');
             const fullscreenBtn = document.getElementById('fullscreen-btn');
-            volumeSlider.value = video.volume;
-            updateVolumeIcon(video);
-            playPauseBtn.addEventListener('click', () => togglePlay(video));
+            volumeSlider.value = twitchPlayer.getVolume();
+            updateVolumeIcon();
+            playPauseBtn.addEventListener('click', toggleTwitchPlay);
             volumeSlider.addEventListener('input', () => {
                 const volume = parseFloat(volumeSlider.value);
-                video.volume = volume;
-                video.muted = volume === 0;
-                updateVolumeIcon(video);
+                twitchPlayer.setVolume(volume);
+                twitchPlayer.setMuted(volume === 0);
+                updateVolumeIcon();
             });
-            muteBtn.addEventListener('click', () => toggleMute(video));
+            muteBtn.addEventListener('click', toggleTwitchMute);
             fullscreenBtn.addEventListener('click', toggleFullscreen);
-            video.addEventListener('play', () => playPauseBtn.textContent = '⏸️');
-            video.addEventListener('pause', () => playPauseBtn.textContent = '▶️');
-            document.addEventListener('keydown', (event) => handleKeyPress(event, video));
+            document.addEventListener('keydown', handleTwitchKeyPress);
         }
 
-        function togglePlay(video) {
-            if (video.paused) {
-                video.play();
-                showNotification('Reproduzindo', 'info');
-            } else {
-                video.pause();
-                showNotification('Pausado', 'info');
+        function toggleTwitchPlay() {
+            if (isTwitchActive && twitchPlayer) {
+                if (twitchPlayer.isPaused()) {
+                    twitchPlayer.play();
+                    showNotification('Reproduzindo', 'info');
+                } else {
+                    twitchPlayer.pause();
+                    showNotification('Pausado', 'info');
+                }
             }
         }
 
-        function toggleMute(video) {
-            video.muted = !video.muted;
-            updateVolumeIcon(video);
-            showNotification(video.muted ? 'Som desativado' : 'Som ativado', 'info');
+        function toggleTwitchMute() {
+            if (isTwitchActive && twitchPlayer) {
+                const muted = twitchPlayer.getMuted();
+                twitchPlayer.setMuted(!muted);
+                updateVolumeIcon();
+                showNotification(muted ? 'Som ativado' : 'Som desativado', 'info');
+            }
         }
 
-        function updateVolumeIcon(video) {
+        function updateVolumeIcon() {
             const muteBtn = document.getElementById('mute-btn');
-            if (video.muted || video.volume === 0) muteBtn.textContent = '🔇';
-            else if (video.volume < 0.5) muteBtn.textContent = '🔉';
-            else muteBtn.textContent = '🔊';
+            if (!muteBtn) return;
+            if (isTwitchActive && twitchPlayer) {
+                if (twitchPlayer.getMuted() || twitchPlayer.getVolume() === 0) muteBtn.textContent = '🔇';
+                else if (twitchPlayer.getVolume() < 0.5) muteBtn.textContent = '🔉';
+                else muteBtn.textContent = '🔊';
+            } else if (hlsPlayer && hlsPlayer.media) {
+                const video = hlsPlayer.media;
+                if (video.muted || video.volume === 0) muteBtn.textContent = '🔇';
+                else if (video.volume < 0.5) muteBtn.textContent = '🔉';
+                else muteBtn.textContent = '🔊';
+            }
         }
 
         function toggleFullscreen() {
@@ -1041,18 +1091,88 @@
             }
         }
 
-        function handleKeyPress(event, video) {
+        function handleTwitchKeyPress(event) {
             if (document.getElementById('player-container').style.display !== 'flex') return;
+            if (isTwitchActive && twitchPlayer) {
+                switch(event.key) {
+                    case ' ': case 'k': toggleTwitchPlay(); event.preventDefault(); break;
+                    case 'm': toggleTwitchMute(); event.preventDefault(); break;
+                    case 'f': toggleFullscreen(); event.preventDefault(); break;
+                    case 'ArrowUp':
+                        const newVolumeUp = Math.min(1, twitchPlayer.getVolume() + 0.05);
+                        twitchPlayer.setVolume(newVolumeUp);
+                        twitchPlayer.setMuted(false);
+                        document.getElementById('volume-slider').value = newVolumeUp;
+                        updateVolumeIcon();
+                        showNotification(`Volume: ${Math.round(newVolumeUp * 100)}%`, 'info');
+                        event.preventDefault();
+                        break;
+                    case 'ArrowDown':
+                        const newVolumeDown = Math.max(0, twitchPlayer.getVolume() - 0.05);
+                        twitchPlayer.setVolume(newVolumeDown);
+                        twitchPlayer.setMuted(newVolumeDown === 0);
+                        document.getElementById('volume-slider').value = newVolumeDown;
+                        updateVolumeIcon();
+                        showNotification(`Volume: ${Math.round(newVolumeDown * 100)}%`, 'info');
+                        event.preventDefault();
+                        break;
+                }
+            }
+        }
+
+        function initHLSControls(video) {
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const muteBtn = document.getElementById('mute-btn');
+            const volumeSlider = document.getElementById('volume-slider');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            volumeSlider.value = video.volume;
+            updateVolumeIcon();
+            playPauseBtn.onclick = () => toggleHLSPlay(video);
+            volumeSlider.oninput = () => {
+                const volume = parseFloat(volumeSlider.value);
+                video.volume = volume;
+                video.muted = volume === 0;
+                updateVolumeIcon();
+            };
+            muteBtn.onclick = () => toggleHLSMute(video);
+            fullscreenBtn.onclick = toggleFullscreen;
+            video.onplay = () => playPauseBtn.textContent = '⏸️';
+            video.onpause = () => playPauseBtn.textContent = '▶️';
+            document.addEventListener('keydown', (event) => handleHLSKeyPress(event, video));
+        }
+
+        function toggleHLSPlay(video) {
+            if (!isTwitchActive && video) {
+                if (video.paused) {
+                    video.play();
+                    showNotification('Reproduzindo', 'info');
+                } else {
+                    video.pause();
+                    showNotification('Pausado', 'info');
+                }
+            }
+        }
+
+        function toggleHLSMute(video) {
+            if (!isTwitchActive && video) {
+                video.muted = !video.muted;
+                updateVolumeIcon();
+                showNotification(video.muted ? 'Som desativado' : 'Som ativado', 'info');
+            }
+        }
+
+        function handleHLSKeyPress(event, video) {
+            if (document.getElementById('player-container').style.display !== 'flex' || isTwitchActive) return;
             switch(event.key) {
-                case ' ': case 'k': togglePlay(video); event.preventDefault(); break;
-                case 'm': toggleMute(video); event.preventDefault(); break;
+                case ' ': case 'k': toggleHLSPlay(video); event.preventDefault(); break;
+                case 'm': toggleHLSMute(video); event.preventDefault(); break;
                 case 'f': toggleFullscreen(); event.preventDefault(); break;
                 case 'ArrowUp':
                     const newVolumeUp = Math.min(1, video.volume + 0.05);
                     video.volume = newVolumeUp;
                     video.muted = false;
                     document.getElementById('volume-slider').value = newVolumeUp;
-                    updateVolumeIcon(video);
+                    updateVolumeIcon();
                     showNotification(`Volume: ${Math.round(newVolumeUp * 100)}%`, 'info');
                     event.preventDefault();
                     break;
@@ -1061,7 +1181,7 @@
                     video.volume = newVolumeDown;
                     video.muted = newVolumeDown === 0;
                     document.getElementById('volume-slider').value = newVolumeDown;
-                    updateVolumeIcon(video);
+                    updateVolumeIcon();
                     showNotification(`Volume: ${Math.round(newVolumeDown * 100)}%`, 'info');
                     event.preventDefault();
                     break;
@@ -1129,7 +1249,7 @@
                 setTimeout(() => {
                     zoomImageContainer.style.display = 'none';
                     document.getElementById('player-container').style.display = 'flex';
-                    reproduzirCanalDefault();
+                    createTwitchPlayer();
                     carregarCanaisSeletor();
                 }, 2000);
                 document.getElementById('live-notification').style.display = 'none';
@@ -1143,18 +1263,17 @@
             }
         }
 
-        function reproduzirCanalDefault() {
-            const defaultStream = "https://mrjunim.github.io/tvaovivo/filmeseseries.txt";
-            reproduzirCanal("https://5cf4a2c2512a2.streamlock.net/diretotv/diretotv/playlist.m3u8", "StreamXcellence", "https://i.imgur.com/QsrJDbX.png");
-        }
-
         function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
+            if (isTwitchActive) {
+                document.getElementById('player').innerHTML = '<video id="video-player" controls></video>';
+                isTwitchActive = false;
+            }
             const video = document.getElementById('video-player');
             const channelName = document.getElementById('channel-name');
             const channelLogo = document.getElementById('channel-logo');
             channelName.textContent = nomeCanal;
             channelLogo.src = logoUrl;
-            if (videoPlayer) videoPlayer.destroy();
+            if (hlsPlayer) hlsPlayer.destroy();
             if (Hls.isSupported()) {
                 const hls = new Hls({
                     maxBufferLength: 30,
@@ -1166,7 +1285,7 @@
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
                     video.play().catch(err => showNotification("Erro ao iniciar: " + err.message, "error"));
-                    initCustomControls(video);
+                    initHLSControls(video);
                 });
                 hls.on(Hls.Events.ERROR, (event, data) => {
                     if (data.fatal) {
@@ -1174,12 +1293,12 @@
                         hls.destroy();
                     }
                 });
-                videoPlayer = hls;
+                hlsPlayer = hls;
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = streamUrl;
                 video.addEventListener('loadedmetadata', () => {
                     video.play().catch(err => showNotification("Erro ao iniciar: " + err.message, "error"));
-                    initCustomControls(video);
+                    initHLSControls(video);
                 });
             } else {
                 showNotification("Seu navegador não suporta HLS", "error");
