@@ -356,6 +356,7 @@
             transition: all 0.3s ease-in-out;
             position: relative;
             overflow: hidden;
+            margin-bottom: 15px;
         }
 
         .botao-terror::before {
@@ -408,7 +409,7 @@
         .player {
             width: 100%;
             height: 0;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 */
             position: relative;
             border-radius: 8px;
             overflow: hidden;
@@ -436,6 +437,10 @@
             top: 0;
             left: 0;
             z-index: 2;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         #player-container.active {
@@ -486,11 +491,11 @@
 
         .player-controls {
             position: absolute;
-            bottom: 0;
+            bottom: 20px;
             left: 0;
             width: 100%;
             background: rgba(20, 20, 20, 0.9);
-            padding: 20px;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -507,7 +512,7 @@
         .controls-right {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
         .control-btn {
@@ -516,7 +521,7 @@
             color: #fff;
             font-size: 24px;
             cursor: pointer;
-            padding: 10px;
+            padding: 8px;
             border-radius: 50%;
             transition: background-color 0.2s, transform 0.2s;
         }
@@ -529,12 +534,12 @@
         .volume-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .volume-slider {
             -webkit-appearance: none;
-            width: 100px;
+            width: 80px;
             height: 5px;
             border-radius: 5px;
             background: rgba(255, 255, 255, 0.2);
@@ -543,8 +548,8 @@
 
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: var(--primary-color);
             cursor: pointer;
@@ -552,8 +557,8 @@
         }
 
         .volume-slider::-moz-range-thumb {
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: var(--primary-color);
             cursor: pointer;
@@ -834,19 +839,43 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Responsividade */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 align-items: center;
+                width: 100%;
+                padding: 10px;
             }
             .login-container,
             .live-notification {
                 width: 100%;
                 max-width: none;
                 min-width: auto;
+                padding: 20px;
             }
             h1 {
                 font-size: 2.5em;
+            }
+            .player {
+                width: 100%;
+                max-width: 100%;
+            }
+            #player-container {
+                padding: 10px;
+            }
+            .player-controls {
+                padding: 10px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .controls-left,
+            .controls-right {
+                width: 100%;
+                justify-content: center;
+            }
+            .volume-slider {
+                width: 100px;
             }
         }
 
@@ -863,6 +892,15 @@
             .app-logo {
                 width: 60px;
                 height: 60px;
+            }
+            .control-btn {
+                font-size: 20px;
+                padding: 6px;
+            }
+            #channel-selector-menu {
+                width: 90%;
+                right: 5%;
+                top: 70px;
             }
         }
     </style>
@@ -893,6 +931,9 @@
         <section class="live-notification" id="live-notification">
             <a href="https://chat.whatsapp.com/DhbWCqqmV8O2Jh1nT3xdBO" target="_blank" class="botao-terror">
                 🩸 Junte-se à Comunidade
+            </a>
+            <a href="https://www.instagram.com/streamxcellence" target="_blank" class="botao-terror">
+                📸 Siga no Instagram
             </a>
             <div id="sobre">
                 <h2>Sobre o StreamXcellence</h2>
@@ -993,13 +1034,13 @@
                     channel: "lourimarcos",
                     width: "100%",
                     height: "100%",
-                    controls: false,
+                    controls: true,
                     autoplay: true,
                     muted: false,
                     parent: ["localhost", window.location.hostname]
                 });
                 twitchPlayer.addEventListener(Twitch.Player.READY, () => {
-                    twitchPlayer.setVolume(0.5);
+                    twitchPlayer.setVolume(1.0);
                     twitchPlayer.setMuted(false);
                     twitchPlayer.play();
                     initTwitchControls();
@@ -1193,14 +1234,17 @@
                 channel: "lourimarcos",
                 height: "100%",
                 width: "100%",
-                muted: true,
+                muted: false,
                 autoplay: true,
                 controls: false,
                 parent: ["localhost", window.location.hostname]
             });
             livePlayer.addEventListener(Twitch.Player.READY, () => {
+                livePlayer.setVolume(0.5);
+                livePlayer.setMuted(false);
                 const iframe = livePlayer.getIframe();
                 iframe.style.pointerEvents = "none";
+                iframe.allowFullscreen = false; // Desativa tela cheia nativa
             });
             setInterval(() => livePlayer.seek(0), 30000);
         }
@@ -1284,6 +1328,8 @@
                 hls.loadSource(streamUrl);
                 hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.muted = false;
+                    video.volume = 1.0;
                     video.play().catch(err => showNotification("Erro ao iniciar: " + err.message, "error"));
                     initHLSControls(video);
                 });
@@ -1297,6 +1343,8 @@
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                 video.src = streamUrl;
                 video.addEventListener('loadedmetadata', () => {
+                    video.muted = false;
+                    video.volume = 1.0;
                     video.play().catch(err => showNotification("Erro ao iniciar: " + err.message, "error"));
                     initHLSControls(video);
                 });
