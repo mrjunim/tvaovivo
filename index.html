@@ -14,6 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <style>
+	
+	
         /* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
@@ -1169,10 +1171,44 @@
                 height: 60px;
             }
         }
-    </style>
+    .live-notification .player.hidden {
+            display: none;
+        }
+
+        .upsell-message {
+            display: none;
+            text-align: center;
+            color: var(--text-color);
+            font-size: 1.2em;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .upsell-message.active {
+            display: block;
+        }
+
+        .upsell-button {
+            margin-top: 15px;
+            background: linear-gradient(135deg, #ff1a1a, #cc0000);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upsell-button:hover {
+            background: linear-gradient(135deg, #cc0000, #ff1a1a);
+            box-shadow: 0 8px 15px rgba(255, 26, 26, 0.4);
+            transform: translateY(-2px);
+        }
+	</style>
 </head>
 <body>
-    <div class="nevoa"></div>
+   <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
     <div id="zoom-image-container">
@@ -1211,6 +1247,10 @@
                 </div>
             </div>
             <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo"></div>
+            <div class="upsell-message" id="upsell-message">
+                <p>Quer assistir o conteúdo completo? Faça o login ou compre uma chave de acesso por apenas R$ 1,99.</p>
+                <button class="upsell-button" onclick="openModal()">Clique aqui</button>
+            </div>
         </section>
     </main>
 
@@ -1301,7 +1341,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         let player;
@@ -1316,13 +1356,14 @@
         let canaisData = [];
         let isChannelSelectorOpen = false;
 
-        function playVideo(videoElement) {
+       function playVideo(videoElement) {
             videoElement.play().catch(error => {
                 console.log('Erro ao reproduzir o vídeo:', error);
             });
         }
 
-        function showNotification(message, type = 'info') {
+
+         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
@@ -1332,6 +1373,68 @@
                 notification.remove();
             }, 3000);
         }
+
+// Função modificada para o player de notificação
+        function createLiveNotificationPlayer() {
+            const livePlayerContainer = document.getElementById("live-player");
+            const upsellMessage = document.getElementById("upsell-message");
+            
+            // Usar um blob URL para evitar captura direta do link
+            const m3u8Content = '#EXTM3U\n#EXTINF:-1,Lourimarcos\nhttps://video.twitch.tv/hls/lourimarcos.m3u8';
+            const blob = new Blob([m3u8Content], { type: 'application/vnd.apple.mpegurl' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            if (Hls.isSupported()) {
+                livePlayer = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 15
+                });
+                const video = document.createElement('video');
+                video.id = 'live-video';
+                video.muted = true;
+                video.autoplay = true;
+                video.controls = false;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                video.style.pointerEvents = 'none'; // Impede interação
+                livePlayerContainer.appendChild(video);
+
+                livePlayer.loadSource(blobUrl);
+                livePlayer.attachMedia(video);
+                livePlayer.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(err => console.log('Erro ao iniciar prévia:', err));
+                    // Temporizador de 15 segundos
+                    setTimeout(() => {
+                        livePlayer.destroy();
+                        livePlayerContainer.classList.add('hidden');
+                        upsellMessage.classList.add('active');
+                        URL.revokeObjectURL(blobUrl); // Libera o blob da memória
+                    }, 15000);
+                });
+            } else {
+                const video = document.createElement('video');
+                video.src = blobUrl;
+                video.muted = true;
+                video.autoplay = true;
+                video.controls = false;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                video.style.pointerEvents = 'none';
+                livePlayerContainer.appendChild(video);
+                video.addEventListener('loadedmetadata', () => {
+                    video.play().catch(err => console.log('Erro ao iniciar prévia (nativo):', err));
+                    setTimeout(() => {
+                        video.remove();
+                        livePlayerContainer.classList.add('hidden');
+                        upsellMessage.classList.add('active');
+                        URL.revokeObjectURL(blobUrl);
+                    }, 15000);
+                });
+            }
+        }
+
+
 
         function updateQualityMenu() {
             const qualityMenu = document.getElementById('quality-menu');
@@ -2108,12 +2211,11 @@
             return false;
         });
 
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             loadProgramacao();
             loadKeys();
             createLiveNotificationPlayer();
-            // Adicionar evento de tecla Enter para o input de chave
+            // Eventos existentes mantidos
             const keyInput = document.getElementById('key-input');
             if (keyInput) {
                 keyInput.addEventListener('keydown', function(event) {
@@ -2122,7 +2224,6 @@
                     }
                 });
             }
-            // Adicionar evento de tecla Enter para o input de nome
             const userName = document.getElementById('user-name');
             if (userName) {
                 userName.addEventListener('keydown', function(event) {
@@ -2131,7 +2232,6 @@
                     }
                 });
             }
-            // Adicionar evento de tecla Enter para verificação de chave de canais
             const canaisKeyInput = document.getElementById('canais-key-input');
             if (canaisKeyInput) {
                 canaisKeyInput.addEventListener('keydown', function(event) {
@@ -2140,7 +2240,6 @@
                     }
                 });
             }
-            // Fechar o seletor de canais ao clicar fora dele
             document.addEventListener('click', function(event) {
                 const selectorButton = document.getElementById('channel-selector-button');
                 const selectorMenu = document.getElementById('channel-selector-menu');
