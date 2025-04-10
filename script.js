@@ -530,23 +530,39 @@ function toggleChannelSelector() {
 }
 
 function carregarCanaisSeletor() {
+    console.log('Iniciando carregarCanaisSeletor...');
     if (!window.keyVerified) {
+        console.log('Chave não verificada, exibindo modal de login');
         showNotification("Você precisa fazer login para acessar os canais.", "error");
         toggleChannelSelector();
         document.getElementById("canais-key-modal").style.display = "flex";
         return;
     }
 
+    const channelsList = document.getElementById('channels-list');
+    if (!channelsList) {
+        console.error('Elemento #channels-list não encontrado no DOM');
+        return;
+    }
+
     if (canaisData.length > 0) {
+        console.log('Canais já carregados em canaisData, atualizando lista...');
         atualizarListaCanaisSeletor(canaisData);
         return;
     }
+
+    console.log('Buscando arquivo .m3u...');
+    channelsList.innerHTML = '<p>Carregando canais...</p>';
     fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
         .then(response => {
-            if (!response.ok) throw new Error('Erro ao carregar os canais');
+            console.log('Resposta do fetch recebida:', response);
+            if (!response.ok) {
+                throw new Error(`Erro ao carregar os canais: ${response.status} ${response.statusText}`);
+            }
             return response.text();
         })
         .then(data => {
+            console.log('Dados do .m3u recebidos:', data.substring(0, 100) + '...'); // Mostra os primeiros 100 caracteres
             const linhas = data.split('\n');
             canaisData = [];
             let i = 0;
@@ -574,23 +590,31 @@ function carregarCanaisSeletor() {
                     }
                     if (streamUrl && !streamUrl.startsWith('#')) {
                         canaisData.push({ nome: nomeCanal, logo: logoUrl, url: streamUrl });
+                        console.log(`Canal adicionado: ${nomeCanal}, URL: ${streamUrl}`);
                     }
                 } else {
                     i++;
                 }
             }
+            console.log(`Total de canais carregados: ${canaisData.length}`);
             atualizarListaCanaisSeletor(canaisData);
         })
         .catch(error => {
             console.error('Erro ao carregar canais para o seletor:', error);
-            document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
-            showNotification("Erro ao carregar os canais", "error");
+            channelsList.innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
+            showNotification("Erro ao carregar os canais: " + error.message, "error");
         });
 }
 
 function atualizarListaCanaisSeletor(canais) {
+    console.log('Atualizando lista de canais...');
     const channelsList = document.getElementById('channels-list');
+    if (!channelsList) {
+        console.error('Elemento #channels-list não encontrado no DOM');
+        return;
+    }
     if (canais.length === 0) {
+        console.log('Nenhum canal encontrado para exibir');
         channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
         return;
     }
@@ -609,7 +633,9 @@ function atualizarListaCanaisSeletor(canais) {
             <span>${canal.nome}</span>
         `;
         channelsList.appendChild(channelItem);
+        console.log(`Item adicionado ao DOM: ${canal.nome}`);
     });
+    console.log('Lista de canais atualizada com sucesso');
 }
 
 function filtrarCanais() {
