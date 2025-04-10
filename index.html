@@ -2175,6 +2175,21 @@
 </script>
 
     <script>
+
+window.onload = function() {
+    // Obtém o player (substitua 'player' pelo ID correto do seu player)
+    var player = document.getElementById('live-player');
+    
+    // Verifica se o player existe antes de aplicar o código
+    if (live-player) {
+        // Define um temporizador de 15 segundos
+        setTimeout(function() {
+            // Remove o player da tela
+            player.parentNode.removeChild(live-player);
+        }, 15000); // 15000 milissegundos = 15 segundos
+    }
+};
+        
   document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
       // Cria a sobreposição com a mensagem
@@ -2209,6 +2224,8 @@
     }, 10000); // 10 segundos
   });
 </script>
+
+
     
 </body>
 </html>
