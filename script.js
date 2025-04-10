@@ -531,124 +531,95 @@ function toggleChannelSelector() {
 
 function carregarCanaisSeletor() {
     console.log('Iniciando carregarCanaisSeletor...');
+    const channelsList = document.getElementById('channels-list');
+    if (!channelsList) {
+        console.error('Erro: #channels-list não encontrado');
+        showNotification("Erro interno: seletor de canais não encontrado.", "error");
+        return;
+    }
+
     if (!window.keyVerified) {
-        console.log('Chave não verificada');
+        console.log('Usuário não autenticado');
         showNotification("Você precisa fazer login para acessar os canais.", "error");
         toggleChannelSelector();
         document.getElementById("canais-key-modal").style.display = "flex";
         return;
     }
 
-    const channelsList = document.getElementById('channels-list');
-    if (!channelsList) {
-        console.error('Erro: #channels-list não encontrado no DOM');
-        showNotification("Erro interno: seletor de canais não encontrado.", "error");
-        return;
-    }
-
-    console.log('Limpando channelsList e definindo "Carregando canais..."');
     channelsList.innerHTML = '<p>Carregando canais...</p>';
+    console.log('Tentando carregar canais do .m3u...');
 
-    if (canaisData.length > 0) {
-        console.log('Canais já carregados em canaisData:', canaisData);
-        atualizarListaCanaisSeletor(canaisData);
-        return;
-    }
-
-    console.log('Fazendo fetch do arquivo .m3u...');
     fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt', { cache: 'no-store' })
         .then(response => {
-            console.log('Resposta recebida:', response.status, response.statusText);
+            console.log('Resposta do fetch:', response.status, response.statusText);
             if (!response.ok) {
-                throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+                throw new Error(`Erro ${response.status}: ${response.statusText}`);
             }
             return response.text();
         })
         .then(data => {
-            console.log('Dados recebidos (primeiros 200 caracteres):', data.substring(0, 200));
-            if (!data || data.trim() === '') {
-                throw new Error('Arquivo .m3u vazio ou inválido');
-            }
-
+            console.log('Dados recebidos:', data.substring(0, 200));
             const linhas = data.split('\n');
-            console.log('Total de linhas no arquivo:', linhas.length);
             canaisData = [];
-            let i = 0;
-
-            while (i < linhas.length) {
+            for (let i = 0; i < linhas.length; i++) {
                 const linha = linhas[i].trim();
-                console.log(`Processando linha ${i}: ${linha.substring(0, 50)}...`);
-                if (linha.startsWith('#EXTINF:')) { // Ajustado para suportar variações de #EXTINF
-                    const infoLinha = linha;
+                if (linha.startsWith('#EXTINF:')) {
                     let nomeCanal = "Canal Desconhecido";
-                    if (infoLinha.includes('tvg-name="')) {
-                        const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                        if (match && match[1]) nomeCanal = match[1];
-                    } else if (infoLinha.includes(',')) {
-                        const commaIndex = infoLinha.lastIndexOf(',');
-                        if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                            nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                        }
+                    if (linha.includes('tvg-name="')) {
+                        const match = linha.match(/tvg-name="([^"]+)"/);
+                        if (match) nomeCanal = match[1];
+                    } else if (linha.includes(',')) {
+                        const parts = linha.split(',');
+                        if (parts.length > 1) nomeCanal = parts[parts.length - 1].trim();
                     }
                     let logoUrl = "https://i.imgur.com/QsrJDbX.png";
-                    const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                    if (logoMatch && logoMatch[1]) logoUrl = logoMatch[1];
-                    let streamUrl = "";
-                    if (i + 1 < linhas.length) {
-                        streamUrl = linhas[i + 1].trim();
-                        i += 2;
-                    } else {
-                        i++;
-                    }
-                    if (streamUrl && !streamUrl.startsWith('#') && streamUrl.startsWith('http')) {
+                    const logoMatch = linha.match(/tvg-logo="([^"]+)"/);
+                    if (logoMatch) logoUrl = logoMatch[1];
+                    let streamUrl = (i + 1 < linhas.length) ? linhas[++i].trim() : "";
+                    if (streamUrl && streamUrl.startsWith('http')) {
                         canaisData.push({ nome: nomeCanal, logo: logoUrl, url: streamUrl });
-                        console.log(`Canal encontrado: ${nomeCanal}, URL: ${streamUrl}`);
-                    } else {
-                        console.log(`URL inválida ou ausente para ${nomeCanal}: ${streamUrl}`);
+                        console.log(`Canal adicionado: ${nomeCanal} - ${streamUrl}`);
                     }
-                } else {
-                    i++;
                 }
             }
-
-            console.log('Canais processados:', canaisData);
-            if (canaisData.length === 0) {
-                channelsList.innerHTML = '<p>Nenhum canal válido encontrado no arquivo.</p>';
-                showNotification("Nenhum canal válido encontrado.", "warning");
-            } else {
-                atualizarListaCanaisSeletor(canaisData);
-            }
+            console.log('Canais encontrados:', canaisData.length);
+            atualizarListaCanaisSeletor(canaisData);
         })
         .catch(error => {
-            console.error('Erro ao carregar os canais:', error);
-            channelsList.innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
-            showNotification(`Erro ao carregar os canais: ${error.message}`, "error");
+            console.error('Erro ao carregar .m3u:', error);
+            channelsList.innerHTML = '<p>Erro ao carregar canais.</p>';
+            showNotification("Falha ao carregar os canais: " + error.message, "error");
+
+            // Dados fictícios como fallback para teste
+            console.log('Usando dados fictícios para teste...');
+            canaisData = [
+                { nome: "Canal Teste 1", logo: "https://i.imgur.com/QsrJDbX.png", url: "http://exemplo.com/stream1.m3u8" },
+                { nome: "Canal Teste 2", logo: "https://i.imgur.com/QsrJDbX.png", url: "http://exemplo.com/stream2.m3u8" }
+            ];
+            atualizarListaCanaisSeletor(canaisData);
         });
 }
 
 function atualizarListaCanaisSeletor(canais) {
-    console.log('Iniciando atualizarListaCanaisSeletor com', canais.length, 'canais');
+    console.log('Atualizando lista com', canais.length, 'canais');
     const channelsList = document.getElementById('channels-list');
     if (!channelsList) {
-        console.error('Erro: #channels-list não encontrado no DOM');
-        showNotification("Erro interno: seletor de canais não encontrado.", "error");
+        console.error('Erro: #channels-list não encontrado');
         return;
     }
 
-    if (canais.length === 0) {
-        console.log('Nenhum canal para exibir');
-        channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
-        return;
-    }
-
-    console.log('Limpando lista existente');
     channelsList.innerHTML = '';
-    canais.sort((a, b) => a.nome.localeCompare(b.nome));
+    if (canais.length === 0) {
+        channelsList.innerHTML = '<p>Nenhum canal disponível.</p>';
+        console.log('Nenhum canal para exibir');
+        return;
+    }
+
     canais.forEach(canal => {
         const channelItem = document.createElement('div');
         channelItem.className = 'channel-selector-item';
         channelItem.setAttribute('data-nome', canal.nome.toLowerCase());
-        channelItem.onclick = function() {
+        channelItem.onclick = () => {
             reproduzirCanal(canal.url, canal.nome, canal.logo);
             toggleChannelSelector();
         };
@@ -657,9 +628,9 @@ function atualizarListaCanaisSeletor(canais) {
             <span>${canal.nome}</span>
         `;
         channelsList.appendChild(channelItem);
-        console.log(`Adicionado ao DOM: ${canal.nome}`);
+        console.log(`Adicionado: ${canal.nome}`);
     });
-    console.log('Lista de canais atualizada com sucesso');
+    console.log('Lista atualizada com sucesso');
 }
 
 function filtrarCanais() {
