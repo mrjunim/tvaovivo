@@ -1229,6 +1229,11 @@ display: flex;
             animation: fadeIn 0.5s ease;
         }
 
+        /* Esconde os controles do áudio */
+        #ghostAudio {
+            display: none;
+        }
+
         @keyframes slideIn {
             from {
                 top: -100px;
@@ -1248,10 +1253,6 @@ display: flex;
                 transform: scale(1);
             }
         }
-	    audio {
-    width: 100%;
-    margin-top: 10px;
-}
     </style>
 </head>
 <body>
@@ -1286,10 +1287,11 @@ display: flex;
         <h2>Sobre o StreamXcellence</h2>
         <p id="texto-sobre"></p>
     </div>
-<div class="notification" onclick="showMessage()">📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+	<br>	
+    <div class="notification" onclick="showMessage()"> 📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
     <div class="message-box" id="messageBox">
-        <p>Mensagem de voz do além</p>
-        <audio id="ghostAudio" src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3" controls></audio>
+        <p>Escutando mensagem do além...</p>
+        <audio id="ghostAudio" src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3"></audio>
     </div>
 
     <script>
@@ -1312,7 +1314,7 @@ display: flex;
             document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
         }, 1000);
     </script>
-	
+	<br>
     <div id="guide-container" role="marquee">
         <div class="scrolling-text" id="scrolling-text">
             <span id="guide-text">Carregando guia...</span>
