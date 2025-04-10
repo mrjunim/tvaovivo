@@ -1248,37 +1248,11 @@ display: flex;
                 transform: scale(1);
             }
         }
-  
 	    
     </style>
 </head>
 <body>
-	<div class="notification" onclick="showMessage()">Nova Mensagem do Além!</div>
-    <div class="message-box" id="messageBox">
-        <p>Eu sei o que você fez...</p>
-        <audio id="ghostAudio" src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3"></audio>
-    </div>
-
-    <script>
-        function showMessage() {
-            const messageBox = document.getElementById('messageBox');
-            const notification = document.querySelector('.notification');
-            
-            notification.style.display = 'none';
-            messageBox.style.display = 'block';
-            
-            // Toca o áudio
-            const audio = document.getElementById('ghostAudio');
-            audio.play().catch(error => {
-                console.log("Erro ao tocar áudio:", error);
-            });
-        }
-
-        // Mostra a notificação após 1 segundo
-        setTimeout(() => {
-            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
-        }, 1000);
-    </script>
+	
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
@@ -1309,6 +1283,33 @@ display: flex;
         <h2>Sobre o StreamXcellence</h2>
         <p id="texto-sobre"></p>
     </div>
+<div class="notification" onclick="showMessage()">📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+    <div class="message-box" id="messageBox">
+        <p>Mensagem de voz do além</p>
+        <audio id="ghostAudio" src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3" controls></audio>
+    </div>
+
+    <script>
+        function showMessage() {
+            const messageBox = document.getElementById('messageBox');
+            const notification = document.querySelector('.notification');
+            
+            notification.style.display = 'none';
+            messageBox.style.display = 'block';
+            
+            // Toca o áudio
+            const audio = document.getElementById('ghostAudio');
+            audio.play().catch(error => {
+                console.log("Erro ao tocar áudio:", error);
+            });
+        }
+
+        // Mostra a notificação após 1 segundo
+        setTimeout(() => {
+            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
+        }, 1000);
+    </script>
+	
     <div id="guide-container" role="marquee">
         <div class="scrolling-text" id="scrolling-text">
             <span id="guide-text">Carregando guia...</span>
