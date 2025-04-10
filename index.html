@@ -1186,7 +1186,7 @@
     </style>
 </head>
 <body>
-    <div class="live-player">
+    <div class="video-player">
   <video loop volume="0.5">
     <source src="https://cdn-user.veed.io/render/premium/fe23bfb2-8218-473f-92c4-be2b6fad5406.mp4" type="video/mp4">
     Seu navegador não suporta o elemento de vídeo.
@@ -2210,5 +2210,14 @@
     }, 10000); // 10 segundos
   });     
 </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const video = document.querySelector('.video-player video');
+    video.volume = 0.5; // Define volume para 50%
+    video.play(); // Inicia a reprodução automaticamente
+  });
+</script>
+    
 </body>
 </html>
