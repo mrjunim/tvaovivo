@@ -1169,9 +1169,29 @@
                 height: 60px;
             }
         }
+        .video-player {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 350px;
+  height: 200px;
+  z-index: 2;
+}
+
+.video-player video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
     </style>
 </head>
 <body>
+    <div class="video-player">
+  <video loop volume="0.5">
+    <source src="https://cdn-user.veed.io/render/premium/fe23bfb2-8218-473f-92c4-be2b6fad5406.mp4" type="video/mp4">
+    Seu navegador não suporta o elemento de vídeo.
+  </video>
+</div>
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
