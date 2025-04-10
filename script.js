@@ -16,6 +16,15 @@ let player;
             });
         }
 
+window.keyVerified = false;
+let player;
+let qualities = [];
+let currentQuality = 'auto';
+let isQualityMenuOpen = false;
+let isChannelSelectorOpen = false;
+let canaisData = [];
+let videoPlayer = null;
+
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
@@ -67,61 +76,63 @@ let player;
             }
         }
 
-        function createTwitchPlayer() {
-            if (!document.querySelector("#twitch-embed iframe")) {
-                player = new Twitch.Player("twitch-embed", {
-                    channel: "lourimarcos",
-                    width: "100%",
-                    height: "100%",
-                    controls: false,
-                    autoplay: true,
-                    muted: false,
-                    parent: ["localhost", window.location.hostname]
-                });
-                player.addEventListener(Twitch.Player.READY, () => {
-                    player.setVolume(0.5);
-                    player.setMuted(false);
-                    player.play();
-                    setTimeout(() => {
-                        qualities = player.getQualities();
-                        updateQualityMenu();
-                    }, 2000);
-                    initCustomControls();
-                    const playerElement = player.getIframe();
-                    const clickEvent = new MouseEvent('click', {
-                        view: window,
-                        bubbles: true,
-                        cancelable: true
-                    });
-                    playerElement.dispatchEvent(clickEvent);
-                    showNotification('Reprodução iniciada', 'success');
-                });
-                player.addEventListener(Twitch.Player.PLAY, () => {
-                    const playPauseBtn = document.getElementById('play-pause-btn');
-                    if (playPauseBtn) playPauseBtn.textContent = '⏸️';
-                });
-                player.addEventListener(Twitch.Player.PAUSE, () => {
-                    const playPauseBtn = document.getElementById('play-pause-btn');
-                    if (playPauseBtn) playPauseBtn.textContent = '▶️';
-                });
-                player.addEventListener(Twitch.Player.OFFLINE, () => {
-                    document.getElementById('player-container').innerHTML = `
-                        <div class="offline-container">
-                            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-                                <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                            </video>
-                            <div class="offline-message">
-                                <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
-                            </div>
-                        </div>
-                    `;
-                    const offlineVideo = document.getElementById('offline-video');
-                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-                    playVideo(offlineVideo);
-                    showNotification('O canal está offline no momento', 'error');
-                });
-            }
-        }
+       function createTwitchPlayer() {
+    if (!document.querySelector("#twitch-embed iframe")) {
+        player = new Twitch.Player("twitch-embed", {
+            channel: "lourimarcos", // Canal principal "StreamXcellence"
+            width: "100%",
+            height: "100%",
+            controls: false,
+            autoplay: true,
+            muted: false,
+            parent: ["localhost", window.location.hostname]
+        });
+        player.addEventListener(Twitch.Player.READY, () => {
+            player.setVolume(0.5);
+            player.setMuted(false);
+            player.play();
+            setTimeout(() => {
+                qualities = player.getQualities();
+                updateQualityMenu();
+            }, 2000);
+            initCustomControls();
+            const playerElement = player.getIframe();
+            const clickEvent = new MouseEvent('click', { view: window, bubbles: true, cancelable: true });
+            playerElement.dispatchEvent(clickEvent);
+            showNotification('Reprodução iniciada - StreamXcellence', 'success');
+            updateChannelInfo("StreamXcellence", "https://i.imgur.com/QsrJDbX.png");
+        });
+        player.addEventListener(Twitch.Player.PLAY, () => {
+            document.getElementById('play-pause-btn').textContent = '⏸️';
+        });
+        player.addEventListener(Twitch.Player.PAUSE, () => {
+            document.getElementById('play-pause-btn').textContent = '▶️';
+        });
+        player.addEventListener(Twitch.Player.OFFLINE, () => {
+            document.getElementById('player-container').innerHTML = `
+                <div class="offline-container">
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                    </video>
+                    <div class="offline-message">
+                        <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                    </div>
+                </div>
+            `;
+            const offlineVideo = document.getElementById('offline-video');
+            offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+            playVideo(offlineVideo);
+            showNotification('O canal está offline no momento', 'error');
+        });
+    }
+}
+
+function updateChannelInfo(channelName, logoUrl) {
+    const channelNameElement = document.querySelector('.channel-name');
+    const channelLogoElement = document.querySelector('.channel-logo');
+    channelNameElement.textContent = channelName;
+    channelLogoElement.src = logoUrl;
+}
 
         function initCustomControls() {
             const playPauseBtn = document.getElementById('play-pause-btn');
@@ -495,81 +506,89 @@ let player;
         }
 
         function toggleChannelSelector() {
-            const channelSelector = document.getElementById('channel-selector-menu');
-            isChannelSelectorOpen = !isChannelSelectorOpen;
-            if (isChannelSelectorOpen) {
-                channelSelector.classList.add('active');
-                if (document.getElementById('channels-list').innerHTML === '<p>Carregando canais...</p>' && canaisData.length === 0) {
-                    carregarCanaisSeletor();
-                }
+    const channelSelector = document.getElementById('channel-selector-menu');
+    isChannelSelectorOpen = !isChannelSelectorOpen;
+    channelSelector.classList.toggle('active', isChannelSelectorOpen);
+    if (isChannelSelectorOpen && document.getElementById('channels-list').innerHTML === '<p>Carregando canais...</p>' && canaisData.length === 0) {
+        carregarCanaisSeletor();
+    }
+}
             } else {
                 channelSelector.classList.remove('active');
             }
         }
 
-        function carregarCanaisSeletor() {
-            if (canaisData.length > 0) {
-                atualizarListaCanaisSeletor(canaisData);
-                return;
+       function carregarCanaisSeletor() {
+    if (!window.keyVerified) {
+        showNotification("Você precisa fazer login para acessar os canais.", "error");
+        toggleChannelSelector();
+        document.getElementById("canais-key-modal").style.display = "flex";
+        return;
+    }
+
+    if (canaisData.length > 0) {
+        atualizarListaCanaisSeletor(canaisData);
+        return;
+    }
+
+    fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
+        .then(response => {
+            if (!response.ok) throw new Error('Erro ao carregar os canais');
+            return response.text();
+        })
+        .then(data => {
+            const linhas = data.split('\n');
+            canaisData = [];
+            let i = 0;
+            while (i < linhas.length) {
+                const linha = linhas[i].trim();
+                if (linha.startsWith('#EXTINF:-1')) {
+                    const infoLinha = linha;
+                    let nomeCanal = "Canal";
+                    if (infoLinha.includes('tvg-name="')) {
+                        const match = infoLinha.match(/tvg-name="([^"]+)"/);
+                        if (match && match[1]) nomeCanal = match[1];
+                    } else if (infoLinha.includes(',')) {
+                        const commaIndex = infoLinha.lastIndexOf(',');
+                        if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) nomeCanal = infoLinha.substring(commaIndex + 1).trim();
+                    }
+                    let logoUrl = "https://i.imgur.com/QsrJDbX.png";
+                    const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
+                    if (logoMatch && logoMatch[1]) logoUrl = logoMatch[1];
+                    let streamUrl = "";
+                    if (i + 1 < linhas.length) {
+                        streamUrl = linhas[i + 1].trim();
+                        i += 2;
+                    } else {
+                        i++;
+                    }
+                    if (streamUrl && !streamUrl.startsWith('#')) {
+                        canaisData.push({ nome: nomeCanal, logo: logoUrl, url: streamUrl });
+                    }
+                } else {
+                    i++;
+                }
             }
-            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar os canais');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    const linhas = data.split('\n');
-                    canaisData = [];
-                    let i = 0;
-                    while (i < linhas.length) {
-                        const linha = linhas[i].trim();
-                        if (linha.startsWith('#EXTINF:-1')) {
-                            const infoLinha = linha;
-                            let nomeCanal = "Canal";
-                            if (infoLinha.includes('tvg-name="')) {
-                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                                if (match && match[1]) {
-                                    nomeCanal = match[1];
-                                }
-                            } else if (infoLinha.includes(',')) {
-                                const commaIndex = infoLinha.lastIndexOf(',');
-                                if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                                    nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                                }
-                            }
-                            let logoUrl = "https://i.imgur.com/QsrJDbX.png";
-                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                            if (logoMatch && logoMatch[1]) {
-                                logoUrl = logoMatch[1];
-                            }
-                            let streamUrl = "";
-                            if (i + 1 < linhas.length) {
-                                streamUrl = linhas[i + 1].trim();
-                                i += 2;
-                            } else {
-                                i++;
-                            }
-                            if (streamUrl && !streamUrl.startsWith('#')) {
-                                canaisData.push({
-                                    nome: nomeCanal,
-                                    logo: logoUrl,
-                                    url: streamUrl
-                                });
-                            }
-                        } else {
-                            i++;
-                        }
-                    }
-                    atualizarListaCanaisSeletor(canaisData);
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar canais para o seletor:', error);
-                    document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
-                    showNotification("Erro ao carregar os canais", "error");
-                });
-        }
+            atualizarListaCanaisSeletor(canaisData);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar canais para o seletor:', error);
+            document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
+            showNotification("Erro ao carregar os canais", "error");
+        });
+}
+
+function backToMainChannel() {
+    if (videoPlayer) {
+        videoPlayer.destroy(); // Destroi o player HLS atual
+        videoPlayer = null;
+    }
+    const playerElement = document.getElementById('player');
+    playerElement.innerHTML = '<div id="twitch-embed"></div>';
+    createTwitchPlayer(); // Recria o Twitch Player com o canal principal
+    toggleChannelSelector(); // Fecha o seletor
+    showNotification("Voltando para StreamXcellence", "success");
+}
 
         function atualizarListaCanaisSeletor(canais) {
             const channelsList = document.getElementById('channels-list');
@@ -682,106 +701,84 @@ let player;
         }
 
         function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
-            console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
-            closeCanaisModal();
-            const playerContainer = document.getElementById('player-container');
-            playerContainer.style.display = 'flex';
-            playerContainer.innerHTML = `
-                <div class="player hls-player">
-                    <video id="video-player" controls></video>
-                </div>
-                <div class="channel-info">
-                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <div>
-                        <div class="channel-name">${nomeCanal}</div>
-                        <span class="live-indicator">AO VIVO</span>
-                    </div>
-                </div>
-                <div id="channel-selector-button" onclick="toggleChannelSelector()">
-                    <span>📺 Mudar Canal</span>
-                </div>
-                <div id="channel-selector-menu">
-                    <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
-                    <div id="channels-list">
-                        <p>Carregando canais...</p>
-                    </div>
-                </div>
-            `;
-            const video = document.getElementById('video-player');
-            if (Hls.isSupported()) {
-                const hls = new Hls({
-                    maxBufferLength: 30,
-                    maxMaxBufferLength: 60,
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    testBandwidth: true,
-                    progressive: true,
-                    xhrSetup: function(xhr) {
-                        xhr.withCredentials = false;
-                    }
-                });
-                try {
-                    hls.loadSource(streamUrl);
-                    hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        console.log('Manifest parsed, attempting to play');
-                        video.play().catch(err => {
-                            console.error('Erro ao iniciar reprodução:', err);
-                            showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                        });
-                    });
-                    hls.on(Hls.Events.ERROR, function(event, data) {
-                        console.error('Erro HLS:', data.type, data.details);
-                        if (data.fatal) {
-                            switch(data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    console.error('Erro de rede, tentando recuperar...');
-                                    showNotification("Erro de rede. Tentando reconectar...", "error");
-                                    hls.startLoad();
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    console.error('Erro de mídia, tentando recuperar...');
-                                    showNotification("Erro de mídia. Tentando recuperar...", "error");
-                                    hls.recoverMediaError();
-                                    break;
-                                default:
-                                    console.error('Erro fatal, não é possível recuperar');
-                                    showNotification("Não foi possível carregar o stream", "error");
-                                    hls.destroy();
-                                    break;
-                            }
-                        }
-                    });
-                        
-                    videoPlayer = hls;
-                } catch (error) {
-                    console.error('Erro ao configurar HLS:', error);
-                    showNotification("Erro ao configurar reprodução: " + error.message, "error");
-                }
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Para Safari/iOS
-                video.src = streamUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    console.log('Metadados carregados, tentando reproduzir');
-                    video.play().catch(err => {
-                        console.error('Erro ao iniciar reprodução (Safari):', err);
-                        showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                    });
-                });
-                    
-                video.addEventListener('error', function(e) {
-                    console.error('Erro no elemento de vídeo:', video.error);
-                    showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
-                });
-            } else {
-                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
-            }
-                
-            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
+    console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
+    const playerContainer = document.getElementById('player-container');
+    if (!playerContainer.classList.contains('active')) {
+        playerContainer.style.display = 'flex';
+        playerContainer.classList.add('active');
+    }
 
-            // Carregar canais para o seletor
-            setTimeout(carregarCanaisSeletor, 500);
+    // Remove o Twitch Player se existir
+    if (player) {
+        player.destroy();
+        player = null;
+    }
+
+    // Limpa o conteúdo atual do player
+    const playerElement = document.getElementById('player');
+    playerElement.innerHTML = '<video id="video-player" controls></video>';
+
+    const video = document.getElementById('video-player');
+    if (Hls.isSupported()) {
+        if (videoPlayer) videoPlayer.destroy(); // Destroi o player HLS anterior
+        const hls = new Hls({
+            maxBufferLength: 30,
+            maxMaxBufferLength: 60,
+            enableWorker: true,
+            lowLatencyMode: true,
+            testBandwidth: true,
+            progressive: true,
+            xhrSetup: function(xhr) { xhr.withCredentials = false; }
+        });
+        try {
+            hls.loadSource(streamUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                video.play().catch(err => {
+                    console.error('Erro ao iniciar reprodução:', err);
+                    showNotification("Erro ao iniciar reprodução: " + err.message, "error");
+                });
+            });
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                console.error('Erro HLS:', data.type, data.details);
+                if (data.fatal) {
+                    switch(data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            showNotification("Erro de rede. Tentando reconectar...", "error");
+                            hls.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            showNotification("Erro de mídia. Tentando recuperar...", "error");
+                            hls.recoverMediaError();
+                            break;
+                        default:
+                            showNotification("Não foi possível carregar o stream", "error");
+                            hls.destroy();
+                            break;
+                    }
+                }
+            });
+            videoPlayer = hls;
+        } catch (error) {
+            console.error('Erro ao configurar HLS:', error);
+            showNotification("Erro ao configurar reprodução: " + error.message, "error");
         }
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.addEventListener('loadedmetadata', () => {
+            video.play().catch(err => {
+                console.error('Erro ao iniciar reprodução (Safari):', err);
+                showNotification("Erro ao iniciar reprodução: " + err.message, "error");
+            });
+        });
+    } else {
+        showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
+    }
+
+    updateChannelInfo(nomeCanal, logoUrl);
+    showNotification(`Reproduzindo: ${nomeCanal}`, "success");
+    toggleChannelSelector(); // Fecha o seletor após seleção
+}
 
         // Proteção contra inspeção (mantido do código original)
         document.addEventListener('keydown', function (event) {
