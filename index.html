@@ -1258,15 +1258,28 @@ display: flex;
         <p id="texto-sobre"></p>
     </div>
 	<br>	
-    <div class="notification" onclick="playAudio()"> 📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <audio id="ghostAudio" src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3"></audio>
+   <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+    <audio id="ghostAudio"></audio>
+
     <script>
-        function playAudio() {
+        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
+        const audioFiles = [
+            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
+            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
+            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
+            
+        ];
+
+        function playRandomAudio() {
             const notification = document.querySelector('.notification');
             const audio = document.getElementById('ghostAudio');
             
             // Esconde a notificação
             notification.style.display = 'none';
+            
+            // Seleciona um áudio aleatório da lista
+            const randomIndex = Math.floor(Math.random() * audioFiles.length);
+            audio.src = audioFiles[randomIndex];
             
             // Toca o áudio
             audio.play().catch(error => {
