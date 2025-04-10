@@ -21,6 +21,48 @@
             --guide-bg: rgba(30, 41, 59, 0.95);
         }
 
+ #channel-selector-menu {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    width: 300px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: rgba(20, 25, 40, 0.95);
+    border-radius: 16px;
+    padding: 20px;
+    display: none;
+    z-index: 1000;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+}
+
+#channel-selector-menu.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+#back-to-main-btn {
+    width: 100%;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #ff1a1a, #cc0000);
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#back-to-main-btn:hover {
+    background: linear-gradient(135deg, #cc0000, #ff1a1a);
+    box-shadow: 0 8px 15px rgba(255, 26, 26, 0.4);
+    transform: translateY(-2px);
+}
+
         * {
             margin: 0;
             padding: 0;
