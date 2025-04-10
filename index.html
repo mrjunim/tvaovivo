@@ -1196,16 +1196,7 @@
 }
 
 
-display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1a1a1a;
-            font-family: Arial, sans-serif;
-        }
-
-        .notification {
+.notification {
             position: fixed;
             top: -100px;
             background: #ff4444;
@@ -1217,40 +1208,12 @@ display: flex;
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
 
-        .message-box {
-            display: none;
-            position: fixed;
-            width: 300px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Esconde os controles do áudio */
-        #ghostAudio {
-            display: none;
-        }
-
         @keyframes slideIn {
             from {
                 top: -100px;
             }
             to {
                 top: 20px;
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
             }
         }
     </style>
@@ -1288,22 +1251,17 @@ display: flex;
         <p id="texto-sobre"></p>
     </div>
 	<br>	
-    <div class="notification" onclick="showMessage()"> 📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <div class="message-box" id="messageBox">
-        <p>Escutando mensagem do além...</p>
-        <audio id="ghostAudio" src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3"></audio>
-    </div>
-
+    <div class="notification" onclick="playAudio()"> 📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+    <audio id="ghostAudio" src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3"></audio>
     <script>
-        function showMessage() {
-            const messageBox = document.getElementById('messageBox');
+        function playAudio() {
             const notification = document.querySelector('.notification');
+            const audio = document.getElementById('ghostAudio');
             
+            // Esconde a notificação
             notification.style.display = 'none';
-            messageBox.style.display = 'block';
             
             // Toca o áudio
-            const audio = document.getElementById('ghostAudio');
             audio.play().catch(error => {
                 console.log("Erro ao tocar áudio:", error);
             });
