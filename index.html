@@ -57,41 +57,42 @@
         </section>
     </main>
 
-    <div id="player-container" aria-live="polite">
-        <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
-        </div>
-        <div class="channel-info">
-            <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
-            <div>
-                <div class="channel-name">StreamXcellence</div>
-                <span class="live-indicator">AO VIVO</span>
-            </div>
-        </div>
-        <div id="channel-selector-button" onclick="toggleChannelSelector()">
-            <span>📺 Mudar Canal</span>
-        </div>
-        <div id="channel-selector-menu">
-            <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
-            <div id="channels-list">
-                <p>Carregando canais...</p>
-            </div>
-        </div>
-        <div id="quality-menu" class="quality-menu"></div>
-        <div class="player-controls">
-            <div class="controls-left">
-                <button id="play-pause-btn" class="control-btn">⏸️</button>
-                <div class="volume-container">
-                    <button id="mute-btn" class="control-btn">🔊</button>
-                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
-                </div>
-            </div>
-            <div class="controls-right">
-                <button id="quality-btn" class="control-btn">⚙️</button>
-                <button id="fullscreen-btn" class="control-btn">⛶</button>
-            </div>
+   <div id="player-container" aria-live="polite">
+    <div class="player twitch-player" id="player">
+        <div id="twitch-embed"></div>
+    </div>
+    <div class="channel-info">
+        <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
+        <div>
+            <div class="channel-name">StreamXcellence</div>
+            <span class="live-indicator">AO VIVO</span>
         </div>
     </div>
+    <div id="channel-selector-button" onclick="toggleChannelSelector()">
+        <span>📺 Mudar Canal</span>
+    </div>
+    <div id="channel-selector-menu">
+        <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
+        <button id="back-to-main-btn" class="btn-primary" onclick="backToMainChannel()">Voltar para StreamXcellence</button>
+        <div id="channels-list">
+            <p>Carregando canais...</p>
+        </div>
+    </div>
+    <div id="quality-menu" class="quality-menu"></div>
+    <div class="player-controls">
+        <div class="controls-left">
+            <button id="play-pause-btn" class="control-btn">⏸️</button>
+            <div class="volume-container">
+                <button id="mute-btn" class="control-btn">🔊</button>
+                <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+            </div>
+        </div>
+        <div class="controls-right">
+            <button id="quality-btn" class="control-btn">⚙️</button>
+            <button id="fullscreen-btn" class="control-btn">⛶</button>
+        </div>
+    </div>
+</div>
 
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
