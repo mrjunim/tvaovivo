@@ -2176,19 +2176,6 @@
 
     <script>
 
-window.onload = function() {
-    // Obtém o player (substitua 'player' pelo ID correto do seu player)
-    var player = document.getElementById('live-player');
-    
-    // Verifica se o player existe antes de aplicar o código
-    if (live-player) {
-        // Define um temporizador de 15 segundos
-        setTimeout(function() {
-            // Remove o player da tela
-            player.parentNode.removeChild(live-player);
-        }, 15000); // 15000 milissegundos = 15 segundos
-    }
-};
         
   document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => {
@@ -2223,6 +2210,21 @@ window.onload = function() {
       }
     }, 10000); // 10 segundos
   });
+
+        window.onload = function() {
+    // Obtém o player (substitua 'player' pelo ID correto do seu player)
+    var player = document.getElementById('notification-container');
+    
+    // Verifica se o player existe antes de aplicar o código
+    if (notification-container) {
+        // Define um temporizador de 15 segundos
+        setTimeout(function() {
+            // Remove o player da tela
+            player.parentNode.removeChild(notification-container);
+        }, 15000); // 15000 milissegundos = 15 segundos
+    }
+};
+        
 </script>
 
 
