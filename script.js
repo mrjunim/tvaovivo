@@ -847,14 +847,6 @@ let player;
                 }
             });
         });
-    </script>
-
-
-
-
-
-
-    <script>
 
         
   document.addEventListener("DOMContentLoaded", function () {
