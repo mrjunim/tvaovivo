@@ -1596,6 +1596,37 @@
     }
 }
 
+
+function attemptPlay() {
+            liveVideo.muted = true; // Começa muted para garantir autoplay
+            liveVideo.play()
+                .then(() => {
+                    // Após iniciar, tenta desmutar
+                    liveVideo.muted = false;
+                    console.log('Vídeo iniciado com som');
+                })
+                .catch(error => {
+                    console.log('Autoplay bloqueado:', error);
+                    // Fallback: desmuta e toca ao primeiro clique
+                    document.body.addEventListener('click', function enableAudio() {
+                        liveVideo.muted = false;
+                        liveVideo.play().catch(err => console.error('Erro ao retomar:', err));
+                        document.body.removeEventListener('click', enableAudio);
+                        showNotification('Clique detectado, vídeo iniciado com som', 'info');
+                    }, { once: true });
+                });
+        }
+
+        // Tenta reproduzir imediatamente
+        attemptPlay();
+
+        // Listener para erro de carregamento
+        liveVideo.addEventListener('error', (e) => {
+            console.error('Erro ao carregar o vídeo ao vivo:', e);
+            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+        });
+    }
+}
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
                 .then(response => {
