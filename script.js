@@ -16,15 +16,6 @@ let player;
             });
         }
 
-window.keyVerified = false;
-let player;
-let qualities = [];
-let currentQuality = 'auto';
-let isQualityMenuOpen = false;
-let isChannelSelectorOpen = false;
-let canaisData = [];
-let videoPlayer = null;
-
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
