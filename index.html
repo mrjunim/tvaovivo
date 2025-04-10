@@ -1548,28 +1548,7 @@
             }
         }
 
-        function createLiveNotificationPlayer() {
-            const livePlayerContainer = document.getElementById("live-player");
-            livePlayer = new Twitch.Player("live-player", {
-                channel: "lourimarcos",
-                height: "100%",
-                width: "100%",
-                muted: true,
-                autoplay: true,
-                controls: false,
-                parent: ["localhost", window.location.hostname]
-            });
-            livePlayer.addEventListener(Twitch.Player.READY, () => {
-                const iframe = livePlayer.getIframe();
-                iframe.style.pointerEvents = "none";
-            });
-            function reloadLivePlayer() {
-                if (livePlayer) {
-                    livePlayer.seek(0);
-                }
-            }
-            setInterval(reloadLivePlayer, 30000);
-        }
+        
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
