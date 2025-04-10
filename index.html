@@ -2209,18 +2209,19 @@
       overlay.style.width = "100%";
       overlay.style.height = "100%";
       overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
-      overlay.style.zIndex = 9999;
+      overlay.style.zIndex = 6666;
       overlay.style.display = "flex";
       overlay.style.flexDirection = "column";
       overlay.style.alignItems = "center";
       overlay.style.justifyContent = "center";
       overlay.style.color = "white";
       overlay.style.fontFamily = "sans-serif";
-      overlay.style.padding = "30px";
+      overlay.style.padding = "10px";
       overlay.innerHTML = `
         <h2 style="margin-bottom: 10px;">Atenção!</h2>
         <p style="font-size: 18px; max-width: 400px; text-align: center;">
-          Para continuar assistindo, faça o login ou compre uma chave de acesso por apenas <strong>R$ 1,99</strong>.
+          Você atravessou o portal... e agora não há mais volta.
+          Sombras sussurram seu nome. A próxima cena só começa com o seu login. <strong>R$ 1,99</strong>.
         </p>
       `;
       // Insere a sobreposição dentro da div do player
@@ -2229,7 +2230,7 @@
         playerContainer.style.position = "relative";
         playerContainer.appendChild(overlay);
       }
-    }, 10000); // 10 segundos
+    }, 130000); // 10 segundos
   });     
 </script>
 </body>
