@@ -1375,64 +1375,81 @@
         }
 
 // Função modificada para o player de notificação
-        function createLiveNotificationPlayer() {
-            const livePlayerContainer = document.getElementById("live-player");
-            const upsellMessage = document.getElementById("upsell-message");
-            
-            // Usar um blob URL para evitar captura direta do link
-            const m3u8Content = '#EXTM3U\n#EXTINF:-1,Lourimarcos\nhttps://video.twitch.tv/hls/lourimarcos.m3u8';
-            const blob = new Blob([m3u8Content], { type: 'application/vnd.apple.mpegurl' });
-            const blobUrl = URL.createObjectURL(blob);
+         function createLiveNotificationPlayer() {
+        const livePlayerContainer = document.getElementById("live-player");
+        const upsellMessage = document.getElementById("upsell-message");
+        
+        // Certifique-se de que o container e a mensagem estão inicialmente visíveis/escondidos corretamente
+        livePlayerContainer.classList.remove('hidden'); // Garante que o player comece visível
+        upsellMessage.classList.remove('active'); // Garante que a mensagem comece escondida
 
-            if (Hls.isSupported()) {
-                livePlayer = new Hls({
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    backBufferLength: 15
-                });
-                const video = document.createElement('video');
-                video.id = 'live-video';
-                video.muted = true;
-                video.autoplay = true;
-                video.controls = false;
-                video.style.width = '100%';
-                video.style.height = '100%';
-                video.style.pointerEvents = 'none'; // Impede interação
-                livePlayerContainer.appendChild(video);
+        // Usar um blob URL para evitar captura direta do link
+        const m3u8Content = '#EXTM3U\n#EXTINF:-1,Lourimarcos\nhttps://video.twitch.tv/hls/lourimarcos.m3u8';
+        const blob = new Blob([m3u8Content], { type: 'application/vnd.apple.mpegurl' });
+        const blobUrl = URL.createObjectURL(blob);
 
-                livePlayer.loadSource(blobUrl);
-                livePlayer.attachMedia(video);
-                livePlayer.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(err => console.log('Erro ao iniciar prévia:', err));
-                    // Temporizador de 15 segundos
-                    setTimeout(() => {
-                        livePlayer.destroy();
-                        livePlayerContainer.classList.add('hidden');
-                        upsellMessage.classList.add('active');
-                        URL.revokeObjectURL(blobUrl); // Libera o blob da memória
-                    }, 15000);
-                });
-            } else {
-                const video = document.createElement('video');
-                video.src = blobUrl;
-                video.muted = true;
-                video.autoplay = true;
-                video.controls = false;
-                video.style.width = '100%';
-                video.style.height = '100%';
-                video.style.pointerEvents = 'none';
-                livePlayerContainer.appendChild(video);
-                video.addEventListener('loadedmetadata', () => {
-                    video.play().catch(err => console.log('Erro ao iniciar prévia (nativo):', err));
-                    setTimeout(() => {
-                        video.remove();
-                        livePlayerContainer.classList.add('hidden');
-                        upsellMessage.classList.add('active');
-                        URL.revokeObjectURL(blobUrl);
-                    }, 15000);
-                });
-            }
+        if (Hls.isSupported()) {
+            livePlayer = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                backBufferLength: 15
+            });
+            const video = document.createElement('video');
+            video.id = 'live-video';
+            video.muted = true;
+            video.autoplay = true;
+            video.controls = false;
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.pointerEvents = 'none'; // Impede interação
+            livePlayerContainer.innerHTML = ''; // Limpa o container antes de adicionar o vídeo
+            livePlayerContainer.appendChild(video);
+
+            livePlayer.loadSource(blobUrl);
+            livePlayer.attachMedia(video);
+            livePlayer.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play().catch(err => console.log('Erro ao iniciar prévia:', err));
+                // Temporizador de 15 segundos
+                setTimeout(() => {
+                    livePlayer.destroy(); // Destroi o player HLS
+                    livePlayerContainer.innerHTML = ''; // Remove o vídeo do DOM
+                    livePlayerContainer.classList.add('hidden'); // Esconde o container
+                    upsellMessage.classList.add('active'); // Mostra a mensagem de upsell
+                    URL.revokeObjectURL(blobUrl); // Libera o blob da memória
+                }, 15000);
+            });
+            livePlayer.on(Hls.Events.ERROR, function(event, data) {
+                console.error('Erro HLS:', data.type, data.details);
+                livePlayerContainer.innerHTML = '<p>Erro ao carregar a prévia.</p>';
+                upsellMessage.classList.add('active');
+            });
+        } else {
+            const video = document.createElement('video');
+            video.src = blobUrl;
+            video.muted = true;
+            video.autoplay = true;
+            video.controls = false;
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.pointerEvents = 'none';
+            livePlayerContainer.innerHTML = ''; // Limpa o container antes de adicionar o vídeo
+            livePlayerContainer.appendChild(video);
+            video.addEventListener('loadedmetadata', () => {
+                video.play().catch(err => console.log('Erro ao iniciar prévia (nativo):', err));
+                setTimeout(() => {
+                    video.remove(); // Remove o elemento de vídeo do DOM
+                    livePlayerContainer.classList.add('hidden'); // Esconde o container
+                    upsellMessage.classList.add('active'); // Mostra a mensagem de upsell
+                    URL.revokeObjectURL(blobUrl);
+                }, 15000);
+            });
+            video.addEventListener('error', () => {
+                console.error('Erro no vídeo nativo');
+                livePlayerContainer.innerHTML = '<p>Erro ao carregar a prévia.</p>';
+                upsellMessage.classList.add('active');
+            });
         }
+    }
 
 
 
@@ -2255,6 +2272,47 @@
     </script>
 
 
+document.addEventListener('DOMContentLoaded', function() {
+        loadProgramacao();
+        loadKeys();
+        createLiveNotificationPlayer();
+        // Eventos existentes mantidos
+        const keyInput = document.getElementById('key-input');
+        if (keyInput) {
+            keyInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verifyKey();
+                }
+            });
+        }
+        const userName = document.getElementById('user-name');
+        if (userName) {
+            userName.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    sendToWhatsApp();
+                }
+            });
+        }
+        const canaisKeyInput = document.getElementById('canais-key-input');
+        if (canaisKeyInput) {
+            canaisKeyInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificarChaveCanais();
+                }
+            });
+        }
+        document.addEventListener('click', function(event) {
+            const selectorButton = document.getElementById('channel-selector-button');
+            const selectorMenu = document.getElementById('channel-selector-menu');
+            if (isChannelSelectorOpen && 
+                selectorButton && selectorMenu && 
+                !selectorButton.contains(event.target) && 
+                !selectorMenu.contains(event.target)) {
+                isChannelSelectorOpen = false;
+                selectorMenu.classList.remove('active');
+            }
+        });
+    });
 
 
 <script>
