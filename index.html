@@ -2172,5 +2172,46 @@
 
   window.onload = digitarTexto;
 </script>
+
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(() => {
+      // Cria a sobreposição com a mensagem
+      const overlay = document.createElement("div");
+      overlay.id = "block-message";
+      overlay.style.position = "absolute";
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
+      overlay.style.zIndex = 9999;
+      overlay.style.display = "flex";
+      overlay.style.flexDirection = "column";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.color = "white";
+      overlay.style.fontFamily = "sans-serif";
+      overlay.style.padding = "20px";
+      overlay.innerHTML = `
+        <h2 style="margin-bottom: 10px;">Atenção!</h2>
+        <p style="font-size: 18px; max-width: 400px; text-align: center;">
+          Para continuar assistindo, faça o login ou compre uma chave de acesso por apenas <strong>R$ 1,99</strong>.
+        </p>
+        <button onclick="document.querySelector('#modal').click()" style="margin-top: 20px; padding: 10px 20px; background-color: #e60000; border: none; border-radius: 5px; color: white; font-size: 16px; cursor: pointer;">
+          Comprar Chave de Acesso
+        </button>
+      `;
+
+      // Insere a sobreposição dentro da div do player
+      const playerContainer = document.querySelector('#notification-container');
+      if (playerContainer) {
+        playerContainer.style.position = "relative";
+        playerContainer.appendChild(overlay);
+      }
+    }, 10000); // 10 segundos
+  });
+</script>
+    
 </body>
 </html>
