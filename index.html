@@ -2199,14 +2199,6 @@
           Para continuar assistindo, faça o login ou compre uma chave de acesso por apenas <strong>R$ 1,99</strong>.
         </p>
       `;
- setTimeout(() => {
-    // Encontrar o iframe do player
-    const player = document.querySelector('#live-player');
-    
-    // Remover o iframe (destruir o player)
-    if (player) {
-      player.remove();
-    }
       // Insere a sobreposição dentro da div do player
       const playerContainer = document.querySelector('#live-player');
       if (playerContainer) {
