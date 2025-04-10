@@ -1737,6 +1737,16 @@
             }
         }
 
+
+	    // Aguarda 15 segundos antes de ocultar a notificação
+setTimeout(function() {
+    var notification = document.getElementById('createLiveNotificationPlayer');
+    if (notification) {
+        notification.style.display = 'none';
+    }
+}, 15000);
+
+	    
         function createLiveNotificationPlayer() {
             const livePlayerContainer = document.getElementById("live-player");
             livePlayer = new Twitch.Player("live-player", {
