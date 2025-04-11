@@ -1223,10 +1223,95 @@ display: flex;
                 top: 20px;
             }
         }
+
+body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #1c2526;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        header img {
+            max-width: 150px;
+        }
+        .player-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+            position: relative;
+        }
+        #videoPlayer {
+            width: 100%;
+            height: auto;
+            background-color: #000;
+        }
+        .channel-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #1c2526;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 800px;
+        }
+        .channel-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #333;
+        }
+        .channel-item:hover {
+            background-color: #333;
+        }
+        .controls {
+            margin-top: 10px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #e50914;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #b20710;
+        }
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #1c2526;
+            width: 100%;
+        }
+	    
     </style>
 </head>
 <body>
-	
+	<header>
+        <img src="https://raw.githubusercontent.com/mrjunim/tvaovivo/main/logo.png" alt="Logo TV Online">
+    </header>
+
+    <div class="player-container">
+        <video id="videoPlayer" controls autoplay>
+            <source id="videoSource" src="" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+        <div class="channel-list" id="channelList"></div>
+        <div class="controls">
+            <button onclick="resetToFirstChannel()">Voltar ao Canal Inicial</button>
+        </div>
+    </div>
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
@@ -1396,6 +1481,7 @@ display: flex;
         </div>
     </div>
 
+	
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
@@ -1417,6 +1503,65 @@ display: flex;
             });
         }
 
+
+        let channels = [];
+        let firstChannelUrl = '';
+
+        // Função para carregar os canais do filmeseseries.txt
+        async function loadChannels() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/mrjunim/tvaovivo/main/filmeseseries.txt');
+                const text = await response.text();
+                channels = text.split('\n').filter(line => line.trim() && line.includes('|'));
+
+                const channelList = document.getElementById('channelList');
+                channelList.innerHTML = '';
+
+                channels.forEach((channel, index) => {
+                    const [name, url] = channel.split('|').map(item => item.trim());
+                    if (name && url) {
+                        const channelItem = document.createElement('div');
+                        channelItem.className = 'channel-item';
+                        channelItem.textContent = name;
+                        channelItem.onclick = () => playChannel(url);
+                        channelList.appendChild(channelItem);
+
+                        // Define o primeiro canal como padrão
+                        if (index === 0) {
+                            firstChannelUrl = url;
+                            playChannel(url);
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Erro ao carregar os canais:', error);
+                document.getElementById('channelList').innerHTML = '<p>Erro ao carregar os canais.</p>';
+            }
+        }
+
+        // Função para reproduzir um canal no player
+        function playChannel(url) {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoSource = document.getElementById('videoSource');
+            videoSource.src = url;
+            videoPlayer.load();
+            videoPlayer.play().catch(error => {
+                console.error('Erro ao reproduzir o canal:', error);
+                alert('Não foi possível reproduzir o canal. Verifique a URL ou tente outro.');
+            });
+        }
+
+        // Função para voltar ao primeiro canal
+        function resetToFirstChannel() {
+            if (firstChannelUrl) {
+                playChannel(firstChannelUrl);
+            }
+        }
+
+        // Carrega os canais ao iniciar a página
+        window.onload = loadChannels;
+    
+	    
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
