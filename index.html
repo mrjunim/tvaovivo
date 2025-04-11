@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="StreamXcellence - Assista aos melhores canais online">
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
+	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
     <!-- Preconnect para melhorar o carregamento -->
@@ -376,25 +377,27 @@
         }
 
         .live-notification .player {
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            pointer-events: none;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-        }
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* Mantém proporção 16:9 */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: none; /* Impede qualquer interação */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
 
-        .live-notification .player iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+.live-notification .player video#live-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Reforça a desativação de cliques */
+}
 
         #player-container {
             display: none;
@@ -1236,32 +1239,7 @@ display: flex;
     <div id="notification-container"></div>
 
     <main class="container">
-        <section class="login-container" id="login-container">
-            <img src="https://i.imgur.com/QsrJDbX.png" alt="StreamXcellence Logo" class="app-logo">
-            <h1>StreamXcellence</h1>
-            <p class="subtitle">Digite a chave de acesso para entrar na melhor experiência de streaming</p>
-            <div class="input-group">
-                <label for="key-input" class="sr-only">Chave de acesso</label>
-                <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" autocomplete="off"/>
-            </div>
-            <div class="button-group">
-                <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
-                <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
-                <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
-                <button type="button" id="live-channels-button" onclick="openCanaisModalWithKey()" class="btn-info">Canais ao vivo</button>
-            </div>
-            <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-        </section>
-<section class="live-notification" id="live-notification">
-    <div id="sobre">
-        <h2>Sobre o StreamXcellence</h2>
-        <p id="texto-sobre"></p>
-    </div>
-	<br>	
-   <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <audio id="ghostAudio"></audio>
-
-    <script>
+	<script>
         // Lista de URLs de áudios (adicione mais URLs conforme necessário)
         const audioFiles = [
             "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
@@ -1292,7 +1270,36 @@ display: flex;
             document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
         }, 1000);
     </script>
-	<br>
+   
+	
+        <section class="login-container" id="login-container">
+            <img src="https://i.imgur.com/QsrJDbX.png" alt="StreamXcellence Logo" class="app-logo">
+            <h1>StreamXcellence</h1>
+            <p class="subtitle">Digite a chave de acesso para entrar na melhor experiência de streaming</p>
+            <div class="input-group">
+                <label for="key-input" class="sr-only">Chave de acesso</label>
+                <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" autocomplete="off"/>
+            </div>
+            <div class="button-group">
+                <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
+                <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
+                <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
+                <button type="button" id="live-channels-button" onclick="openCanaisModalWithKey()" class="btn-info">Canais ao vivo</button>
+            </div>
+            <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
+        </section>
+<section class="live-notification" id="live-notification">
+    
+	<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+    <audio id="ghostAudio"></audio>
+	
+	
+	<div id="sobre">
+        <h2>Sobre o StreamXcellence</h2>
+        <p id="texto-sobre"></p>
+    </div>
+    <br>
+    <br>
     <div id="guide-container" role="marquee">
         <div class="scrolling-text" id="scrolling-text">
             <span id="guide-text">Carregando guia...</span>
@@ -1300,7 +1307,7 @@ display: flex;
         </div>
     </div>
     <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-        <video id="live-video" autoplay loop muted playsinline preload="auto" controlslist="nodownload nofullscreen noremoteplayback" disablePictureInPicture>
+        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
             <source src="https://i.imgur.com/7PzQRkQ.mp4" type="video/mp4">
             Seu navegador não suporta o elemento de vídeo.
         </video>
@@ -1642,22 +1649,29 @@ display: flex;
             }
         }
 
-        function createLiveNotificationPlayer() {
+        ffunction createLiveNotificationPlayer() {
     const liveVideo = document.getElementById('live-video');
     if (liveVideo) {
-        liveVideo.autoplay = true
-		liveVideo.volume = 0.0; // Define volume em 50%
-        liveVideo.muted = false; // Desmuta o vídeo
-        liveVideo.controls = false; // Desabilita controles nativos
-        liveVideo.loop = true; // Ativa loop infinito
+        liveVideo.autoplay = true; // Garante reprodução automática
+        liveVideo.loop = true; // Mantém o loop
+        liveVideo.muted = true; // Garante que o vídeo esteja mudo
+        liveVideo.controls = false; // Remove controles
+        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
+        liveVideo.volume = 0; // Define volume como 0 por segurança
         playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
         liveVideo.addEventListener('error', (e) => {
             console.error('Erro ao carregar o vídeo ao vivo:', e);
             showNotification('Erro ao carregar o vídeo ao vivo', 'error');
         });
+        // Garante que o vídeo permaneça mudo mesmo após eventos
+        liveVideo.addEventListener('volumechange', () => {
+            if (!liveVideo.muted) {
+                liveVideo.muted = true;
+                liveVideo.volume = 0;
+            }
+        });
     }
 }
-
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
                 .then(response => {
@@ -2290,7 +2304,7 @@ display: flex;
         playerContainer.style.position = "relative";
         playerContainer.appendChild(overlay);
       }
-    }, 30000); // 10 segundos
+    }, 40000); // 40 segundos
   });     
 </script>
 </body>
