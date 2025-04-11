@@ -14,7 +14,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <style>
-        /* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -54,11 +53,10 @@
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
-            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a); /* Fundo de terror */
+            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a);
             position: relative;
         }
 
-        /* Névoa de terror apenas na página inicial */
         .nevoa {
             position: fixed;
             top: 0;
@@ -96,7 +94,7 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
-            filter: brightness(0.2) contrast(1.2) grayscale(0.5); /* Efeito sombrio */
+            filter: brightness(0.2) contrast(1.2) grayscale(0.5);
             transform: scale(1.1);
         }
 
@@ -113,13 +111,12 @@
             position: relative;
         }
 
-        /* Estilos de terror apenas para a página inicial */
         .login-container,
         .live-notification {
-            background: rgba(20, 20, 20, 0.9); /* Fundo preto opaco */
+            background: rgba(20, 20, 20, 0.9);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); /* Sombra vermelha */
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
             text-align: center;
             flex: 1;
             animation: fadeIn 1s ease-in-out;
@@ -128,7 +125,7 @@
             align-items: center;
             min-width: 300px;
             transition: all 0.3s ease;
-            border: 2px solid rgba(139, 0, 0, 0.5); /* Borda vermelho sangue */
+            border: 2px solid rgba(139, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
         }
@@ -141,7 +138,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent); /* Efeito de sangue sutil */
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent);
             animation: pulseBlood 8s infinite;
             z-index: -1;
         }
@@ -170,8 +167,8 @@
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
-            color: #ff1a1a; /* Vermelho sangue */
-            font-family: 'Creepster', cursive; /* Fonte de terror */
+            color: #ff1a1a;
+            font-family: 'Creepster', cursive;
             font-weight: 700;
             letter-spacing: 0.5px;
             text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
@@ -187,7 +184,7 @@
             font-size: 1.3em;
             margin-bottom: 15px;
             color: #fff;
-            font-family: 'Nosifer', cursive; /* Fonte assustadora */
+            font-family: 'Nosifer', cursive;
             font-weight: 600;
             letter-spacing: 0.3px;
             text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
@@ -209,7 +206,7 @@
             width: 100%;
             padding: 14px;
             margin-top: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
+            border: 1px solid rgba(255, 0, 0, 0.5);
             border-radius: 12px;
             background: rgba(30, 30, 30, 0.8);
             color: #fff;
@@ -269,7 +266,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff1a1a, #cc0000); /* Vermelho sangue */
+            background: linear-gradient(135deg, #ff1a1a, #cc0000);
             color: white;
         }
 
@@ -282,7 +279,7 @@
         .btn-secondary {
             background: rgba(40, 45, 60, 0.8);
             color: white;
-            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
+            border: 1px solid rgba(255, 0, 0, 0.5);
         }
 
         .btn-secondary:hover {
@@ -316,7 +313,7 @@
 
         #guide-container {
             width: 100%;
-            background: rgba(20, 20, 20, 0.95); /* Fundo escuro */
+            background: rgba(20, 20, 20, 0.95);
             color: #fff;
             padding: 15px 0;
             margin-bottom: 25px;
@@ -355,7 +352,6 @@
             line-height: 1.6;
         }
 
-        /* Estilos originais mantidos para os outros elementos */
         #zoom-image-container {
             display: none;
             position: fixed;
@@ -563,39 +559,71 @@
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
 
-        .quality-menu {
+        .channel-list {
             position: absolute;
-            bottom: 70px;
-            right: 20px;
-            background: rgba(20, 25, 40, 0.9);
+            bottom: 80px;
+            left: 20px;
+            width: 280px;
+            max-height: 50vh;
+            overflow-y: auto;
+            background: rgba(20, 25, 40, 0.95);
             border-radius: 12px;
             padding: 15px;
             display: none;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            transition: opacity 0.3s ease;
+            opacity: 0;
         }
 
-        .quality-menu.active {
+        #player-container:hover .channel-list {
             display: block;
+            opacity: 1;
         }
 
-        .quality-option {
-            color: white;
-            padding: 10px 15px;
+        .channel-list-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
             cursor: pointer;
             border-radius: 8px;
             transition: all 0.2s ease;
+            background: rgba(40, 50, 70, 0.5);
+            margin-bottom: 5px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .channel-list-item:hover {
+            background: rgba(60, 70, 90, 0.7);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        .channel-list-item img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .channel-list-item span {
+            font-size: 14px;
             font-weight: 400;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
         }
 
-        .quality-option:hover {
-            background: rgba(255, 255, 255, 0.1);
+        #reset-channel-btn {
+            background: linear-gradient(135deg, #ff1a1a, #cc0000);
         }
 
-        .quality-option.active {
-            background: rgba(115, 103, 240, 0.3);
-            font-weight: 500;
+        #reset-channel-btn:hover {
+            background: linear-gradient(135deg, #cc0000, #ff1a1a);
+            transform: scale(1.1);
         }
 
         .modal {
@@ -884,123 +912,9 @@
             background: #000;
         }
 
-        #channel-selector-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(20, 25, 40, 0.8);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            transition: all 0.3s;
-            opacity: 0;
-            backdrop-filter: blur(5px);
-            border: 1px solid var(--border-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        #player-container:hover #channel-selector-button {
-            opacity: 1;
-        }
-
-        #channel-selector-button:hover {
-            background: rgba(40, 50, 70, 0.9);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        #channel-selector-menu {
-            position: absolute;
-            top: 80px;
-            right: 20px;
-            width: 280px;
-            max-height: 70vh;
-            overflow-y: auto;
-            background: rgba(20, 25, 40, 0.95);
-            border-radius: 16px;
-            padding: 20px;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-        }
-
-        #channel-selector-menu.active {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .channel-selector-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s;
-            margin-bottom: 5px;
-        }
-
-        .channel-selector-item:hover {
-            background: rgba(60, 70, 90, 0.7);
-            transform: translateX(3px);
-        }
-
-        .channel-selector-item img {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .channel-search {
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            background: rgba(40, 50, 70, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: white;
-            font-size: 14px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .channel-search::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .channel-search:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px rgba(115, 103, 240, 0.3);
-            outline: none;
-        }
-
-        .channel-category {
-            font-weight: 600;
-            color: var(--primary-color);
-            padding: 8px 0;
-            margin: 15px 0 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            letter-spacing: 0.5px;
-            font-size: 14px;
-        }
-
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         @keyframes fadeOut {
@@ -1039,7 +953,7 @@
             width: 80px;
             height: 80px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); /* Sombra vermelha */
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
             animation: pulse 2s infinite alternate;
         }
 
@@ -1067,7 +981,7 @@
                 -webkit-animation-duration: 25s;
             }
 
-            #volume-control {
+            .volume-slider {
                 width: 80px;
             }
 
@@ -1084,18 +998,6 @@
 
             #canais-grid {
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
-
-            #channel-selector-button {
-                top: 10px;
-                right: 10px;
-                padding: 10px 15px;
-            }
-
-            #channel-selector-menu {
-                width: 240px;
-                top: 60px;
-                right: 10px;
             }
 
             .email-container {
@@ -1146,12 +1048,6 @@
                 grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             }
 
-            #channel-selector-menu {
-                width: 220px;
-                max-height: 60vh;
-                padding: 15px;
-            }
-
             h1 {
                 font-size: 1.6em;
             }
@@ -1169,41 +1065,33 @@
                 height: 60px;
             }
         }
-		
-		.live-notification .player {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    pointer-events: none;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.live-notification .player video#live-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-}
-
-display: flex;
+        .live-notification .player {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            pointer-events: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1a1a1a;
-            font-family: Arial, sans-serif;
         }
-.notification {
+
+        .live-notification .player video#live-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+        }
+
+        .notification {
             position: fixed;
             top: -100px;
             background: #ff4444;
@@ -1216,17 +1104,12 @@ display: flex;
         }
 
         @keyframes slideIn {
-            from {
-                top: -100px;
-            }
-            to {
-                top: 20px;
-            }
+            from { top: -100px; }
+            to { top: 20px; }
         }
     </style>
 </head>
 <body>
-	
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
@@ -1252,60 +1135,28 @@ display: flex;
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
         </section>
-<section class="live-notification" id="live-notification">
-    <div id="sobre">
-        <h2>Sobre o StreamXcellence</h2>
-        <p id="texto-sobre"></p>
-    </div>
-	<br>	
-   <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <audio id="ghostAudio"></audio>
-
-    <script>
-        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
-        const audioFiles = [
-            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
-            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
-            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
-            
-        ];
-
-        function playRandomAudio() {
-            const notification = document.querySelector('.notification');
-            const audio = document.getElementById('ghostAudio');
-            
-            // Esconde a notificação
-            notification.style.display = 'none';
-            
-            // Seleciona um áudio aleatório da lista
-            const randomIndex = Math.floor(Math.random() * audioFiles.length);
-            audio.src = audioFiles[randomIndex];
-            
-            // Toca o áudio
-            audio.play().catch(error => {
-                console.log("Erro ao tocar áudio:", error);
-            });
-        }
-
-        // Mostra a notificação após 1 segundo
-        setTimeout(() => {
-            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
-        }, 1000);
-    </script>
-	<br>
-    <div id="guide-container" role="marquee">
-        <div class="scrolling-text" id="scrolling-text">
-            <span id="guide-text">Carregando guia...</span>
-            <span id="guide-text-duplicate">Carregando guia...</span>
-        </div>
-    </div>
-    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-        <video id="live-video" autoplay loop muted playsinline preload="auto" controlslist="nodownload nofullscreen noremoteplayback" disablePictureInPicture>
-            <source src="https://i.imgur.com/7PzQRkQ.mp4" type="video/mp4">
-            Seu navegador não suporta o elemento de vídeo.
-        </video>
-    </div>
-</section>
+        <section class="live-notification" id="live-notification">
+            <div id="sobre">
+                <h2>Sobre o StreamXcellence</h2>
+                <p id="texto-sobre"></p>
+            </div>
+            <br>
+            <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+            <audio id="ghostAudio"></audio>
+            <br>
+            <div id="guide-container" role="marquee">
+                <div class="scrolling-text" id="scrolling-text">
+                    <span id="guide-text">Carregando guia...</span>
+                    <span id="guide-text-duplicate">Carregando guia...</span>
+                </div>
+            </div>
+            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
+                <video id="live-video" autoplay loop muted playsinline preload="auto" controlslist="nodownload nofullscreen noremoteplayback" disablePictureInPicture>
+                    <source src="https://i.imgur.com/7PzQRkQ.mp4" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+        </section>
     </main>
 
     <div id="player-container" aria-live="polite">
@@ -1319,16 +1170,6 @@ display: flex;
                 <span class="live-indicator">AO VIVO</span>
             </div>
         </div>
-        <div id="channel-selector-button" onclick="toggleChannelSelector()">
-            <span>📺 Mudar Canal</span>
-        </div>
-        <div id="channel-selector-menu">
-            <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
-            <div id="channels-list">
-                <p>Carregando canais...</p>
-            </div>
-        </div>
-        <div id="quality-menu" class="quality-menu"></div>
         <div class="player-controls">
             <div class="controls-left">
                 <button id="play-pause-btn" class="control-btn">⏸️</button>
@@ -1336,12 +1177,13 @@ display: flex;
                     <button id="mute-btn" class="control-btn">🔊</button>
                     <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
                 </div>
+                <button id="reset-channel-btn" class="control-btn" title="Voltar ao canal inicial">🔄</button>
             </div>
             <div class="controls-right">
-                <button id="quality-btn" class="control-btn">⚙️</button>
                 <button id="fullscreen-btn" class="control-btn">⛶</button>
             </div>
         </div>
+        <div id="channel-list" class="channel-list"></div>
     </div>
 
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
@@ -1400,16 +1242,11 @@ display: flex;
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
         let player;
-        let livePlayer;
-        let qualities = [];
-        let currentQuality = 'auto';
-        let isQualityMenuOpen = false;
-        let notificationTimeout;
-        let keyVerified = false;
-        let currentKey = "";
         let videoPlayer = null;
         let canaisData = [];
-        let isChannelSelectorOpen = false;
+        let keyVerified = false;
+        let currentKey = "";
+        let isTwitchActive = true;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -1428,47 +1265,9 @@ display: flex;
             }, 3000);
         }
 
-        function updateQualityMenu() {
-            const qualityMenu = document.getElementById('quality-menu');
-            qualityMenu.innerHTML = '';
-            if (!player || !qualities.length) return;
-            const autoOption = document.createElement('div');
-            autoOption.className = `quality-option ${currentQuality === 'auto' ? 'active' : ''}`;
-            autoOption.textContent = 'Auto';
-            autoOption.onclick = () => {
-                player.setQuality('auto');
-                currentQuality = 'auto';
-                updateQualityMenu();
-                showNotification('Qualidade alterada para Automático', 'info');
-                toggleQualityMenu();
-            };
-            qualityMenu.appendChild(autoOption);
-            qualities.forEach(quality => {
-                const option = document.createElement('div');
-                option.className = `quality-option ${currentQuality === quality.name ? 'active' : ''}`;
-                option.textContent = quality.name;
-                option.onclick = () => {
-                    player.setQuality(quality.name);
-                    currentQuality = quality.name;
-                    updateQualityMenu();
-                    showNotification(`Qualidade alterada para ${quality.name}`, 'info');
-                    toggleQualityMenu();
-                };
-                qualityMenu.appendChild(option);
-            });
-        }
-
-        function toggleQualityMenu() {
-            const qualityMenu = document.getElementById('quality-menu');
-            isQualityMenuOpen = !isQualityMenuOpen;
-            if (isQualityMenuOpen) {
-                qualityMenu.classList.add('active');
-            } else {
-                qualityMenu.classList.remove('active');
-            }
-        }
-
         function createTwitchPlayer() {
+            const twitchEmbed = document.querySelector("#twitch-embed");
+            if (!twitchEmbed) return;
             if (!document.querySelector("#twitch-embed iframe")) {
                 player = new Twitch.Player("twitch-embed", {
                     channel: "lourimarcos",
@@ -1483,19 +1282,9 @@ display: flex;
                     player.setVolume(0.5);
                     player.setMuted(false);
                     player.play();
-                    setTimeout(() => {
-                        qualities = player.getQualities();
-                        updateQualityMenu();
-                    }, 2000);
                     initCustomControls();
-                    const playerElement = player.getIframe();
-                    const clickEvent = new MouseEvent('click', {
-                        view: window,
-                        bubbles: true,
-                        cancelable: true
-                    });
-                    playerElement.dispatchEvent(clickEvent);
                     showNotification('Reprodução iniciada', 'success');
+                    carregarCanaisSeletor();
                 });
                 player.addEventListener(Twitch.Player.PLAY, () => {
                     const playPauseBtn = document.getElementById('play-pause-btn');
@@ -1522,31 +1311,276 @@ display: flex;
                     showNotification('O canal está offline no momento', 'error');
                 });
             }
+            isTwitchActive = true;
+        }
+
+        function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
+            console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
+            closeCanaisModal();
+            const playerContainer = document.getElementById('player-container');
+            playerContainer.classList.add('active');
+            playerContainer.innerHTML = `
+                <div class="player hls-player">
+                    <video id="video-player" controls></video>
+                </div>
+                <div class="channel-info">
+                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+                    <div>
+                        <div class="channel-name">${nomeCanal}</div>
+                        <span class="live-indicator">AO VIVO</span>
+                    </div>
+                </div>
+                <div class="player-controls">
+                    <div class="controls-left">
+                        <button id="play-pause-btn" class="control-btn">⏸️</button>
+                        <div class="volume-container">
+                            <button id="mute-btn" class="control-btn">🔊</button>
+                            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+                        </div>
+                        <button id="reset-channel-btn" class="control-btn" title="Voltar ao canal inicial">🔄</button>
+                    </div>
+                    <div class="controls-right">
+                        <button id="fullscreen-btn" class="control-btn">⛶</button>
+                    </div>
+                </div>
+                <div id="channel-list" class="channel-list"></div>
+            `;
+            const video = document.getElementById('video-player');
+            initCustomControls();
+            if (Hls.isSupported()) {
+                const hls = new Hls({
+                    maxBufferLength: 30,
+                    maxMaxBufferLength: 60,
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    testBandwidth: true,
+                    progressive: true,
+                    xhrSetup: function(xhr) {
+                        xhr.withCredentials = false;
+                    }
+                });
+                try {
+                    hls.loadSource(streamUrl);
+                    hls.attachMedia(video);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        console.log('Manifest parsed, attempting to play');
+                        video.play().catch(err => {
+                            console.error('Erro ao iniciar reprodução:', err);
+                            showNotification("Erro ao iniciar reprodução: " + err.message, "error");
+                        });
+                    });
+                    hls.on(Hls.Events.ERROR, function(event, data) {
+                        console.error('Erro HLS:', data.type, data.details);
+                        if (data.fatal) {
+                            switch(data.type) {
+                                case Hls.ErrorTypes.NETWORK_ERROR:
+                                    console.error('Erro de rede, tentando recuperar...');
+                                    showNotification("Erro de rede. Tentando reconectar...", "error");
+                                    hls.startLoad();
+                                    break;
+                                case Hls.ErrorTypes.MEDIA_ERROR:
+                                    console.error('Erro de mídia, tentando recuperar...');
+                                    showNotification("Erro de mídia. Tentando recuperar...", "error");
+                                    hls.recoverMediaError();
+                                    break;
+                                default:
+                                    console.error('Erro fatal, não é possível recuperar');
+                                    showNotification("Não foi possível carregar o stream", "error");
+                                    hls.destroy();
+                                    break;
+                            }
+                        }
+                    });
+                    videoPlayer = hls;
+                } catch (error) {
+                    console.error('Erro ao configurar HLS:', error);
+                    showNotification("Erro ao configurar reprodução: " + error.message, "error");
+                }
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = streamUrl;
+                video.addEventListener('loadedmetadata', function() {
+                    console.log('Metadados carregados, tentando reproduzir');
+                    video.play().catch(err => {
+                        console.error('Erro ao iniciar reprodução (Safari):', err);
+                        showNotification("Erro ao iniciar reprodução: " + err.message, "error");
+                    });
+                });
+                video.addEventListener('error', function(e) {
+                    console.error('Erro no elemento de vídeo:', video.error);
+                    showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
+                });
+            } else {
+                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
+            }
+            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
+            updateChannelList(canaisData);
+            isTwitchActive = false;
+        }
+
+        function updateChannelList(canais) {
+            const channelList = document.getElementById('channel-list');
+            if (!channelList) return;
+            channelList.innerHTML = '';
+            if (canais.length === 0) {
+                channelList.innerHTML = '<p>Nenhum canal disponível.</p>';
+                return;
+            }
+            canais.forEach(canal => {
+                const channelItem = document.createElement('div');
+                channelItem.className = 'channel-list-item';
+                channelItem.onclick = () => {
+                    reproduzirCanal(canal.url, canal.nome, canal.logo);
+                };
+                channelItem.innerHTML = `
+                    <img src="${canal.logo}" alt="${canal.nome}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
+                    <span>${canal.nome}</span>
+                `;
+                channelList.appendChild(channelItem);
+            });
+        }
+
+        function carregarCanaisSeletor() {
+            if (canaisData.length > 0) {
+                updateChannelList(canaisData);
+                return;
+            }
+            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
+                .then(response => {
+                    if (!response.ok) throw new Error('Erro ao carregar os canais');
+                    return response.text();
+                })
+                .then(data => {
+                    const linhas = data.split('\n');
+                    canaisData = [];
+                    let i = 0;
+                    while (i < linhas.length) {
+                        const linha = linhas[i].trim();
+                        if (linha.startsWith('#EXTINF:-1')) {
+                            const infoLinha = linha;
+                            let nomeCanal = "Canal";
+                            if (infoLinha.includes('tvg-name="')) {
+                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
+                                if (match && match[1]) nomeCanal = match[1];
+                            } else if (infoLinha.includes(',')) {
+                                const commaIndex = infoLinha.lastIndexOf(',');
+                                if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
+                                    nomeCanal = infoLinha.substring(commaIndex + 1).trim();
+                                }
+                            }
+                            let logoUrl = "https://i.imgur.com/QsrJDbX.png";
+                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
+                            if (logoMatch && logoMatch[1]) logoUrl = logoMatch[1];
+                            let streamUrl = "";
+                            if (i + 1 < linhas.length) {
+                                streamUrl = linhas[i + 1].trim();
+                                i += 2;
+                            } else {
+                                i++;
+                            }
+                            if (streamUrl && !streamUrl.startsWith('#')) {
+                                canaisData.push({ nome: nomeCanal, logo: logoUrl, url: streamUrl });
+                            }
+                        } else {
+                            i++;
+                        }
+                    }
+                    updateChannelList(canaisData);
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar canais:', error);
+                    const channelList = document.getElementById('channel-list');
+                    if (channelList) channelList.innerHTML = '<p>Erro ao carregar canais.</p>';
+                    showNotification("Erro ao carregar os canais", "error");
+                });
+        }
+
+        function resetToFirstChannel() {
+            const playerContainer = document.getElementById('player-container');
+            playerContainer.innerHTML = `
+                <div class="player twitch-player" id="player">
+                    <div id="twitch-embed"></div>
+                </div>
+                <div class="channel-info">
+                    <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
+                    <div>
+                        <div class="channel-name">StreamXcellence</div>
+                        <span class="live-indicator">AO VIVO</span>
+                    </div>
+                </div>
+                <div class="player-controls">
+                    <div class="controls-left">
+                        <button id="play-pause-btn" class="control-btn">⏸️</button>
+                        <div class="volume-container">
+                            <button id="mute-btn" class="control-btn">🔊</button>
+                            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+                        </div>
+                        <button id="reset-channel-btn" class="control-btn" title="Voltar ao canal inicial">🔄</button>
+                    </div>
+                    <div class="controls-right">
+                        <button id="fullscreen-btn" class="control-btn">⛶</button>
+                    </div>
+                </div>
+                <div id="channel-list" class="channel-list"></div>
+            `;
+            createTwitchPlayer();
+            showNotification('Retornando ao canal principal', 'info');
         }
 
         function initCustomControls() {
             const playPauseBtn = document.getElementById('play-pause-btn');
             const muteBtn = document.getElementById('mute-btn');
             const volumeSlider = document.getElementById('volume-slider');
-            const qualityBtn = document.getElementById('quality-btn');
             const fullscreenBtn = document.getElementById('fullscreen-btn');
-            volumeSlider.value = player.getVolume();
-            updateVolumeIcon();
-            playPauseBtn.addEventListener('click', togglePlay);
-            volumeSlider.addEventListener('input', () => {
-                const volume = parseFloat(volumeSlider.value);
-                player.setVolume(volume);
-                player.setMuted(volume === 0);
+            const resetChannelBtn = document.getElementById('reset-channel-btn');
+            if (isTwitchActive && player) {
+                volumeSlider.value = player.getVolume();
                 updateVolumeIcon();
-            });
-            muteBtn.addEventListener('click', toggleMute);
-            qualityBtn.addEventListener('click', toggleQualityMenu);
-            fullscreenBtn.addEventListener('click', toggleFullscreen);
-            document.addEventListener('keydown', handleKeyPress);
+                playPauseBtn.addEventListener('click', togglePlay);
+                volumeSlider.addEventListener('input', () => {
+                    const volume = parseFloat(volumeSlider.value);
+                    player.setVolume(volume);
+                    player.setMuted(volume === 0);
+                    updateVolumeIcon();
+                });
+                muteBtn.addEventListener('click', toggleMute);
+                fullscreenBtn.addEventListener('click', toggleFullscreen);
+                resetChannelBtn.addEventListener('click', resetToFirstChannel);
+            } else {
+                const video = document.getElementById('video-player');
+                if (video) {
+                    volumeSlider.value = video.volume;
+                    updateVolumeIcon();
+                    playPauseBtn.addEventListener('click', () => {
+                        if (video.paused) {
+                            video.play();
+                            playPauseBtn.textContent = '⏸️';
+                            showNotification('Reproduzindo', 'info');
+                        } else {
+                            video.pause();
+                            playPauseBtn.textContent = '▶️';
+                            showNotification('Pausado', 'info');
+                        }
+                    });
+                    volumeSlider.addEventListener('input', () => {
+                        const volume = parseFloat(volumeSlider.value);
+                        video.volume = volume;
+                        video.muted = volume === 0;
+                        updateVolumeIcon();
+                    });
+                    muteBtn.addEventListener('click', () => {
+                        video.muted = !video.muted;
+                        volumeSlider.value = video.muted ? 0 : video.volume;
+                        updateVolumeIcon();
+                        showNotification(video.muted ? 'Som desativado' : 'Som ativado', 'info');
+                    });
+                    fullscreenBtn.addEventListener('click', toggleFullscreen);
+                    resetChannelBtn.addEventListener('click', resetToFirstChannel);
+                }
+            }
         }
 
         function togglePlay() {
-            if (player) {
+            if (isTwitchActive && player) {
                 if (player.isPaused()) {
                     player.play();
                     showNotification('Reproduzindo', 'info');
@@ -1558,7 +1592,7 @@ display: flex;
         }
 
         function toggleMute() {
-            if (player) {
+            if (isTwitchActive && player) {
                 const muted = player.getMuted();
                 player.setMuted(!muted);
                 updateVolumeIcon();
@@ -1568,13 +1602,26 @@ display: flex;
 
         function updateVolumeIcon() {
             const muteBtn = document.getElementById('mute-btn');
-            if (!muteBtn || !player) return;
-            if (player.getMuted() || player.getVolume() === 0) {
-                muteBtn.textContent = '🔇';
-            } else if (player.getVolume() < 0.5) {
-                muteBtn.textContent = '🔉';
+            if (!muteBtn) return;
+            if (isTwitchActive && player) {
+                if (player.getMuted() || player.getVolume() === 0) {
+                    muteBtn.textContent = '🔇';
+                } else if (player.getVolume() < 0.5) {
+                    muteBtn.textContent = '🔉';
+                } else {
+                    muteBtn.textContent = '🔊';
+                }
             } else {
-                muteBtn.textContent = '🔊';
+                const video = document.getElementById('video-player');
+                if (video) {
+                    if (video.muted || video.volume === 0) {
+                        muteBtn.textContent = '🔇';
+                    } else if (video.volume < 0.5) {
+                        muteBtn.textContent = '🔉';
+                    } else {
+                        muteBtn.textContent = '🔊';
+                    }
+                }
             }
         }
 
@@ -1601,62 +1648,21 @@ display: flex;
             }
         }
 
-        function handleKeyPress(event) {
-            if (!document.getElementById('player-container').style.display === 'flex') return;
-            switch(event.key) {
-                case ' ':
-                case 'k':
-                    togglePlay();
-                    event.preventDefault();
-                    break;
-                case 'm':
-                    toggleMute();
-                    event.preventDefault();
-                    break;
-                case 'f':
-                    toggleFullscreen();
-                    event.preventDefault();
-                    break;
-                case 'ArrowUp':
-                    if (player) {
-                        const newVolume = Math.min(1, player.getVolume() + 0.05);
-                        player.setVolume(newVolume);
-                        player.setMuted(false);
-                        document.getElementById('volume-slider').value = newVolume;
-                        updateVolumeIcon();
-                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
-                    }
-                    event.preventDefault();
-                    break;
-                case 'ArrowDown':
-                    if (player) {
-                        const newVolume = Math.max(0, player.getVolume() - 0.05);
-                        player.setVolume(newVolume);
-                        player.setMuted(newVolume === 0);
-                        document.getElementById('volume-slider').value = newVolume;
-                        updateVolumeIcon();
-                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
-                    }
-                    event.preventDefault();
-                    break;
+        function createLiveNotificationPlayer() {
+            const liveVideo = document.getElementById('live-video');
+            if (liveVideo) {
+                liveVideo.autoplay = true;
+                liveVideo.volume = 0.0;
+                liveVideo.muted = false;
+                liveVideo.controls = false;
+                liveVideo.loop = true;
+                playVideo(liveVideo);
+                liveVideo.addEventListener('error', (e) => {
+                    console.error('Erro ao carregar o vídeo ao vivo:', e);
+                    showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+                });
             }
         }
-
-        function createLiveNotificationPlayer() {
-    const liveVideo = document.getElementById('live-video');
-    if (liveVideo) {
-        liveVideo.autoplay = true
-		liveVideo.volume = 0.0; // Define volume em 50%
-        liveVideo.muted = false; // Desmuta o vídeo
-        liveVideo.controls = false; // Desabilita controles nativos
-        liveVideo.loop = true; // Ativa loop infinito
-        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
-        liveVideo.addEventListener('error', (e) => {
-            console.error('Erro ao carregar o vídeo ao vivo:', e);
-            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-        });
-    }
-}
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -1843,7 +1849,8 @@ display: flex;
 
         function openCanaisModalWithKey() {
             if (keyVerified) {
-                openCanaisModal();
+                document.getElementById('player-container').style.display = 'flex';
+                createTwitchPlayer();
             } else {
                 document.getElementById("canais-key-modal").style.display = "flex";
                 const mainKeyInput = document.getElementById('key-input').value;
@@ -1864,7 +1871,8 @@ display: flex;
                 keyVerified = true;
                 currentKey = keyInput;
                 closeCanaisKeyModal();
-                openCanaisModal();
+                document.getElementById('player-container').style.display = 'flex';
+                createTwitchPlayer();
                 showNotification("Acesso aos canais liberado!", "success");
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
@@ -1886,121 +1894,6 @@ display: flex;
 
         function closeCanaisModal() {
             document.getElementById("canais-modal").style.display = "none";
-        }
-
-        function toggleChannelSelector() {
-            const channelSelector = document.getElementById('channel-selector-menu');
-            isChannelSelectorOpen = !isChannelSelectorOpen;
-            if (isChannelSelectorOpen) {
-                channelSelector.classList.add('active');
-                if (document.getElementById('channels-list').innerHTML === '<p>Carregando canais...</p>' && canaisData.length === 0) {
-                    carregarCanaisSeletor();
-                }
-            } else {
-                channelSelector.classList.remove('active');
-            }
-        }
-
-        function carregarCanaisSeletor() {
-            if (canaisData.length > 0) {
-                atualizarListaCanaisSeletor(canaisData);
-                return;
-            }
-            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar os canais');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    const linhas = data.split('\n');
-                    canaisData = [];
-                    let i = 0;
-                    while (i < linhas.length) {
-                        const linha = linhas[i].trim();
-                        if (linha.startsWith('#EXTINF:-1')) {
-                            const infoLinha = linha;
-                            let nomeCanal = "Canal";
-                            if (infoLinha.includes('tvg-name="')) {
-                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                                if (match && match[1]) {
-                                    nomeCanal = match[1];
-                                }
-                            } else if (infoLinha.includes(',')) {
-                                const commaIndex = infoLinha.lastIndexOf(',');
-                                if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                                    nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                                }
-                            }
-                            let logoUrl = "https://i.imgur.com/QsrJDbX.png";
-                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                            if (logoMatch && logoMatch[1]) {
-                                logoUrl = logoMatch[1];
-                            }
-                            let streamUrl = "";
-                            if (i + 1 < linhas.length) {
-                                streamUrl = linhas[i + 1].trim();
-                                i += 2;
-                            } else {
-                                i++;
-                            }
-                            if (streamUrl && !streamUrl.startsWith('#')) {
-                                canaisData.push({
-                                    nome: nomeCanal,
-                                    logo: logoUrl,
-                                    url: streamUrl
-                                });
-                            }
-                        } else {
-                            i++;
-                        }
-                    }
-                    atualizarListaCanaisSeletor(canaisData);
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar canais para o seletor:', error);
-                    document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
-                    showNotification("Erro ao carregar os canais", "error");
-                });
-        }
-
-        function atualizarListaCanaisSeletor(canais) {
-            const channelsList = document.getElementById('channels-list');
-            if (canais.length === 0) {
-                channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
-                return;
-            }
-            channelsList.innerHTML = '';
-            canais.sort((a, b) => a.nome.localeCompare(b.nome));
-            canais.forEach(canal => {
-                const channelItem = document.createElement('div');
-                channelItem.className = 'channel-selector-item';
-                channelItem.setAttribute('data-nome', canal.nome.toLowerCase());
-                channelItem.onclick = function() {
-                    reproduzirCanal(canal.url, canal.nome, canal.logo);
-                    toggleChannelSelector();
-                };
-                channelItem.innerHTML = `
-                    <img src="${canal.logo}" alt="${canal.nome}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <span>${canal.nome}</span>
-                `;
-                channelsList.appendChild(channelItem);
-            });
-        }
-
-        function filtrarCanais() {
-            const searchInput = document.getElementById('channel-search');
-            const searchTerm = searchInput.value.toLowerCase();
-            const items = document.querySelectorAll('.channel-selector-item');
-            items.forEach(item => {
-                const nome = item.getAttribute('data-nome');
-                if (nome.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
         }
 
         function carregarCanais() {
@@ -2075,109 +1968,6 @@ display: flex;
                 });
         }
 
-        function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
-            console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
-            closeCanaisModal();
-            const playerContainer = document.getElementById('player-container');
-            playerContainer.style.display = 'flex';
-            playerContainer.innerHTML = `
-                <div class="player hls-player">
-                    <video id="video-player" controls></video>
-                </div>
-                <div class="channel-info">
-                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <div>
-                        <div class="channel-name">${nomeCanal}</div>
-                        <span class="live-indicator">AO VIVO</span>
-                    </div>
-                </div>
-                <div id="channel-selector-button" onclick="toggleChannelSelector()">
-                    <span>📺 Mudar Canal</span>
-                </div>
-                <div id="channel-selector-menu">
-                    <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
-                    <div id="channels-list">
-                        <p>Carregando canais...</p>
-                    </div>
-                </div>
-            `;
-            const video = document.getElementById('video-player');
-            if (Hls.isSupported()) {
-                const hls = new Hls({
-                    maxBufferLength: 30,
-                    maxMaxBufferLength: 60,
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    testBandwidth: true,
-                    progressive: true,
-                    xhrSetup: function(xhr) {
-                        xhr.withCredentials = false;
-                    }
-                });
-                try {
-                    hls.loadSource(streamUrl);
-                    hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        console.log('Manifest parsed, attempting to play');
-                        video.play().catch(err => {
-                            console.error('Erro ao iniciar reprodução:', err);
-                            showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                        });
-                    });
-                    hls.on(Hls.Events.ERROR, function(event, data) {
-                        console.error('Erro HLS:', data.type, data.details);
-                        if (data.fatal) {
-                            switch(data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    console.error('Erro de rede, tentando recuperar...');
-                                    showNotification("Erro de rede. Tentando reconectar...", "error");
-                                    hls.startLoad();
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    console.error('Erro de mídia, tentando recuperar...');
-                                    showNotification("Erro de mídia. Tentando recuperar...", "error");
-                                    hls.recoverMediaError();
-                                    break;
-                                default:
-                                    console.error('Erro fatal, não é possível recuperar');
-                                    showNotification("Não foi possível carregar o stream", "error");
-                                    hls.destroy();
-                                    break;
-                            }
-                        }
-                    });
-                        
-                    videoPlayer = hls;
-                } catch (error) {
-                    console.error('Erro ao configurar HLS:', error);
-                    showNotification("Erro ao configurar reprodução: " + error.message, "error");
-                }
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Para Safari/iOS
-                video.src = streamUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    console.log('Metadados carregados, tentando reproduzir');
-                    video.play().catch(err => {
-                        console.error('Erro ao iniciar reprodução (Safari):', err);
-                        showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                    });
-                });
-                    
-                video.addEventListener('error', function(e) {
-                    console.error('Erro no elemento de vídeo:', video.error);
-                    showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
-                });
-            } else {
-                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
-            }
-                
-            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
-
-            // Carregar canais para o seletor
-            setTimeout(carregarCanaisSeletor, 500);
-        }
-
-        // Proteção contra inspeção (mantido do código original)
         document.addEventListener('keydown', function (event) {
             if (
                 event.key === 'F12' ||
@@ -2196,8 +1986,7 @@ display: flex;
             return false;
         });
 
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
             loadProgramacao();
             loadKeys();
             createLiveNotificationPlayer(); // Chama a nova função para o vídeo
