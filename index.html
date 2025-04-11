@@ -2063,16 +2063,8 @@ display: flex;
                         <span class="live-indicator">AO VIVO</span>
                     </div>
                 </div>
-                <div id="channel-selector-button" onclick="toggleChannelSelector()">
-                    <span>📺 Mudar Canal</span>
-                </div>
-                <div id="channel-selector-menu">
-                    <input type="text" class="channel-search" id="channel-search" placeholder="Buscar canais..." oninput="filtrarCanais()">
-                    <div id="channels-list">
-                        <p>Carregando canais...</p>
-                    </div>
-                </div>
-            `;
+                
+                
             const video = document.getElementById('video-player');
             if (Hls.isSupported()) {
                 const hls = new Hls({
