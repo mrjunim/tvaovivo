@@ -1618,21 +1618,20 @@ display: flex;
             }
         }
 
-        ffunction createLiveNotificationPlayer() {
+       function createLiveNotificationPlayer() {
     const liveVideo = document.getElementById('live-video');
     if (liveVideo) {
-        liveVideo.autoplay = true; // Garante reprodução automática
-        liveVideo.loop = true; // Mantém o loop
-        liveVideo.muted = true; // Garante que o vídeo esteja mudo
-        liveVideo.controls = false; // Remove controles
-        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
-        liveVideo.volume = 0; // Define volume como 0 por segurança
-        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
+        liveVideo.autoplay = true;
+        liveVideo.loop = true;
+        liveVideo.muted = true;
+        liveVideo.controls = false;
+        liveVideo.playsinline = true;
+        liveVideo.volume = 0;
+        playVideo(liveVideo);
         liveVideo.addEventListener('error', (e) => {
             console.error('Erro ao carregar o vídeo ao vivo:', e);
             showNotification('Erro ao carregar o vídeo ao vivo', 'error');
         });
-        // Garante que o vídeo permaneça mudo mesmo após eventos
         liveVideo.addEventListener('volumechange', () => {
             if (!liveVideo.muted) {
                 liveVideo.muted = true;
