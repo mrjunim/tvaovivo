@@ -1393,38 +1393,6 @@ display: flex;
         }
 
 
-        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
-        const audioFiles = [
-            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
-            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
-            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
-            
-        ];
-
-        function playRandomAudio() {
-            const notification = document.querySelector('.notification');
-            const audio = document.getElementById('ghostAudio');
-            
-            // Esconde a notificação
-            notification.style.display = 'none';
-            
-            // Seleciona um áudio aleatório da lista
-            const randomIndex = Math.floor(Math.random() * audioFiles.length);
-            audio.src = audioFiles[randomIndex];
-            
-            // Toca o áudio
-            audio.play().catch(error => {
-                console.log("Erro ao tocar áudio:", error);
-            });
-        }
-
-        // Mostra a notificação após 1 segundo
-        setTimeout(() => {
-            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
-        }, 1000);
-    
-
-
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             const notification = document.createElement('div');
@@ -2308,5 +2276,40 @@ display: flex;
     }, 40000); // 40 segundos
   });     
 </script>
+
+
+<script>
+        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
+        const audioFiles = [
+            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
+            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
+            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
+            
+        ];
+
+        function playRandomAudio() {
+            const notification = document.querySelector('.notification');
+            const audio = document.getElementById('ghostAudio');
+            
+            // Esconde a notificação
+            notification.style.display = 'none';
+            
+            // Seleciona um áudio aleatório da lista
+            const randomIndex = Math.floor(Math.random() * audioFiles.length);
+            audio.src = audioFiles[randomIndex];
+            
+            // Toca o áudio
+            audio.play().catch(error => {
+                console.log("Erro ao tocar áudio:", error);
+            });
+        }
+
+        // Mostra a notificação após 1 segundo
+        setTimeout(() => {
+            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
+        }, 1000);
+    
+</script>
+
 </body>
 </html>
