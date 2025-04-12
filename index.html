@@ -1238,7 +1238,7 @@ display: flex;
     <main class="container">
         <section class="login-container" id="login-container">
             <img src="https://i.imgur.com/QsrJDbX.png" alt="StreamXcellence Logo" class="app-logo">
-            <h4>StreamXcellence</h4>
+            <h1>StreamXcellence</h1>
             <p class="subtitle">Digite a chave de acesso para entrar na melhor experiência de streaming</p>
             <div class="input-group">
                 <label for="key-input" class="sr-only">Chave de acesso</label>
@@ -1253,7 +1253,10 @@ display: flex;
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
         </section>
 <section class="live-notification" id="live-notification">
-    
+    <div id="sobre">
+        <h4>Sobre o StreamXcellence</h4>
+        <p id="texto-sobre"></p>
+    </div>
 	<br>	
    <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
     <audio id="ghostAudio"></audio>
@@ -1302,7 +1305,6 @@ display: flex;
             Seu navegador não suporta o elemento de vídeo.
         </video>
     </div>
-	
 </section>
     </main>
 
