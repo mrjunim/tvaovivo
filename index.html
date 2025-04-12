@@ -1296,7 +1296,7 @@ display: flex;
             }
         }
 		
-		.player-controls .control-btn:disabled {
+.player-controls .control-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
@@ -1320,6 +1320,25 @@ display: flex;
 
 #twitch-embed:empty + #video-player {
     display: block !important;
+}
+
+/* Estilos para notificação */
+.notification {
+    position: fixed;
+    top: -100px;
+    background: #ff4444;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    animation: slideIn 1s ease forwards;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+@keyframes slideIn {
+    from { top: -100px; }
+    to { top: 20px; }
 }
 		
 		
@@ -1621,7 +1640,7 @@ display: flex;
     }
 }
 
-       function initCustomControls() {
+     function initCustomControls() {
     console.log('Inicializando controles personalizados...');
     const playPauseBtn = document.getElementById('play-pause-btn');
     const playIcon = document.getElementById('play-icon');
@@ -1635,12 +1654,23 @@ display: flex;
     const progressBar = document.getElementById('progress-bar');
     const currentTime = document.getElementById('current-time');
     const duration = document.getElementById('duration');
+    const video = document.getElementById('video-player'); // Declarar video aqui
 
     if (!playPauseBtn || !muteBtn || !volumeSlider) {
         console.error('Elementos de controle não encontrados');
         return;
     }
-   function updateProgress() {
+	volumeSlider.value = isTwitchActive ? (player ? player.getVolume() : 0.5) : (video ? video.volume : 0.5);
+    updateVolumeIcon();
+	
+	
+	function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+	
+  function updateProgress() {
         if (!isTwitchActive && video && video.duration) {
             const current = video.currentTime;
             const dur = video.duration;
@@ -1659,9 +1689,8 @@ display: flex;
             forwardBtn.disabled = true;
         }
     }
-
     // Eventos dos controles
-  playPauseBtn.addEventListener('click', togglePlay);
+ playPauseBtn.addEventListener('click', togglePlay);
     volumeSlider.addEventListener('input', () => {
         const volume = parseFloat(volumeSlider.value);
         if (isTwitchActive && player) {
@@ -1701,8 +1730,7 @@ function formatTime(seconds) {
         return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
-
-   if (isTwitchActive && player) {
+if (isTwitchActive && player) {
         player.addEventListener(Twitch.Player.PLAY, () => {
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
@@ -1726,7 +1754,6 @@ function formatTime(seconds) {
             showNotification('Erro na reprodução do vídeo', 'error');
         });
     }
-	
 	updateProgress();
     console.log('Controles inicializados:', { isTwitchActive, player, video });
 }
@@ -1787,6 +1814,31 @@ function toggleMute() {
         showNotification(video.muted ? 'Som desativado' : 'Som ativado', 'info');
     }
 }
+
+
+function toggleFullscreen() {
+    const playerContainer = document.getElementById('player-container');
+    if (!document.fullscreenElement) {
+        if (playerContainer.requestFullscreen) {
+            playerContainer.requestFullscreen();
+        } else if (playerContainer.webkitRequestFullscreen) { // Safari
+            playerContainer.webkitRequestFullscreen();
+        } else if (playerContainer.msRequestFullscreen) { // IE11
+            playerContainer.msRequestFullscreen();
+        }
+        showNotification('Tela cheia ativada', 'info');
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        showNotification('Tela cheia desativada', 'info');
+    }
+}
+
 
 function updateVolumeIcon() {
     const muteBtn = document.getElementById('mute-btn');
@@ -2283,18 +2335,40 @@ function updateVolumeIcon() {
                 });
         }
 
-       function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
+     function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
     console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
     closeCanaisModal();
     const playerContainer = document.getElementById('player-container');
     playerContainer.style.display = 'flex';
-	
-	if (player) {
+
+    // Limpar player Twitch se existir
+    if (player) {
         player.destroy();
         player = null;
     }
-	
-            playerContainer.innerHTML = `
+    // Limpar HLS player se existir
+    if (videoPlayer) {
+        videoPlayer.destroy();
+        videoPlayer = null;
+    }
+            function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
+    console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
+    closeCanaisModal();
+    const playerContainer = document.getElementById('player-container');
+    playerContainer.style.display = 'flex';
+
+    // Limpar player Twitch se existir
+    if (player) {
+        player.destroy();
+        player = null;
+    }
+    // Limpar HLS player se existir
+    if (videoPlayer) {
+        videoPlayer.destroy();
+        videoPlayer = null;
+    }
+
+    playerContainer.innerHTML = `
         <div class="player hls-player" id="player">
             <div id="twitch-embed" style="display: none;"></div>
             <video id="video-player" controls></video>
@@ -2366,8 +2440,8 @@ function updateVolumeIcon() {
             </div>
         </div>
     `;
-            `;
-           const video = document.getElementById('video-player');
+
+    const video = document.getElementById('video-player');
     document.getElementById('twitch-embed').style.display = 'none';
     video.style.display = 'block';
     isTwitchActive = false;
@@ -2440,7 +2514,7 @@ function updateVolumeIcon() {
             showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
         });
     } else {
-        showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
+        showNotification("Seu navegador não suporta Reprodução de streams HLS", "error");
     }
 
     showNotification(`Reproduzindo: ${nomeCanal}`, "success");
