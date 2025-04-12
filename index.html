@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="StreamXcellence - Assista aos melhores canais online">
+    <meta name="description" content="streamXcellence é onde o horror encontra a arte. Psicologicamente inquietante, visualmente hipnótico — terror cult em sua forma mais pura.">
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
+	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
     <!-- Preconnect para melhorar o carregamento -->
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
@@ -376,25 +377,27 @@
         }
 
         .live-notification .player {
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            pointer-events: none;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-        }
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* Mantém proporção 16:9 */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: none; /* Impede qualquer interação */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
 
-        .live-notification .player iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+.live-notification .player video#live-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Reforça a desativação de cliques */
+}
 
         #player-container {
             display: none;
@@ -1253,46 +1256,14 @@ display: flex;
 			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
     <audio id="ghostAudio"></audio>
         </section>
+
 <section class="live-notification" id="live-notification">
     <div id="sobre">
-        <h4>Sobre o StreamXcellence</h4>
+        <h2>Sobre o StreamXcellence</h2>
         <p id="texto-sobre"></p>
     </div>
-	<br>	
-   
-
-    <script>
-        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
-        const audioFiles = [
-            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
-            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
-            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
-            
-        ];
-
-        function playRandomAudio() {
-            const notification = document.querySelector('.notification');
-            const audio = document.getElementById('ghostAudio');
-            
-            // Esconde a notificação
-            notification.style.display = 'none';
-            
-            // Seleciona um áudio aleatório da lista
-            const randomIndex = Math.floor(Math.random() * audioFiles.length);
-            audio.src = audioFiles[randomIndex];
-            
-            // Toca o áudio
-            audio.play().catch(error => {
-                console.log("Erro ao tocar áudio:", error);
-            });
-        }
-
-        // Mostra a notificação após 1 segundo
-        setTimeout(() => {
-            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
-        }, 1000);
-    </script>
-	<br>
+    <br>	
+    <br>
     <div id="guide-container" role="marquee">
         <div class="scrolling-text" id="scrolling-text">
             <span id="guide-text">Carregando guia...</span>
@@ -1300,12 +1271,13 @@ display: flex;
         </div>
     </div>
     <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-        <video id="live-video" autoplay loop muted playsinline preload="auto" controlslist="nodownload nofullscreen noremoteplayback" disablePictureInPicture>
+        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
             <source src="https://i.imgur.com/7PzQRkQ.mp4" type="video/mp4">
             Seu navegador não suporta o elemento de vídeo.
         </video>
     </div>
 </section>
+
     </main>
 
     <div id="player-container" aria-live="polite">
@@ -1642,18 +1614,26 @@ display: flex;
             }
         }
 
-        function createLiveNotificationPlayer() {
+    function createLiveNotificationPlayer() {
     const liveVideo = document.getElementById('live-video');
     if (liveVideo) {
-        liveVideo.autoplay = true
-		liveVideo.volume = 0.0; // Define volume em 50%
-        liveVideo.muted = false; // Desmuta o vídeo
-        liveVideo.controls = false; // Desabilita controles nativos
-        liveVideo.loop = true; // Ativa loop infinito
+        liveVideo.autoplay = true; // Garante reprodução automática
+        liveVideo.loop = true; // Mantém o loop
+        liveVideo.muted = true; // Garante que o vídeo esteja mudo
+        liveVideo.controls = false; // Remove controles
+        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
+        liveVideo.volume = 0; // Define volume como 0 por segurança
         playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
         liveVideo.addEventListener('error', (e) => {
             console.error('Erro ao carregar o vídeo ao vivo:', e);
             showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+        });
+        // Garante que o vídeo permaneça mudo mesmo após eventos
+        liveVideo.addEventListener('volumechange', () => {
+            if (!liveVideo.muted) {
+                liveVideo.muted = true;
+                liveVideo.volume = 0;
+            }
         });
     }
 }
@@ -2293,5 +2273,36 @@ display: flex;
     }, 30000); // 10 segundos
   });     
 </script>
+<script>
+        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
+        const audioFiles = [
+            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
+            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
+            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
+            
+        ];
+
+        function playRandomAudio() {
+            const notification = document.querySelector('.notification');
+            const audio = document.getElementById('ghostAudio');
+            
+            // Esconde a notificação
+            notification.style.display = 'none';
+            
+            // Seleciona um áudio aleatório da lista
+            const randomIndex = Math.floor(Math.random() * audioFiles.length);
+            audio.src = audioFiles[randomIndex];
+            
+            // Toca o áudio
+            audio.play().catch(error => {
+                console.log("Erro ao tocar áudio:", error);
+            });
+        }
+
+        // Mostra a notificação após 1 segundo
+        setTimeout(() => {
+            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
+        }, 1000);
+    </script>
 </body>
 </html>
