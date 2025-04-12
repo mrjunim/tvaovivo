@@ -1471,9 +1471,11 @@ display: flex;
                 player.addEventListener(Twitch.Player.OFFLINE, () => {
                     document.getElementById('player-container').innerHTML = `
                         <div class="offline-container">
+			<center>
                             <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
                                 <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
                             </video>
+			    </center>
                             <div class="offline-message">
                                 <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
                             </div>
