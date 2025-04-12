@@ -2146,14 +2146,12 @@ display: flex;
                 (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
                 (event.ctrlKey && event.key === 'U')
             ) {
-                alert("Isso não é permitido 😢");
                 event.preventDefault();
                 return false;
             }
         });
 
         document.addEventListener('contextmenu', function (event) {
-            alert("Isso não é permitido 😢");
             event.preventDefault();
             return false;
         });
