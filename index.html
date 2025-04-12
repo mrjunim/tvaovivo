@@ -1248,9 +1248,10 @@ display: flex;
                 <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
                 <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
-                <button type="button" id="live-channels-button" onclick="openCanaisModalWithKey()" class="btn-info">Canais ao vivo</button>
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
+			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+    <audio id="ghostAudio"></audio>
         </section>
 <section class="live-notification" id="live-notification">
     <div id="sobre">
@@ -1258,8 +1259,7 @@ display: flex;
         <p id="texto-sobre"></p>
     </div>
 	<br>	
-   <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <audio id="ghostAudio"></audio>
+   
 
     <script>
         // Lista de URLs de áudios (adicione mais URLs conforme necessário)
