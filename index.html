@@ -2179,6 +2179,55 @@ display: flex;
                     }
                 });
             }
+
+
+
+		document.addEventListener('keydown', function(e) {
+    // Bloqueia Ctrl+U, Ctrl+S, Ctrl+C, Ctrl+V, Ctrl+A, Ctrl+P, Ctrl+T
+    if (e.ctrlKey && (
+        e.key === 'u' || 
+        e.key === 's' || 
+        e.key === 'c' || 
+        e.key === 'v' || 
+        e.key === 'a' || 
+        e.key === 'p' || 
+        e.key === 't'
+    )) {
+        e.preventDefault();
+        return false;
+    }
+
+    // Bloqueia F12 (DevTools)
+    if (e.key === 'F12') {
+        e.preventDefault();
+        return false;
+    }
+
+    // Bloqueia Ctrl+Shift+I (DevTools no Chrome)
+    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault();
+        return false;
+    }
+
+    // Bloqueia Ctrl+Shift+J (Console no Chrome)
+    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+        e.preventDefault();
+        return false;
+    }
+
+    // Bloqueia Ctrl+Shift+C (Inspeção de elementos)
+    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Bloqueia clique com botão direito (opcional)
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+});
+		
             // Adicionar evento de tecla Enter para verificação de chave de canais
             const canaisKeyInput = document.getElementById('canais-key-input');
             if (canaisKeyInput) {
