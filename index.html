@@ -1226,7 +1226,27 @@ display: flex;
                 top: 20px;
             }
         }
+		.control-btn#cast-btn {
+    background: linear-gradient(135deg, #ff1a1a, #cc0000);
+    color: white;
+    font-size: 20px;
+    padding: 12px;
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.control-btn#cast-btn:hover {
+    background: linear-gradient(135deg, #cc0000, #ff1a1a);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(255, 26, 26, 0.5);
+}
+
+.control-btn#cast-btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
     </style>
+	<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
 </head>
 <body>
 	
@@ -1293,19 +1313,19 @@ display: flex;
         </div>
         <div id="quality-menu" class="quality-menu"></div>
         <div class="player-controls">
-            <div class="controls-left">
-                <button id="play-pause-btn" class="control-btn">⏸️</button>
-                <div class="volume-container">
-                    <button id="mute-btn" class="control-btn">🔊</button>
-                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
-                </div>
-            </div>
-            <div class="controls-right">
-                <button id="quality-btn" class="control-btn">⚙️</button>
-                <button id="fullscreen-btn" class="control-btn">⛶</button>
-            </div>
+    <div class="controls-left">
+        <button id="play-pause-btn" class="control-btn">⏸️</button>
+        <div class="volume-container">
+            <button id="mute-btn" class="control-btn">🔊</button>
+            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
         </div>
     </div>
+    <div class="controls-right">
+        <button id="quality-btn" class="control-btn">⚙️</button>
+        <button id="fullscreen-btn" class="control-btn">⛶</button>
+        <button id="cast-btn" class="control-btn" title="Transmitir Tela">📺</button>
+    </div>
+</div>
 
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
@@ -1362,6 +1382,95 @@ display: flex;
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
+	
+	
+	let castSession = null;
+
+function initCastApi() {
+    if (!window.chrome.cast || !window.cast) {
+        console.error('Google Cast API não está disponível.');
+        return;
+    }
+
+    const castBtn = document.getElementById('cast-btn');
+    castBtn.disabled = true;
+
+    window['__onGCastApiAvailable'] = (isAvailable) => {
+        if (isAvailable) {
+            castBtn.disabled = false;
+            cast.initializeCastApi();
+        } else {
+            console.error('Google Cast não está disponível.');
+            showNotification('Dispositivo de transmissão não suportado.', 'error');
+        }
+    };
+
+    cast.initializeCastApi = () => {
+        const context = cast.framework.CastContext.getInstance();
+        context.setOptions({
+            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+        });
+
+        context.addEventListener(
+            cast.framework.CastContextEventType.CAST_STATE_CHANGED,
+            (event) => {
+                switch (event.castState) {
+                    case cast.framework.CastState.CONNECTED:
+                        castBtn.style.background = 'linear-gradient(135deg, #00cc00, #009900)';
+                        break;
+                    default:
+                        castBtn.style.background = 'linear-gradient(135deg, #ff1a1a, #cc0000)';
+                        break;
+                }
+            }
+        );
+    };
+
+    castBtn.addEventListener('click', () => {
+        const context = cast.framework.CastContext.getInstance();
+        if (context.getCastState() === cast.framework.CastState.CONNECTED) {
+            context.endCurrentSession(true);
+            showNotification('Transmissão encerrada.', 'info');
+        } else {
+            context.requestSession().then(
+                () => {
+                    castSession = context.getCurrentSession();
+                    showNotification('Conectado ao dispositivo de transmissão!', 'success');
+                    castScreen();
+                },
+                (error) => {
+                    console.error('Erro ao iniciar sessão de transmissão:', error);
+                    showNotification('Falha ao conectar ao dispositivo. Verifique a rede Wi-Fi.', 'error');
+                }
+            );
+        }
+    });
+}
+
+function castScreen() {
+    if (!castSession) return;
+
+    const mediaInfo = new chrome.cast.media.MediaInfo('https://your-stream-url.m3u8', 'video/mp4');
+    const request = new chrome.cast.media.LoadRequest(mediaInfo);
+    castSession.loadMedia(request).then(
+        () => {
+            showNotification('Transmissão iniciada com sucesso!', 'success');
+        },
+        (error) => {
+            console.error('Erro ao carregar mídia:', error);
+            showNotification('Erro ao transmitir conteúdo.', 'error');
+        }
+    );
+}
+
+// Inicializar a API após o carregamento da página
+document.addEventListener('DOMContentLoaded', () => {
+    initCastApi();
+    initCustomControls(); // Certifique-se de que esta função já existe no seu código
+});
+	
+	
         let player;
         let livePlayer;
         let qualities = [];
