@@ -1451,7 +1451,7 @@ function initCastApi() {
 function castScreen() {
     if (!castSession) return;
 
-    const mediaInfo = new chrome.cast.media.MediaInfo('https://your-stream-url.m3u8', 'video/mp4');
+    const mediaInfo = new chrome.cast.media.MediaInfo('https://sae13.playlist.ttvnw.net/v1/playlist/Cq4G3cYs75E0stx39xHQAPYfTx12ltH_8V1OxSeecFJKFaqLvFaHRcDtRjZ0E4gQNv84GePV2P9YtzPuBFZJTIHQpn7eIGNIvDYa-U6Sh5QHd5ZY7RqysllwuVvWvbI0TeHXMrYbntMn0bDdXSRak3cndJD0gQnL9_bHX6F3nJH_gCWO4_dceJvUcegDZZsuGLrKlK40X5OBGV6iwTEHVU8SZedmAgZK8uU4Lw0IGZdQw-3GafORyFOPluxzGONUu31R0Sp5sRUtQqlyI4il2W3DUkfTxROBM110fvMUx63zuSQPUSPePQiFaogcw5v5ArfCeqAWOb4DF33D26EBnund70CYalwCUPo1ssD50xp0bF3c_5nVvsGVKm-hE2NBjM8rprIMiWI15lFEEAuSSAl2i_3cMt6Hf55tTIL_2p1ObkziBd_IqU6MsKm-tG-pdF_wZ5YEFsXNvy2nfKtkHRXX_f1uzIWy_mpFZGb7Dgs4XEz_ZdeZCHX0KVpqY_CNwJi_wa4cI2bd1crnLInGym1dWyJUpqYcGBtabJF-fzCLVwB6IYTtH7KJ_1dAZhGFiM-ia4eCMR86MwlJZOQpj0rZ1Tf_0K9ZSAAS1Nb9148nrWmGB95GhP5SacYeu7cWDCgY0EsqsU-YjsuJxiuSwPoD_sTUMbz8L581FMyfW1e1d2hn4S7RU43EGEsgWoNjak3YMSyqzMZVIUoD1T5fuLip_0CfRZ_pxphQV-OPhFHs8lBikIY-r65Vh3Z0m5azG4khbLV2fVffrEBWlFJYf_0TDJqP4KfR9erAIm7Dn2vp18HhN1t8Fk-PXL-GpZINPb7qrtBPKRTyB9rVoVNG0p_0IMxWgeWzxjVY61YmidfvJQ5_PPUqjYpibUUprFCDQNPoDOyLT1BcN71bf9Fj-4-kZ3XYzUpKJYp9aFOU2_nWF_JAhaiU7w8KPeUsNV_BUVKVmyHw54p5mYAEfww2zO98pTA-vIB7Ip7YLeGowr6L1oHmG8y_ugumcFoSSrlE23YaxtGbKt5059QbIHheS9Gdz0U4XS_RlZRl2Fgxpu8NgwbQGO_Y_w2Q6wf3B58vFBoMrK1Y_xadVPBldzcgIAEqCXVzLWVhc3QtMjCFDA.m3u8', 'video/mp4');
     const request = new chrome.cast.media.LoadRequest(mediaInfo);
     castSession.loadMedia(request).then(
         () => {
