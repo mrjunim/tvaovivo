@@ -7,13 +7,15 @@
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
+	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
+    <!-- Preconnect para melhorar o carregamento -->
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <style>
+        /* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -53,10 +55,11 @@
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
-            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a);
+            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a); /* Fundo de terror */
             position: relative;
         }
 
+        /* Névoa de terror apenas na página inicial */
         .nevoa {
             position: fixed;
             top: 0;
@@ -94,7 +97,7 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
-            filter: brightness(0.2) contrast(1.2) grayscale(0.5);
+            filter: brightness(0.2) contrast(1.2) grayscale(0.5); /* Efeito sombrio */
             transform: scale(1.1);
         }
 
@@ -111,12 +114,13 @@
             position: relative;
         }
 
+        /* Estilos de terror apenas para a página inicial */
         .login-container,
         .live-notification {
-            background: rgba(20, 20, 20, 0.9);
+            background: rgba(20, 20, 20, 0.9); /* Fundo preto opaco */
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); /* Sombra vermelha */
             text-align: center;
             flex: 1;
             animation: fadeIn 1s ease-in-out;
@@ -125,7 +129,7 @@
             align-items: center;
             min-width: 300px;
             transition: all 0.3s ease;
-            border: 2px solid rgba(139, 0, 0, 0.5);
+            border: 2px solid rgba(139, 0, 0, 0.5); /* Borda vermelho sangue */
             position: relative;
             overflow: hidden;
         }
@@ -138,7 +142,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent);
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent); /* Efeito de sangue sutil */
             animation: pulseBlood 8s infinite;
             z-index: -1;
         }
@@ -167,8 +171,8 @@
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
-            color: #ff1a1a;
-            font-family: 'Creepster', cursive;
+            color: #ff1a1a; /* Vermelho sangue */
+            font-family: 'Creepster', cursive; /* Fonte de terror */
             font-weight: 700;
             letter-spacing: 0.5px;
             text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
@@ -184,7 +188,7 @@
             font-size: 1.3em;
             margin-bottom: 15px;
             color: #fff;
-            font-family: 'Nosifer', cursive;
+            font-family: 'Nosifer', cursive; /* Fonte assustadora */
             font-weight: 600;
             letter-spacing: 0.3px;
             text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
@@ -206,7 +210,7 @@
             width: 100%;
             padding: 14px;
             margin-top: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
             border-radius: 12px;
             background: rgba(30, 30, 30, 0.8);
             color: #fff;
@@ -266,7 +270,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
+            background: linear-gradient(135deg, #ff1a1a, #cc0000); /* Vermelho sangue */
             color: white;
         }
 
@@ -279,7 +283,7 @@
         .btn-secondary {
             background: rgba(40, 45, 60, 0.8);
             color: white;
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
         }
 
         .btn-secondary:hover {
@@ -313,7 +317,7 @@
 
         #guide-container {
             width: 100%;
-            background: rgba(20, 20, 20, 0.95);
+            background: rgba(20, 20, 20, 0.95); /* Fundo escuro */
             color: #fff;
             padding: 15px 0;
             margin-bottom: 25px;
@@ -352,6 +356,7 @@
             line-height: 1.6;
         }
 
+        /* Estilos originais mantidos para os outros elementos */
         #zoom-image-container {
             display: none;
             position: fixed;
@@ -372,27 +377,27 @@
         }
 
         .live-notification .player {
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            pointer-events: none;
-            box-shadow: 0 10px 20px rgba(0, twitch-player.css0, 0, 0.3);
-            border: 1px solid var(--border-color);
-        }
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* Mantém proporção 16:9 */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: none; /* Impede qualquer interação */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
 
-        .live-notification .player video#live-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-        }
+.live-notification .player video#live-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Reforça a desativação de cliques */
+}
 
         #player-container {
             display: none;
@@ -414,17 +419,21 @@
             display: flex;
         }
 
-        #twitch-player {
+        .player {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        #player-container iframe {
             width: 100%;
             height: 100%;
             border: none;
-            pointer-events: auto;
-        }
-
-        #twitch-player::-webkit-media-controls,
-        #twitch-player::-webkit-media-controls-panel {
-            display: block !important;
-            opacity: 1 !important;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .channel-info {
@@ -1033,7 +1042,7 @@
             width: 80px;
             height: 80px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); /* Sombra vermelha */
             animation: pulse 2s infinite alternate;
         }
 
@@ -1163,33 +1172,41 @@
                 height: 60px;
             }
         }
+		
+		.live-notification .player {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        .live-notification .player {
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            pointer-events: none;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-color);
-            display: flex;
+.live-notification .player video#live-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+
+display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
         }
-
-        .live-notification .player video#live-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: translate(-50%, -50%);
-        }
-
-        .notification {
+.notification {
             position: fixed;
             top: -100px;
             background: #ff4444;
@@ -1212,6 +1229,7 @@
     </style>
 </head>
 <body>
+	
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
@@ -1235,40 +1253,37 @@
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-            <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-            <audio id="ghostAudio"></audio>
+			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+    <audio id="ghostAudio"></audio>
         </section>
 
-        <section class="live-notification" id="live-notification">
-            <div id="sobre">
-                <h3>Sobre o StreamXcellence</h3>
-                <p id="texto-sobre"></p>
-            </div>
-            <br><br>
-            <div id="guide-container" role="marquee">
-                <div class="scrolling-text" id="scrolling-text">
-                    <span id="guide-text">Carregando guia...</span>
-                    <span id="guide-text-duplicate">Carregando guia...</span>
-                </div>
-            </div>
-            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-                <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
-                    <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
-                    Seu navegador não suporta o elemento de vídeo.
-                </video>
-            </div>
-        </section>
+<section class="live-notification" id="live-notification">
+    <div id="sobre">
+        <h3>Sobre o StreamXcellence</h3>
+        <p id="texto-sobre"></p>
+    </div>
+    <br>	
+    <br>
+    <div id="guide-container" role="marquee">
+        <div class="scrolling-text" id="scrolling-text">
+            <span id="guide-text">Carregando guia...</span>
+            <span id="guide-text-duplicate">Carregando guia...</span>
+        </div>
+    </div>
+    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
+        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
+            <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+    </div>
+</section>
+
     </main>
 
     <div id="player-container" aria-live="polite">
-        <iframe
-            id="twitch-player"
-            src="https://player.twitch.tv/?channel=lourimarcos&parent=localhost&controls=true"
-            allowfullscreen="true"
-            frameborder="0"
-            width="100%"
-            height="100%">
-        </iframe>
+        <div class="player twitch-player" id="player">
+            <div id="twitch-embed"></div>
+        </div>
         <div class="channel-info">
             <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
             <div>
@@ -1417,15 +1432,15 @@
         }
 
         function createTwitchPlayer() {
-            if (!document.querySelector("#twitch-player")) {
-                player = new Twitch.Player("player-container", {
+            if (!document.querySelector("#twitch-embed iframe")) {
+                player = new Twitch.Player("twitch-embed", {
                     channel: "lourimarcos",
                     width: "100%",
                     height: "100%",
-                    controls: true,
+                    controls: false,
                     autoplay: true,
                     muted: false,
-                    parent: ["localhost"]
+                    parent: ["localhost", window.location.hostname]
                 });
                 player.addEventListener(Twitch.Player.READY, () => {
                     player.setVolume(0.5);
@@ -1436,6 +1451,13 @@
                         updateQualityMenu();
                     }, 2000);
                     initCustomControls();
+                    const playerElement = player.getIframe();
+                    const clickEvent = new MouseEvent('click', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true
+                    });
+                    playerElement.dispatchEvent(clickEvent);
                     showNotification('Reprodução iniciada', 'success');
                 });
                 player.addEventListener(Twitch.Player.PLAY, () => {
@@ -1583,28 +1605,29 @@
             }
         }
 
-        function createLiveNotificationPlayer() {
-            const liveVideo = document.getElementById('live-video');
-            if (liveVideo) {
-                liveVideo.autoplay = true;
-                liveVideo.loop = true;
+    function createLiveNotificationPlayer() {
+    const liveVideo = document.getElementById('live-video');
+    if (liveVideo) {
+        liveVideo.autoplay = true; // Garante reprodução automática
+        liveVideo.loop = true; // Mantém o loop
+        liveVideo.muted = true; // Garante que o vídeo esteja mudo
+        liveVideo.controls = false; // Remove controles
+        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
+        liveVideo.volume = 0; // Define volume como 0 por segurança
+        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
+        liveVideo.addEventListener('error', (e) => {
+            console.error('Erro ao carregar o vídeo ao vivo:', e);
+            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+        });
+        // Garante que o vídeo permaneça mudo mesmo após eventos
+        liveVideo.addEventListener('volumechange', () => {
+            if (!liveVideo.muted) {
                 liveVideo.muted = true;
-                liveVideo.controls = false;
-                liveVideo.playsinline = true;
                 liveVideo.volume = 0;
-                playVideo(liveVideo);
-                liveVideo.addEventListener('error', (e) => {
-                    console.error('Erro ao carregar o vídeo ao vivo:', e);
-                    showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-                });
-                liveVideo.addEventListener('volumechange', () => {
-                    if (!liveVideo.muted) {
-                        liveVideo.muted = true;
-                        liveVideo.volume = 0;
-                    }
-                });
             }
-        }
+        });
+    }
+}
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -2018,7 +2041,7 @@
                 })
                 .catch(error => {
                     console.error('Erro ao carregar canais:', error);
- canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
+                    canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
                     showNotification("Erro ao carregar os canais", "error");
                 });
         }
