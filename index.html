@@ -7,15 +7,13 @@
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
-	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
-    <!-- Preconnect para melhorar o carregamento -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <style>
-        /* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -55,11 +53,10 @@
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
-            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a); /* Fundo de terror */
+            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a);
             position: relative;
         }
 
-        /* Névoa de terror apenas na página inicial */
         .nevoa {
             position: fixed;
             top: 0;
@@ -97,7 +94,7 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
-            filter: brightness(0.2) contrast(1.2) grayscale(0.5); /* Efeito sombrio */
+            filter: brightness(0.2) contrast(1.2) grayscale(0.5);
             transform: scale(1.1);
         }
 
@@ -114,13 +111,12 @@
             position: relative;
         }
 
-        /* Estilos de terror apenas para a página inicial */
         .login-container,
         .live-notification {
-            background: rgba(20, 20, 20, 0.9); /* Fundo preto opaco */
+            background: rgba(20, 20, 20, 0.9);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); /* Sombra vermelha */
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
             text-align: center;
             flex: 1;
             animation: fadeIn 1s ease-in-out;
@@ -129,7 +125,7 @@
             align-items: center;
             min-width: 300px;
             transition: all 0.3s ease;
-            border: 2px solid rgba(139, 0, 0, 0.5); /* Borda vermelho sangue */
+            border: 2px solid rgba(139, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
         }
@@ -142,7 +138,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent); /* Efeito de sangue sutil */
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent);
             animation: pulseBlood 8s infinite;
             z-index: -1;
         }
@@ -171,8 +167,8 @@
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
-            color: #ff1a1a; /* Vermelho sangue */
-            font-family: 'Creepster', cursive; /* Fonte de terror */
+            color: #ff1a1a;
+            font-family: 'Creepster', cursive;
             font-weight: 700;
             letter-spacing: 0.5px;
             text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
@@ -188,7 +184,7 @@
             font-size: 1.3em;
             margin-bottom: 15px;
             color: #fff;
-            font-family: 'Nosifer', cursive; /* Fonte assustadora */
+            font-family: 'Nosifer', cursive;
             font-weight: 600;
             letter-spacing: 0.3px;
             text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
@@ -210,7 +206,7 @@
             width: 100%;
             padding: 14px;
             margin-top: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
+            border: 1px solid rgba(255, 0, 0, 0.5);
             border-radius: 12px;
             background: rgba(30, 30, 30, 0.8);
             color: #fff;
@@ -270,7 +266,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff1a1a, #cc0000); /* Vermelho sangue */
+            background: linear-gradient(135deg, #ff1a1a, #cc0000);
             color: white;
         }
 
@@ -283,7 +279,7 @@
         .btn-secondary {
             background: rgba(40, 45, 60, 0.8);
             color: white;
-            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
+            border: 1px solid rgba(255, 0, 0, 0.5);
         }
 
         .btn-secondary:hover {
@@ -317,7 +313,7 @@
 
         #guide-container {
             width: 100%;
-            background: rgba(20, 20, 20, 0.95); /* Fundo escuro */
+            background: rgba(20, 20, 20, 0.95);
             color: #fff;
             padding: 15px 0;
             margin-bottom: 25px;
@@ -356,7 +352,6 @@
             line-height: 1.6;
         }
 
-        /* Estilos originais mantidos para os outros elementos */
         #zoom-image-container {
             display: none;
             position: fixed;
@@ -377,27 +372,27 @@
         }
 
         .live-notification .player {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* Mantém proporção 16:9 */
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    pointer-events: none; /* Impede qualquer interação */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-}
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            pointer-events: none;
+            box-shadow: 0 10px 20px rgba(0, twitch-player.css0, 0, 0.3);
+            border: 1px solid var(--border-color);
+        }
 
-.live-notification .player video#live-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-    pointer-events: none; /* Reforça a desativação de cliques */
-}
+        .live-notification .player video#live-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
 
         #player-container {
             display: none;
@@ -419,21 +414,17 @@
             display: flex;
         }
 
-        .player {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-            border-radius: 0;
-        }
-
-        #player-container iframe {
+        #twitch-player {
             width: 100%;
             height: 100%;
             border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+            pointer-events: auto;
+        }
+
+        #twitch-player::-webkit-media-controls,
+        #twitch-player::-webkit-media-controls-panel {
+            display: block !important;
+            opacity: 1 !important;
         }
 
         .channel-info {
@@ -1042,7 +1033,7 @@
             width: 80px;
             height: 80px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); /* Sombra vermelha */
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
             animation: pulse 2s infinite alternate;
         }
 
@@ -1172,41 +1163,33 @@
                 height: 60px;
             }
         }
-		
-		.live-notification .player {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    pointer-events: none;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.live-notification .player video#live-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-}
-
-display: flex;
+        .live-notification .player {
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            pointer-events: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1a1a1a;
-            font-family: Arial, sans-serif;
         }
-.notification {
+
+        .live-notification .player video#live-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+        }
+
+        .notification {
             position: fixed;
             top: -100px;
             background: #ff4444;
@@ -1226,30 +1209,9 @@ display: flex;
                 top: 20px;
             }
         }
-		.control-btn#cast-btn {
-    background: linear-gradient(135deg, #ff1a1a, #cc0000);
-    color: white;
-    font-size: 20px;
-    padding: 12px;
-    border-radius: 50%;
-    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
-}
-
-.control-btn#cast-btn:hover {
-    background: linear-gradient(135deg, #cc0000, #ff1a1a);
-    transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(255, 26, 26, 0.5);
-}
-
-.control-btn#cast-btn:disabled {
-    background: #666;
-    cursor: not-allowed;
-}
     </style>
-	
 </head>
 <body>
-	
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
@@ -1273,37 +1235,40 @@ display: flex;
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <audio id="ghostAudio"></audio>
+            <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+            <audio id="ghostAudio"></audio>
         </section>
 
-<section class="live-notification" id="live-notification">
-    <div id="sobre">
-        <h3>Sobre o StreamXcellence</h3>
-        <p id="texto-sobre"></p>
-    </div>
-    <br>	
-    <br>
-    <div id="guide-container" role="marquee">
-        <div class="scrolling-text" id="scrolling-text">
-            <span id="guide-text">Carregando guia...</span>
-            <span id="guide-text-duplicate">Carregando guia...</span>
-        </div>
-    </div>
-    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
-            <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
-            Seu navegador não suporta o elemento de vídeo.
-        </video>
-    </div>
-</section>
-
+        <section class="live-notification" id="live-notification">
+            <div id="sobre">
+                <h3>Sobre o StreamXcellence</h3>
+                <p id="texto-sobre"></p>
+            </div>
+            <br><br>
+            <div id="guide-container" role="marquee">
+                <div class="scrolling-text" id="scrolling-text">
+                    <span id="guide-text">Carregando guia...</span>
+                    <span id="guide-text-duplicate">Carregando guia...</span>
+                </div>
+            </div>
+            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
+                <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
+                    <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+        </section>
     </main>
 
     <div id="player-container" aria-live="polite">
-        <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
-        </div>
+        <iframe
+            id="twitch-player"
+            src="https://player.twitch.tv/?channel=lourimarcos&parent=localhost&controls=true"
+            allowfullscreen="true"
+            frameborder="0"
+            width="100%"
+            height="100%">
+        </iframe>
         <div class="channel-info">
             <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
             <div>
@@ -1313,19 +1278,19 @@ display: flex;
         </div>
         <div id="quality-menu" class="quality-menu"></div>
         <div class="player-controls">
-    <div class="controls-left">
-        <button id="play-pause-btn" class="control-btn">⏸️</button>
-        <div class="volume-container">
-            <button id="mute-btn" class="control-btn">🔊</button>
-            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+            <div class="controls-left">
+                <button id="play-pause-btn" class="control-btn">⏸️</button>
+                <div class="volume-container">
+                    <button id="mute-btn" class="control-btn">🔊</button>
+                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+                </div>
+            </div>
+            <div class="controls-right">
+                <button id="quality-btn" class="control-btn">⚙️</button>
+                <button id="fullscreen-btn" class="control-btn">⛶</button>
+            </div>
         </div>
     </div>
-    <div class="controls-right">
-        <button id="quality-btn" class="control-btn">⚙️</button>
-        <button id="fullscreen-btn" class="control-btn">⛶</button>
-        <button id="cast-btn" class="control-btn" title="Transmitir Tela">📺</button>
-    </div>
-</div>
 
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
@@ -1378,99 +1343,10 @@ display: flex;
             <button type="button" onclick="verificarChaveCanais()" class="btn-primary">Acessar Canais</button>
         </div>
     </div>
-    <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
-	
-	
-	let castSession = null;
-
-function initCastApi() {
-    if (!window.chrome.cast || !window.cast) {
-        console.error('Google Cast API não está disponível.');
-        return;
-    }
-
-    const castBtn = document.getElementById('cast-btn');
-    castBtn.disabled = true;
-
-    window['__onGCastApiAvailable'] = (isAvailable) => {
-        if (isAvailable) {
-            castBtn.disabled = false;
-            cast.initializeCastApi();
-        } else {
-            console.error('Google Cast não está disponível.');
-            showNotification('Dispositivo de transmissão não suportado.', 'error');
-        }
-    };
-
-    cast.initializeCastApi = () => {
-        const context = cast.framework.CastContext.getInstance();
-        context.setOptions({
-            receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-        });
-
-        context.addEventListener(
-            cast.framework.CastContextEventType.CAST_STATE_CHANGED,
-            (event) => {
-                switch (event.castState) {
-                    case cast.framework.CastState.CONNECTED:
-                        castBtn.style.background = 'linear-gradient(135deg, #00cc00, #009900)';
-                        break;
-                    default:
-                        castBtn.style.background = 'linear-gradient(135deg, #ff1a1a, #cc0000)';
-                        break;
-                }
-            }
-        );
-    };
-
-    castBtn.addEventListener('click', () => {
-        const context = cast.framework.CastContext.getInstance();
-        if (context.getCastState() === cast.framework.CastState.CONNECTED) {
-            context.endCurrentSession(true);
-            showNotification('Transmissão encerrada.', 'info');
-        } else {
-            context.requestSession().then(
-                () => {
-                    castSession = context.getCurrentSession();
-                    showNotification('Conectado ao dispositivo de transmissão!', 'success');
-                    castScreen();
-                },
-                (error) => {
-                    console.error('Erro ao iniciar sessão de transmissão:', error);
-                    showNotification('Falha ao conectar ao dispositivo. Verifique a rede Wi-Fi.', 'error');
-                }
-            );
-        }
-    });
-}
-
-function castScreen() {
-    if (!castSession) return;
-
-    const mediaInfo = new chrome.cast.media.MediaInfo('https://sae13.playlist.ttvnw.net/v1/playlist/Cq4G3cYs75E0stx39xHQAPYfTx12ltH_8V1OxSeecFJKFaqLvFaHRcDtRjZ0E4gQNv84GePV2P9YtzPuBFZJTIHQpn7eIGNIvDYa-U6Sh5QHd5ZY7RqysllwuVvWvbI0TeHXMrYbntMn0bDdXSRak3cndJD0gQnL9_bHX6F3nJH_gCWO4_dceJvUcegDZZsuGLrKlK40X5OBGV6iwTEHVU8SZedmAgZK8uU4Lw0IGZdQw-3GafORyFOPluxzGONUu31R0Sp5sRUtQqlyI4il2W3DUkfTxROBM110fvMUx63zuSQPUSPePQiFaogcw5v5ArfCeqAWOb4DF33D26EBnund70CYalwCUPo1ssD50xp0bF3c_5nVvsGVKm-hE2NBjM8rprIMiWI15lFEEAuSSAl2i_3cMt6Hf55tTIL_2p1ObkziBd_IqU6MsKm-tG-pdF_wZ5YEFsXNvy2nfKtkHRXX_f1uzIWy_mpFZGb7Dgs4XEz_ZdeZCHX0KVpqY_CNwJi_wa4cI2bd1crnLInGym1dWyJUpqYcGBtabJF-fzCLVwB6IYTtH7KJ_1dAZhGFiM-ia4eCMR86MwlJZOQpj0rZ1Tf_0K9ZSAAS1Nb9148nrWmGB95GhP5SacYeu7cWDCgY0EsqsU-YjsuJxiuSwPoD_sTUMbz8L581FMyfW1e1d2hn4S7RU43EGEsgWoNjak3YMSyqzMZVIUoD1T5fuLip_0CfRZ_pxphQV-OPhFHs8lBikIY-r65Vh3Z0m5azG4khbLV2fVffrEBWlFJYf_0TDJqP4KfR9erAIm7Dn2vp18HhN1t8Fk-PXL-GpZINPb7qrtBPKRTyB9rVoVNG0p_0IMxWgeWzxjVY61YmidfvJQ5_PPUqjYpibUUprFCDQNPoDOyLT1BcN71bf9Fj-4-kZ3XYzUpKJYp9aFOU2_nWF_JAhaiU7w8KPeUsNV_BUVKVmyHw54p5mYAEfww2zO98pTA-vIB7Ip7YLeGowr6L1oHmG8y_ugumcFoSSrlE23YaxtGbKt5059QbIHheS9Gdz0U4XS_RlZRl2Fgxpu8NgwbQGO_Y_w2Q6wf3B58vFBoMrK1Y_xadVPBldzcgIAEqCXVzLWVhc3QtMjCFDA.m3u8', 'video/mp4');
-    const request = new chrome.cast.media.LoadRequest(mediaInfo);
-    castSession.loadMedia(request).then(
-        () => {
-            showNotification('Transmissão iniciada com sucesso!', 'success');
-        },
-        (error) => {
-            console.error('Erro ao carregar mídia:', error);
-            showNotification('Erro ao transmitir conteúdo.', 'error');
-        }
-    );
-}
-
-// Inicializar a API após o carregamento da página
-document.addEventListener('DOMContentLoaded', () => {
-    initCastApi();
-    initCustomControls(); // Certifique-se de que esta função já existe no seu código
-});
-	
-	
         let player;
         let livePlayer;
         let qualities = [];
@@ -1541,15 +1417,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function createTwitchPlayer() {
-            if (!document.querySelector("#twitch-embed iframe")) {
-                player = new Twitch.Player("twitch-embed", {
+            if (!document.querySelector("#twitch-player")) {
+                player = new Twitch.Player("player-container", {
                     channel: "lourimarcos",
                     width: "100%",
                     height: "100%",
-                    controls: false,
+                    controls: true,
                     autoplay: true,
                     muted: false,
-                    parent: ["localhost", window.location.hostname]
+                    parent: ["localhost"]
                 });
                 player.addEventListener(Twitch.Player.READY, () => {
                     player.setVolume(0.5);
@@ -1560,13 +1436,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         updateQualityMenu();
                     }, 2000);
                     initCustomControls();
-                    const playerElement = player.getIframe();
-                    const clickEvent = new MouseEvent('click', {
-                        view: window,
-                        bubbles: true,
-                        cancelable: true
-                    });
-                    playerElement.dispatchEvent(clickEvent);
                     showNotification('Reprodução iniciada', 'success');
                 });
                 player.addEventListener(Twitch.Player.PLAY, () => {
@@ -1714,29 +1583,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-    function createLiveNotificationPlayer() {
-    const liveVideo = document.getElementById('live-video');
-    if (liveVideo) {
-        liveVideo.autoplay = true; // Garante reprodução automática
-        liveVideo.loop = true; // Mantém o loop
-        liveVideo.muted = true; // Garante que o vídeo esteja mudo
-        liveVideo.controls = false; // Remove controles
-        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
-        liveVideo.volume = 0; // Define volume como 0 por segurança
-        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
-        liveVideo.addEventListener('error', (e) => {
-            console.error('Erro ao carregar o vídeo ao vivo:', e);
-            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-        });
-        // Garante que o vídeo permaneça mudo mesmo após eventos
-        liveVideo.addEventListener('volumechange', () => {
-            if (!liveVideo.muted) {
+        function createLiveNotificationPlayer() {
+            const liveVideo = document.getElementById('live-video');
+            if (liveVideo) {
+                liveVideo.autoplay = true;
+                liveVideo.loop = true;
                 liveVideo.muted = true;
+                liveVideo.controls = false;
+                liveVideo.playsinline = true;
                 liveVideo.volume = 0;
+                playVideo(liveVideo);
+                liveVideo.addEventListener('error', (e) => {
+                    console.error('Erro ao carregar o vídeo ao vivo:', e);
+                    showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+                });
+                liveVideo.addEventListener('volumechange', () => {
+                    if (!liveVideo.muted) {
+                        liveVideo.muted = true;
+                        liveVideo.volume = 0;
+                    }
+                });
             }
-        });
-    }
-}
+        }
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -2150,7 +2018,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .catch(error => {
                     console.error('Erro ao carregar canais:', error);
-                    canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
+ canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
                     showNotification("Erro ao carregar os canais", "error");
                 });
         }
