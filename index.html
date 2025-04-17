@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="streamXcellence é onde o horror encontra a arte. Psicologicamente inquietante, visualmente hipnótico — terror cult em sua forma mais pura.">
-    <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
+    <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento, horror">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
-	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
-    <!-- Preconnect para melhorar o carregamento -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <style>
-        /* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -23,20 +21,21 @@
             --secondary-hover: #0069d9;
             --success-color: #28c76f;
             --success-hover: #1f9d57;
-            --danger-color: #ea5455;
-            --danger-hover: #d43a3b;
+            --danger-color: #8b0000; /* Deeper blood red */
+            --danger-hover: #6b0000;
             --warning-color: #ff9f43;
             --warning-hover: #ff8510;
             --info-color: #00cfe8;
             --info-hover: #00a8bd;
+            --eerie-glow: #0f3d0f; /* Subtle eerie green */
             --text-color: #f8f8f8;
             --text-muted: #b4b7bd;
-            --background-dark: #161d31;
-            --background-darker: #0c102a;
-            --card-background: rgba(30, 41, 59, 0.8);
-            --card-background-hover: rgba(40, 51, 69, 0.85);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --guide-bg: rgba(30, 41, 59, 0.95);
+            --background-dark: #0a0a0a; /* Darker for horror */
+            --background-darker: #05050f;
+            --card-background: rgba(20, 20, 20, 0.9);
+            --card-background-hover: rgba(30, 30, 30, 0.95);
+            --border-color: rgba(255, 0, 0, 0.3);
+            --guide-bg: rgba(20, 20, 20, 0.95);
         }
 
         * {
@@ -55,22 +54,43 @@
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
-            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a); /* Fundo de terror */
             position: relative;
+            animation: glitch 10s infinite;
         }
 
-        /* Névoa de terror apenas na página inicial */
+        /* Screen glitch effect */
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); opacity: 1; }
+            2% { transform: translate(2px, -2px); opacity: 0.8; }
+            4% { transform: translate(-2px, 2px); opacity: 0.9; }
+            6% { transform: translate(0); opacity: 1; }
+        }
+
+        /* Background video */
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            filter: brightness(0.15) contrast(1.3) grayscale(0.7);
+            transform: scale(1.1);
+        }
+
+        /* Enhanced fog overlay */
         .nevoa {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://i.gifer.com/9vZI.gif') repeat;
-            opacity: 0.15;
+            background: url('https://i.gifer.com/1am.gif') repeat;
+            opacity: 0.3;
             z-index: 0;
             pointer-events: none;
-            animation: moverNevoa 40s linear infinite;
+            animation: moverNevoa 60s linear infinite;
         }
 
         @keyframes moverNevoa {
@@ -89,18 +109,6 @@
             border: 0;
         }
 
-        .background-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            filter: brightness(0.2) contrast(1.2) grayscale(0.5); /* Efeito sombrio */
-            transform: scale(1.1);
-        }
-
         .container {
             display: flex;
             flex-direction: row;
@@ -114,13 +122,12 @@
             position: relative;
         }
 
-        /* Estilos de terror apenas para a página inicial */
         .login-container,
         .live-notification {
-            background: rgba(20, 20, 20, 0.9); /* Fundo preto opaco */
+            background: var(--card-background);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); /* Sombra vermelha */
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
             text-align: center;
             flex: 1;
             animation: fadeIn 1s ease-in-out;
@@ -129,7 +136,7 @@
             align-items: center;
             min-width: 300px;
             transition: all 0.3s ease;
-            border: 2px solid rgba(139, 0, 0, 0.5); /* Borda vermelho sangue */
+            border: 2px solid var(--border-color);
             position: relative;
             overflow: hidden;
         }
@@ -142,21 +149,21 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent); /* Efeito de sangue sutil */
-            animation: pulseBlood 8s infinite;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.2), transparent);
+            animation: pulseBlood 6s infinite;
             z-index: -1;
         }
 
         @keyframes pulseBlood {
-            0% { transform: scale(1); opacity: 0.4; }
-            50% { transform: scale(1.1); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 0.4; }
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 0.5; }
         }
 
         .login-container:hover,
         .live-notification:hover {
-            background: rgba(40, 40, 40, 0.95);
-            box-shadow: 0 0 35px rgba(255, 0, 0, 0.5);
+            background: var(--card-background-hover);
+            box-shadow: 0 0 35px rgba(255, 0, 0, 0.6);
             transform: translateY(-5px);
         }
 
@@ -169,29 +176,29 @@
         }
 
         h1 {
-            font-size: 2em;
+            font-size: 2.2em;
             margin-bottom: 20px;
-            color: #ff1a1a; /* Vermelho sangue */
-            font-family: 'Creepster', cursive; /* Fonte de terror */
+            color: var(--danger-color);
+            font-family: 'Creepster', cursive;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
-            animation: flicker 3s infinite;
+            letter-spacing: 1px;
+            text-shadow: 3px 3px 10px rgba(255, 0, 0, 0.9), 0 0 5px var(--eerie-glow);
+            animation: flicker 2.5s infinite;
         }
 
         @keyframes flicker {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            50% { opacity: 0.6; }
         }
 
         h2 {
-            font-size: 1.3em;
+            font-size: 1.4em;
             margin-bottom: 15px;
             color: #fff;
-            font-family: 'Nosifer', cursive; /* Fonte assustadora */
+            font-family: 'Nosifer', cursive;
             font-weight: 600;
-            letter-spacing: 0.3px;
-            text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 5px rgba(255, 0, 0, 0.8);
         }
 
         .subtitle {
@@ -199,6 +206,8 @@
             color: #b4b7bd;
             font-size: 1em;
             font-weight: 300;
+            font-family: 'Nosifer', cursive;
+            text-shadow: 1px 1px 3px rgba(255, 0, 0, 0.5);
         }
 
         .input-group {
@@ -210,18 +219,19 @@
             width: 100%;
             padding: 14px;
             margin-top: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
+            border: 1px solid var(--border-color);
             border-radius: 12px;
-            background: rgba(30, 30, 30, 0.8);
+            background: rgba(30, 30, 30, 0.9);
             color: #fff;
             font-size: 1em;
             outline: none;
             transition: all 0.3s ease;
+            font-family: 'Nosifer', cursive;
         }
 
         input:focus {
-            border-color: #ff1a1a;
-            box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
+            border-color: var(--danger-color);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
         }
 
         .button-group {
@@ -240,8 +250,8 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-            letter-spacing: 0.3px;
+            font-family: 'Nosifer', cursive;
+            letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
         }
@@ -270,36 +280,54 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff1a1a, #cc0000); /* Vermelho sangue */
+            background: linear-gradient(135deg, var(--danger-color), var(--danger-hover));
             color: white;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #cc0000, #ff1a1a);
-            box-shadow: 0 8px 15px rgba(255, 26, 26, 0.4);
+            background: linear-gradient(135deg, var(--danger-hover), var(--danger-color));
+            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.5);
             transform: translateY(-2px);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: url('https://i.imgur.com/7Z3X9kL.png') top center;
+            background-size: cover;
+            opacity: 0;
+            transition: height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .btn-primary:hover::before {
+            height: 100%;
+            opacity: 0.7;
         }
 
         .btn-secondary {
             background: rgba(40, 45, 60, 0.8);
             color: white;
-            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
+            border: 1px solid var(--border-color);
         }
 
         .btn-secondary:hover {
             background: rgba(50, 55, 70, 0.9);
-            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.4);
             transform: translateY(-2px);
         }
 
         .btn-info {
-            background: linear-gradient(135deg, var(--secondary-color), var(--secondary-hover));
+            background: linear-gradient(135deg, var(--eerie-glow), #0a2a0a);
             color: white;
         }
 
         .btn-info:hover {
-            background: linear-gradient(135deg, var(--secondary-hover), var(--secondary-color));
-            box-shadow: 0 8px 15px rgba(0, 132, 255, 0.3);
+            background: linear-gradient(135deg, #0a2a0a, var(--eerie-glow));
+            box-shadow: 0 8px 15px rgba(15, 61, 15, 0.4);
             transform: translateY(-2px);
         }
 
@@ -313,19 +341,20 @@
             margin-top: 10px;
             animation: shake 0.3s;
             min-height: 20px;
+            font-family: 'Nosifer', cursive;
         }
 
         #guide-container {
             width: 100%;
-            background: rgba(20, 20, 20, 0.95); /* Fundo escuro */
+            background: var(--guide-bg);
             color: #fff;
             padding: 15px 0;
             margin-bottom: 25px;
             position: relative;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            border: 1px solid var(--border-color);
         }
 
         .scrolling-text {
@@ -340,7 +369,8 @@
             font-size: 16px;
             font-weight: 400;
             letter-spacing: 0.5px;
-            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.6);
+            font-family: 'Nosifer', cursive;
         }
 
         #sobre {
@@ -348,15 +378,14 @@
             padding: 20px;
             width: 100%;
             max-width: 700px;
-            background-color: rgba(20, 20, 20, 0.9);
-            border-left: 7px solid #ff1a1a;
+            background: url('https://i.imgur.com/9kX3z2r.png') center/cover;
+            border-left: 7px solid var(--danger-color);
             border-radius: 14px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
             font-size: 1.1em;
             line-height: 1.6;
         }
 
-        /* Estilos originais mantidos para os outros elementos */
         #zoom-image-container {
             display: none;
             position: fixed;
@@ -377,27 +406,29 @@
         }
 
         .live-notification .player {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%; /* Mantém proporção 16:9 */
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    pointer-events: none; /* Impede qualquer interação */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-}
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            pointer-events: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            border: 3px solid var(--border-color);
+            background: url('https://i.imgur.com/4Z3yX8h.jpg') center/cover;
+        }
 
-.live-notification .player video#live-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-    pointer-events: none; /* Reforça a desativação de cliques */
-}
+        .live-notification .player video#live-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            filter: contrast(1.2) brightness(0.8);
+        }
 
         #player-container {
             display: none;
@@ -407,7 +438,7 @@
             border-radius: 0;
             overflow: hidden;
             box-shadow: none;
-            background: linear-gradient(45deg, var(--background-darker), var(--background-dark));
+            background: var(--background-darker);
             padding: 0;
             position: fixed;
             top: 0;
@@ -425,6 +456,8 @@
             position: relative;
             overflow: hidden;
             border-radius: 0;
+            border: 5px solid var(--border-color);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
         }
 
         #player-container iframe {
@@ -440,7 +473,7 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(20, 25, 40, 0.8);
+            background: rgba(20, 25, 40, 0.9);
             padding: 12px 20px;
             border-radius: 12px;
             display: flex;
@@ -462,12 +495,14 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 0, 0, 0.4);
+            filter: drop-shadow(0 0 5px var(--eerie-glow));
         }
 
         .channel-name {
             font-weight: 600;
             font-size: 16px;
+            font-family: 'Nosifer', cursive;
         }
 
         .live-indicator {
@@ -487,7 +522,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(20, 25, 40, 0.8);
+            background: rgba(20, 25, 40, 0.9);
             padding: 20px;
             display: flex;
             justify-content: space-between;
@@ -527,7 +562,7 @@
         }
 
         .control-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 0, 0, 0.3);
             transform: scale(1.1);
         }
 
@@ -542,7 +577,7 @@
             width: 100px;
             height: 5px;
             border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 0, 0, 0.3);
             outline: none;
             transition: opacity 0.2s;
         }
@@ -552,31 +587,31 @@
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            background: var(--primary-color);
+            background: var(--danger-color);
             cursor: pointer;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
         }
 
         .volume-slider::-moz-range-thumb {
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            background: var(--primary-color);
+            background: var(--danger-color);
             cursor: pointer;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
         }
 
         .quality-menu {
             position: absolute;
             bottom: 70px;
             right: 20px;
-            background: rgba(20, 25, 40, 0.9);
+            background: var(--card-background);
             border-radius: 12px;
             padding: 15px;
             display: none;
             backdrop-filter: blur(5px);
             border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
         }
 
         .quality-menu.active {
@@ -590,14 +625,15 @@
             border-radius: 8px;
             transition: all 0.2s ease;
             font-weight: 400;
+            font-family: 'Nosifer', cursive;
         }
 
         .quality-option:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 0, 0, 0.3);
         }
 
         .quality-option.active {
-            background: rgba(115, 103, 240, 0.3);
+            background: rgba(139, 0, 0, 0.4);
             font-weight: 500;
         }
 
@@ -608,7 +644,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             justify-content: center;
@@ -616,48 +652,46 @@
             z-index: 10000;
         }
 
-        .modal-content {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+        .modal-content,
+        #programacao-modal-content,
+        #canais-modal-content {
+            background: url('https://i.imgur.com/9kX3z2r.png') center/cover;
             border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4);
             padding: 35px;
             text-align: center;
             position: relative;
             width: 90%;
             max-width: 500px;
             animation: fadeIn 0.4s ease-out;
-            border: 1px solid var(--border-color);
+            border: 3px solid var(--border-color);
         }
 
         #programacao-modal-content {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
-            color: #fff;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            width: 95%;
             max-width: 800px;
-            position: relative;
-            margin: 20px;
             text-align: left;
             overflow-y: auto;
             max-height: 80vh;
-            border: 1px solid var(--border-color);
+        }
+
+        #canais-modal-content {
+            max-width: 900px;
         }
 
         .modal-content h2,
-        #programacao-modal-content h2 {
-            color: var(--primary-color);
+        #programacao-modal-content h2,
+        #canais-modal-content h2 {
+            color: var(--danger-color);
             font-size: 1.6em;
             font-weight: 700;
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Nosifer', cursive;
+            text-shadow: 2px 2px 5px rgba(255, 0, 0, 0.8);
         }
 
         #programacao-modal-content h2 {
-            color: var(--warning-color);
             text-align: center;
         }
 
@@ -666,6 +700,7 @@
             font-size: 1em;
             line-height: 1.6;
             margin-bottom: 20px;
+            font-family: 'Nosifer', cursive;
         }
 
         .close,
@@ -685,7 +720,7 @@
 
         .close:hover,
         .close-modal:hover {
-            color: #ddd;
+            color: var(--danger-color);
             transform: scale(1.1);
         }
 
@@ -694,7 +729,7 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 20px;
-            background: rgba(40, 50, 70, 0.5);
+            background: rgba(40, 50, 70, 0.6);
             padding: 15px;
             border-radius: 12px;
             border: 1px solid var(--border-color);
@@ -704,6 +739,7 @@
             margin: 0 15px 0 0;
             font-size: 1em;
             color: #ddd;
+            font-family: 'Nosifer', cursive;
         }
 
         #copy-email {
@@ -716,12 +752,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             width: auto;
+            font-family: 'Nosifer', cursive;
         }
 
         #copy-email:hover {
             background-color: var(--success-hover);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(40, 199, 111, 0.3);
+            box-shadow: 0 5px 15px rgba(40, 199, 111, 0.4);
         }
 
         #programacao-lista {
@@ -733,7 +770,7 @@
         #programacao-lista li {
             margin-bottom: 25px;
             padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
         }
 
         #programacao-lista li:last-child {
@@ -747,6 +784,7 @@
             margin-bottom: 10px;
             color: #fff;
             font-weight: 600;
+            font-family: 'Nosifer', cursive;
         }
 
         #programacao-lista img {
@@ -756,16 +794,17 @@
             margin-bottom: 15px;
             max-height: 200px;
             object-fit: contain;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
         }
 
         #programacao-lista p {
             margin-bottom: 10px;
             color: var(--text-muted);
+            font-family: 'Nosifer', cursive;
         }
 
         #programacao-lista p strong {
-            color: var(--primary-color);
+            color: var(--danger-color);
             font-weight: 500;
         }
 
@@ -777,16 +816,18 @@
         }
 
         .notification {
-            background: rgba(20, 25, 40, 0.9);
+            background: rgba(20, 20, 20, 0.9);
             color: white;
             padding: 15px 20px;
             border-radius: 12px;
             margin-bottom: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.4);
+            animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards, shake 0.5s infinite;
             max-width: 350px;
             backdrop-filter: blur(5px);
             border: 1px solid var(--border-color);
+            font-family: 'Nosifer', cursive;
+            text-shadow: 1px 1px 3px rgba(255, 0, 0, 0.8);
         }
 
         .notification.success {
@@ -798,23 +839,7 @@
         }
 
         .notification.info {
-            border-left: 4px solid var(--info-color);
-        }
-
-        #canais-modal-content {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
-            color: #fff;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            width: 95%;
-            max-width: 900px;
-            position: relative;
-            margin: 20px;
-            text-align: center;
-            overflow-y: auto;
-            max-height: 80vh;
-            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--eerie-glow);
         }
 
         #canais-grid {
@@ -829,14 +854,14 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-radius: 12px;
             overflow: hidden;
-            background: rgba(40, 50, 70, 0.5);
+            background: rgba(40, 50, 70, 0.6);
             position: relative;
             border: 1px solid var(--border-color);
         }
 
         .canal-item:hover {
             transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 30px rgba(255, 0, 0, 0.5);
         }
 
         .canal-item img {
@@ -845,6 +870,7 @@
             object-fit: cover;
             display: block;
             transition: transform 0.5s ease;
+            filter: brightness(0.8) contrast(1.2);
         }
 
         .canal-item:hover img {
@@ -854,7 +880,7 @@
         .canal-info {
             padding: 12px;
             text-align: center;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.9);
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -868,6 +894,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: 'Nosifer', cursive;
         }
 
         #login-modal {
@@ -891,7 +918,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(20, 25, 40, 0.8);
+            background: rgba(20, 25, 40, 0.9);
             color: white;
             padding: 12px 20px;
             border-radius: 12px;
@@ -904,7 +931,8 @@
             opacity: 0;
             backdrop-filter: blur(5px);
             border: 1px solid var(--border-color);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            font-family: 'Nosifer', cursive;
         }
 
         #player-container:hover #channel-selector-button {
@@ -914,7 +942,7 @@
         #channel-selector-button:hover {
             background: rgba(40, 50, 70, 0.9);
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
         }
 
         #channel-selector-menu {
@@ -924,12 +952,12 @@
             width: 280px;
             max-height: 70vh;
             overflow-y: auto;
-            background: rgba(20, 25, 40, 0.95);
+            background: var(--card-background);
             border-radius: 16px;
             padding: 20px;
             display: none;
             z-index: 1000;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 35px rgba(255, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
         }
@@ -951,7 +979,7 @@
         }
 
         .channel-selector-item:hover {
-            background: rgba(60, 70, 90, 0.7);
+            background: rgba(255, 0, 0, 0.3);
             transform: translateX(3px);
         }
 
@@ -960,19 +988,19 @@
             height: 36px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 0, 0, 0.2);
         }
 
         .channel-search {
             width: 100%;
             padding: 12px 15px;
             margin-bottom: 15px;
-            background: rgba(40, 50, 70, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(40, 50, 70, 0.6);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             color: white;
             font-size: 14px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Nosifer', cursive;
         }
 
         .channel-search::placeholder {
@@ -980,30 +1008,25 @@
         }
 
         .channel-search:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 10px rgba(115, 103, 240, 0.3);
+            border-color: var(--danger-color);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
             outline: none;
         }
 
         .channel-category {
             font-weight: 600;
-            color: var(--primary-color);
+            color: var(--danger-color);
             padding: 8px 0;
             margin: 15px 0 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--border-color);
             letter-spacing: 0.5px;
             font-size: 14px;
+            font-family: 'Nosifer', cursive;
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
         @keyframes fadeOut {
@@ -1042,13 +1065,13 @@
             width: 80px;
             height: 80px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); /* Sombra vermelha */
-            animation: pulse 2s infinite alternate;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6));
+            animation: pulse 1.5s infinite alternate;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1.1); opacity: 0.8; }
         }
 
         @media (max-width: 768px) {
@@ -1172,67 +1195,33 @@
                 height: 60px;
             }
         }
-		
-		.live-notification .player {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    pointer-events: none;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.live-notification .player video#live-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-}
-
-display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1a1a1a;
-            font-family: Arial, sans-serif;
-        }
-.notification {
+        .notification {
             position: fixed;
             top: -100px;
-            background: #ff4444;
+            background: var(--danger-color);
             color: white;
             padding: 15px 30px;
             border-radius: 5px;
             cursor: pointer;
-            animation: slideIn 1s ease forwards;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            animation: slideIn 1s ease forwards, shake 0.5s infinite;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+            font-family: 'Nosifer', cursive;
         }
 
         @keyframes slideIn {
-            from {
-                top: -100px;
-            }
-            to {
-                top: 20px;
-            }
+            from { top: -100px; }
+            to { top: 20px; }
         }
     </style>
 </head>
 <body>
-	
+    <video class="background-video" autoplay loop muted playsinline>
+        <source src="https://i.imgur.com/1fq5.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
-    <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
     <div id="zoom-image-container">
         <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Imagem de boas-vindas">
     </div>
@@ -1242,7 +1231,7 @@ display: flex;
         <section class="login-container" id="login-container">
             <img src="https://i.imgur.com/QsrJDbX.png" alt="StreamXcellence Logo" class="app-logo">
             <h1>StreamXcellence</h1>
-            <p class="subtitle">Digite a chave de acesso para entrar na melhor experiência de streaming</p>
+            <p class="subtitle">Digite a chave para abrir o portal do terror</p>
             <div class="input-group">
                 <label for="key-input" class="sr-only">Chave de acesso</label>
                 <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" autocomplete="off"/>
@@ -1253,31 +1242,30 @@ display: flex;
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <audio id="ghostAudio"></audio>
+            <div class="notification" onclick="playRandomAudio()">📞 Você recebeu uma mensagem do além! Clique para ouvir</div>
+            <audio id="ghostAudio"></audio>
         </section>
 
-<section class="live-notification" id="live-notification">
-    <div id="sobre">
-        <h3>Sobre o StreamXcellence</h3>
-        <p id="texto-sobre"></p>
-    </div>
-    <br>	
-    <br>
-    <div id="guide-container" role="marquee">
-        <div class="scrolling-text" id="scrolling-text">
-            <span id="guide-text">Carregando guia...</span>
-            <span id="guide-text-duplicate">Carregando guia...</span>
-        </div>
-    </div>
-    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
-            <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
-            Seu navegador não suporta o elemento de vídeo.
-        </video>
-    </div>
-</section>
-
+        <section class="live-notification" id="live-notification">
+            <div id="sobre">
+                <h3>Sobre o StreamXcellence</h3>
+                <p id="texto-sobre"></p>
+            </div>
+            <br>
+            <br>
+            <div id="guide-container" role="marquee">
+                <div class="scrolling-text" id="scrolling-text">
+                    <span id="guide-text">Carregando guia...</span>
+                    <span id="guide-text-duplicate">Carregando guia...</span>
+                </div>
+            </div>
+            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
+                <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
+                    <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+        </section>
     </main>
 
     <div id="player-container" aria-live="polite">
@@ -1359,6 +1347,11 @@ display: flex;
         </div>
     </div>
 
+    <audio id="ambientAudio" loop>
+        <source src="https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
@@ -1405,7 +1398,7 @@ display: flex;
                 showNotification('Qualidade alterada para Automático', 'info');
                 toggleQualityMenu();
             };
-            qualityMenu.appendChild(autoOption);
+           qualityMenu.appendChild(autoOption);
             qualities.forEach(quality => {
                 const option = document.createElement('div');
                 option.className = `quality-option ${currentQuality === quality.name ? 'active' : ''}`;
@@ -1462,7 +1455,7 @@ display: flex;
                 });
                 player.addEventListener(Twitch.Player.PLAY, () => {
                     const playPauseBtn = document.getElementById('play-pause-btn');
-                    if (playPauseBtn) playPauseBtn.textContent = '⏸️';
+                    if (playPauseBtn) playPauseBtn.textContent = '💀';
                 });
                 player.addEventListener(Twitch.Player.PAUSE, () => {
                     const playPauseBtn = document.getElementById('play-pause-btn');
@@ -1517,6 +1510,14 @@ display: flex;
                     player.pause();
                     showNotification('Pausado', 'info');
                 }
+            } else if (videoPlayer) {
+                if (videoPlayer.paused) {
+                    videoPlayer.play();
+                    showNotification('Reproduzindo', 'info');
+                } else {
+                    videoPlayer.pause();
+                    showNotification('Pausado', 'info');
+                }
             }
         }
 
@@ -1526,19 +1527,33 @@ display: flex;
                 player.setMuted(!muted);
                 updateVolumeIcon();
                 showNotification(muted ? 'Som ativado' : 'Som desativado', 'info');
+            } else if (videoPlayer) {
+                videoPlayer.muted = !videoPlayer.muted;
+                updateVolumeIcon();
+                showNotification(videoPlayer.muted ? 'Som desativado' : 'Som ativado', 'info');
             }
         }
 
         function updateVolumeIcon() {
             const muteBtn = document.getElementById('mute-btn');
-            if (!muteBtn || !player) return;
-            if (player.getMuted() || player.getVolume() === 0) {
-                muteBtn.textContent = '🔇';
-            } else if (player.getVolume() < 0.5) {
-                muteBtn.textContent = '🔉';
+            const volumeSlider = document.getElementById('volume-slider');
+            if (!muteBtn || (!player && !videoPlayer)) return;
+            let muted, volume;
+            if (player) {
+                muted = player.getMuted();
+                volume = player.getVolume();
             } else {
-                muteBtn.textContent = '🔊';
+                muted = videoPlayer.muted;
+                volume = videoPlayer.volume;
             }
+            if (muted || volume === 0) {
+                muteBtn.textContent = '👁️';
+            } else if (volume < 0.5) {
+                muteBtn.textContent = '👁️';
+            } else {
+                muteBtn.textContent = '👁️';
+            }
+            volumeSlider.value = muted ? 0 : volume;
         }
 
         function toggleFullscreen() {
@@ -1588,6 +1603,13 @@ display: flex;
                         document.getElementById('volume-slider').value = newVolume;
                         updateVolumeIcon();
                         showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
+                    } else if (videoPlayer) {
+                        const newVolume = Math.min(1, videoPlayer.volume + 0.05);
+                        videoPlayer.volume = newVolume;
+                        videoPlayer.muted = false;
+                        document.getElementById('volume-slider').value = newVolume;
+                        updateVolumeIcon();
+                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
                     }
                     event.preventDefault();
                     break;
@@ -1599,35 +1621,41 @@ display: flex;
                         document.getElementById('volume-slider').value = newVolume;
                         updateVolumeIcon();
                         showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
+                    } else if (videoPlayer) {
+                        const newVolume = Math.max(0, videoPlayer.volume - 0.05);
+                        videoPlayer.volume = newVolume;
+                        videoPlayer.muted = newVolume === 0;
+                        document.getElementById('volume-slider').value = newVolume;
+                        updateVolumeIcon();
+                        showNotification(`Volume: ${Math.round(newVolume * 100)}%`, 'info');
                     }
                     event.preventDefault();
                     break;
             }
         }
 
-    function createLiveNotificationPlayer() {
-    const liveVideo = document.getElementById('live-video');
-    if (liveVideo) {
-        liveVideo.autoplay = true; // Garante reprodução automática
-        liveVideo.loop = true; // Mantém o loop
-        liveVideo.muted = true; // Garante que o vídeo esteja mudo
-        liveVideo.controls = false; // Remove controles
-        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
-        liveVideo.volume = 0; // Define volume como 0 por segurança
-        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
-        liveVideo.addEventListener('error', (e) => {
-            console.error('Erro ao carregar o vídeo ao vivo:', e);
-            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-        });
-        // Garante que o vídeo permaneça mudo mesmo após eventos
-        liveVideo.addEventListener('volumechange', () => {
-            if (!liveVideo.muted) {
+        function createLiveNotificationPlayer() {
+            const liveVideo = document.getElementById('live-video');
+            if (liveVideo) {
+                liveVideo.autoplay = true;
+                liveVideo.loop = true;
                 liveVideo.muted = true;
+                liveVideo.controls = false;
+                liveVideo.playsinline = true;
                 liveVideo.volume = 0;
+                playVideo(liveVideo);
+                liveVideo.addEventListener('error', (e) => {
+                    console.error('Erro ao carregar o vídeo ao vivo:', e);
+                    showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+                });
+                liveVideo.addEventListener('volumechange', () => {
+                    if (!liveVideo.muted) {
+                        liveVideo.muted = true;
+                        liveVideo.volume = 0;
+                    }
+                });
             }
-        });
-    }
-}
+        }
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -1667,6 +1695,23 @@ display: flex;
                     if (errorMessage) {
                         errorMessage.textContent = "Erro ao carregar chaves de acesso. Tente novamente mais tarde.";
                     }
+                });
+        }
+
+        function loadSobre() {
+            fetch('https://mrjunim.github.io/tvaovivo/sobre.txt')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Resposta da rede não foi ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('texto-sobre').textContent = data;
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar texto sobre:', error);
+                    document.getElementById('texto-sobre').textContent = "Erro ao carregar informações.";
                 });
         }
 
@@ -1847,410 +1892,309 @@ display: flex;
         }
 
         function closeCanaisKeyModal() {
-            document.getElementById("canais-key-modal").style.display = "none";
-        }
+    document.getElementById("canais-key-modal").style.display = "none";
+    document.getElementById('canais-key-input').value = '';
+    document.getElementById('canais-key-error-message').textContent = '';
+}
 
-        function openCanaisModal() {
-            document.getElementById("canais-modal").style.display = "flex";
-            carregarCanais();
-        }
+function openCanaisModal() {
+    document.getElementById("canais-modal").style.display = "flex";
+    carregarCanais();
+}
 
-        function closeCanaisModal() {
-            document.getElementById("canais-modal").style.display = "none";
-        }
+function closeCanaisModal() {
+    document.getElementById("canais-modal").style.display = "none";
+}
 
-        function toggleChannelSelector() {
-            const channelSelector = document.getElementById('channel-selector-menu');
-            isChannelSelectorOpen = !isChannelSelectorOpen;
-            if (isChannelSelectorOpen) {
-                channelSelector.classList.add('active');
-                if (document.getElementById('channels-list').innerHTML === '<p>Carregando canais...</p>' && canaisData.length === 0) {
-                    carregarCanaisSeletor();
-                }
-            } else {
-                channelSelector.classList.remove('active');
-            }
-        }
+function carregarCanais() {
+    const canaisGrid = document.getElementById("canais-grid");
+    canaisGrid.innerHTML = '<p>Carregando canais...</p>';
 
-        function carregarCanaisSeletor() {
-            if (canaisData.length > 0) {
-                atualizarListaCanaisSeletor(canaisData);
-                return;
-            }
-            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar os canais');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    const linhas = data.split('\n');
-                    canaisData = [];
-                    let i = 0;
-                    while (i < linhas.length) {
-                        const linha = linhas[i].trim();
-                        if (linha.startsWith('#EXTINF:-1')) {
-                            const infoLinha = linha;
-                            let nomeCanal = "Canal";
-                            if (infoLinha.includes('tvg-name="')) {
-                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                                if (match && match[1]) {
-                                    nomeCanal = match[1];
-                                }
-                            } else if (infoLinha.includes(',')) {
-                                const commaIndex = infoLinha.lastIndexOf(',');
-                                if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                                    nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                                }
-                            }
-                            let logoUrl = "https://i.imgur.com/QsrJDbX.png";
-                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                            if (logoMatch && logoMatch[1]) {
-                                logoUrl = logoMatch[1];
-                            }
-                            let streamUrl = "";
-                            if (i + 1 < linhas.length) {
-                                streamUrl = linhas[i + 1].trim();
-                                i += 2;
-                            } else {
-                                i++;
-                            }
-                            if (streamUrl && !streamUrl.startsWith('#')) {
-                                canaisData.push({
-                                    nome: nomeCanal,
-                                    logo: logoUrl,
-                                    url: streamUrl
-                                });
-                            }
-                        } else {
-                            i++;
-                        }
-                    }
-                    atualizarListaCanaisSeletor(canaisData);
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar canais para o seletor:', error);
-                    document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
-                    showNotification("Erro ao carregar os canais", "error");
-                });
+    // Dados fictícios dos canais para demonstração (substitua por API real)
+    canaisData = [
+        {
+            id: "lourimarcos",
+            nome: "LouriMarcos Horror",
+            imagem: "https://i.imgur.com/QsrJDbX.png",
+            categoria: "Terror",
+            tipo: "twitch"
+        },
+        {
+            id: "horror_movie_channel",
+            nome: "Horror Movie Channel",
+            imagem: "https://i.imgur.com/horror-movie.jpg",
+            url: "https://example.com/horror-movie.m3u8",
+            categoria: "Filmes",
+            tipo: "hls"
+        },
+        {
+            id: "creepy_tales",
+            nome: "Creepy Tales",
+            imagem: "https://i.imgur.com/creepy-tales.jpg",
+            categoria: "Histórias",
+            tipo: "twitch"
         }
+    ];
 
-        function atualizarListaCanaisSeletor(canais) {
-            const channelsList = document.getElementById('channels-list');
-            if (canais.length === 0) {
-                channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
-                return;
-            }
-            channelsList.innerHTML = '';
-            canais.sort((a, b) => a.nome.localeCompare(b.nome));
-            canais.forEach(canal => {
-                const channelItem = document.createElement('div');
-                channelItem.className = 'channel-selector-item';
-                channelItem.setAttribute('data-nome', canal.nome.toLowerCase());
-                channelItem.onclick = function() {
-                    reproduzirCanal(canal.url, canal.nome, canal.logo);
-                    toggleChannelSelector();
-                };
-                channelItem.innerHTML = `
-                    <img src="${canal.logo}" alt="${canal.nome}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <span>${canal.nome}</span>
-                `;
-                channelsList.appendChild(channelItem);
-            });
-        }
+    canaisGrid.innerHTML = '';
+    const categorias = [...new Set(canaisData.map(canal => canal.categoria))];
 
-        function filtrarCanais() {
-            const searchInput = document.getElementById('channel-search');
-            const searchTerm = searchInput.value.toLowerCase();
-            const items = document.querySelectorAll('.channel-selector-item');
-            items.forEach(item => {
-                const nome = item.getAttribute('data-nome');
-                if (nome.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
+    categorias.forEach(categoria => {
+        const categoriaDiv = document.createElement('div');
+        categoriaDiv.className = 'channel-category';
+        categoriaDiv.textContent = categoria;
+        canaisGrid.appendChild(categoriaDiv);
 
-        function carregarCanais() {
-            const canaisGrid = document.getElementById("canais-grid");
-            canaisGrid.innerHTML = '<p>Carregando canais...</p>';
-            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar os canais');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    canaisGrid.innerHTML = '';
-                    const linhas = data.split('\n');
-                    let i = 0;
-                    while (i < linhas.length) {
-                        const linha = linhas[i].trim();
-                        if (linha.startsWith('#EXTINF:-1')) {
-                            const infoLinha = linha;
-                            let nomeCanal = "Canal";
-                            if (infoLinha.includes('tvg-name="')) {
-                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                                if (match && match[1]) {
-                                    nomeCanal = match[1];
-                                }
-                            } else if (infoLinha.includes(',')) {
-                                const commaIndex = infoLinha.lastIndexOf(',');
-                                if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                                    nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                                }
-                            }
-                            let logoUrl = "https://i.imgur.com/QsrJDbX.png";
-                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                            if (logoMatch && logoMatch[1]) {
-                                logoUrl = logoMatch[1];
-                            }
-                            let streamUrl = "";
-                            if (i + 1 < linhas.length) {
-                                streamUrl = linhas[i + 1].trim();
-                                i += 2;
-                            } else {
-                                i++;
-                            }
-                            if (streamUrl && !streamUrl.startsWith('#')) {
-                                const canalItem = document.createElement('div');
-                                canalItem.className = 'canal-item';
-                                canalItem.setAttribute('data-stream-url', streamUrl);
-                                canalItem.onclick = function() {
-                                    reproduzirCanal(streamUrl, nomeCanal, logoUrl);
-                                };
-                                canalItem.innerHTML = `
-                                    <img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                                    <div class="canal-info">
-                                        <p class="canal-nome">${nomeCanal}</p>
-                                    </div>
-                                `;
-                                canaisGrid.appendChild(canalItem);
-                            }
-                        } else {
-                            i++;
-                        }
-                    }
-                    if (canaisGrid.children.length === 0) {
-                        canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar canais:', error);
-                    canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
-                    showNotification("Erro ao carregar os canais", "error");
-                });
-        }
-
-        function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
-            console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
-            closeCanaisModal();
-            const playerContainer = document.getElementById('player-container');
-            playerContainer.style.display = 'flex';
-            playerContainer.innerHTML = `
-                <div class="player hls-player">
-                    <video id="video-player" controls></video>
+        const canaisFiltrados = canaisData.filter(canal => canal.categoria === categoria);
+        canaisFiltrados.forEach(canal => {
+            const canalItem = document.createElement('div');
+            canalItem.className = 'canal-item';
+            canalItem.innerHTML = `
+                <img src="${canal.imagem}" alt="Logo do canal ${canal.nome}" loading="lazy">
+                <div class="canal-info">
+                    <p class="canal-nome">${canal.nome}</p>
                 </div>
-                <div class="channel-info">
-                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <div>
-                        <div class="channel-name">${nomeCanal}</div>
-                        <span class="live-indicator">AO VIVO</span>
+            `;
+            canalItem.onclick = () => reproduzirCanal(canal);
+            canaisGrid.appendChild(canalItem);
+        });
+    });
+
+    if (canaisGrid.children.length === 0) {
+        canaisGrid.innerHTML = '<p>Nenhum canal disponível no momento.</p>';
+    }
+
+    // Atualizar também o seletor de canais
+    atualizarSeletorCanais();
+}
+
+function atualizarSeletorCanais() {
+    const channelsList = document.getElementById('channels-list');
+    channelsList.innerHTML = '';
+
+    const categorias = [...new Set(canaisData.map(canal => canal.categoria))];
+    categorias.forEach(categoria => {
+        const categoriaDiv = document.createElement('div');
+        categoriaDiv.className = 'channel-category';
+        categoriaDiv.textContent = categoria;
+        channelsList.appendChild(categoriaDiv);
+
+        const canaisFiltrados = canaisData.filter(canal => canal.categoria === categoria);
+        canaisFiltrados.forEach(canal => {
+            const channelItem = document.createElement('div');
+            channelItem.className = 'channel-selector-item';
+            channelItem.innerHTML = `
+                <img src="${canal.imagem}" alt="Logo do canal ${canal.nome}">
+                <span>${canal.nome}</span>
+            `;
+            channelItem.onclick = () => {
+                reproduzirCanal(canal);
+                toggleChannelSelector();
+            };
+            channelsList.appendChild(channelItem);
+        });
+    });
+}
+
+function filtrarCanais() {
+    const searchTerm = document.getElementById('channel-search').value.toLowerCase();
+    const channelsList = document.getElementById('channels-list');
+    channelsList.innerHTML = '';
+
+    const canaisFiltrados = canaisData.filter(canal => 
+        canal.nome.toLowerCase().includes(searchTerm) || 
+        canal.categoria.toLowerCase().includes(searchTerm)
+    );
+
+    if (canaisFiltrados.length === 0) {
+        channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
+        return;
+    }
+
+    const categorias = [...new Set(canaisFiltrados.map(canal => canal.categoria))];
+    categorias.forEach(categoria => {
+        const categoriaDiv = document.createElement('div');
+        categoriaDiv.className = 'channel-category';
+        categoriaDiv.textContent = categoria;
+        channelsList.appendChild(categoriaDiv);
+
+        const canaisCategoria = canaisFiltrados.filter(canal => canal.categoria === categoria);
+        canaisCategoria.forEach(canal => {
+            const channelItem = document.createElement('div');
+            channelItem.className = 'channel-selector-item';
+            channelItem.innerHTML = `
+                <img src="${canal.imagem}" alt="Logo do canal ${canal.nome}">
+                <span>${canal.nome}</span>
+            `;
+            channelItem.onclick = () => {
+                reproduzirCanal(canal);
+                toggleChannelSelector();
+            };
+            channelsList.appendChild(channelItem);
+        });
+    });
+}
+
+function toggleChannelSelector() {
+    const channelSelectorMenu = document.getElementById('channel-selector-menu');
+    isChannelSelectorOpen = !isChannelSelectorOpen;
+    if (isChannelSelectorOpen) {
+        channelSelectorMenu.classList.add('active');
+        document.getElementById('channel-search').focus();
+    } else {
+        channelSelectorMenu.classList.remove('active');
+        document.getElementById('channel-search').value = '';
+        atualizarSeletorCanais();
+    }
+}
+
+function reproduzirCanal(canal) {
+    document.getElementById('player-container').style.display = 'flex';
+    document.getElementById('login-container').style.display = 'none';
+    document.getElementById('live-notification').style.display = 'none';
+    closeCanaisModal();
+
+    // Atualizar informações do canal
+    const channelInfo = document.querySelector('.channel-info');
+    channelInfo.querySelector('.channel-logo').src = canal.imagem;
+    channelInfo.querySelector('.channel-name').textContent = canal.nome;
+
+    // Limpar player anterior
+    const playerDiv = document.getElementById('player');
+    playerDiv.innerHTML = '';
+    if (player) {
+        player.destroy();
+        player = null;
+    }
+    if (videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer = null;
+    }
+
+    if (canal.tipo === 'twitch') {
+        playerDiv.innerHTML = '<div id="twitch-embed"></div>';
+        player = new Twitch.Player("twitch-embed", {
+            channel: canal.id,
+            width: "100%",
+            height: "100%",
+            controls: false,
+            autoplay: true,
+            muted: false,
+            parent: ["localhost", window.location.hostname]
+        });
+        player.addEventListener(Twitch.Player.READY, () => {
+            player.setVolume(0.5);
+            player.setMuted(false);
+            player.play();
+            setTimeout(() => {
+                qualities = player.getQualities();
+                updateQualityMenu();
+            }, 2000);
+            initCustomControls();
+            showNotification(`Canal ${canal.nome} iniciado`, 'success');
+        });
+        player.addEventListener(Twitch.Player.OFFLINE, () => {
+            playerDiv.innerHTML = `
+                <div class="offline-container">
+                    <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                        <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                    </video>
+                    <div class="offline-message">
+                        <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
                     </div>
                 </div>
             `;
-            const video = document.getElementById('video-player');
-            if (Hls.isSupported()) {
-                const hls = new Hls({
-                    maxBufferLength: 30,
-                    maxMaxBufferLength: 60,
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    testBandwidth: true,
-                    progressive: true,
-                    xhrSetup: function(xhr) {
-                        xhr.withCredentials = false;
-                    }
-                });
-                try {
-                    hls.loadSource(streamUrl);
-                    hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        console.log('Manifest parsed, attempting to play');
-                        video.play().catch(err => {
-                            console.error('Erro ao iniciar reprodução:', err);
-                            showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                        });
-                    });
-                    hls.on(Hls.Events.ERROR, function(event, data) {
-                        console.error('Erro HLS:', data.type, data.details);
-                        if (data.fatal) {
-                            switch(data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    console.error('Erro de rede, tentando recuperar...');
-                                    showNotification("Erro de rede. Tentando reconectar...", "error");
-                                    hls.startLoad();
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    console.error('Erro de mídia, tentando recuperar...');
-                                    showNotification("Erro de mídia. Tentando recuperar...", "error");
-                                    hls.recoverMediaError();
-                                    break;
-                                default:
-                                    console.error('Erro fatal, não é possível recuperar');
-                                    showNotification("Não foi possível carregar o stream", "error");
-                                    hls.destroy();
-                                    break;
-                            }
-                        }
-                    });
-                        
-                    videoPlayer = hls;
-                } catch (error) {
-                    console.error('Erro ao configurar HLS:', error);
-                    showNotification("Erro ao configurar reprodução: " + error.message, "error");
-                }
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Para Safari/iOS
-                video.src = streamUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    console.log('Metadados carregados, tentando reproduzir');
-                    video.play().catch(err => {
-                        console.error('Erro ao iniciar reprodução (Safari):', err);
-                        showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                    });
-                });
-                    
-                video.addEventListener('error', function(e) {
-                    console.error('Erro no elemento de vídeo:', video.error);
-                    showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
-                });
-            } else {
-                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
-            }
-                
-            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
-
-            // Carregar canais para o seletor
-            setTimeout(carregarCanaisSeletor, 500);
-        }
-
-        // Proteção contra inspeção (mantido do código original)
-        document.addEventListener('keydown', function (event) {
-            if (
-                event.key === 'F12' ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.key === 'U')
-            ) {
-                event.preventDefault();
-                return false;
-            }
+            const offlineVideo = document.getElementById('offline-video');
+            playVideo(offlineVideo);
+            showNotification('O canal está offline no momento', 'error');
         });
-
-        document.addEventListener('contextmenu', function (event) {
-            event.preventDefault();
-            return false;
-        });
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            loadProgramacao();
-            loadKeys();
-            createLiveNotificationPlayer(); // Chama a nova função para o vídeo
-            // Adicionar evento de tecla Enter para o input de chave
-            const keyInput = document.getElementById('key-input');
-            if (keyInput) {
-                keyInput.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        verifyKey();
-                    }
-                });
-            }
-            // Adicionar evento de tecla Enter para o input de nome
-            const userName = document.getElementById('user-name');
-            if (userName) {
-                userName.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        sendToWhatsApp();
-                    }
-                });
-            }
-
-
-
-		document.addEventListener('keydown', function(e) {
-    // Bloqueia Ctrl+U, Ctrl+S, Ctrl+C, Ctrl+V, Ctrl+A, Ctrl+P, Ctrl+T
-    if (e.ctrlKey && (
-        e.key === 'u' || 
-        e.key === 's' || 
-        e.key === 'c' || 
-        e.key === 'v' || 
-        e.key === 'a' || 
-        e.key === 'p' || 
-        e.key === 't'
-    )) {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia F12 (DevTools)
-    if (e.key === 'F12') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+I (DevTools no Chrome)
-    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+J (Console no Chrome)
-    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+C (Inspeção de elementos)
-    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Bloqueia clique com botão direito (opcional)
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
-		
-            // Adicionar evento de tecla Enter para verificação de chave de canais
-            const canaisKeyInput = document.getElementById('canais-key-input');
-            if (canaisKeyInput) {
-                canaisKeyInput.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        verificarChaveCanais();
-                    }
-                });
-            }
-            // Fechar o seletor de canais ao clicar fora dele
-            document.addEventListener('click', function(event) {
-                const selectorButton = document.getElementById('channel-selector-button');
-                const selectorMenu = document.getElementById('channel-selector-menu');
-                if (isChannelSelectorOpen && 
-                    selectorButton && selectorMenu && 
-                    !selectorButton.contains(event.target) && 
-                    !selectorMenu.contains(event.target)) {
-                    isChannelSelectorOpen = false;
-                    selectorMenu.classList.remove('active');
-                }
+    } else if (canal.tipo === 'hls') {
+        playerDiv.innerHTML = '<video id="video-player" autoplay playsinline></video>';
+        videoPlayer = document.getElementById('video-player');
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(canal.url);
+            hls.attachMedia(videoPlayer);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                videoPlayer.play();
+                showNotification(`Canal ${canal.nome} iniciado`, 'success');
             });
-        });
-    </script>
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                console.error('Erro HLS:', data);
+                showNotification('Erro ao carregar o canal', 'error');
+            });
+        } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+            videoPlayer.src = canal.url;
+            videoPlayer.play();
+            showNotification(`Canal ${canal.nome} iniciado`, 'success');
+        } else {
+            showNotification('Formato de vídeo não suportado', 'error');
+        }
+        initCustomControls();
+    }
+}
+
+function playRandomAudio() {
+    const audioUrls = [
+        'https://example.com/ghost-whisper.mp3',
+        'https://example.com/creepy-laugh.mp3',
+        'https://example.com/scream.mp3'
+    ];
+    const randomAudio = audioUrls[Math.floor(Math.random() * audioUrls.length)];
+    const ghostAudio = document.getElementById('ghostAudio');
+    ghostAudio.src = randomAudio;
+    ghostAudio.volume = 0.4;
+    ghostAudio.play().catch(err => {
+        console.error('Erro ao tocar áudio:', err);
+        showNotification('Erro ao reproduzir mensagem do além', 'error');
+    });
+    showNotification('Mensagem do além recebida!', 'info');
+}
+
+// Fechar modais ao clicar fora
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            if (modal.id === 'canais-modal') closeCanaisModal();
+            if (modal.id === 'programacao-modal') closeProgramacaoModal();
+            if (modal.id === 'modal') closeModal();
+            if (modal.id === 'canais-key-modal') closeCanaisKeyModal();
+        }
+    });
+});
+
+// Efeito de som de terror aleatório
+setInterval(() => {
+    if (Math.random() < 0.1) {
+        const randomSound = new Audio('https://example.com/random-horror.mp3');
+        randomSound.volume = 0.2;
+        randomSound.play().catch(err => console.log('Erro ao tocar som aleatório:', err));
+    }
+}, 30000);
+
+// Fechar player com tecla Esc
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const playerContainer = document.getElementById('player-container');
+        if (playerContainer.style.display === 'flex') {
+            playerContainer.style.display = 'none';
+            document.getElementById('login-container').style.display = 'flex';
+            document.getElementById('live-notification').style.display = 'flex';
+            if (player) {
+                player.pause();
+            }
+            if (videoPlayer) {
+                videoPlayer.pause();
+            }
+        }
+        closeCanaisModal();
+        closeProgramacaoModal();
+        closeModal();
+        closeCanaisKeyModal();
+        if (isChannelSelectorOpen) toggleChannelSelector();
+    }
+});
 <script>
   const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
   let i = 0;
