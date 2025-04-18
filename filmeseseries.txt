@@ -1,3 +1,2 @@
-Nome: HEREDITARIO
-Imagem: https://cdna.artstation.com/p/assets/images/images/037/337/716/large/amanda-alves-hereditary.jpg?1620132052
-URL: https://dl9.mp4.ir/video/2018/10/34759-727375160/m3u8/1080p/out.m3u8
+#EXTINF:-1 tvg-name="Você Deveria Ter Partido (2020)" tvg-logo="https://image.tmdb.org/t/p/w600_and_h900_bestv2/48g3GxLLekaan7agQAOd7i386qK.jpg" group-title="FILMES • TERROR",Você Deveria Ter Partido (2020)
+http://azoni.xyz:80/movie/012872072/966495681/2560514.mp4
