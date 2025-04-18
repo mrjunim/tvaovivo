@@ -2302,6 +2302,23 @@ document.addEventListener('contextmenu', function(e) {
     }, 40000); // 40 segundos
   });     
 </script>
+
+	 <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+  <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('7880e96ea4577504bafa', {
+      cluster: 'sa1'
+    });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      alert(JSON.stringify(data));
+    });
+  </script>
+	
 <script>
         // Lista de URLs de áudios (adicione mais URLs conforme necessário)
         const audioFiles = [
