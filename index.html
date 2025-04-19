@@ -399,6 +399,29 @@
     pointer-events: none; /* Reforça a desativação de cliques */
 }
 
+
+#player-container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.player {
+    flex: 1;
+    width: calc(100% - 300px); /* Ajusta a largura do player para acomodar o chat */
+}
+
+@media (max-width: 768px) {
+    #player-container {
+        flex-direction: column;
+    }
+
+    .player {
+        width: 100%;
+    }
+}
+
+
         #player-container {
             display: none;
             width: 100%;
@@ -1226,6 +1249,122 @@ display: flex;
                 top: 20px;
             }
         }
+		
+		.chat-container {
+    width: 300px;
+    height: 100%;
+    background: rgba(20, 20, 20, 0.95);
+    border-left: 1px solid rgba(255, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    box-shadow: -5px 0 15px rgba(255, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.chat-header {
+    padding: 15px;
+    background: linear-gradient(135deg, #ff1a1a, #cc0000);
+    color: white;
+    font-family: 'Creepster', cursive;
+    font-size: 1.5em;
+    text-align: center;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: rgba(30, 30, 30, 0.8);
+    color: #fff;
+    font-size: 0.9em;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chat-message {
+    background: rgba(40, 40, 40, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #ff1a1a;
+    animation: fadeIn 0.5s ease;
+    word-wrap: break-word;
+}
+
+.chat-message .username {
+    color: #ff1a1a;
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.chat-input-form {
+    display: flex;
+    padding: 15px;
+    background: rgba(20, 20, 20, 0.95);
+    border-top: 1px solid rgba(255, 0, 0, 0.5);
+}
+
+.chat-input-form input {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    background: rgba(30, 30, 30, 0.8);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+
+.chat-input-form button {
+    padding: 10px 20px;
+    font-size: 0.9em;
+}
+
+.chat-container:hover {
+    box-shadow: -10px 0 25px rgba(255, 0, 0, 0.5);
+}
+
+/* Estilizar a barra de rolagem do chat */
+.chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: rgba(20, 20, 20, 0.8);
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #ff1a1a;
+    border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #cc0000;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 100%;
+        height: 50%;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        top: auto;
+        border-left: none;
+        border-top: 1px solid rgba(255, 0, 0, 0.5);
+    }
+
+    .chat-messages {
+        max-height: 200px;
+    }
+}
+		
     </style>
 </head>
 <body>
@@ -1280,33 +1419,41 @@ display: flex;
 
     </main>
 
-    <div id="player-container" aria-live="polite">
-        <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
-        </div>
-        <div class="channel-info">
-            <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
-            <div>
-                <div class="channel-name">StreamXcellence</div>
-                <span class="live-indicator">AO VIVO</span>
-            </div>
-        </div>
-        <div id="quality-menu" class="quality-menu"></div>
-        <div class="player-controls">
-            <div class="controls-left">
-                <button id="play-pause-btn" class="control-btn">⏸️</button>
-                <div class="volume-container">
-                    <button id="mute-btn" class="control-btn">🔊</button>
-                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
-                </div>
-            </div>
-            <div class="controls-right">
-                <button id="quality-btn" class="control-btn">⚙️</button>
-                <button id="fullscreen-btn" class="control-btn">⛶</button>
-            </div>
+   <div id="player-container" aria-live="polite">
+    <div class="player twitch-player" id="player">
+        <div id="twitch-embed"></div>
+    </div>
+    <div class="channel-info">
+        <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
+        <div>
+            <div class="channel-name">StreamXcellence</div>
+            <span class="live-indicator">AO VIVO</span>
         </div>
     </div>
-
+    <div id="quality-menu" class="quality-menu"></div>
+    <div class="player-controls">
+        <div class="controls-left">
+            <button id="play-pause-btn" class="control-btn">⏸️</button>
+            <div class="volume-container">
+                <button id="mute-btn" class="control-btn">🔊</button>
+                <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+            </div>
+        </div>
+        <div class="controls-right">
+            <button id="quality-btn" class="control-btn">⚙️</button>
+            <button id="fullscreen-btn" class="control-btn">⛶</button>
+        </div>
+    </div>
+    <!-- Novo contêiner de chat -->
+    <div class="chat-container">
+        <div class="chat-header">Chat ao Vivo</div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <form class="chat-input-form" id="chat-form">
+            <input type="text" id="chat-input" placeholder="Digite sua mensagem..." aria-label="Enviar mensagem no chat" autocomplete="off">
+            <button type="submit" class="btn-primary">Enviar</button>
+        </form>
+    </div>
+</div>
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
             <span class="close" onclick="closeModal()" aria-label="Fechar">×</span>
@@ -2158,7 +2305,60 @@ display: flex;
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            loadProgramacao();
+            // Configuração do Pusher
+Pusher.logToConsole = true; // Ativar logs para depuração (remova em produção)
+
+const pusher = new Pusher('4dfd23d98c17be4534f7', {
+    cluster: 'sa1'
+});
+
+const channel = pusher.subscribe('my-channel');
+channel.bind('my-event', function(data) {
+    displayChatMessage(data);
+});
+
+// Exibir mensagens no chat
+function displayChatMessage(data) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.className = 'chat-message';
+    messageElement.innerHTML = `<span class="username">${data.username || 'Anônimo'}:</span> ${data.message}`;
+    chatMessages.appendChild(messageElement);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Rolagem automática para a última mensagem
+}
+
+// Enviar mensagens
+document.getElementById('chat-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    if (message) {
+        // Enviar mensagem para o backend (você precisa configurar um endpoint para isso)
+        fetch('https://streamxcellence.vercel.app/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: 'Usuário', // Substitua por um nome de usuário dinâmico
+                message: message
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                input.value = ''; // Limpar o campo de entrada
+                showNotification('Mensagem enviada!', 'success');
+            } else {
+                showNotification('Erro ao enviar mensagem.', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao enviar mensagem:', error);
+            showNotification('Erro ao enviar mensagem.', 'error');
+        });
+    }
+});
+			loadProgramacao();
             loadKeys();
             createLiveNotificationPlayer(); // Chama a nova função para o vídeo
             // Adicionar evento de tecla Enter para o input de chave
@@ -2250,6 +2450,48 @@ document.addEventListener('contextmenu', function(e) {
                 }
             });
         });
+		
+		
+		const express = require('express');
+const Pusher = require('pusher');
+const app = express();
+
+const pusher = new Pusher({
+    appId: '1978009',
+    key: '4dfd23d98c17be4534f7',
+    secret: '90a7a7286e19cde708d4',
+    cluster: 'sa1',
+    useTLS: true
+});
+
+app.use(express.json());
+
+app.post('/send-message', (req, res) => {
+    const { username, message } = req.body;
+    pusher.trigger('my-channel', 'my-event', {
+        username,
+        message
+    });
+    res.status(200).send('Mensagem enviada');
+});
+
+app.listen(3000, () => {
+    console.log('Servidor rodando na porta 3000');
+});
+
+function displayChatMessage(data) {
+    const chatMessages = document.getElementById('chat-messages');
+    const messageElement = document.createElement('div');
+    messageElement.className = 'chat-message';
+    messageElement.innerHTML = `<span class="username">${data.username || 'Anônimo'}:</span> ${data.message}`;
+    chatMessages.appendChild(messageElement);
+    if (chatMessages.children.length > 100) {
+        chatMessages.removeChild(chatMessages.firstChild);
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+		
     </script>
 <script>
   const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
