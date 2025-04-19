@@ -1226,142 +1226,6 @@ display: flex;
                 top: 20px;
             }
         }
-		.chat-container {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 300px;
-    height: 100%;
-    background: rgba(20, 20, 20, 0.95);
-    border-left: 2px solid rgba(139, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    z-index: 1001;
-    transition: transform 0.3s ease;
-    box-shadow: -5px 0 15px rgba(255, 0, 0, 0.3);
-}
-
-.chat-container.collapsed {
-    transform: translateX(260px);
-}
-
-.chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background: rgba(40, 40, 40, 0.9);
-    border-bottom: 1px solid rgba(255, 0, 0, 0.5);
-}
-
-.chat-header h3 {
-    color: #ff1a1a;
-    font-family: 'Creepster', cursive;
-    font-size: 1.2em;
-    margin: 0;
-    text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
-}
-
-.chat-toggle {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 5px;
-    transition: transform 0.2s;
-}
-
-.chat-toggle:hover {
-    transform: scale(1.1);
-}
-
-.chat-messages {
-    flex: 1;
-    padding: 15px;
-    overflow-y: auto;
-    background: rgba(30, 30, 30, 0.8);
-    color: #fff;
-    font-size: 0.9em;
-}
-
-.chat-message {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 8px;
-    background: rgba(40, 40, 40, 0.7);
-    word-wrap: break-word;
-}
-
-.chat-message .username {
-    font-weight: 600;
-    color: #ff1a1a;
-}
-
-.chat-message .message {
-    color: #b4b7bd;
-}
-
-.chat-input {
-    display: flex;
-    padding: 15px;
-    background: rgba(20, 20, 20, 0.9);
-    border-top: 1px solid rgba(255, 0, 0, 0.5);
-}
-
-.chat-input input {
-    flex: 1;
-    margin-right: 10px;
-    background: rgba(40, 40, 40, 0.8);
-    border: 1px solid rgba(255, 0, 0, 0.5);
-    color: #fff;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.chat-input button {
-    padding: 10px 15px;
-    font-size: 0.9em;
-}
-
-.chat-input input:focus {
-    border-color: #ff1a1a;
-    box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
-}
-
-/* Esconder chat quando player não está ativo */
-#player-container:not(.active) .chat-container {
-    display: none;
-}
-
-/* Estilização para scroll do chat */
-.chat-messages::-webkit-scrollbar {
-    width: 6px;
-}
-
-.chat-messages::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.chat-messages::-webkit-scrollbar-thumb {
-    background: #ff1a1a;
-    border-radius: 3px;
-}
-
-@media (max-width: 768px) {
-    .chat-container {
-        width: 100%;
-        height: 50%;
-        top: auto;
-        bottom: 0;
-        border-left: none;
-        border-top: 2px solid rgba(139, 0, 0, 0.5);
-    }
-
-    .chat-container.collapsed {
-        transform: translateY(90%);
-    }
-}
     </style>
 </head>
 <body>
@@ -1442,17 +1306,7 @@ display: flex;
             </div>
         </div>
     </div>
-<div class="chat-container" id="chat-container">
-    <div class="chat-header">
-        <h3>Chat ao Vivo</h3>
-        <button class="chat-toggle" id="chat-toggle">−</button>
-    </div>
-    <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
-    <div class="chat-input">
-        <input type="text" id="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem" />
-        <button id="send-message" class="btn-primary">Enviar</button>
-    </div>
-</div>
+
     <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
             <span class="close" onclick="closeModal()" aria-label="Fechar">×</span>
@@ -2396,103 +2250,6 @@ document.addEventListener('contextmenu', function(e) {
                 }
             });
         });
-		
-		// Configuração do Pusher
-Pusher.logToConsole = true; // Para depuração (remova em produção)
-const pusher = new Pusher('7880e96ea4577504bafa', {
-    cluster: 'sa1',
-    forceTLS: true
-});
-
-// Inscrever-se no canal público (sem autenticação)
-const channel = pusher.subscribe('public-chat-channel');
-
-// Manipular novas mensagens
-channel.bind('new-message', function(data) {
-    const chatMessages = document.getElementById('chat-messages');
-    const messageElement = document.createElement('div');
-    messageElement.className = 'chat-message';
-    messageElement.innerHTML = `
-        <span class="username">${sanitizeHTML(data.username)}:</span>
-        <span class="message">${sanitizeHTML(data.message)}</span>
-    `;
-    chatMessages.appendChild(messageElement);
-    chatMessages.scrollTop = chatMessages.scrollHeight; // Rolagem automática
-});
-
-// Função para sanitizar HTML e prevenir XSS
-function sanitizeHTML(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-}
-
-// Enviar mensagem diretamente com Pusher
-function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const message = input.value.trim();
-    if (!message) return;
-
-    // Usar um nome de usuário baseado na chave ou padrão
-    const username = currentKey ? `User_${currentKey.slice(0, 5)}` : 'Anônimo';
-
-    // Configurar o cliente Pusher para enviar mensagens
-    const pusherClient = new Pusher('7880e96ea4577504bafa', {
-        cluster: 'sa1',
-        forceTLS: true
-    });
-
-    // Enviar mensagem diretamente (usando a chave secreta - apenas para testes)
-    fetch('https://api-sa1.pusher.com/apps/1977153/events', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer fe14c3f03de74923ffcf' // Chave secreta (NÃO USE EM PRODUÇÃO)
-        },
-        body: JSON.stringify({
-            channel: 'public-chat-channel',
-            name: 'new-message',
-            data: JSON.stringify({
-                username,
-                message,
-                timestamp: new Date().toISOString()
-            })
-        })
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Erro ao enviar mensagem');
-        input.value = '';
-    })
-    .catch(error => {
-        console.error('Erro ao enviar mensagem:', error);
-        showNotification('Erro ao enviar mensagem', 'error');
-    });
-}
-
-// Alternar visibilidade do chat
-function toggleChat() {
-    const chatContainer = document.getElementById('chat-container');
-    const toggleButton = document.getElementById('chat-toggle');
-    chatContainer.classList.toggle('collapsed');
-    toggleButton.textContent = chatContainer.classList.contains('collapsed') ? '+' : '−';
-}
-
-// Eventos
-document.getElementById('send-message').addEventListener('click', sendMessage);
-document.getElementById('chat-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-document.getElementById('chat-toggle').addEventListener('click', toggleChat);
-
-// Inicializar chat quando o player for ativado
-document.getElementById('player-container').addEventListener('transitionend', function(e) {
-    if (e.propertyName === 'display' && this.classList.contains('active')) {
-        const chatMessages = document.getElementById('chat-messages');
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-});
-		
-		
     </script>
 <script>
   const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
@@ -2544,21 +2301,6 @@ document.getElementById('player-container').addEventListener('transitionend', fu
       }
     }, 40000); // 40 segundos
   });     
-  
-  function sanitizeHTML(str) {
-    return DOMPurify.sanitize(str);
-}
-
-player.addEventListener(Twitch.Player.OFFLINE, () => {
-    const chatMessages = document.getElementById('chat-messages');
-    chatMessages.innerHTML = '<p class="chat-message">Canal offline. O chat está desativado.</p>';
-    document.getElementById('chat-input').disabled = true;
-    document.getElementById('send-message').disabled = true;
-});
-
-let username = localStorage.getItem('chatUsername') || prompt('Digite seu apelido para o chat:') || 'Anônimo';
-localStorage.setItem('chatUsername', username);
-  
 </script>
 <script>
         // Lista de URLs de áudios (adicione mais URLs conforme necessário)
@@ -2591,7 +2333,5 @@ localStorage.setItem('chatUsername', username);
             document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
         }, 1000);
     </script>
-	<script src="https://js.pusher.com/8.2/pusher.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
 </body>
 </html>
