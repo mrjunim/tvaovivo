@@ -7,15 +7,206 @@
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
-	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
     <!-- Preconnect para melhorar o carregamento -->
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
+    <!-- Biblioteca do Pusher -->
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     <style>
-        /* Estilos originais mantidos intactos */
+
+        
+
+        @keyframes pulseBlood {
+            0% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 0.4; }
+        }
+
+        h1 {
+            font-family: 'Creepster', cursive;
+            color: var(--BLOOD-RED);
+            text-shadow: 2px 2px 10px var(--GLOW-RED);
+            animation: flicker 3s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .chat-container {
+            width: 300px;
+            height: 100%;
+            background: var(--SHADOW-DARK);
+            border-left: 1px solid var(--GLOW-RED);
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1000;
+            box-shadow: -5px 0 15px var(--GLOW-RED);
+            transition: all 0.3s ease;
+        }
+
+        .chat-header {
+            padding: 15px;
+            background: linear-gradient(135deg, var(--BLOOD-RED), var(--BLOOD-DARK));
+            color: white;
+            font-family: 'Creepster', cursive;
+            font-size: 1.5em;
+            text-align: center;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: rgba(30, 30, 30, 0.8);
+            color: #fff;
+            font-size: 0.9em;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-message {
+            background: rgba(40, 40, 40, 0.7);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid var(--BLOOD-RED);
+            animation: fadeIn 0.5s ease;
+            word-wrap: break-word;
+        }
+
+        .chat-message .username {
+            color: var(--BLOOD-RED);
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .chat-input-form {
+            display: flex;
+            padding: 15px;
+            background: var(--SHADOW-DARK);
+            border-top: 1px solid var(--GLOW-RED);
+        }
+
+        .chat-input-form input {
+            flex: 1;
+            margin-right: 10px;
+            padding: 10px;
+            border: 1px solid var(--GLOW-RED);
+            background: rgba(30, 30, 30, 0.8);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .chat-input-form button {
+            padding: 10px 20px;
+            font-size: 0.9em;
+            background: linear-gradient(135deg, var(--BLOOD-RED), var(--BLOOD-DARK));
+            color: white;
+        }
+
+        .chat-container:hover {
+            box-shadow: -10px 0 25px var(--GLOW-RED);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(20, 20, 20, 0.8);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--BLOOD-RED);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--BLOOD-DARK);
+        }
+
+        /* Responsividade do Chat */
+        @media (max-width: 1024px) {
+            .chat-container {
+                width: 250px;
+            }
+            .player {
+                width: calc(100% - 250px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            #player-container {
+                flex-direction: column;
+            }
+            .player {
+                width: 100%;
+                height: 60%;
+            }
+            .chat-container {
+                width: 100%;
+                height: 40%;
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                top: auto;
+                border-left: none;
+                border-top: 1px solid var(--GLOW-RED);
+            }
+            .chat-messages {
+                max-height: 300px;
+                font-size: 0.85em;
+            }
+            .chat-header {
+                font-size: 1.2em;
+                padding: 10px;
+            }
+            .chat-input-form input {
+                font-size: 0.85em;
+                padding: 8px;
+            }
+            .chat-input-form button {
+                padding: 8px 15px;
+                font-size: 0.85em;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .chat-container {
+                height: 35%;
+            }
+            .player {
+                height: 65%;
+            }
+            .chat-messages {
+                max-height: 200px;
+                font-size: 0.8em;
+            }
+            .chat-header {
+                font-size: 1em;
+            }
+            .chat-input-form input {
+                font-size: 0.8em;
+            }
+            .chat-input-form button {
+                padding: 8px 10px;
+                font-size: 0.8em;
+            }
+        }
+		
+		
+		 /* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -37,6 +228,10 @@
             --card-background-hover: rgba(40, 51, 69, 0.85);
             --border-color: rgba(255, 255, 255, 0.1);
             --guide-bg: rgba(30, 41, 59, 0.95);
+			--BLOOD-RED: #ff1a1a;
+            --BLOOD-DARK: #cc0000;
+            --SHADOW-DARK: rgba(20, 20, 20, 0.95);
+            --GLOW-RED: rgba(255, 0, 0, 0.5);
         }
 
         * {
@@ -57,6 +252,8 @@
             line-height: 1.6;
             background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a); /* Fundo de terror */
             position: relative;
+			background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a);
+            position: relative;
         }
 
         /* Névoa de terror apenas na página inicial */
@@ -71,10 +268,14 @@
             z-index: 0;
             pointer-events: none;
             animation: moverNevoa 40s linear infinite;
+			background: url('https://i.gifer.com/9vZI.gif') repeat;
+            opacity: 0.15;
+            animation: moverNevoa 40s linear infinite;
         }
+        
 
         @keyframes moverNevoa {
-            from { background-position: 0 0; }
+			from { background-position: 0 0; }
             to { background-position: 1000px 0; }
         }
 
@@ -115,7 +316,7 @@
         }
 
         /* Estilos de terror apenas para a página inicial */
-        .login-container,
+        .login-container::before,
         .live-notification {
             background: rgba(20, 20, 20, 0.9); /* Fundo preto opaco */
             padding: 30px;
@@ -142,7 +343,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent); /* Efeito de sangue sutil */
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent);
             animation: pulseBlood 8s infinite;
             z-index: -1;
         }
@@ -1226,10 +1427,13 @@ display: flex;
                 top: 20px;
             }
         }
+		
+		
+		
+		
     </style>
 </head>
 <body>
-	
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
@@ -1251,33 +1455,32 @@ display: flex;
                 <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
                 <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
+                <button type="button" onclick="window.open('https://www.instagram.com/streamxcellence', '_blank')" class="btn-info">Siga @streamxcellence</button>
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-    <audio id="ghostAudio"></audio>
+            <div class="notification-message" onclick="playRandomAudio()">📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+            <audio id="ghostAudio"></audio>
         </section>
 
-<section class="live-notification" id="live-notification">
-    <div id="sobre">
-        <h3>Sobre o StreamXcellence</h3>
-        <p id="texto-sobre"></p>
-    </div>
-    <br>	
-    <br>
-    <div id="guide-container" role="marquee">
-        <div class="scrolling-text" id="scrolling-text">
-            <span id="guide-text">Carregando guia...</span>
-            <span id="guide-text-duplicate">Carregando guia...</span>
-        </div>
-    </div>
-    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
-            <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
-            Seu navegador não suporta o elemento de vídeo.
-        </video>
-    </div>
-</section>
-
+        <section class="live-notification" id="live-notification">
+            <div id="sobre">
+                <h3>Sobre o StreamXcellence</h3>
+                <p id="texto-sobre"></p>
+            </div>
+            <br><br>
+            <div id="guide-container" role="marquee">
+                <div class="scrolling-text" id="scrolling-text">
+                    <span id="guide-text">Carregando guia...</span>
+                    <span id="guide-text-duplicate">Carregando guia...</span>
+                </div>
+            </div>
+            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
+                <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
+                    <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+        </section>
     </main>
 
     <div id="player-container" aria-live="polite">
@@ -1303,7 +1506,22 @@ display: flex;
             <div class="controls-right">
                 <button id="quality-btn" class="control-btn">⚙️</button>
                 <button id="fullscreen-btn" class="control-btn">⛶</button>
+                <button id="channel-selector-button" onclick="toggleChannelSelector()">📺 Canais</button>
             </div>
+        </div>
+        <div id="channel-selector-menu">
+            <input type="text" class="channel-search" id="channel-search" placeholder="Pesquisar canais...">
+            <div id="channels-list">
+                <p>Carregando canais...</p>
+            </div>
+        </div>
+        <div class="chat-container">
+            <div class="chat-header">Chat ao Vivo</div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <form class="chat-input-form" id="chat-form">
+                <input type="text" id="chat-input" placeholder="Digite sua mensagem..." aria-label="Enviar mensagem no chat" autocomplete="off">
+                <button type="submit" class="btn-primary">Enviar</button>
+            </form>
         </div>
     </div>
 
@@ -1605,29 +1823,28 @@ display: flex;
             }
         }
 
-    function createLiveNotificationPlayer() {
-    const liveVideo = document.getElementById('live-video');
-    if (liveVideo) {
-        liveVideo.autoplay = true; // Garante reprodução automática
-        liveVideo.loop = true; // Mantém o loop
-        liveVideo.muted = true; // Garante que o vídeo esteja mudo
-        liveVideo.controls = false; // Remove controles
-        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
-        liveVideo.volume = 0; // Define volume como 0 por segurança
-        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
-        liveVideo.addEventListener('error', (e) => {
-            console.error('Erro ao carregar o vídeo ao vivo:', e);
-            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-        });
-        // Garante que o vídeo permaneça mudo mesmo após eventos
-        liveVideo.addEventListener('volumechange', () => {
-            if (!liveVideo.muted) {
+        function createLiveNotificationPlayer() {
+            const liveVideo = document.getElementById('live-video');
+            if (liveVideo) {
+                liveVideo.autoplay = true;
+                liveVideo.loop = true;
                 liveVideo.muted = true;
+                liveVideo.controls = false;
+                liveVideo.playsinline = true;
                 liveVideo.volume = 0;
+                playVideo(liveVideo);
+                liveVideo.addEventListener('error', (e) => {
+                    console.error('Erro ao carregar o vídeo ao vivo:', e);
+                    showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+                });
+                liveVideo.addEventListener('volumechange', () => {
+                    if (!liveVideo.muted) {
+                        liveVideo.muted = true;
+                        liveVideo.volume = 0;
+                    }
+                });
             }
-        });
-    }
-}
+        }
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -1873,465 +2090,264 @@ display: flex;
         }
 
         function carregarCanaisSeletor() {
-            if (canaisData.length > 0) {
-                atualizarListaCanaisSeletor(canaisData);
-                return;
-            }
-            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar os canais');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    const linhas = data.split('\n');
-                    canaisData = [];
-                    let i = 0;
-                    while (i < linhas.length) {
-                        const linha = linhas[i].trim();
-                        if (linha.startsWith('#EXTINF:-1')) {
-                            const infoLinha = linha;
-                            let nomeCanal = "Canal";
-                            if (infoLinha.includes('tvg-name="')) {
-                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                                if (match && match[1]) {
-                                    nomeCanal = match[1];
-                                }
-                            } else if (infoLinha.includes(',')) {
-                                const commaIndex = infoLinha.lastIndexOf(',');
-                                if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                                    nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                                }
-                            }
-                            let logoUrl = "https://i.imgur.com/QsrJDbX.png";
-                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                            if (logoMatch && logoMatch[1]) {
-                                logoUrl = logoMatch[1];
-                            }
-                            let streamUrl = "";
-                            if (i + 1 < linhas.length) {
-                                streamUrl = linhas[i + 1].trim();
-                                i += 2;
-                            } else {
-                                i++;
-                            }
-                            if (streamUrl && !streamUrl.startsWith('#')) {
-                                canaisData.push({
-                                    nome: nomeCanal,
-                                    logo: logoUrl,
-                                    url: streamUrl
-                                });
-                            }
-                        } else {
-                            i++;
-                        }
-                    }
-                    atualizarListaCanaisSeletor(canaisData);
-                })
-                .catch(error => {
-                    console.error('Erro ao carregar canais para o seletor:', error);
-                    document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
-                    showNotification("Erro ao carregar os canais", "error");
-                });
-        }
-
-        function atualizarListaCanaisSeletor(canais) {
             const channelsList = document.getElementById('channels-list');
-            if (canais.length === 0) {
-                channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
-                return;
-            }
-            channelsList.innerHTML = '';
-            canais.sort((a, b) => a.nome.localeCompare(b.nome));
-            canais.forEach(canal => {
-                const channelItem = document.createElement('div');
-                channelItem.className = 'channel-selector-item';
-                channelItem.setAttribute('data-nome', canal.nome.toLowerCase());
-                channelItem.onclick = function() {
-                    reproduzirCanal(canal.url, canal.nome, canal.logo);
-                    toggleChannelSelector();
-                };
-                channelItem.innerHTML = `
-                    <img src="${canal.logo}" alt="${canal.nome}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <span>${canal.nome}</span>
-                `;
-                channelsList.appendChild(channelItem);
-            });
-        }
-
-        function filtrarCanais() {
-            const searchInput = document.getElementById('channel-search');
-            const searchTerm = searchInput.value.toLowerCase();
-            const items = document.querySelectorAll('.channel-selector-item');
-            items.forEach(item => {
-                const nome = item.getAttribute('data-nome');
-                if (nome.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        function carregarCanais() {
-            const canaisGrid = document.getElementById("canais-grid");
-            canaisGrid.innerHTML = '<p>Carregando canais...</p>';
+            channelsList.innerHTML = '<p>Carregando canais...</p>';
             fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Erro ao carregar os canais');
+                        throw new Error('Erro ao carregar a lista de canais');
                     }
                     return response.text();
                 })
                 .then(data => {
-                    canaisGrid.innerHTML = '';
-                    const linhas = data.split('\n');
-                    let i = 0;
-                    while (i < linhas.length) {
-                        const linha = linhas[i].trim();
+                    const linhas = data.split('\n').map(linha => linha.trim());
+                    canaisData = [];
+                    let currentCategory = '';
+                    let channel = null;
+                    for (let i = 0; i < linhas.length; i++) {
+                        const linha = linhas[i];
                         if (linha.startsWith('#EXTINF:-1')) {
-                            const infoLinha = linha;
-                            let nomeCanal = "Canal";
-                            if (infoLinha.includes('tvg-name="')) {
-                                const match = infoLinha.match(/tvg-name="([^"]+)"/);
-                                if (match && match[1]) {
-                                    nomeCanal = match[1];
-                                }
-                            } else if (infoLinha.includes(',')) {
-                                const commaIndex = infoLinha.lastIndexOf(',');
-                                if (commaIndex !== -1 && commaIndex < infoLinha.length - 1) {
-                                    nomeCanal = infoLinha.substring(commaIndex + 1).trim();
-                                }
+                            const nameMatch = linha.match(/tvg-name="([^"]+)"/);
+                            const logoMatch = linha.match(/tvg-logo="([^"]+)"/);
+                            const groupMatch = linha.match(/group-title="([^"]+)"/);
+                            const name = nameMatch ? nameMatch[1] : 'Canal Desconhecido';
+                            const logo = logoMatch ? logoMatch[1] : 'https://i.imgur.com/QsrJDbX.png';
+                            const group = groupMatch ? groupMatch[1] : 'Sem Categoria';
+                            if (group !== currentCategory) {
+                                currentCategory = group;
                             }
-                            let logoUrl = "https://i.imgur.com/QsrJDbX.png";
-                            const logoMatch = infoLinha.match(/tvg-logo="([^"]+)"/);
-                            if (logoMatch && logoMatch[1]) {
-                                logoUrl = logoMatch[1];
+                            channel = {
+                                name: name,
+                                logo: logo,
+                                category: currentCategory,
+                                url: ''
+                            };
+                            if (i + 1 < linhas.length && !linhas[i + 1].startsWith('#')) {
+                                channel.url = linhas[i + 1].trim();
+                                canaisData.push(channel);
                             }
-                            let streamUrl = "";
-                            if (i + 1 < linhas.length) {
-                                streamUrl = linhas[i + 1].trim();
-                                i += 2;
-                            } else {
-                                i++;
-                            }
-                            if (streamUrl && !streamUrl.startsWith('#')) {
-                                const canalItem = document.createElement('div');
-                                canalItem.className = 'canal-item';
-                                canalItem.setAttribute('data-stream-url', streamUrl);
-                                canalItem.onclick = function() {
-                                    reproduzirCanal(streamUrl, nomeCanal, logoUrl);
-                                };
-                                canalItem.innerHTML = `
-                                    <img src="${logoUrl}" alt="${nomeCanal}" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                                    <div class="canal-info">
-                                        <p class="canal-nome">${nomeCanal}</p>
-                                    </div>
-                                `;
-                                canaisGrid.appendChild(canalItem);
-                            }
-                        } else {
-                            i++;
                         }
                     }
-                    if (canaisGrid.children.length === 0) {
-                        canaisGrid.innerHTML = '<p>Nenhum canal encontrado.</p>';
+                    if (canaisData.length === 0) {
+                        channelsList.innerHTML = '<p>Nenhum canal disponível.</p>';
+                        return;
                     }
+                    renderizarCanais();
+                    configurarPesquisaCanais();
                 })
                 .catch(error => {
                     console.error('Erro ao carregar canais:', error);
-                    canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente mais tarde.</p>';
-                    showNotification("Erro ao carregar os canais", "error");
+                    channelsList.innerHTML = '<p>Erro ao carregar os canais. Tente novamente.</p>';
+                    showNotification('Erro ao carregar os canais', 'error');
                 });
         }
 
-        function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
-            console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
-            closeCanaisModal();
-            const playerContainer = document.getElementById('player-container');
-            playerContainer.style.display = 'flex';
-            playerContainer.innerHTML = `
-                <div class="player hls-player">
-                    <video id="video-player" controls></video>
-                </div>
-                <div class="channel-info">
-                    <img src="${logoUrl}" alt="${nomeCanal}" class="channel-logo" onerror="this.src='https://i.imgur.com/QsrJDbX.png'">
-                    <div>
-                        <div class="channel-name">${nomeCanal}</div>
-                        <span class="live-indicator">AO VIVO</span>
-                    </div>
-                </div>
-            `;
-            const video = document.getElementById('video-player');
-            if (Hls.isSupported()) {
-                const hls = new Hls({
-                    maxBufferLength: 30,
-                    maxMaxBufferLength: 60,
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    testBandwidth: true,
-                    progressive: true,
-                    xhrSetup: function(xhr) {
-                        xhr.withCredentials = false;
-                    }
-                });
-                try {
-                    hls.loadSource(streamUrl);
-                    hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        console.log('Manifest parsed, attempting to play');
-                        video.play().catch(err => {
-                            console.error('Erro ao iniciar reprodução:', err);
-                            showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                        });
+        function renderizarCanais(filtro = '') {
+            const channelsList = document.getElementById('channels-list');
+            channelsList.innerHTML = '';
+            const categorias = [...new Set(canaisData.map(canal => canal.category))];
+            categorias.forEach(categoria => {
+                const canaisFiltrados = canaisData.filter(canal => 
+                    canal.category === categoria && 
+                    canal.name.toLowerCase().includes(filtro.toLowerCase())
+                );
+                if (canaisFiltrados.length > 0) {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'channel-category';
+                    categoryDiv.textContent = categoria;
+                    channelsList.appendChild(categoryDiv);
+                    canaisFiltrados.forEach(canal => {
+                        const channelItem = document.createElement('div');
+                        channelItem.className = 'channel-selector-item';
+                        channelItem.innerHTML = `
+                            <img src="${canal.logo}" alt="${canal.name}">
+                            <span>${canal.name}</span>
+                        `;
+                        channelItem.onclick = () => selecionarCanal(canal);
+                        channelsList.appendChild(channelItem);
                     });
-                    hls.on(Hls.Events.ERROR, function(event, data) {
-                        console.error('Erro HLS:', data.type, data.details);
-                        if (data.fatal) {
-                            switch(data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    console.error('Erro de rede, tentando recuperar...');
-                                    showNotification("Erro de rede. Tentando reconectar...", "error");
-                                    hls.startLoad();
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    console.error('Erro de mídia, tentando recuperar...');
-                                    showNotification("Erro de mídia. Tentando recuperar...", "error");
-                                    hls.recoverMediaError();
-                                    break;
-                                default:
-                                    console.error('Erro fatal, não é possível recuperar');
-                                    showNotification("Não foi possível carregar o stream", "error");
-                                    hls.destroy();
-                                    break;
+                }
+            });
+            if (channelsList.innerHTML === '') {
+                channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
+            }
+        }
+
+        function configurarPesquisaCanais() {
+            const searchInput = document.getElementById('channel-search');
+            searchInput.addEventListener('input', () => {
+                renderizarCanais(searchInput.value);
+            });
+        }
+
+        function selecionarCanal(canal) {
+            document.getElementById('twitch-embed').innerHTML = '';
+            document.getElementById('player').classList.remove('twitch-player');
+            const playerContainer = document.getElementById('player');
+            playerContainer.innerHTML = `<video id="video-player" controls autoplay></video>`;
+            videoPlayer = document.getElementById('video-player');
+            document.querySelector('.channel-name').textContent = canal.name;
+            document.querySelector('.channel-logo').src = canal.logo;
+            if (Hls.isSupported() && canal.url.includes('.m3u8')) {
+                const hls = new Hls();
+                hls.loadSource(canal.url);
+                hls.attachMedia(videoPlayer);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    videoPlayer.play();
+                    showNotification(`Canal ${canal.name} carregado`, 'success');
+                });
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('Erro HLS:', data);
+                    showNotification('Erro ao carregar o canal', 'error');
+                });
+            } else if (canal.url.includes('.mp4') || canal.url.includes('.webm')) {
+                videoPlayer.src = canal.url;
+                videoPlayer.play();
+                showNotification(`Canal ${canal.name} carregado`, 'success');
+            } else {
+                playerContainer.innerHTML = '<p>Formato de vídeo não suportado.</p>';
+                showNotification('Formato de vídeo não suportado', 'error');
+            }
+            toggleChannelSelector();
+        }
+
+        function carregarCanais() {
+            const canaisGrid = document.getElementById('canais-grid');
+            canaisGrid.innerHTML = '<p>Carregando canais...</p>';
+            if (canaisData.length > 0) {
+                renderizarCanaisModal();
+                return;
+            }
+            fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar a lista de canais');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    const linhas = data.split('\n').map(linha => linha.trim());
+                    canaisData = [];
+                    let currentCategory = '';
+                    let channel = null;
+                    for (let i = 0; i < linhas.length; i++) {
+                        const linha = linhas[i];
+                        if (linha.startsWith('#EXTINF:-1')) {
+                            const nameMatch = linha.match(/tvg-name="([^"]+)"/);
+                            const logoMatch = linha.match(/tvg-logo="([^"]+)"/);
+                            const groupMatch = linha.match(/group-title="([^"]+)"/);
+                            const name = nameMatch ? nameMatch[1] : 'Canal Desconhecido';
+                            const logo = logoMatch ? logoMatch[1] : 'https://i.imgur.com/QsrJDbX.png';
+                            const group = groupMatch ? groupMatch[1] : 'Sem Categoria';
+                            if (group !== currentCategory) {
+                                currentCategory = group;
+                            }
+                            channel = {
+                                name: name,
+                                logo: logo,
+                                category: currentCategory,
+                                url: ''
+                            };
+                            if (i + 1 < linhas.length && !linhas[i + 1].startsWith('#')) {
+                                channel.url = linhas[i + 1].trim();
+                                canaisData.push(channel);
                             }
                         }
-                    });
-                        
-                    videoPlayer = hls;
-                } catch (error) {
-                    console.error('Erro ao configurar HLS:', error);
-                    showNotification("Erro ao configurar reprodução: " + error.message, "error");
-                }
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Para Safari/iOS
-                video.src = streamUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    console.log('Metadados carregados, tentando reproduzir');
-                    video.play().catch(err => {
-                        console.error('Erro ao iniciar reprodução (Safari):', err);
-                        showNotification("Erro ao iniciar reprodução: " + err.message, "error");
-                    });
+                    }
+                    renderizarCanaisModal();
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar canais:', error);
+                    canaisGrid.innerHTML = '<p>Erro ao carregar os canais. Tente novamente.</p>';
+                    showNotification('Erro ao carregar os canais', 'error');
                 });
-                    
-                video.addEventListener('error', function(e) {
-                    console.error('Erro no elemento de vídeo:', video.error);
-                    showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
-                });
-            } else {
-                showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
-            }
-                
-            showNotification(`Reproduzindo: ${nomeCanal}`, "success");
-
-            // Carregar canais para o seletor
-            setTimeout(carregarCanaisSeletor, 500);
         }
 
-        // Proteção contra inspeção (mantido do código original)
-        document.addEventListener('keydown', function (event) {
-            if (
-                event.key === 'F12' ||
-                (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J')) ||
-                (event.ctrlKey && event.key === 'U')
-            ) {
-                event.preventDefault();
-                return false;
+        function renderizarCanaisModal() {
+            const canaisGrid = document.getElementById('canais-grid');
+            canaisGrid.innerHTML = '';
+            if (canaisData.length === 0) {
+                canaisGrid.innerHTML = '<p>Nenhum canal disponível.</p>';
+                return;
             }
-        });
-
-        document.addEventListener('contextmenu', function (event) {
-            event.preventDefault();
-            return false;
-        });
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            loadProgramacao();
-            loadKeys();
-            createLiveNotificationPlayer(); // Chama a nova função para o vídeo
-            // Adicionar evento de tecla Enter para o input de chave
-            const keyInput = document.getElementById('key-input');
-            if (keyInput) {
-                keyInput.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        verifyKey();
-                    }
-                });
-            }
-            // Adicionar evento de tecla Enter para o input de nome
-            const userName = document.getElementById('user-name');
-            if (userName) {
-                userName.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        sendToWhatsApp();
-                    }
-                });
-            }
-
-
-
-		document.addEventListener('keydown', function(e) {
-    // Bloqueia Ctrl+U, Ctrl+S, Ctrl+C, Ctrl+V, Ctrl+A, Ctrl+P, Ctrl+T
-    if (e.ctrlKey && (
-        e.key === 'u' || 
-        e.key === 's' || 
-        e.key === 'c' || 
-        e.key === 'v' || 
-        e.key === 'a' || 
-        e.key === 'p' || 
-        e.key === 't'
-    )) {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia F12 (DevTools)
-    if (e.key === 'F12') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+I (DevTools no Chrome)
-    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+J (Console no Chrome)
-    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+C (Inspeção de elementos)
-    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Bloqueia clique com botão direito (opcional)
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
-		
-            // Adicionar evento de tecla Enter para verificação de chave de canais
-            const canaisKeyInput = document.getElementById('canais-key-input');
-            if (canaisKeyInput) {
-                canaisKeyInput.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        verificarChaveCanais();
-                    }
-                });
-            }
-            // Fechar o seletor de canais ao clicar fora dele
-            document.addEventListener('click', function(event) {
-                const selectorButton = document.getElementById('channel-selector-button');
-                const selectorMenu = document.getElementById('channel-selector-menu');
-                if (isChannelSelectorOpen && 
-                    selectorButton && selectorMenu && 
-                    !selectorButton.contains(event.target) && 
-                    !selectorMenu.contains(event.target)) {
-                    isChannelSelectorOpen = false;
-                    selectorMenu.classList.remove('active');
-                }
+            canaisData.forEach(canal => {
+                const canalItem = document.createElement('div');
+                canalItem.className = 'canal-item';
+                canalItem.innerHTML = `
+                    <img src="${canal.logo}" alt="${canal.name}">
+                    <div class="canal-info">
+                        <h3 class="canal-nome">${canal.name}</h3>
+                    </div>
+                `;
+                canalItem.onclick = () => {
+                    closeCanaisModal();
+                    selecionarCanal(canal);
+                };
+                canaisGrid.appendChild(canalItem);
             });
-        });
-    </script>
-<script>
-  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
-  let i = 0;
-
-  function digitarTexto() {
-    if (i < textoSobre.length) {
-      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
-      i++;
-      setTimeout(digitarTexto, 50);
-    }
-  }
-
-  window.onload = digitarTexto;
-</script>
-
-    <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(() => {
-      // Cria a sobreposição com a mensagem
-      const overlay = document.createElement("div");
-      overlay.id = "block-message";
-      overlay.style.position = "absolute";
-      overlay.style.top = 0;
-      overlay.style.left = 0;
-      overlay.style.width = "100%";
-      overlay.style.height = "100%";
-      overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
-      overlay.style.zIndex = 6666;
-      overlay.style.display = "flex";
-      overlay.style.flexDirection = "column";
-      overlay.style.alignItems = "center";
-      overlay.style.justifyContent = "center";
-      overlay.style.color = "white";
-      overlay.style.fontFamily = "sans-serif";
-      overlay.style.padding = "10px";
-      overlay.innerHTML = `
-        <h2 style="margin-bottom: 10px;">Atenção!</h2>
-        <p style="font-size: 18px; max-width: 400px; text-align: center;">
-          Você atravessou o portal... e agora não há mais volta.
-          Sombras sussurram seu nome. A próxima cena só começa com o seu <strong>login.</strong>.
-        </p>
-      `;
-      // Insere a sobreposição dentro da div do player
-      const playerContainer = document.querySelector('#live-player');
-      if (playerContainer) {
-        playerContainer.style.position = "relative";
-        playerContainer.appendChild(overlay);
-      }
-    }, 40000); // 40 segundos
-  });     
-</script>
-<script>
-        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
-        const audioFiles = [
-            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
-            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
-            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
-            
-        ];
+        }
 
         function playRandomAudio() {
-            const notification = document.querySelector('.notification');
+            const audioUrls = [
+                'https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3',
+                'https://www.soundjay.com/buttons/beep-01a.mp3',
+                'https://www.freesoundslibrary.com/wp-content/uploads/2020/06/scary-creak-1.mp3'
+            ];
             const audio = document.getElementById('ghostAudio');
-            
-            // Esconde a notificação
-            notification.style.display = 'none';
-            
-            // Seleciona um áudio aleatório da lista
-            const randomIndex = Math.floor(Math.random() * audioFiles.length);
-            audio.src = audioFiles[randomIndex];
-            
-            // Toca o áudio
+            audio.src = audioUrls[Math.floor(Math.random() * audioUrls.length)];
             audio.play().catch(error => {
-                console.log("Erro ao tocar áudio:", error);
+                console.error('Erro ao reproduzir áudio:', error);
+                showNotification('Erro ao reproduzir o áudio', 'error');
             });
         }
 
-        // Mostra a notificação após 1 segundo
-        setTimeout(() => {
-            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
-        }, 1000);
+        function initPusherChat() {
+            const pusher = new Pusher('YOUR_PUSHER_APP_KEY', {
+                cluster: 'YOUR_PUSHER_CLUSTER',
+                encrypted: true
+            });
+            const channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+                appendMessage(data.username, data.message, false);
+            });
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const message = chatInput.value.trim();
+                if (message) {
+                    const username = 'Usuário'; // Substituir por nome dinâmico se houver login
+                    appendMessage(username, message, true);
+                    chatInput.value = '';
+                    // Para simular envio ao Pusher sem backend, use o Debug Console do Pusher
+                    console.log('Mensagem enviada localmente:', { username, message });
+                }
+            });
+        }
+
+        function appendMessage(username, message, isUser) {
+            const messages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            messageDiv.innerHTML = `<span class="username">${username}:</span> ${message}`;
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+            if (isUser) {
+                showNotification('Mensagem enviada!', 'success');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createLiveNotificationPlayer();
+            loadProgramacao();
+            loadKeys();
+            initPusherChat();
+            document.getElementById('zoom-image-container').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('zoom-image-container').style.display = 'none';
+            }, 6000);
+            document.getElementById('texto-sobre').textContent = 'StreamXcellence é onde o horror encontra a arte. Psicologicamente inquietante, visualmente hipnótico — terror cult em sua forma mais pura.';
+        });
     </script>
 </body>
 </html>
