@@ -7,37 +7,36 @@
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
+	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
     <!-- Preconnect para melhorar o carregamento -->
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
-    <!-- Biblioteca do Pusher -->
-    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
     <style>
+        /* Estilos originais mantidos intactos */
         :root {
-            --PRIMARY-COLOR: #7367f0;
-            --PRIMARY-HOVER: #5e50ee;
-            --SECONDARY-COLOR: #0084ff;
-            --SECONDARY-HOVER: #0069d9;
-            --SUCCESS-COLOR: #28c76f;
-            --SUCCESS-HOVER: #1f9d57;
-            --DANGER-COLOR: #ea5455;
-            --DANGER-HOVER: #d43a3b;
-            --WARNING-COLOR: #ff9f43;
-            --WARNING-HOVER: #ff8510;
-            --INFO-COLOR: #00cfe8;
-            --INFO-HOVER: #00a8bd;
-            --TEXT-COLOR: #f8f8f8;
-            --TEXT-MUTED: #b4b7bd;
-            --BACKGROUND-DARK: #161d31;
-            --BACKGROUND-DARKER: #0c102a;
-            --CARD-BACKGROUND: rgba(30, 41, 59, 0.8);
-            --CARD-BACKGROUND-HOVER: rgba(40, 51, 69, 0.85);
-            --BORDER-COLOR: rgba(255, 255, 255, 0.1);
-            --GUIDE-BG: rgba(30, 41, 59, 0.95);
+            --primary-color: #7367f0;
+            --primary-hover: #5e50ee;
+            --secondary-color: #0084ff;
+            --secondary-hover: #0069d9;
+            --success-color: #28c76f;
+            --success-hover: #1f9d57;
+            --danger-color: #ea5455;
+            --danger-hover: #d43a3b;
+            --warning-color: #ff9f43;
+            --warning-hover: #ff8510;
+            --info-color: #00cfe8;
+            --info-hover: #00a8bd;
+            --text-color: #f8f8f8;
+            --text-muted: #b4b7bd;
+            --background-dark: #161d31;
+            --background-darker: #0c102a;
+            --card-background: rgba(30, 41, 59, 0.8);
+            --card-background-hover: rgba(40, 51, 69, 0.85);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --guide-bg: rgba(30, 41, 59, 0.95);
         }
 
         * {
@@ -48,18 +47,19 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--BACKGROUND-DARK);
-            color: var(--TEXT-COLOR);
+            background-color: var(--background-dark);
+            color: var(--text-color);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
             line-height: 1.6;
-            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a);
+            background-image: linear-gradient(to bottom right, #0d0d0d, #1a1a1a); /* Fundo de terror */
             position: relative;
         }
 
+        /* Névoa de terror apenas na página inicial */
         .nevoa {
             position: fixed;
             top: 0;
@@ -97,7 +97,7 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
-            filter: brightness(0.2) contrast(1.2) grayscale(0.5);
+            filter: brightness(0.2) contrast(1.2) grayscale(0.5); /* Efeito sombrio */
             transform: scale(1.1);
         }
 
@@ -114,12 +114,13 @@
             position: relative;
         }
 
+        /* Estilos de terror apenas para a página inicial */
         .login-container,
         .live-notification {
-            background: rgba(20, 20, 20, 0.9);
+            background: rgba(20, 20, 20, 0.9); /* Fundo preto opaco */
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); /* Sombra vermelha */
             text-align: center;
             flex: 1;
             animation: fadeIn 1s ease-in-out;
@@ -128,7 +129,7 @@
             align-items: center;
             min-width: 300px;
             transition: all 0.3s ease;
-            border: 2px solid rgba(139, 0, 0, 0.5);
+            border: 2px solid rgba(139, 0, 0, 0.5); /* Borda vermelho sangue */
             position: relative;
             overflow: hidden;
         }
@@ -141,7 +142,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent);
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.15), transparent); /* Efeito de sangue sutil */
             animation: pulseBlood 8s infinite;
             z-index: -1;
         }
@@ -170,8 +171,8 @@
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
-            color: #ff1a1a;
-            font-family: 'Creepster', cursive;
+            color: #ff1a1a; /* Vermelho sangue */
+            font-family: 'Creepster', cursive; /* Fonte de terror */
             font-weight: 700;
             letter-spacing: 0.5px;
             text-shadow: 2px 2px 10px rgba(255, 0, 0, 0.8);
@@ -187,7 +188,7 @@
             font-size: 1.3em;
             margin-bottom: 15px;
             color: #fff;
-            font-family: 'Nosifer', cursive;
+            font-family: 'Nosifer', cursive; /* Fonte assustadora */
             font-weight: 600;
             letter-spacing: 0.3px;
             text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
@@ -209,7 +210,7 @@
             width: 100%;
             padding: 14px;
             margin-top: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
             border-radius: 12px;
             background: rgba(30, 30, 30, 0.8);
             color: #fff;
@@ -269,7 +270,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
+            background: linear-gradient(135deg, #ff1a1a, #cc0000); /* Vermelho sangue */
             color: white;
         }
 
@@ -282,7 +283,7 @@
         .btn-secondary {
             background: rgba(40, 45, 60, 0.8);
             color: white;
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 0, 0.5); /* Borda vermelha */
         }
 
         .btn-secondary:hover {
@@ -292,12 +293,12 @@
         }
 
         .btn-info {
-            background: linear-gradient(135deg, var(--SECONDARY-COLOR), var(--SECONDARY-HOVER));
+            background: linear-gradient(135deg, var(--secondary-color), var(--secondary-hover));
             color: white;
         }
 
         .btn-info:hover {
-            background: linear-gradient(135deg, var(--SECONDARY-HOVER), var(--SECONDARY-COLOR));
+            background: linear-gradient(135deg, var(--secondary-hover), var(--secondary-color));
             box-shadow: 0 8px 15px rgba(0, 132, 255, 0.3);
             transform: translateY(-2px);
         }
@@ -307,7 +308,7 @@
         }
 
         .error-message {
-            color: var(--DANGER-COLOR);
+            color: var(--danger-color);
             font-size: 0.9em;
             margin-top: 10px;
             animation: shake 0.3s;
@@ -316,7 +317,7 @@
 
         #guide-container {
             width: 100%;
-            background: rgba(20, 20, 20, 0.95);
+            background: rgba(20, 20, 20, 0.95); /* Fundo escuro */
             color: #fff;
             padding: 15px 0;
             margin-bottom: 25px;
@@ -355,6 +356,7 @@
             line-height: 1.6;
         }
 
+        /* Estilos originais mantidos para os outros elementos */
         #zoom-image-container {
             display: none;
             position: fixed;
@@ -362,7 +364,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--BACKGROUND-DARKER);
+            background-color: var(--background-darker);
             z-index: 10;
             justify-content: center;
             align-items: center;
@@ -375,27 +377,27 @@
         }
 
         .live-notification .player {
-            width: 100%;
-            height: 0;
-            padding-bottom: 56.25%;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            pointer-events: none;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--BORDER-COLOR);
-        }
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* Mantém proporção 16:9 */
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: none; /* Impede qualquer interação */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+}
 
-        .live-notification .player video#live-video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-        }
+.live-notification .player video#live-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Reforça a desativação de cliques */
+}
 
         #player-container {
             display: none;
@@ -405,13 +407,12 @@
             border-radius: 0;
             overflow: hidden;
             box-shadow: none;
-            background: linear-gradient(45deg, var(--BACKGROUND-DARKER), var(--BACKGROUND-DARK));
+            background: linear-gradient(45deg, var(--background-darker), var(--background-dark));
             padding: 0;
             position: fixed;
             top: 0;
             left: 0;
             z-index: 2;
-            flex-direction: row;
         }
 
         #player-container.active {
@@ -419,8 +420,7 @@
         }
 
         .player {
-            flex: 1;
-            width: calc(100% - 300px);
+            width: 100%;
             height: 100%;
             position: relative;
             overflow: hidden;
@@ -450,7 +450,7 @@
             transition: opacity 0.3s;
             z-index: 1000;
             backdrop-filter: blur(5px);
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         #player-container:hover .channel-info {
@@ -471,7 +471,7 @@
         }
 
         .live-indicator {
-            background-color: var(--DANGER-COLOR);
+            background-color: var(--danger-color);
             color: white;
             padding: 4px 10px;
             border-radius: 6px;
@@ -552,7 +552,7 @@
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            background: var(--PRIMARY-COLOR);
+            background: var(--primary-color);
             cursor: pointer;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
@@ -561,7 +561,7 @@
             width: 15px;
             height: 15px;
             border-radius: 50%;
-            background: var(--PRIMARY-COLOR);
+            background: var(--primary-color);
             cursor: pointer;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
@@ -575,7 +575,7 @@
             padding: 15px;
             display: none;
             backdrop-filter: blur(5px);
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
 
@@ -626,7 +626,7 @@
             width: 90%;
             max-width: 500px;
             animation: fadeIn 0.4s ease-out;
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         #programacao-modal-content {
@@ -642,12 +642,12 @@
             text-align: left;
             overflow-y: auto;
             max-height: 80vh;
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         .modal-content h2,
         #programacao-modal-content h2 {
-            color: var(--PRIMARY-COLOR);
+            color: var(--primary-color);
             font-size: 1.6em;
             font-weight: 700;
             margin-bottom: 20px;
@@ -657,12 +657,12 @@
         }
 
         #programacao-modal-content h2 {
-            color: var(--WARNING-COLOR);
+            color: var(--warning-color);
             text-align: center;
         }
 
         .modal-content p {
-            color: var(--TEXT-MUTED);
+            color: var(--text-muted);
             font-size: 1em;
             line-height: 1.6;
             margin-bottom: 20px;
@@ -674,7 +674,7 @@
             top: 20px;
             right: 25px;
             font-size: 26px;
-            color: var(--TEXT-MUTED);
+            color: var(--text-muted);
             cursor: pointer;
             transition: color 0.3s ease, transform 0.2s ease;
             width: auto;
@@ -697,7 +697,7 @@
             background: rgba(40, 50, 70, 0.5);
             padding: 15px;
             border-radius: 12px;
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         .email-container p {
@@ -710,7 +710,7 @@
             padding: 10px 15px;
             border: none;
             border-radius: 8px;
-            background-color: var(--SUCCESS-COLOR);
+            background-color: var(--success-color);
             color: white;
             font-size: 0.9em;
             cursor: pointer;
@@ -719,7 +719,7 @@
         }
 
         #copy-email:hover {
-            background-color: var(--SUCCESS-HOVER);
+            background-color: var(--success-hover);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(40, 199, 111, 0.3);
         }
@@ -761,11 +761,11 @@
 
         #programacao-lista p {
             margin-bottom: 10px;
-            color: var(--TEXT-MUTED);
+            color: var(--text-muted);
         }
 
         #programacao-lista p strong {
-            color: var(--PRIMARY-COLOR);
+            color: var(--primary-color);
             font-weight: 500;
         }
 
@@ -786,19 +786,19 @@
             animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
             max-width: 350px;
             backdrop-filter: blur(5px);
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         .notification.success {
-            border-left: 4px solid var(--SUCCESS-COLOR);
+            border-left: 4px solid var(--success-color);
         }
 
         .notification.error {
-            border-left: 4px solid var(--DANGER-COLOR);
+            border-left: 4px solid var(--danger-color);
         }
 
         .notification.info {
-            border-left: 4px solid var(--INFO-COLOR);
+            border-left: 4px solid var(--info-color);
         }
 
         #canais-modal-content {
@@ -814,7 +814,7 @@
             text-align: center;
             overflow-y: auto;
             max-height: 80vh;
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         #canais-grid {
@@ -831,7 +831,7 @@
             overflow: hidden;
             background: rgba(40, 50, 70, 0.5);
             position: relative;
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         .canal-item:hover {
@@ -903,7 +903,7 @@
             transition: all 0.3s;
             opacity: 0;
             backdrop-filter: blur(5px);
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
@@ -931,7 +931,7 @@
             z-index: 1000;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--BORDER-COLOR);
+            border: 1px solid var(--border-color);
         }
 
         #channel-selector-menu.active {
@@ -980,116 +980,19 @@
         }
 
         .channel-search:focus {
-            border-color: var(--PRIMARY-COLOR);
+            border-color: var(--primary-color);
             box-shadow: 0 0 10px rgba(115, 103, 240, 0.3);
             outline: none;
         }
 
         .channel-category {
             font-weight: 600;
-            color: var(--PRIMARY-COLOR);
+            color: var(--primary-color);
             padding: 8px 0;
             margin: 15px 0 8px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             letter-spacing: 0.5px;
             font-size: 14px;
-        }
-
-        /* Estilos do Chat */
-        .chat-container {
-            width: 300px;
-            height: 100%;
-            background: rgba(20, 20, 20, 0.95);
-            border-left: 1px solid rgba(255, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            right: 0;
-            top: 0;
-            z-index: 1000;
-            box-shadow: -5px 0 15px rgba(255, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .chat-header {
-            padding: 15px;
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
-            color: white;
-            font-family: 'Creepster', cursive;
-            font-size: 1.5em;
-            text-align: center;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: rgba(30, 30, 30, 0.8);
-            color: #fff;
-            font-size: 0.9em;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .chat-message {
-            background: rgba(40, 40, 40, 0.7);
-            padding: 10px;
-            border-radius: 8px;
-            border-left: 3px solid #ff1a1a;
-            animation: fadeIn 0.5s ease;
-            word-wrap: break-word;
-        }
-
-        .chat-message .username {
-            color: #ff1a1a;
-            font-weight: 600;
-            margin-right: 5px;
-        }
-
-        .chat-input-form {
-            display: flex;
-            padding: 15px;
-            background: rgba(20, 20, 20, 0.95);
-            border-top: 1px solid rgba(255, 0, 0, 0.5);
-        }
-
-        .chat-input-form input {
-            flex: 1;
-            margin-right: 10px;
-            padding: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5);
-            background: rgba(30, 30, 30, 0.8);
-            color: #fff;
-            border-radius: 8px;
-            font-size: 0.9em;
-        }
-
-        .chat-input-form button {
-            padding: 10px 20px;
-            font-size: 0.9em;
-        }
-
-        .chat-container:hover {
-            box-shadow: -10px 0 25px rgba(255, 0, 0, 0.5);
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: rgba(20, 20, 20, 0.8);
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #ff1a1a;
-            border-radius: 4px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: #cc0000;
         }
 
         @keyframes slideIn {
@@ -1139,25 +1042,13 @@
             width: 80px;
             height: 80px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5)); /* Sombra vermelha */
             animation: pulse 2s infinite alternate;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); opacity: 1; }
             100% { transform: scale(1.05); opacity: 0.9; }
-        }
-
-        .notification-message {
-            position: fixed;
-            top: -100px;
-            background: #ff4444;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 5px;
-            cursor: pointer;
-            animation: slideIn 1s ease forwards;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
 
         @media (max-width: 768px) {
@@ -1217,29 +1108,6 @@
 
             .email-container p {
                 margin: 0 0 10px 0;
-            }
-
-            #player-container {
-                flex-direction: column;
-            }
-
-            .player {
-                width: 100%;
-            }
-
-            .chat-container {
-                width: 100%;
-                height: 50%;
-                position: fixed;
-                bottom: 0;
-                right: 0;
-                top: auto;
-                border-left: none;
-                border-top: 1px solid rgba(255, 0, 0, 0.5);
-            }
-
-            .chat-messages {
-                max-height: 200px;
             }
         }
 
@@ -1304,9 +1172,64 @@
                 height: 60px;
             }
         }
+		
+		.live-notification .player {
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    pointer-events: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.live-notification .player video#live-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+
+display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+.notification {
+            position: fixed;
+            top: -100px;
+            background: #ff4444;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            animation: slideIn 1s ease forwards;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        @keyframes slideIn {
+            from {
+                top: -100px;
+            }
+            to {
+                top: 20px;
+            }
+        }
     </style>
 </head>
 <body>
+	
     <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
@@ -1330,29 +1253,31 @@
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-            <div class="notification-message" onclick="playRandomAudio()">📞 Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-            <audio id="ghostAudio"></audio>
+			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
+    <audio id="ghostAudio"></audio>
         </section>
 
-        <section class="live-notification" id="live-notification">
-            <div id="sobre">
-                <h3>Sobre o StreamXcellence</h3>
-                <p id="texto-sobre"></p>
-            </div>
-            <br><br>
-            <div id="guide-container" role="marquee">
-                <div class="scrolling-text" id="scrolling-text">
-                    <span id="guide-text">Carregando guia...</span>
-                    <span id="guide-text-duplicate">Carregando guia...</span>
-                </div>
-            </div>
-            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-                <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
-                    <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
-                    Seu navegador não suporta o elemento de vídeo.
-                </video>
-            </div>
-        </section>
+<section class="live-notification" id="live-notification">
+    <div id="sobre">
+        <h3>Sobre o StreamXcellence</h3>
+        <p id="texto-sobre"></p>
+    </div>
+    <br>	
+    <br>
+    <div id="guide-container" role="marquee">
+        <div class="scrolling-text" id="scrolling-text">
+            <span id="guide-text">Carregando guia...</span>
+            <span id="guide-text-duplicate">Carregando guia...</span>
+        </div>
+    </div>
+    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
+        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
+            <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+    </div>
+</section>
+
     </main>
 
     <div id="player-container" aria-live="polite">
@@ -1379,14 +1304,6 @@
                 <button id="quality-btn" class="control-btn">⚙️</button>
                 <button id="fullscreen-btn" class="control-btn">⛶</button>
             </div>
-        </div>
-        <div class="chat-container">
-            <div class="chat-header">Chat ao Vivo</div>
-            <div class="chat-messages" id="chat-messages"></div>
-            <form class="chat-input-form" id="chat-form">
-                <input type="text" id="chat-input" placeholder="Digite sua mensagem..." aria-label="Enviar mensagem no chat" autocomplete="off">
-                <button type="submit" class="btn-primary">Enviar</button>
-            </form>
         </div>
     </div>
 
@@ -1688,28 +1605,29 @@
             }
         }
 
-        function createLiveNotificationPlayer() {
-            const liveVideo = document.getElementById('live-video');
-            if (liveVideo) {
-                liveVideo.autoplay = true;
-                liveVideo.loop = true;
+    function createLiveNotificationPlayer() {
+    const liveVideo = document.getElementById('live-video');
+    if (liveVideo) {
+        liveVideo.autoplay = true; // Garante reprodução automática
+        liveVideo.loop = true; // Mantém o loop
+        liveVideo.muted = true; // Garante que o vídeo esteja mudo
+        liveVideo.controls = false; // Remove controles
+        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
+        liveVideo.volume = 0; // Define volume como 0 por segurança
+        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
+        liveVideo.addEventListener('error', (e) => {
+            console.error('Erro ao carregar o vídeo ao vivo:', e);
+            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+        });
+        // Garante que o vídeo permaneça mudo mesmo após eventos
+        liveVideo.addEventListener('volumechange', () => {
+            if (!liveVideo.muted) {
                 liveVideo.muted = true;
-                liveVideo.controls = false;
-                liveVideo.playsinline = true;
                 liveVideo.volume = 0;
-                playVideo(liveVideo);
-                liveVideo.addEventListener('error', (e) => {
-                    console.error('Erro ao carregar o vídeo ao vivo:', e);
-                    showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-                });
-                liveVideo.addEventListener('volumechange', () => {
-                    if (!liveVideo.muted) {
-                        liveVideo.muted = true;
-                        liveVideo.volume = 0;
-                    }
-                });
             }
-        }
+        });
+    }
+}
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -2019,7 +1937,7 @@
         }
 
         function atualizarListaCanaisSeletor(canais) {
-                     const channelsList = document.getElementById('channels-list');
+            const channelsList = document.getElementById('channels-list');
             if (canais.length === 0) {
                 channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
                 return;
@@ -2127,64 +2045,6 @@
                     showNotification("Erro ao carregar os canais", "error");
                 });
         }
-
-
-function playRandomAudio() {
-        const audioFiles = [
-            'https://www.myinstants.com/media/sounds/discord-notification.mp3',
-            'https://www.myinstants.com/media/sounds/whatsapp-notification.mp3',
-            'https://www.myinstants.com/media/sounds/telegram-notification.mp3'
-        ];
-        const randomAudio = audioFiles[Math.floor(Math.random() * audioFiles.length)];
-        const audio = document.getElementById('ghostAudio');
-        audio.src = randomAudio;
-        audio.play().catch(error => {
-            console.error('Erro ao reproduzir áudio:', error);
-            showNotification('Erro ao reproduzir mensagem de voz', 'error');
-        });
-    }
-
-    // Configuração do Pusher para o Chat
-    Pusher.logToConsole = true; // Ativar logs para depuração (remova em produção)
-
-    const pusher = new Pusher('4dfd23d98c17be4534f7', {
-        cluster: 'sa1'
-    });
-
-    const channel = pusher.subscribe('my-channel');
-    channel.bind('my-event', function(data) {
-        displayChatMessage(data);
-    });
-
-    // Exibir mensagens no chat
-    function displayChatMessage(data) {
-        const chatMessages = document.getElementById('chat-messages');
-        const messageElement = document.createElement('div');
-        messageElement.className = 'chat-message';
-        messageElement.innerHTML = `<span class="username">${data.username || 'Anônimo'}:</span> ${data.message}`;
-        chatMessages.appendChild(messageElement);
-        if (chatMessages.children.length > 100) {
-            chatMessages.removeChild(chatMessages.firstChild); // Limitar a 100 mensagens
-        }
-        chatMessages.scrollTop = chatMessages.scrollHeight; // Rolagem automática
-    }
-
-    // Simular envio de mensagens localmente
-    document.getElementById('chat-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const input = document.getElementById('chat-input');
-        const message = input.value.trim();
-        if (message) {
-            const data = {
-                username: 'Usuário', // Nome fixo, pode ser dinâmico com autenticação futura
-                message: message
-            };
-            displayChatMessage(data); // Adicionar mensagem localmente
-            input.value = ''; // Limpar o campo
-            showNotification('Mensagem enviada!', 'success');
-            // Nota: Para mensagens serem vistas por outros usuários, você precisa disparar um evento no Pusher via backend ou painel do Pusher
-        }
-    });
 
         function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
             console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
