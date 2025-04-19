@@ -2128,6 +2128,64 @@
                 });
         }
 
+
+function playRandomAudio() {
+        const audioFiles = [
+            'https://www.myinstants.com/media/sounds/discord-notification.mp3',
+            'https://www.myinstants.com/media/sounds/whatsapp-notification.mp3',
+            'https://www.myinstants.com/media/sounds/telegram-notification.mp3'
+        ];
+        const randomAudio = audioFiles[Math.floor(Math.random() * audioFiles.length)];
+        const audio = document.getElementById('ghostAudio');
+        audio.src = randomAudio;
+        audio.play().catch(error => {
+            console.error('Erro ao reproduzir áudio:', error);
+            showNotification('Erro ao reproduzir mensagem de voz', 'error');
+        });
+    }
+
+    // Configuração do Pusher para o Chat
+    Pusher.logToConsole = true; // Ativar logs para depuração (remova em produção)
+
+    const pusher = new Pusher('4dfd23d98c17be4534f7', {
+        cluster: 'sa1'
+    });
+
+    const channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+        displayChatMessage(data);
+    });
+
+    // Exibir mensagens no chat
+    function displayChatMessage(data) {
+        const chatMessages = document.getElementById('chat-messages');
+        const messageElement = document.createElement('div');
+        messageElement.className = 'chat-message';
+        messageElement.innerHTML = `<span class="username">${data.username || 'Anônimo'}:</span> ${data.message}`;
+        chatMessages.appendChild(messageElement);
+        if (chatMessages.children.length > 100) {
+            chatMessages.removeChild(chatMessages.firstChild); // Limitar a 100 mensagens
+        }
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Rolagem automática
+    }
+
+    // Simular envio de mensagens localmente
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        if (message) {
+            const data = {
+                username: 'Usuário', // Nome fixo, pode ser dinâmico com autenticação futura
+                message: message
+            };
+            displayChatMessage(data); // Adicionar mensagem localmente
+            input.value = ''; // Limpar o campo
+            showNotification('Mensagem enviada!', 'success');
+            // Nota: Para mensagens serem vistas por outros usuários, você precisa disparar um evento no Pusher via backend ou painel do Pusher
+        }
+    });
+
         function reproduzirCanal(streamUrl, nomeCanal, logoUrl) {
             console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
             closeCanaisModal();
