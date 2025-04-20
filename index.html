@@ -8,309 +8,6 @@
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
-    <!-- Preconnect para melhorar o carregamento -->
-    <link rel="preconnect" href="https://i.imgur.com">
-    <link rel="preconnect" href="https://player.twitch.tv">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
-    <!-- Adicionar PeerJS -->
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-    <style>
-        /* Apenas CSS alterado ou adicionado para o chat e ajustes no player */
-        :root {
-            --primary-color: #7367f0;
-            --primary-hover: #5e50ee;
-            --text-color: #f8f8f8;
-            --text-muted: #b4b7bd;
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        #player-container {
-            flex-direction: row; /* Modificado para suportar chat ao lado */
-        }
-
-        /* Novos estilos para o chat */
-        .chat-container {
-            width: 300px;
-            height: 100%;
-            background: rgba(20, 25, 40, 0.95);
-            border-left: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease;
-            transform: translateX(100%);
-            position: fixed;
-            right: 0;
-            top: 0;
-            z-index: 1001;
-            backdrop-filter: blur(10px);
-        }
-
-        .chat-container.active {
-            transform: translateX(0);
-        }
-
-        .chat-header {
-            padding: 15px;
-            background: rgba(15, 23, 42, 0.8);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header h3 {
-            color: var(--text-color);
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .chat-message {
-            background: rgba(40, 50, 70, 0.5);
-            padding: 10px;
-            border-radius: 8px;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-
-        .chat-message.self {
-            background: rgba(115, 103, 240, 0.3);
-            align-self: flex-end;
-        }
-
-        .chat-message span {
-            font-size: 12px;
-            color: var(--text-muted);
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .chat-input-container {
-            padding: 15px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            background: rgba(40, 50, 70, 0.5);
-            color: white;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .chat-input:focus {
-            border-color: var(--primary-color);
-        }
-
-        .chat-send-btn {
-            padding: 10px 15px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .chat-send-btn:hover {
-            background: var(--primary-hover);
-        }
-
-        /* Ajustes no player para acomodar o chat */
-        #player-container.with-chat .player {
-            width: calc(100% - 300px);
-        }
-
-        @media (max-width: 768px) {
-            .chat-container {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            #player-container.with-chat .player {
-                width: 100%;
-            }
-
-            .chat-container.active {
-                transform: translateX(0);
-            }
-        }
-
-        @media (max-width: 576px) {
-            .chat-container {
-                width: 100%;
-                max-width: none;
-            }
-
-            .chat-header h3 {
-                font-size: 14px;
-            }
-
-            .chat-message {
-                max-width: 90%;
-            }
-
-            .chat-input {
-                font-size: 12px;
-            }
-
-            .chat-send-btn {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="nevoa"></div>
-    <div id="alerta-visual"></div>
-    <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
-    <div id="zoom-image-container">
-        <img id="zoom-image" src="https://i.imgur.com/QsrJDbX.png" alt="Imagem de boas-vindas">
-    </div>
-    <div id="notification-container"></div>
-
-    <main class="container">
-        <section class="login-container" id="login-container">
-            <img src="https://i.imgur.com/QsrJDbX.png" alt="StreamXcellence Logo" class="app-logo">
-            <h1>StreamXcellence</h1>
-            <p class="subtitle">Digite a chave de acesso para entrar na melhor experiência de streaming</p>
-            <div class="input-group">
-                <label for="key-input" class="sr-only">Chave de acesso</label>
-                <input type="text" id="key-input" placeholder="Digite a chave de acesso" aria-label="Chave de acesso" autocomplete="off"/>
-            </div>
-            <div class="button-group">
-                <button type="button" onclick="verifyKey()" class="btn-primary">Entrar</button>
-                <button type="button" onclick="openModal()" class="btn-secondary">Obter chave de acesso</button>
-                <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
-            </div>
-            <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
-            <div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
-            <audio id="ghostAudio"></audio>
-        </section>
-
-        <section class="live-notification" id="live-notification">
-            <div id="sobre">
-                <h3>Sobre o StreamXcellence</h3>
-                <p id="texto-sobre"></p>
-            </div>
-            <br><br>
-            <div id="guide-container" role="marquee">
-                <div class="scrolling-text" id="scrolling-text">
-                    <span id="guide-text">Carregando guia...</span>
-                    <span id="guide-text-duplicate">Carregando guia...</span>
-                </div>
-            </div>
-            <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-                <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
-                    <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
-                    Seu navegador não suporta o elemento de vídeo.
-                </video>
-            </div>
-        </section>
-    </main>
-
-    <div id="player-container" aria-live="polite">
-        <div class="player twitch-player" id="player">
-            <div id="twitch-embed"></div>
-        </div>
-        <div class="channel-info">
-            <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
-            <div>
-                <div class="channel-name">StreamXcellence</div>
-                <span class="live-indicator">AO VIVO</span>
-            </div>
-        </div>
-        <div id="quality-menu" class="quality-menu"></div>
-        <div class="player-controls">
-            <div class="controls-left">
-                <button id="play-pause-btn" class="control-btn">⏸️</button>
-                <div class="volume-container">
-                    <button id="mute-btn" class="control-btn">🔊</button>
-                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
-                </div>
-            </div>
-            <div class="controls-right">
-                <button id="quality-btn" class="control-btn">⚙️</button>
-                <button id="chat-toggle-btn" class="control-btn">💬</button>
-                <button id="fullscreen-btn" class="control-btn">⛶</button>
-            </div>
-        </div>
-        <!-- Novo container para o chat -->
-        <div id="chat-container" class="chat-container">
-            <div class="chat-header">
-                <h3>Chat Geral</h3>
-                <button class="control-btn" onclick="toggleChat()">✕</button>
-            </div>
-            <div class="chat-messages" id="chat-messages"></div>
-            <div class="chat-input-container">
-                <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem">
-                <button class="chat-send-btn" onclick="sendMessage()">Enviar</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()" aria-label="Fechar">×</span>
-            <h2 id="modal-title">Adquirir Chave para Acesso</h2>
-            <p>Para desfrutar do melhor conteúdo StreamXcellence, adquira sua chave de acesso. Siga as instruções abaixo e envie o comprovante para liberação imediata.</p>
-            <p><strong>Valor Simbólico: R$ 1,99</strong></p>
-            <p><strong>Chave Pix, E-mail</strong></p>
-            <div class="email-container">
-                <p id="pix-email">lourimarcos@outlook.com</p>
-                <button id="copy-email" onclick="copyEmail()" aria-label="Copiar email">Copiar</button>
-            </div>
-            <p>A chave tem duração de <strong>30 dias</strong></p>
-            <div class="input-group">
-                <label for="user-name" class="sr-only">Seu Nome</label>
-                <input type="text" id="user-name" placeholder="Seu Nome" aria-required="true" />
-            </div>
-            <button type="button" onclick="sendToWhatsApp()" class="btn-primary">Enviar</button>
-        </div>
-    </div>
-
-    <div id="programacao-modal" class="modal" role="dialog" aria-labelledby="programacao-title" aria-hidden="true">
-        <div id="programacao-modal-content">
-            <span class="close-modal" onclick="closeProgramacaoModal()" aria-label="Fechar">×</span>
-            <h2 id="programacao-title">StreamXcellence �
-
-System: Para implementar o chat P2P ao lado direito do player principal, super responsivo, com um botão nos controles do player para abrir e fechar o chat, conforme solicitado, fornecerei o código atualizado com apenas o CSS que foi alterado ou adicionado para o chat e os ajustes relacionados no layout do player. O HTML e o JavaScript serão fornecidos completos, mantendo a estrutura do seu projeto original e integrando o chat P2P usando **PeerJS**. Este código é uma continuação do artefato anterior (ID: `0029b5a6-9ef4-45aa-9a76-74eaa718c272`), utilizando o mesmo `artifact_id` para refletir a atualização.
-
-### Mudanças Realizadas
-- **HTML**: Adicionado o container do chat (`chat-container`) dentro do `#player-container`, com cabeçalho, área de mensagens e input para envio de mensagens. Um botão de toggle (`chat-toggle-btn`) foi incluído nos controles do player.
-- **CSS**: Incluído apenas o CSS novo ou modificado para o chat (`chat-container`, `chat-header`, `chat-messages`, `chat-message`, `chat-input-container`, etc.) e ajustes no `#player-container` para suportar o chat ao lado, com responsividade para telas menores.
-- **JavaScript**: Adicionada lógica para inicializar o PeerJS, gerenciar conexões P2P, enviar/receber mensagens e togglear o chat. A função `initChat` estabelece a conexão P2P, e as funções `sendMessage` e `receiveMessage` gerenciam o chat geral.
-- **Responsividade**: O chat é fixado à direita do player em telas grandes e ajusta-se para ocupar a largura total em dispositivos móveis, com transições suaves.
-
-### Código Atualizado
-
-<xaiArtifact artifact_id="2d8593e0-624d-4ffe-9dc1-a5757f2af8c2" artifact_version_id="00edaf87-01fc-4ca2-8f88-2766cf4b9030" title="index.html" contentType="text/html">
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="streamXcellence é onde o horror encontra a arte. Psicologicamente inquietante, visualmente hipnótico — terror cult em sua forma mais pura.">
-    <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
-    <meta name="author" content="StreamXcellence">
-    <title>StreamXcellence 📺</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -318,8 +15,8 @@ System: Para implementar o chat P2P ao lado direito do player principal, super r
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        
-		/* Estilos originais mantidos intactos */
+	
+	/* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -1530,8 +1227,8 @@ display: flex;
                 top: 20px;
             }
         }
-		
-		/* Apenas CSS alterado ou adicionado para o chat e ajustes no player */
+	
+        /* Apenas CSS alterado ou adicionado para o chat */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -1565,18 +1262,54 @@ display: flex;
         }
 
         .chat-header {
-            padding: 15px;
+            padding: 10px;
             background: rgba(15, 23, 42, 0.8);
             border-bottom: 1px solid var(--border-color);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .chat-header h3 {
             color: var(--text-color);
             font-size: 16px;
             font-weight: 600;
+            margin: 0;
+        }
+
+        .chat-peer-input {
+            display: flex;
+            gap: 5px;
+        }
+
+        .chat-peer-id {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(40, 50, 70, 0.5);
+            color: white;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .chat-peer-id:focus {
+            border-color: var(--primary-color);
+        }
+
+        .chat-connect-btn {
+            padding: 8px 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .chat-connect-btn:hover {
+            background: var(--primary-hover);
         }
 
         .chat-messages {
@@ -1657,10 +1390,6 @@ display: flex;
             #player-container.with-chat .player {
                 width: 100%;
             }
-
-            .chat-container.active {
-                transform: translateX(0);
-            }
         }
 
         @media (max-width: 576px) {
@@ -1671,6 +1400,11 @@ display: flex;
 
             .chat-header h3 {
                 font-size: 14px;
+            }
+
+            .chat-peer-id,
+            .chat-connect-btn {
+                font-size: 11px;
             }
 
             .chat-message {
@@ -1765,7 +1499,11 @@ display: flex;
         </div>
         <div id="chat-container" class="chat-container">
             <div class="chat-header">
-                <h3>Chat Geral</h3>
+                <h3>Chat Geral (Seu ID: <span id="peer-id">Carregando...</span>)</h3>
+                <div class="chat-peer-input">
+                    <input type="text" id="peer-id-input" class="chat-peer-id" placeholder="ID do outro usuário" aria-label="ID do outro usuário">
+                    <button class="chat-connect-btn" onclick="connectToPeer()">Conectar</button>
+                </div>
                 <button class="control-btn" onclick="toggleChat()">✕</button>
             </div>
             <div class="chat-messages" id="chat-messages"></div>
@@ -2373,40 +2111,69 @@ display: flex;
         function initChat() {
             peer = new Peer();
             peer.on('open', (id) => {
-                console.log('Peer ID:', id);
-                connectToPeers();
+                console.log('Peer ID gerado:', id);
+                document.getElementById('peer-id').textContent = id;
+                showNotification('Seu ID de chat: ' + id, 'info');
             });
             peer.on('connection', (conn) => {
+                console.log('Nova conexão recebida de:', conn.peer);
                 connections.push(conn);
-                conn.on('data', (data) => receiveMessage(data));
+                conn.on('data', (data) => {
+                    console.log('Mensagem recebida:', data);
+                    receiveMessage(data);
+                });
+                conn.on('open', () => {
+                    console.log('Conexão estabelecida com:', conn.peer);
+                    showNotification('Conectado a ' + conn.peer, 'success');
+                });
                 conn.on('close', () => {
+                    console.log('Conexão fechada com:', conn.peer);
                     connections = connections.filter(c => c !== conn);
+                    showNotification('Desconectado de ' + conn.peer, 'info');
+                });
+                conn.on('error', (err) => {
+                    console.error('Erro na conexão com', conn.peer, ':', err);
+                    showNotification('Erro na conexão com ' + conn.peer, 'error');
                 });
             });
             peer.on('error', (err) => {
-                console.error('PeerJS error:', err);
-                showNotification('Erro na conexão do chat', 'error');
+                console.error('Erro no PeerJS:', err);
+                showNotification('Erro na conexão do chat: ' + err.type, 'error');
             });
             document.getElementById('chat-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
         }
 
-        function connectToPeers() {
-            // Simulação de conexão a outros peers (em produção, usar um servidor de sinalização)
-            const knownPeers = ['peer1', 'peer2']; // Substituir por IDs reais ou lógica de descoberta
-            knownPeers.forEach(peerId => {
-                if (peerId !== peer.id) {
-                    const conn = peer.connect(peerId);
-                    conn.on('open', () => {
-                        connections.push(conn);
-                        showNotification('Conectado a outro usuário', 'info');
-                    });
-                    conn.on('data', (data) => receiveMessage(data));
-                    conn.on('close', () => {
-                        connections = connections.filter(c => c !== conn);
-                    });
-                }
+        function connectToPeer() {
+            const peerId = document.getElementById('peer-id-input').value.trim();
+            if (!peerId) {
+                showNotification('Digite o ID do outro usuário', 'error');
+                return;
+            }
+            if (peerId === peer.id) {
+                showNotification('Você não pode conectar ao seu próprio ID', 'error');
+                return;
+            }
+            const conn = peer.connect(peerId);
+            conn.on('open', () => {
+                console.log('Conexão estabelecida com:', peerId);
+                connections.push(conn);
+                showNotification('Conectado a ' + peerId, 'success');
+                document.getElementById('peer-id-input').value = '';
+            });
+            conn.on('data', (data) => {
+                console.log('Mensagem recebida:', data);
+                receiveMessage(data);
+            });
+            conn.on('close', () => {
+                console.log('Conexão fechada com:', peerId);
+                connections = connections.filter(c => c !== conn);
+                showNotification('Desconectado de ' + peerId, 'info');
+            });
+            conn.on('error', (err) => {
+                console.error('Erro na conexão com', peerId, ':', err);
+                showNotification('Erro ao conectar a ' + peerId, 'error');
             });
         }
 
@@ -2415,7 +2182,15 @@ display: flex;
             const message = input.value.trim();
             if (!message) return;
             const data = { username, message, timestamp: new Date().toLocaleTimeString() };
-            connections.forEach(conn => conn.send(data));
+            console.log('Enviando mensagem:', data);
+            connections.forEach(conn => {
+                if (conn.open) {
+                    conn.send(data);
+                    console.log('Mensagem enviada para:', conn.peer);
+                } else {
+                    console.log('Conexão fechada com:', conn.peer);
+                }
+            });
             receiveMessage(data, true);
             input.value = '';
         }
