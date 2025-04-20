@@ -14,11 +14,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (only app and database needed) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
     <style>
+	
 	/* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
@@ -1542,28 +1542,6 @@ display: flex;
         </div>
     </div>
 
-    <div id="login-modal" class="modal" role="dialog" aria-labelledby="login-title" aria-hidden="true">
-        <div class="modal-content">
-            <span class="close" onclick="closeLoginModal()" aria-label="Fechar">×</span>
-            <h2 id="login-title">Login</h2>
-            <form id="login-form">
-                <div class="input-group">
-                    <label for="login-email" class="sr-only">Email</label>
-                    <input type="email" id="login-email" placeholder="Email" required aria-label="Email" autocomplete="email">
-                </div>
-                <div class="input-group">
-                    <label for="login-password" class="sr-only">Senha</label>
-                    <input type="password" id="login-password" placeholder="Senha" required aria-label="Senha" autocomplete="current-password">
-                </div>
-                <div class="error-message" id="login-error-message" role="alert" aria-live="assertive"></div>
-                <div class="button-group">
-                    <button type="button" onclick="loginUser()" class="btn-primary">Entrar</button>
-                    <button type="button" onclick="registerUser()" class="btn-secondary">Criar Conta</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
@@ -1580,10 +1558,9 @@ display: flex;
         };
 
         // Initialize Firebase with error handling
-        let auth, database;
+        let database;
         try {
             firebase.initializeApp(firebaseConfig);
-            auth = firebase.auth();
             database = firebase.database();
         } catch (error) {
             console.error('Erro ao inicializar Firebase:', error);
@@ -1602,7 +1579,6 @@ display: flex;
         let canaisData = [];
         let isChannelSelectorOpen = false;
         let isChatOpen = false;
-        let currentUser = null;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -1936,28 +1912,23 @@ display: flex;
             if (validKeys.includes(keyValue) || keyValue === "admin") {
                 keyVerified = true;
                 currentKey = keyValue;
-                if (currentUser) {
-                    const alertaVisual = document.getElementById("alerta-visual");
-                    const loginContainer = document.getElementById('login-container');
-                    const zoomImageContainer = document.getElementById('zoom-image-container');
-                    const liveNotification = document.getElementById('live-notification');
-                    const playerContainer = document.getElementById('player-container');
-                    if (alertaVisual && loginContainer && zoomImageContainer && liveNotification && playerContainer) {
-                        alertaVisual.style.opacity = "1";
-                        loginContainer.style.display = 'none';
-                        zoomImageContainer.style.display = 'flex';
-                        setTimeout(() => {
-                            zoomImageContainer.style.display = 'none';
-                            playerContainer.style.display = 'flex';
-                            createTwitchPlayer();
-                            loadMessages();
-                        }, 2000);
-                        liveNotification.style.display = 'none';
-                        showWelcomeMessage();
-                    }
-                } else {
-                    errorMessage.textContent = "Por favor, faça login para continuar.";
-                    openLoginModal();
+                const alertaVisual = document.getElementById("alerta-visual");
+                const loginContainer = document.getElementById('login-container');
+                const zoomImageContainer = document.getElementById('zoom-image-container');
+                const liveNotification = document.getElementById('live-notification');
+                const playerContainer = document.getElementById('player-container');
+                if (alertaVisual && loginContainer && zoomImageContainer && liveNotification && playerContainer) {
+                    alertaVisual.style.opacity = "1";
+                    loginContainer.style.display = 'none';
+                    zoomImageContainer.style.display = 'flex';
+                    setTimeout(() => {
+                        zoomImageContainer.style.display = 'none';
+                        playerContainer.style.display = 'flex';
+                        createTwitchPlayer();
+                        loadMessages();
+                    }, 2000);
+                    liveNotification.style.display = 'none';
+                    showWelcomeMessage();
                 }
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
@@ -2456,7 +2427,7 @@ display: flex;
             setTimeout(carregarCanaisSeletor, 500);
             initCustomControls();
             initChatControls();
-            if (currentUser) loadMessages();
+            loadMessages();
         }
 
         function initChatControls() {
@@ -2480,9 +2451,8 @@ display: flex;
         }
 
         function toggleChat() {
-            if (!currentUser) {
-                showNotification('Faça login para acessar o chat', 'error');
-                openLoginModal();
+            if (!keyVerified) {
+                showNotification('Digite uma chave válida para acessar o chat', 'error');
                 return;
             }
             const chatContainer = document.getElementById('chat-container');
@@ -2504,9 +2474,8 @@ display: flex;
         }
 
         function sendMessage() {
-            if (!currentUser) {
-                showNotification('Faça login para enviar mensagens', 'error');
-                openLoginModal();
+            if (!keyVerified) {
+                showNotification('Digite uma chave válida para enviar mensagens', 'error');
                 return;
             }
             const input = document.getElementById('chat-input');
@@ -2515,8 +2484,7 @@ display: flex;
             if (messageText && database) {
                 const messagesRef = database.ref('chat');
                 messagesRef.push({
-                    uid: currentUser.uid,
-                    sender: currentUser.email.split('@')[0],
+                    sender: currentKey || "User",
                     text: messageText,
                     timestamp: firebase.database.ServerValue.TIMESTAMP
                 }).then(() => {
@@ -2530,14 +2498,14 @@ display: flex;
         }
 
         function loadMessages() {
-            if (!currentUser || !database) return;
+            if (!database) return;
             const messagesRef = database.ref('chat').limitToLast(50);
             messagesRef.on('child_added', (snapshot) => {
                 const message = snapshot.val();
                 const chatMessages = document.getElementById('chat-messages');
                 if (!chatMessages) return;
                 const messageElement = document.createElement('div');
-                const isOwnMessage = currentUser && message.uid === currentUser.uid;
+                const isOwnMessage = message.sender === (currentKey || "User");
                 messageElement.className = `message ${isOwnMessage ? 'own' : ''}`;
                 messageElement.innerHTML = `
                     <div class="message-sender">${message.sender}</div>
@@ -2549,72 +2517,6 @@ display: flex;
                 console.error('Erro ao carregar mensagens:', error);
                 showNotification('Erro ao carregar mensagens do chat', 'error');
             });
-        }
-
-        function openLoginModal() {
-            const loginModal = document.getElementById('login-modal');
-            if (loginModal) loginModal.style.display = 'flex';
-        }
-
-        function closeLoginModal() {
-            const loginModal = document.getElementById('login-modal');
-            const loginErrorMessage = document.getElementById('login-error-message');
-            if (loginModal) loginModal.style.display = 'none';
-            if (loginErrorMessage) loginErrorMessage.textContent = '';
-        }
-
-        function loginUser() {
-            const emailInput = document.getElementById('login-email');
-            const passwordInput = document.getElementById('login-password');
-            const errorMessage = document.getElementById('login-error-message');
-            if (!emailInput || !passwordInput || !errorMessage) return;
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            if (auth) {
-                auth.signInWithEmailAndPassword(email, password)
-                    .then(userCredential => {
-                        currentUser = userCredential.user;
-                        closeLoginModal();
-                        showNotification('Login realizado com sucesso!', 'success');
-                        if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
-                            loadMessages();
-                        }
-                    })
-                    .catch(error => {
-                        errorMessage.textContent = error.message;
-                        showNotification('Erro ao fazer login: ' + error.message, 'error');
-                    });
-            } else {
-                errorMessage.textContent = 'Serviço de autenticação indisponível';
-                showNotification('Erro: Serviço de autenticação não inicializado', 'error');
-            }
-        }
-
-        function registerUser() {
-            const emailInput = document.getElementById('login-email');
-            const passwordInput = document.getElementById('login-password');
-            const errorMessage = document.getElementById('login-error-message');
-            if (!emailInput || !passwordInput || !errorMessage) return;
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            if (auth) {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then(userCredential => {
-                        currentUser = userCredential.user;
-                        closeLoginModal();
-                        showNotification('Conta criada com sucesso!', 'success');
-                        if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
-                            loadMessages();
-                        }
-                    })
-                    .catch(error => {
-                        errorMessage.textContent = error.message;
-                        showNotification('Erro ao criar conta: ' + error.message, 'error');
-                    });
-            } else {
-                errorMessage.textContent = 'Serviço de autenticação indisponível';
-                showNotification('Erro: Serviço de autenticação não inicializado', 'error');
-            }
         }
 
         document.addEventListener('keydown', function (event) {
@@ -2676,16 +2578,6 @@ display: flex;
                         !selectorMenu.contains(event.target)) {
                         isChannelSelectorOpen = false;
                         selectorMenu.classList.remove('active');
-                    }
-                });
-            }
-
-            // Firebase auth state listener
-            if (auth) {
-                auth.onAuthStateChanged(user => {
-                    currentUser = user;
-                    if (user && keyVerified && document.getElementById('player-container').style.display === 'flex') {
-                        loadMessages();
                     }
                 });
             }
