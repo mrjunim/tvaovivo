@@ -7,15 +7,20 @@
     <meta name="keywords" content="streaming, TV ao vivo, online, programação, entretenimento">
     <meta name="author" content="StreamXcellence">
     <title>StreamXcellence 📺</title>
-	<link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
-    <!-- Preconnect para melhorar o carregamento -->
+    <link rel="icon" type="image/png" href="https://i.imgur.com/QsrJDbX.png">
+    <!-- Preconnect for faster loading -->
     <link rel="preconnect" href="https://i.imgur.com">
     <link rel="preconnect" href="https://player.twitch.tv">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
-     <style>
-         /* Estilos originais mantidos intactos */
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
+    <style>
+	
+	/* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -1226,207 +1231,115 @@ display: flex;
                 top: 20px;
             }
         }
-    
-        /* CSS Novo para o Chat e Modal */
+	
+	
+        /* Your existing CSS goes here (not repeated as per your request) */
+        /* New chat CSS (as provided above) */
         .chat-container {
-            position: fixed;
-            top: 0;
+            position: absolute;
             right: 0;
+            top: 0;
             width: 300px;
-            height: 100vh;
-            background: rgba(30, 30, 30, 0.95); /* Fundo mais claro para depuração */
-            border-left: 2px solid rgba(255, 0, 0, 0.5);
-            display: none;
+            height: 100%;
+            background: rgba(20, 25, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 1px solid var(--border-color);
+            display: flex;
             flex-direction: column;
-            z-index: 2000; /* Aumentado para evitar sobreposição */
-            box-shadow: -5px 0 15px rgba(255, 0, 0, 0.3);
             transition: transform 0.3s ease;
+            transform: translateX(100%);
+            z-index: 1000;
         }
 
         .chat-container.active {
-            display: flex;
             transform: translateX(0);
         }
 
         .chat-header {
             padding: 15px;
-            background: rgba(50, 50, 50, 0.9);
-            border-bottom: 1px solid rgba(255, 0, 0, 0.5);
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .chat-header h3 {
-            font-family: 'Nosifer', cursive;
-            color: #ff1a1a;
-            font-size: 1.2em;
-            text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
-        }
-
-        .chat-toggle-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .chat-toggle-btn:hover {
-            color: #ff1a1a;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0;
         }
 
         .chat-messages {
             flex: 1;
-            padding: 15px;
             overflow-y: auto;
-            background: rgba(40, 40, 40, 0.8);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .chat-message {
-            margin-bottom: 10px;
+        .message {
+            background: rgba(40, 50, 70, 0.7);
             padding: 10px;
             border-radius: 8px;
-            font-size: 0.9em;
             max-width: 80%;
             word-wrap: break-word;
         }
 
-        .chat-message.sent {
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
-            color: white;
-            margin-left: auto;
-            text-align: right;
+        .message.own {
+            background: rgba(115, 103, 240, 0.3);
+            align-self: flex-end;
         }
 
-        .chat-message.received {
-            background: rgba(50, 60, 80, 0.8);
-            color: #fff;
-            margin-right: auto;
+        .message-sender {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 5px;
         }
 
-        .chat-input-container {
-            display: flex;
-            padding: 15px;
-            background: rgba(30, 30, 30, 0.9);
-            border-top: 1px solid rgba(255, 0, 0, 0.5);
+        .message-text {
+            font-size: 14px;
+            color: var(--text-color);
         }
 
         .chat-input {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
             flex: 1;
             padding: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            background: rgba(40, 40, 40, 0.8);
-            color: #fff;
-            font-size: 0.9em;
+            background: rgba(40, 50, 70, 0.5);
+            color: var(--text-color);
+            font-size: 14px;
             outline: none;
-            margin-right: 10px;
         }
 
-        .chat-input:focus {
-            border-color: #ff1a1a;
-            box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
+        .chat-input input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(115, 103, 240, 0.3);
         }
 
-        .chat-send-btn {
+        .chat-input button {
             padding: 10px 15px;
+            background: var(--primary-color);
+            color: white;
             border: none;
             border-radius: 8px;
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
-            color: white;
-            font-size: 0.9em;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background 0.2s;
         }
 
-        .chat-send-btn:hover {
-            background: linear-gradient(135deg, #cc0000, #ff1a1a);
-            box-shadow: 0 5px 10px rgba(255, 26, 26, 0.4);
-        }
-
-        .chat-send-btn:active {
-            transform: scale(0.95);
-        }
-
-        #chat-key-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            justify-content: center;
-            align-items: center;
-            z-index: 3000; /* Aumentado para garantir visibilidade */
-        }
-
-        #chat-key-modal-content {
-            background: linear-gradient(135deg, rgba(40, 51, 69, 0.95), rgba(20, 31, 49, 0.98));
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            padding: 35px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        #chat-key-modal-content h2 {
-            color: #ff1a1a;
-            font-family: 'Nosifer', cursive;
-            font-size: 1.6em;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
-        }
-
-        #chat-key-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 0, 0, 0.5);
-            border-radius: 8px;
-            background: rgba(40, 40, 40, 0.8);
-            color: #fff;
-            font-size: 1em;
-            outline: none;
-        }
-
-        #chat-key-input:focus {
-            border-color: #ff1a1a;
-            box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
-        }
-
-        #chat-key-error-message {
-            color: #ea5455;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            min-height: 20px;
-        }
-
-        #chat-key-join-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #chat-key-join-btn:hover {
-            background: linear-gradient(135deg, #cc0000, #ff1a1a);
-            box-shadow: 0 8px 15px rgba(255, 26, 26, 0.4);
-            transform: translateY(-2px);
-        }
-
-        #chat-key-join-btn:active {
-            transform: scale(0.98);
+        .chat-input button:hover {
+            background: var(--primary-hover);
         }
 
         @media (max-width: 768px) {
@@ -1435,33 +1348,33 @@ display: flex;
             }
 
             .chat-header h3 {
-                font-size: 1em;
+                font-size: 14px;
             }
 
-            .chat-message {
-                font-size: 0.8em;
+            .message {
+                max-width: 85%;
             }
 
-            .chat-input {
-                font-size: 0.8em;
+            .chat-input input {
+                font-size: 12px;
             }
 
-            .chat-send-btn {
+            .chat-input button {
                 padding: 8px 12px;
-                font-size: 0.8em;
+                font-size: 12px;
             }
         }
 
         @media (max-width: 576px) {
             .chat-container {
                 width: 100%;
-                max-width: 300px;
-                height: 50vh;
+                max-width: none;
+                height: 50%;
                 top: auto;
                 bottom: 0;
-                border-left: none;
-                border-top: 2px solid rgba(255, 0, 0, 0.5);
                 transform: translateY(100%);
+                border-left: none;
+                border-top: 1px solid var(--border-color);
             }
 
             .chat-container.active {
@@ -1469,30 +1382,30 @@ display: flex;
             }
 
             .chat-messages {
-                max-height: calc(50vh - 100px);
+                padding: 10px;
             }
 
-            #chat-key-modal-content {
-                padding: 20px;
+            .message {
+                max-width: 90%;
+                padding: 8px;
             }
 
-            #chat-key-modal-content h2 {
-                font-size: 1.3em;
+            .message-sender {
+                font-size: 10px;
             }
 
-            #chat-key-input {
-                font-size: 0.9em;
+            .message-text {
+                font-size: 12px;
             }
 
-            #chat-key-join-btn {
-                font-size: 0.9em;
+            .chat-input {
+                padding: 10px;
             }
         }
     </style>
 </head>
 <body>
-	
-   <div class="nevoa"></div>
+    <div class="nevoa"></div>
     <div id="alerta-visual"></div>
     <img src="https://i.imgur.com/sj6EMam.jpeg" alt="Background" class="background-image" loading="lazy">
     <div id="zoom-image-container">
@@ -1524,7 +1437,8 @@ display: flex;
                 <h3>Sobre o StreamXcellence</h3>
                 <p id="texto-sobre"></p>
             </div>
-            <br><br>
+            <br>
+            <br>
             <div id="guide-container" role="marquee">
                 <div class="scrolling-text" id="scrolling-text">
                     <span id="guide-text">Carregando guia...</span>
@@ -1561,20 +1475,20 @@ display: flex;
                 </div>
             </div>
             <div class="controls-right">
+                <button id="chat-toggle-btn" class="control-btn">💬</button>
                 <button id="quality-btn" class="control-btn">⚙️</button>
                 <button id="fullscreen-btn" class="control-btn">⛶</button>
-                <button id="chat-toggle-btn" class="control-btn" onclick="toggleChat()">💬</button>
             </div>
         </div>
-        <div id="chat-container" class="chat-container" role="dialog" aria-label="Chat ao vivo">
+        <div id="chat-container" class="chat-container">
             <div class="chat-header">
-                <h3>Chat Sombrio</h3>
-                <button class="chat-toggle-btn" onclick="toggleChat()">×</button>
+                <h3>Chat Ao Vivo</h3>
+                <button id="chat-close-btn" class="control-btn">×</button>
             </div>
-            <div class="chat-messages" id="chat-messages"></div>
-            <div class="chat-input-container">
-                <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem"/>
-                <button class="chat-send-btn" onclick="sendMessage()">Enviar</button>
+            <div id="chat-messages" class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem">
+                <button id="chat-send-btn">Enviar</button>
             </div>
         </div>
     </div>
@@ -1631,31 +1545,36 @@ display: flex;
         </div>
     </div>
 
-    <div id="chat-key-modal" class="modal" role="dialog" aria-labelledby="chat-key-title" aria-hidden="true">
-        <div id="chat-key-modal-content">
-            <span class="close-modal" onclick="closeChatKeyModal()" aria-label="Fechar">×</span>
-            <h2 id="chat-key-title">Entrar no Chat Sombrio</h2>
-            <p>Digite a chave da sala para conversar com outros usuários</p>
-            <div class="input-group">
-                <label for="chat-key-input" class="sr-only">Chave da sala</label>
-                <input type="text" id="chat-key-input" placeholder="Digite a chave da sala" aria-label="Chave da sala" autocomplete="off" required/>
-            </div>
-            <div class="error-message" id="chat-key-error-message" role="alert" aria-live="assertive"></div>
-            <button type="button" id="chat-key-join-btn" onclick="joinChatRoom()" class="btn-primary">Entrar na Sala</button>
+    <div id="login-modal" class="modal" role="dialog" aria-labelledby="login-title" aria-hidden="true">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()" aria-label="Fechar">×</span>
+            <h2 id="login-title">Login</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="login-email" class="sr-only">Email</label>
+                    <input type="email" id="login-email" placeholder="Email" required aria-label="Email" autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <label for="login-password" class="sr-only">Senha</label>
+                    <input type="password" id="login-password" placeholder="Senha" required aria-label="Senha" autocomplete="current-password">
+                </div>
+                <div class="error-message" id="login-error-message" role="alert" aria-live="assertive"></div>
+                <div class="button-group">
+                    <button type="button" onclick="loginUser()" class="btn-primary">Entrar</button>
+                    <button type="button" onclick="registerUser()" class="btn-secondary">Criar Conta</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
-        // Configuração do Firebase
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBSFTNJzKhfdzu0QVyN3LX2kbwXTUekGyM",
             authDomain: "streamxcellence-3827d.firebaseapp.com",
+            databaseURL: "https://streamxcellence-3827d-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "streamxcellence-3827d",
             storageBucket: "streamxcellence-3827d.firebasestorage.app",
             messagingSenderId: "651394479752",
@@ -1663,177 +1582,11 @@ display: flex;
             measurementId: "G-TVM6L1T7G0"
         };
 
-        // Inicializar Firebase
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
         const auth = firebase.auth();
+        const database = firebase.database();
 
-        // Variáveis globais para o chat
-        let userId = null;
-        let roomKey = null;
-        let chatOpen = false;
-        const MAX_MESSAGES = 100;
-
-        // Autenticar usuário anonimamente
-        function initializeAuth() {
-            console.log('Inicializando autenticação anônima');
-            auth.signInAnonymously()
-                .then((userCredential) => {
-                    console.log('Usuário autenticado anonimamente:', userCredential.user.uid);
-                    userId = userCredential.user.uid;
-                })
-                .catch((error) => {
-                    console.error('Erro na autenticação anônima:', error);
-                    showNotification('Erro ao autenticar usuário. Tente novamente.', 'error');
-                });
-        }
-
-        // Função para sanitizar mensagens
-        function sanitizeMessage(message) {
-            const div = document.createElement('div');
-            div.textContent = message;
-            return div.innerHTML;
-        }
-
-        // Função para abrir o modal de chave da sala
-        function openChatKeyModal() {
-            console.log('Abrindo modal de chave da sala');
-            const modal = document.getElementById('chat-key-modal');
-            modal.style.display = 'flex';
-            const chatKeyInput = document.getElementById('chat-key-input');
-            chatKeyInput.value = '';
-            chatKeyInput.focus();
-            document.getElementById('chat-key-error-message').textContent = '';
-        }
-
-        // Função para fechar o modal de chave da sala
-        function closeChatKeyModal() {
-            console.log('Fechando modal de chave da sala');
-            const modal = document.getElementById('chat-key-modal');
-            modal.style.display = 'none';
-            document.getElementById('chat-key-error-message').textContent = '';
-        }
-
-        // Função para entrar na sala de chat
-        function joinChatRoom() {
-            console.log('Tentando entrar na sala de chat');
-            const chatKeyInput = document.getElementById('chat-key-input').value.trim();
-            const errorMessage = document.getElementById('chat-key-error-message');
-            if (!chatKeyInput) {
-                errorMessage.textContent = 'Por favor, digite uma chave da sala.';
-                console.log('Chave da sala vazia');
-                return;
-            }
-            if (!userId) {
-                errorMessage.textContent = 'Usuário não autenticado. Tente novamente.';
-                console.log('Usuário não autenticado');
-                showNotification('Erro: Usuário não autenticado.', 'error');
-                return;
-            }
-
-            roomKey = chatKeyInput.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-            console.log('Chave da sala:', roomKey, 'UserID:', userId);
-            initChat();
-            closeChatKeyModal();
-            showNotification('Conectado à sala: ' + roomKey, 'success');
-        }
-
-        // Inicializar o chat
-        function initChat() {
-            console.log('Inicializando chat');
-            if (!roomKey || !userId) {
-                showNotification('Erro: Chave da sala ou usuário não definido.', 'error');
-                console.error('Erro: roomKey ou userId não definido');
-                return;
-            }
-
-            const chatRef = db.ref(`chat_rooms/${roomKey}/messages`);
-
-            chatRef.orderByChild('timestamp').limitToLast(MAX_MESSAGES).on('child_added', (snapshot) => {
-                const message = snapshot.val();
-                if (message && message.sender && message.text) {
-                    console.log('Nova mensagem recebida:', message);
-                    addMessage(message.text, message.sender === userId ? 'sent' : 'received', message.sender);
-                }
-            }, (error) => {
-                console.error('Erro ao ouvir mensagens:', error);
-                showNotification('Erro ao carregar mensagens do chat.', 'error');
-            });
-
-            chatRef.once('value', (snapshot) => {
-                const messages = snapshot.val();
-                if (messages) {
-                    const messageKeys = Object.keys(messages);
-                    if (messageKeys.length > MAX_MESSAGES) {
-                        const keysToRemove = messageKeys.slice(0, messageKeys.length - MAX_MESSAGES);
-                        keysToRemove.forEach(key => chatRef.child(key).remove());
-                    }
-                }
-            });
-
-            const chatContainer = document.getElementById('chat-container');
-            chatContainer.classList.add('active');
-            chatContainer.style.display = 'flex';
-            chatOpen = true;
-            console.log('Chat container ativado');
-        }
-
-        // Enviar mensagem
-        function sendMessage() {
-            console.log('Enviando mensagem');
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            if (!message || !roomKey || !userId) {
-                showNotification('Digite uma mensagem ou entre em uma sala.', 'error');
-                console.log('Mensagem vazia, sala não definida ou usuário não autenticado');
-                return;
-            }
-
-            const sanitizedMessage = sanitizeMessage(message);
-            const chatRef = db.ref(`chat_rooms/${roomKey}/messages`);
-            chatRef.push({
-                sender: userId,
-                text: sanitizedMessage,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            }).then(() => {
-                console.log('Mensagem enviada com sucesso');
-            }).catch((err) => {
-                console.error('Erro ao enviar mensagem:', err);
-                showNotification('Erro ao enviar mensagem. Tente novamente.', 'error');
-            });
-
-            input.value = '';
-        }
-
-        // Adicionar mensagem ao chat
-        function addMessage(message, type, sender) {
-            console.log('Adicionando mensagem ao chat:', message, type, sender);
-            const messages = document.getElementById('chat-messages');
-            const messageElement = document.createElement('div');
-            messageElement.className = `chat-message ${type}`;
-            messageElement.textContent = `${sender.substring(0, 8)}: ${message}`;
-            messages.appendChild(messageElement);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        // Alternar visibilidade do chat
-        function toggleChat() {
-            console.log('Alternando visibilidade do chat');
-            const chatContainer = document.getElementById('chat-container');
-            chatOpen = !chatOpen;
-            if (chatOpen) {
-                chatContainer.classList.add('active');
-                chatContainer.style.display = 'flex';
-            } else {
-                chatContainer.classList.remove('active');
-                chatContainer.style.display = 'none';
-            }
-            console.log('Chat open:', chatOpen);
-        }
-
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
-   <script>
         let player;
         let livePlayer;
         let qualities = [];
@@ -1845,6 +1598,8 @@ display: flex;
         let videoPlayer = null;
         let canaisData = [];
         let isChannelSelectorOpen = false;
+        let isChatOpen = false;
+        let currentUser = null;
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
@@ -2077,29 +1832,28 @@ display: flex;
             }
         }
 
-    function createLiveNotificationPlayer() {
-    const liveVideo = document.getElementById('live-video');
-    if (liveVideo) {
-        liveVideo.autoplay = true; // Garante reprodução automática
-        liveVideo.loop = true; // Mantém o loop
-        liveVideo.muted = true; // Garante que o vídeo esteja mudo
-        liveVideo.controls = false; // Remove controles
-        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
-        liveVideo.volume = 0; // Define volume como 0 por segurança
-        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
-        liveVideo.addEventListener('error', (e) => {
-            console.error('Erro ao carregar o vídeo ao vivo:', e);
-            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-        });
-        // Garante que o vídeo permaneça mudo mesmo após eventos
-        liveVideo.addEventListener('volumechange', () => {
-            if (!liveVideo.muted) {
+        function createLiveNotificationPlayer() {
+            const liveVideo = document.getElementById('live-video');
+            if (liveVideo) {
+                liveVideo.autoplay = true;
+                liveVideo.loop = true;
                 liveVideo.muted = true;
+                liveVideo.controls = false;
+                liveVideo.playsinline = true;
                 liveVideo.volume = 0;
+                playVideo(liveVideo);
+                liveVideo.addEventListener('error', (e) => {
+                    console.error('Erro ao carregar o vídeo ao vivo:', e);
+                    showNotification('Erro ao carregar o vídeo ao vivo', 'error');
+                });
+                liveVideo.addEventListener('volumechange', () => {
+                    if (!liveVideo.muted) {
+                        liveVideo.muted = true;
+                        liveVideo.volume = 0;
+                    }
+                });
             }
-        });
-    }
-}
+        }
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
@@ -2150,19 +1904,25 @@ display: flex;
                 return;
             }
             if (validKeys.includes(keyInput) || keyInput === "admin") {
-                document.getElementById("alerta-visual").style.opacity = "1";
                 keyVerified = true;
                 currentKey = keyInput;
-                document.getElementById('login-container').style.display = 'none';
-                const zoomImageContainer = document.getElementById('zoom-image-container');
-                zoomImageContainer.style.display = 'flex';
-                setTimeout(() => {
-                    zoomImageContainer.style.display = 'none';
-                    document.getElementById('player-container').style.display = 'flex';
-                    createTwitchPlayer();
-                }, 2000);
-                document.getElementById('live-notification').style.display = 'none';
-                showWelcomeMessage();
+                if (currentUser) {
+                    document.getElementById("alerta-visual").style.opacity = "1";
+                    document.getElementById('login-container').style.display = 'none';
+                    const zoomImageContainer = document.getElementById('zoom-image-container');
+                    zoomImageContainer.style.display = 'flex';
+                    setTimeout(() => {
+                        zoomImageContainer.style.display = 'none';
+                        document.getElementById('player-container').style.display = 'flex';
+                        createTwitchPlayer();
+                        loadMessages();
+                    }, 2000);
+                    document.getElementById('live-notification').style.display = 'none';
+                    showWelcomeMessage();
+                } else {
+                    errorMessage.textContent = "Por favor, faça login para continuar.";
+                    openLoginModal();
+                }
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
                 showNotification("Chave inválida. Tente novamente.", "error");
@@ -2534,6 +2294,32 @@ display: flex;
                         <span class="live-indicator">AO VIVO</span>
                     </div>
                 </div>
+                <div id="quality-menu" class="quality-menu"></div>
+                <div class="player-controls">
+                    <div class="controls-left">
+                        <button id="play-pause-btn" class="control-btn">⏸️</button>
+                        <div class="volume-container">
+                            <button id="mute-btn" class="control-btn">🔊</button>
+                            <input type="range" id="volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+                        </div>
+                    </div>
+                    <div class="controls-right">
+                        <button id="chat-toggle-btn" class="control-btn">💬</button>
+                        <button id="quality-btn" class="control-btn">⚙️</button>
+                        <button id="fullscreen-btn" class="control-btn">⛶</button>
+                    </div>
+                </div>
+                <div id="chat-container" class="chat-container">
+                    <div class="chat-header">
+                        <h3>Chat Ao Vivo</h3>
+                        <button id="chat-close-btn" class="control-btn">×</button>
+                    </div>
+                    <div id="chat-messages" class="chat-messages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem">
+                        <button id="chat-send-btn">Enviar</button>
+                    </div>
+                </div>
             `;
             const video = document.getElementById('video-player');
             if (Hls.isSupported()) {
@@ -2580,14 +2366,12 @@ display: flex;
                             }
                         }
                     });
-                        
                     videoPlayer = hls;
                 } catch (error) {
                     console.error('Erro ao configurar HLS:', error);
                     showNotification("Erro ao configurar reprodução: " + error.message, "error");
                 }
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Para Safari/iOS
                 video.src = streamUrl;
                 video.addEventListener('loadedmetadata', function() {
                     console.log('Metadados carregados, tentando reproduzir');
@@ -2596,7 +2380,6 @@ display: flex;
                         showNotification("Erro ao iniciar reprodução: " + err.message, "error");
                     });
                 });
-                    
                 video.addEventListener('error', function(e) {
                     console.error('Erro no elemento de vídeo:', video.error);
                     showNotification("Erro ao reproduzir: " + (video.error ? video.error.message : "desconhecido"), "error");
@@ -2604,14 +2387,136 @@ display: flex;
             } else {
                 showNotification("Seu navegador não suporta reprodução de streams HLS", "error");
             }
-                
             showNotification(`Reproduzindo: ${nomeCanal}`, "success");
-
-            // Carregar canais para o seletor
             setTimeout(carregarCanaisSeletor, 500);
+            initCustomControls();
+            const chatToggleBtn = document.getElementById('chat-toggle-btn');
+            const chatCloseBtn = document.getElementById('chat-close-btn');
+            if (chatToggleBtn && chatCloseBtn) {
+                chatToggleBtn.addEventListener('click', toggleChat);
+                chatCloseBtn.addEventListener('click', toggleChat);
+            }
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            const chatInput = document.getElementById('chat-input');
+            if (chatSendBtn && chatInput) {
+                chatSendBtn.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        sendMessage();
+                        event.preventDefault();
+                    }
+                });
+            }
+            if (currentUser) loadMessages();
         }
 
-        // Proteção contra inspeção (mantido do código original)
+        function toggleChat() {
+            if (!currentUser) {
+                showNotification('Faça login para acessar o chat', 'error');
+                openLoginModal();
+                return;
+            }
+            const chatContainer = document.getElementById('chat-container');
+            isChatOpen = !isChatOpen;
+            if (isChatOpen) {
+                chatContainer.classList.add('active');
+                scrollToBottom();
+            } else {
+                chatContainer.classList.remove('active');
+            }
+        }
+
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            if (!currentUser) {
+                showNotification('Faça login para enviar mensagens', 'error');
+                openLoginModal();
+                return;
+            }
+            const input = document.getElementById('chat-input');
+            const messageText = input.value.trim();
+            if (messageText) {
+                const messagesRef = database.ref('chat');
+                messagesRef.push({
+                    uid: currentUser.uid,
+                    sender: currentUser.email.split('@')[0],
+                    text: messageText,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                }).then(() => {
+                    input.value = '';
+                    scrollToBottom();
+                }).catch(error => {
+                    showNotification('Erro ao enviar mensagem: ' + error.message, 'error');
+                });
+            }
+        }
+
+        function loadMessages() {
+            if (!currentUser) return;
+            const messagesRef = database.ref('chat').limitToLast(50);
+            messagesRef.on('child_added', (snapshot) => {
+                const message = snapshot.val();
+                const messageElement = document.createElement('div');
+                const isOwnMessage = currentUser && message.uid === currentUser.uid;
+                messageElement.className = `message ${isOwnMessage ? 'own' : ''}`;
+                messageElement.innerHTML = `
+                    <div class="message-sender">${message.sender}</div>
+                    <div class="message-text">${message.text}</div>
+                `;
+                document.getElementById('chat-messages').appendChild(messageElement);
+                scrollToBottom();
+            });
+        }
+
+        function openLoginModal() {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('login-error-message').textContent = '';
+        }
+
+        function loginUser() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    currentUser = userCredential.user;
+                    closeLoginModal();
+                    showNotification('Login realizado com sucesso!', 'success');
+                    if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
+                        loadMessages();
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('login-error-message').textContent = error.message;
+                    showNotification('Erro ao fazer login: ' + error.message, 'error');
+                });
+        }
+
+        function registerUser() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    currentUser = userCredential.user;
+                    closeLoginModal();
+                    showNotification('Conta criada com sucesso!', 'success');
+                    if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
+                        loadMessages();
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('login-error-message').textContent = error.message;
+                    showNotification('Erro ao criar conta: ' + error.message, 'error');
+                });
+        }
+
         document.addEventListener('keydown', function (event) {
             if (
                 event.key === 'F12' ||
@@ -2628,12 +2533,10 @@ display: flex;
             return false;
         });
 
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             loadProgramacao();
             loadKeys();
-            createLiveNotificationPlayer(); // Chama a nova função para o vídeo
-            // Adicionar evento de tecla Enter para o input de chave
+            createLiveNotificationPlayer();
             const keyInput = document.getElementById('key-input');
             if (keyInput) {
                 keyInput.addEventListener('keydown', function(event) {
@@ -2642,7 +2545,6 @@ display: flex;
                     }
                 });
             }
-            // Adicionar evento de tecla Enter para o input de nome
             const userName = document.getElementById('user-name');
             if (userName) {
                 userName.addEventListener('keydown', function(event) {
@@ -2651,56 +2553,6 @@ display: flex;
                     }
                 });
             }
-
-
-
-		document.addEventListener('keydown', function(e) {
-    // Bloqueia Ctrl+U, Ctrl+S, Ctrl+C, Ctrl+V, Ctrl+A, Ctrl+P, Ctrl+T
-    if (e.ctrlKey && (
-        e.key === 'u' || 
-        e.key === 's' || 
-        e.key === 'c' || 
-        e.key === 'v' || 
-        e.key === 'a' || 
-        e.key === 'p' || 
-        e.key === 't'
-    )) {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia F12 (DevTools)
-    if (e.key === 'F12') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+I (DevTools no Chrome)
-    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+J (Console no Chrome)
-    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-        e.preventDefault();
-        return false;
-    }
-
-    // Bloqueia Ctrl+Shift+C (Inspeção de elementos)
-    if (e.ctrlKey && e.shiftKey && e.key === 'C') {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Bloqueia clique com botão direito (opcional)
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
-		
-            // Adicionar evento de tecla Enter para verificação de chave de canais
             const canaisKeyInput = document.getElementById('canais-key-input');
             if (canaisKeyInput) {
                 canaisKeyInput.addEventListener('keydown', function(event) {
@@ -2709,7 +2561,6 @@ document.addEventListener('contextmenu', function(e) {
                     }
                 });
             }
-            // Fechar o seletor de canais ao clicar fora dele
             document.addEventListener('click', function(event) {
                 const selectorButton = document.getElementById('channel-selector-button');
                 const selectorMenu = document.getElementById('channel-selector-menu');
@@ -2721,86 +2572,100 @@ document.addEventListener('contextmenu', function(e) {
                     selectorMenu.classList.remove('active');
                 }
             });
+
+            auth.onAuthStateChanged(user => {
+                currentUser = user;
+                if (user && keyVerified && document.getElementById('player-container').style.display === 'flex') {
+                    loadMessages();
+                }
+            });
+
+            const chatToggleBtn = document.getElementById('chat-toggle-btn');
+            const chatCloseBtn = document.getElementById('chat-close-btn');
+            if (chatToggleBtn && chatCloseBtn) {
+                chatToggleBtn.addEventListener('click', toggleChat);
+                chatCloseBtn.addEventListener('click', toggleChat);
+            }
+
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            const chatInput = document.getElementById('chat-input');
+            if (chatSendBtn && chatInput) {
+                chatSendBtn.addEventListener('click', sendMessage);
+                chatInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        sendMessage();
+                        event.preventDefault();
+                    }
+                });
+            }
         });
     </script>
-<script>
-  const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
-  let i = 0;
-
-  function digitarTexto() {
-    if (i < textoSobre.length) {
-      document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
-      i++;
-      setTimeout(digitarTexto, 50);
-    }
-  }
-
-  window.onload = digitarTexto;
-</script>
-
     <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(() => {
-      // Cria a sobreposição com a mensagem
-      const overlay = document.createElement("div");
-      overlay.id = "block-message";
-      overlay.style.position = "absolute";
-      overlay.style.top = 0;
-      overlay.style.left = 0;
-      overlay.style.width = "100%";
-      overlay.style.height = "100%";
-      overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
-      overlay.style.zIndex = 6666;
-      overlay.style.display = "flex";
-      overlay.style.flexDirection = "column";
-      overlay.style.alignItems = "center";
-      overlay.style.justifyContent = "center";
-      overlay.style.color = "white";
-      overlay.style.fontFamily = "sans-serif";
-      overlay.style.padding = "10px";
-      overlay.innerHTML = `
-        <h2 style="margin-bottom: 10px;">Atenção!</h2>
-        <p style="font-size: 18px; max-width: 400px; text-align: center;">
-          Você atravessou o portal... e agora não há mais volta.
-          Sombras sussurram seu nome. A próxima cena só começa com o seu <strong>login.</strong>.
-        </p>
-      `;
-      // Insere a sobreposição dentro da div do player
-      const playerContainer = document.querySelector('#live-player');
-      if (playerContainer) {
-        playerContainer.style.position = "relative";
-        playerContainer.appendChild(overlay);
-      }
-    }, 40000); // 40 segundos
-  });     
-</script>
-<script>
-        // Lista de URLs de áudios (adicione mais URLs conforme necessário)
+        const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
+        let i = 0;
+
+        function digitarTexto() {
+            if (i < textoSobre.length) {
+                document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
+                i++;
+                setTimeout(digitarTexto, 50);
+            }
+        }
+
+        window.onload = digitarTexto;
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(() => {
+                const overlay = document.createElement("div");
+                overlay.id = "block-message";
+                overlay.style.position = "absolute";
+                overlay.style.top = 0;
+                overlay.style.left = 0;
+                overlay.style.width = "100%";
+                overlay.style.height = "100%";
+                overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
+                overlay.style.zIndex = 6666;
+                overlay.style.display = "flex";
+                overlay.style.flexDirection = "column";
+                overlay.style.alignItems = "center";
+                overlay.style.justifyContent = "center";
+                overlay.style.color = "white";
+                overlay.style.fontFamily = "sans-serif";
+                overlay.style.padding = "10px";
+                overlay.innerHTML = `
+                    <h2 style="margin-bottom: 10px;">Atenção!</h2>
+                    <p style="font-size: 18px; max-width: 400px; text-align: center;">
+                        Você atravessou o portal... e agora não há mais volta.
+                        Sombras sussurram seu nome. A próxima cena só começa com o seu <strong>login.</strong>.
+                    </p>
+                `;
+                const playerContainer = document.querySelector('#live-player');
+                if (playerContainer) {
+                    playerContainer.style.position = "relative";
+                    playerContainer.appendChild(overlay);
+                }
+            }, 40000);
+        });
+    </script>
+    <script>
         const audioFiles = [
             "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
             "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
             "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
-            
         ];
 
         function playRandomAudio() {
             const notification = document.querySelector('.notification');
             const audio = document.getElementById('ghostAudio');
-            
-            // Esconde a notificação
             notification.style.display = 'none';
-            
-            // Seleciona um áudio aleatório da lista
             const randomIndex = Math.floor(Math.random() * audioFiles.length);
             audio.src = audioFiles[randomIndex];
-            
-            // Toca o áudio
             audio.play().catch(error => {
                 console.log("Erro ao tocar áudio:", error);
             });
         }
 
-        // Mostra a notificação após 1 segundo
         setTimeout(() => {
             document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
         }, 1000);
