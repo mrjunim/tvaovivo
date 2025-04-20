@@ -19,7 +19,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
     <style>
-	
 	/* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
@@ -1231,8 +1230,6 @@ display: flex;
                 top: 20px;
             }
         }
-	
-	
         /* Your existing CSS goes here (not repeated as per your request) */
         /* New chat CSS (as provided above) */
         .chat-container {
@@ -1582,10 +1579,16 @@ display: flex;
             measurementId: "G-TVM6L1T7G0"
         };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.database();
+        // Initialize Firebase with error handling
+        let auth, database;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            auth = firebase.auth();
+            database = firebase.database();
+        } catch (error) {
+            console.error('Erro ao inicializar Firebase:', error);
+            showNotification('Erro ao conectar com o servidor de chat', 'error');
+        }
 
         let player;
         let livePlayer;
@@ -1609,6 +1612,7 @@ display: flex;
 
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
+            if (!container) return;
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.textContent = message;
@@ -1620,6 +1624,7 @@ display: flex;
 
         function updateQualityMenu() {
             const qualityMenu = document.getElementById('quality-menu');
+            if (!qualityMenu) return;
             qualityMenu.innerHTML = '';
             if (!player || !qualities.length) return;
             const autoOption = document.createElement('div');
@@ -1650,6 +1655,7 @@ display: flex;
 
         function toggleQualityMenu() {
             const qualityMenu = document.getElementById('quality-menu');
+            if (!qualityMenu) return;
             isQualityMenuOpen = !isQualityMenuOpen;
             if (isQualityMenuOpen) {
                 qualityMenu.classList.add('active');
@@ -1659,7 +1665,9 @@ display: flex;
         }
 
         function createTwitchPlayer() {
-            if (!document.querySelector("#twitch-embed iframe")) {
+            const twitchEmbed = document.querySelector("#twitch-embed");
+            if (!twitchEmbed || document.querySelector("#twitch-embed iframe")) return;
+            try {
                 player = new Twitch.Player("twitch-embed", {
                     channel: "lourimarcos",
                     width: "100%",
@@ -1696,21 +1704,29 @@ display: flex;
                     if (playPauseBtn) playPauseBtn.textContent = '▶️';
                 });
                 player.addEventListener(Twitch.Player.OFFLINE, () => {
-                    document.getElementById('player-container').innerHTML = `
-                        <div class="offline-container">
-                            <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
-                                <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
-                            </video>
-                            <div class="offline-message">
-                                <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                    const playerContainer = document.getElementById('player-container');
+                    if (playerContainer) {
+                        playerContainer.innerHTML = `
+                            <div class="offline-container">
+                                <video autoplay loop muted playsinline width="100%" height="100%" id="offline-video">
+                                    <source src="https://i.gifer.com/1fq5.mp4" type="video/mp4">
+                                </video>
+                                <div class="offline-message">
+                                    <p>🔴 ESTAMOS OFFLINE NO MOMENTO, TENTE NOVAMENTE MAIS TARDE 😢 🔴</p>
+                                </div>
                             </div>
-                        </div>
-                    `;
-                    const offlineVideo = document.getElementById('offline-video');
-                    offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
-                    playVideo(offlineVideo);
+                        `;
+                        const offlineVideo = document.getElementById('offline-video');
+                        if (offlineVideo) {
+                            offlineVideo.addEventListener('click', () => playVideo(offlineVideo));
+                            playVideo(offlineVideo);
+                        }
+                    }
                     showNotification('O canal está offline no momento', 'error');
                 });
+            } catch (error) {
+                console.error('Erro ao criar Twitch Player:', error);
+                showNotification('Erro ao iniciar a reprodução', 'error');
             }
         }
 
@@ -1720,13 +1736,16 @@ display: flex;
             const volumeSlider = document.getElementById('volume-slider');
             const qualityBtn = document.getElementById('quality-btn');
             const fullscreenBtn = document.getElementById('fullscreen-btn');
-            volumeSlider.value = player.getVolume();
+            if (!playPauseBtn || !muteBtn || !volumeSlider || !qualityBtn || !fullscreenBtn) return;
+            volumeSlider.value = player ? player.getVolume() : 1;
             updateVolumeIcon();
             playPauseBtn.addEventListener('click', togglePlay);
             volumeSlider.addEventListener('input', () => {
                 const volume = parseFloat(volumeSlider.value);
-                player.setVolume(volume);
-                player.setMuted(volume === 0);
+                if (player) {
+                    player.setVolume(volume);
+                    player.setMuted(volume === 0);
+                }
                 updateVolumeIcon();
             });
             muteBtn.addEventListener('click', toggleMute);
@@ -1770,6 +1789,7 @@ display: flex;
 
         function toggleFullscreen() {
             const container = document.getElementById('player-container');
+            if (!container) return;
             if (!document.fullscreenElement) {
                 if (container.requestFullscreen) {
                     container.requestFullscreen();
@@ -1792,7 +1812,7 @@ display: flex;
         }
 
         function handleKeyPress(event) {
-            if (!document.getElementById('player-container').style.display === 'flex') return;
+            if (document.getElementById('player-container').style.display !== 'flex') return;
             switch(event.key) {
                 case ' ':
                 case 'k':
@@ -1864,13 +1884,21 @@ display: flex;
                     return response.text();
                 })
                 .then(data => {
-                    document.getElementById('guide-text').textContent = data;
-                    document.getElementById('guide-text-duplicate').textContent = data;
+                    const guideText = document.getElementById('guide-text');
+                    const guideTextDuplicate = document.getElementById('guide-text-duplicate');
+                    if (guideText && guideTextDuplicate) {
+                        guideText.textContent = data;
+                        guideTextDuplicate.textContent = data;
+                    }
                 })
                 .catch(error => {
                     console.error('Erro ao carregar guia de programação:', error);
-                    document.getElementById('guide-text').textContent = "Erro ao carregar guia.";
-                    document.getElementById('guide-text-duplicate').textContent = "Erro ao carregar guia.";
+                    const guideText = document.getElementById('guide-text');
+                    const guideTextDuplicate = document.getElementById('guide-text-duplicate');
+                    if (guideText && guideTextDuplicate) {
+                        guideText.textContent = "Erro ao carregar guia.";
+                        guideTextDuplicate.textContent = "Erro ao carregar guia.";
+                    }
                 });
         }
 
@@ -1897,28 +1925,36 @@ display: flex;
         }
 
         function verifyKey() {
-            const keyInput = document.getElementById('key-input').value;
+            const keyInput = document.getElementById('key-input');
             const errorMessage = document.getElementById('error-message');
-            if (!keyInput) {
+            if (!keyInput || !errorMessage) return;
+            const keyValue = keyInput.value.trim();
+            if (!keyValue) {
                 errorMessage.textContent = "Por favor, digite uma chave de acesso.";
                 return;
             }
-            if (validKeys.includes(keyInput) || keyInput === "admin") {
+            if (validKeys.includes(keyValue) || keyValue === "admin") {
                 keyVerified = true;
-                currentKey = keyInput;
+                currentKey = keyValue;
                 if (currentUser) {
-                    document.getElementById("alerta-visual").style.opacity = "1";
-                    document.getElementById('login-container').style.display = 'none';
+                    const alertaVisual = document.getElementById("alerta-visual");
+                    const loginContainer = document.getElementById('login-container');
                     const zoomImageContainer = document.getElementById('zoom-image-container');
-                    zoomImageContainer.style.display = 'flex';
-                    setTimeout(() => {
-                        zoomImageContainer.style.display = 'none';
-                        document.getElementById('player-container').style.display = 'flex';
-                        createTwitchPlayer();
-                        loadMessages();
-                    }, 2000);
-                    document.getElementById('live-notification').style.display = 'none';
-                    showWelcomeMessage();
+                    const liveNotification = document.getElementById('live-notification');
+                    const playerContainer = document.getElementById('player-container');
+                    if (alertaVisual && loginContainer && zoomImageContainer && liveNotification && playerContainer) {
+                        alertaVisual.style.opacity = "1";
+                        loginContainer.style.display = 'none';
+                        zoomImageContainer.style.display = 'flex';
+                        setTimeout(() => {
+                            zoomImageContainer.style.display = 'none';
+                            playerContainer.style.display = 'flex';
+                            createTwitchPlayer();
+                            loadMessages();
+                        }, 2000);
+                        liveNotification.style.display = 'none';
+                        showWelcomeMessage();
+                    }
                 } else {
                     errorMessage.textContent = "Por favor, faça login para continuar.";
                     openLoginModal();
@@ -1926,9 +1962,8 @@ display: flex;
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
                 showNotification("Chave inválida. Tente novamente.", "error");
-                const keyInputElem = document.getElementById('key-input');
-                keyInputElem.classList.add('shake');
-                setTimeout(() => keyInputElem.classList.remove('shake'), 500);
+                keyInput.classList.add('shake');
+                setTimeout(() => keyInput.classList.remove('shake'), 500);
             }
         }
 
@@ -1937,15 +1972,19 @@ display: flex;
         }
 
         function openModal() {
-            document.getElementById("modal").style.display = "flex";
+            const modal = document.getElementById("modal");
+            if (modal) modal.style.display = "flex";
         }
 
         function closeModal() {
-            document.getElementById("modal").style.display = "none";
+            const modal = document.getElementById("modal");
+            if (modal) modal.style.display = "none";
         }
 
         function sendToWhatsApp() {
-            const name = document.getElementById("user-name").value;
+            const userName = document.getElementById("user-name");
+            if (!userName) return;
+            const name = userName.value.trim();
             if (!name) {
                 alert("Por favor, preencha seu nome antes de enviar.");
                 showNotification("Por favor, preencha seu nome antes de enviar.", "error");
@@ -1956,11 +1995,13 @@ display: flex;
         }
 
         function copyEmail() {
-            const emailText = document.getElementById("pix-email").innerText;
+            const pixEmail = document.getElementById("pix-email");
+            const copyButton = document.getElementById("copy-email");
+            if (!pixEmail || !copyButton) return;
+            const emailText = pixEmail.innerText;
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(emailText)
                     .then(() => {
-                        const copyButton = document.getElementById("copy-email");
                         const originalText = copyButton.textContent;
                         copyButton.textContent = "Copiado!";
                         copyButton.style.backgroundColor = "#28c76f";
@@ -1991,16 +2032,21 @@ display: flex;
         }
 
         function openProgramacaoModal() {
-            document.getElementById("programacao-modal").style.display = "flex";
-            carregarProgramacao();
+            const programacaoModal = document.getElementById("programacao-modal");
+            if (programacaoModal) {
+                programacaoModal.style.display = "flex";
+                carregarProgramacao();
+            }
         }
 
         function closeProgramacaoModal() {
-            document.getElementById("programacao-modal").style.display = "none";
+            const programacaoModal = document.getElementById("programacao-modal");
+            if (programacaoModal) programacaoModal.style.display = "none";
         }
 
         function carregarProgramacao() {
             const listaProgramacao = document.getElementById("programacao-lista");
+            if (!listaProgramacao) return;
             listaProgramacao.innerHTML = '<li>Carregando programação...</li>';
             fetch('https://mrjunim.github.io/tvaovivo/programacaorobusta.txt')
                 .then(response => {
@@ -2048,51 +2094,62 @@ display: flex;
             if (keyVerified) {
                 openCanaisModal();
             } else {
-                document.getElementById("canais-key-modal").style.display = "flex";
-                const mainKeyInput = document.getElementById('key-input').value;
-                if (mainKeyInput) {
-                    document.getElementById('canais-key-input').value = mainKeyInput;
+                const canaisKeyModal = document.getElementById("canais-key-modal");
+                if (canaisKeyModal) {
+                    canaisKeyModal.style.display = "flex";
+                    const mainKeyInput = document.getElementById('key-input');
+                    const canaisKeyInput = document.getElementById('canais-key-input');
+                    if (mainKeyInput && canaisKeyInput && mainKeyInput.value) {
+                        canaisKeyInput.value = mainKeyInput.value;
+                    }
                 }
             }
         }
 
         function verificarChaveCanais() {
-            const keyInput = document.getElementById('canais-key-input').value;
+            const keyInput = document.getElementById('canais-key-input');
             const errorMessage = document.getElementById('canais-key-error-message');
-            if (!keyInput) {
+            if (!keyInput || !errorMessage) return;
+            const keyValue = keyInput.value.trim();
+            if (!keyValue) {
                 errorMessage.textContent = "Por favor, digite uma chave de acesso.";
                 return;
             }
-            if (validKeys.includes(keyInput) || keyInput === "12345") {
+            if (validKeys.includes(keyValue) || keyValue === "12345") {
                 keyVerified = true;
-                currentKey = keyInput;
+                currentKey = keyValue;
                 closeCanaisKeyModal();
                 openCanaisModal();
                 showNotification("Acesso aos canais liberado!", "success");
             } else {
                 errorMessage.textContent = "Chave inválida. Tente novamente.";
                 showNotification("Chave inválida. Tente novamente.", "error");
-                const keyInputElem = document.getElementById('canais-key-input');
-                keyInputElem.classList.add('shake');
-                setTimeout(() => keyInputElem.classList.remove('shake'), 500);
+                keyInput.classList.add('shake');
+                setTimeout(() => keyInput.classList.remove('shake'), 500);
             }
         }
 
         function closeCanaisKeyModal() {
-            document.getElementById("canais-key-modal").style.display = "none";
+            const canaisKeyModal = document.getElementById("canais-key-modal");
+            if (canaisKeyModal) canaisKeyModal.style.display = "none";
         }
 
         function openCanaisModal() {
-            document.getElementById("canais-modal").style.display = "flex";
-            carregarCanais();
+            const canaisModal = document.getElementById("canais-modal");
+            if (canaisModal) {
+                canaisModal.style.display = "flex";
+                carregarCanais();
+            }
         }
 
         function closeCanaisModal() {
-            document.getElementById("canais-modal").style.display = "none";
+            const canaisModal = document.getElementById("canais-modal");
+            if (canaisModal) canaisModal.style.display = "none";
         }
 
         function toggleChannelSelector() {
             const channelSelector = document.getElementById('channel-selector-menu');
+            if (!channelSelector) return;
             isChannelSelectorOpen = !isChannelSelectorOpen;
             if (isChannelSelectorOpen) {
                 channelSelector.classList.add('active');
@@ -2163,13 +2220,17 @@ display: flex;
                 })
                 .catch(error => {
                     console.error('Erro ao carregar canais para o seletor:', error);
-                    document.getElementById('channels-list').innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
+                    const channelsList = document.getElementById('channels-list');
+                    if (channelsList) {
+                        channelsList.innerHTML = '<p>Erro ao carregar canais. Tente novamente mais tarde.</p>';
+                    }
                     showNotification("Erro ao carregar os canais", "error");
                 });
         }
 
         function atualizarListaCanaisSeletor(canais) {
             const channelsList = document.getElementById('channels-list');
+            if (!channelsList) return;
             if (canais.length === 0) {
                 channelsList.innerHTML = '<p>Nenhum canal encontrado.</p>';
                 return;
@@ -2194,6 +2255,7 @@ display: flex;
 
         function filtrarCanais() {
             const searchInput = document.getElementById('channel-search');
+            if (!searchInput) return;
             const searchTerm = searchInput.value.toLowerCase();
             const items = document.querySelectorAll('.channel-selector-item');
             items.forEach(item => {
@@ -2208,6 +2270,7 @@ display: flex;
 
         function carregarCanais() {
             const canaisGrid = document.getElementById("canais-grid");
+            if (!canaisGrid) return;
             canaisGrid.innerHTML = '<p>Carregando canais...</p>';
             fetch('https://mrjunim.github.io/tvaovivo/filmeseseries.txt')
                 .then(response => {
@@ -2282,6 +2345,7 @@ display: flex;
             console.log('Reproduzindo canal:', nomeCanal, 'URL:', streamUrl);
             closeCanaisModal();
             const playerContainer = document.getElementById('player-container');
+            if (!playerContainer) return;
             playerContainer.style.display = 'flex';
             playerContainer.innerHTML = `
                 <div class="player hls-player">
@@ -2322,6 +2386,7 @@ display: flex;
                 </div>
             `;
             const video = document.getElementById('video-player');
+            if (!video) return;
             if (Hls.isSupported()) {
                 const hls = new Hls({
                     maxBufferLength: 30,
@@ -2390,14 +2455,19 @@ display: flex;
             showNotification(`Reproduzindo: ${nomeCanal}`, "success");
             setTimeout(carregarCanaisSeletor, 500);
             initCustomControls();
+            initChatControls();
+            if (currentUser) loadMessages();
+        }
+
+        function initChatControls() {
             const chatToggleBtn = document.getElementById('chat-toggle-btn');
             const chatCloseBtn = document.getElementById('chat-close-btn');
+            const chatSendBtn = document.getElementById('chat-send-btn');
+            const chatInput = document.getElementById('chat-input');
             if (chatToggleBtn && chatCloseBtn) {
                 chatToggleBtn.addEventListener('click', toggleChat);
                 chatCloseBtn.addEventListener('click', toggleChat);
             }
-            const chatSendBtn = document.getElementById('chat-send-btn');
-            const chatInput = document.getElementById('chat-input');
             if (chatSendBtn && chatInput) {
                 chatSendBtn.addEventListener('click', sendMessage);
                 chatInput.addEventListener('keydown', (event) => {
@@ -2407,7 +2477,6 @@ display: flex;
                     }
                 });
             }
-            if (currentUser) loadMessages();
         }
 
         function toggleChat() {
@@ -2417,6 +2486,7 @@ display: flex;
                 return;
             }
             const chatContainer = document.getElementById('chat-container');
+            if (!chatContainer) return;
             isChatOpen = !isChatOpen;
             if (isChatOpen) {
                 chatContainer.classList.add('active');
@@ -2428,7 +2498,9 @@ display: flex;
 
         function scrollToBottom() {
             const chatMessages = document.getElementById('chat-messages');
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
         }
 
         function sendMessage() {
@@ -2438,8 +2510,9 @@ display: flex;
                 return;
             }
             const input = document.getElementById('chat-input');
+            if (!input) return;
             const messageText = input.value.trim();
-            if (messageText) {
+            if (messageText && database) {
                 const messagesRef = database.ref('chat');
                 messagesRef.push({
                     uid: currentUser.uid,
@@ -2450,16 +2523,19 @@ display: flex;
                     input.value = '';
                     scrollToBottom();
                 }).catch(error => {
+                    console.error('Erro ao enviar mensagem:', error);
                     showNotification('Erro ao enviar mensagem: ' + error.message, 'error');
                 });
             }
         }
 
         function loadMessages() {
-            if (!currentUser) return;
+            if (!currentUser || !database) return;
             const messagesRef = database.ref('chat').limitToLast(50);
             messagesRef.on('child_added', (snapshot) => {
                 const message = snapshot.val();
+                const chatMessages = document.getElementById('chat-messages');
+                if (!chatMessages) return;
                 const messageElement = document.createElement('div');
                 const isOwnMessage = currentUser && message.uid === currentUser.uid;
                 messageElement.className = `message ${isOwnMessage ? 'own' : ''}`;
@@ -2467,54 +2543,78 @@ display: flex;
                     <div class="message-sender">${message.sender}</div>
                     <div class="message-text">${message.text}</div>
                 `;
-                document.getElementById('chat-messages').appendChild(messageElement);
+                chatMessages.appendChild(messageElement);
                 scrollToBottom();
+            }, (error) => {
+                console.error('Erro ao carregar mensagens:', error);
+                showNotification('Erro ao carregar mensagens do chat', 'error');
             });
         }
 
         function openLoginModal() {
-            document.getElementById('login-modal').style.display = 'flex';
+            const loginModal = document.getElementById('login-modal');
+            if (loginModal) loginModal.style.display = 'flex';
         }
 
         function closeLoginModal() {
-            document.getElementById('login-modal').style.display = 'none';
-            document.getElementById('login-error-message').textContent = '';
+            const loginModal = document.getElementById('login-modal');
+            const loginErrorMessage = document.getElementById('login-error-message');
+            if (loginModal) loginModal.style.display = 'none';
+            if (loginErrorMessage) loginErrorMessage.textContent = '';
         }
 
         function loginUser() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            auth.signInWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    currentUser = userCredential.user;
-                    closeLoginModal();
-                    showNotification('Login realizado com sucesso!', 'success');
-                    if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
-                        loadMessages();
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('login-error-message').textContent = error.message;
-                    showNotification('Erro ao fazer login: ' + error.message, 'error');
-                });
+            const emailInput = document.getElementById('login-email');
+            const passwordInput = document.getElementById('login-password');
+            const errorMessage = document.getElementById('login-error-message');
+            if (!emailInput || !passwordInput || !errorMessage) return;
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            if (auth) {
+                auth.signInWithEmailAndPassword(email, password)
+                    .then(userCredential => {
+                        currentUser = userCredential.user;
+                        closeLoginModal();
+                        showNotification('Login realizado com sucesso!', 'success');
+                        if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
+                            loadMessages();
+                        }
+                    })
+                    .catch(error => {
+                        errorMessage.textContent = error.message;
+                        showNotification('Erro ao fazer login: ' + error.message, 'error');
+                    });
+            } else {
+                errorMessage.textContent = 'Serviço de autenticação indisponível';
+                showNotification('Erro: Serviço de autenticação não inicializado', 'error');
+            }
         }
 
         function registerUser() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    currentUser = userCredential.user;
-                    closeLoginModal();
-                    showNotification('Conta criada com sucesso!', 'success');
-                    if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
-                        loadMessages();
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('login-error-message').textContent = error.message;
-                    showNotification('Erro ao criar conta: ' + error.message, 'error');
-                });
+            const emailInput = document.getElementById('login-email');
+            const passwordInput = document.getElementById('login-password');
+            const errorMessage = document.getElementById('login-error-message');
+            if (!emailInput || !passwordInput || !errorMessage) return;
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            if (auth) {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then(userCredential => {
+                        currentUser = userCredential.user;
+                        closeLoginModal();
+                        showNotification('Conta criada com sucesso!', 'success');
+                        if (keyVerified && document.getElementById('player-container').style.display === 'flex') {
+                            loadMessages();
+                        }
+                    })
+                    .catch(error => {
+                        errorMessage.textContent = error.message;
+                        showNotification('Erro ao criar conta: ' + error.message, 'error');
+                    });
+            } else {
+                errorMessage.textContent = 'Serviço de autenticação indisponível';
+                showNotification('Erro: Serviço de autenticação não inicializado', 'error');
+            }
         }
 
         document.addEventListener('keydown', function (event) {
@@ -2537,6 +2637,8 @@ display: flex;
             loadProgramacao();
             loadKeys();
             createLiveNotificationPlayer();
+
+            // Initialize login page buttons
             const keyInput = document.getElementById('key-input');
             if (keyInput) {
                 keyInput.addEventListener('keydown', function(event) {
@@ -2545,6 +2647,7 @@ display: flex;
                     }
                 });
             }
+
             const userName = document.getElementById('user-name');
             if (userName) {
                 userName.addEventListener('keydown', function(event) {
@@ -2553,6 +2656,7 @@ display: flex;
                     }
                 });
             }
+
             const canaisKeyInput = document.getElementById('canais-key-input');
             if (canaisKeyInput) {
                 canaisKeyInput.addEventListener('keydown', function(event) {
@@ -2561,114 +2665,108 @@ display: flex;
                     }
                 });
             }
-            document.addEventListener('click', function(event) {
-                const selectorButton = document.getElementById('channel-selector-button');
-                const selectorMenu = document.getElementById('channel-selector-menu');
-                if (isChannelSelectorOpen && 
-                    selectorButton && selectorMenu && 
-                    !selectorButton.contains(event.target) && 
-                    !selectorMenu.contains(event.target)) {
-                    isChannelSelectorOpen = false;
-                    selectorMenu.classList.remove('active');
-                }
-            });
 
-            auth.onAuthStateChanged(user => {
-                currentUser = user;
-                if (user && keyVerified && document.getElementById('player-container').style.display === 'flex') {
-                    loadMessages();
-                }
-            });
-
-            const chatToggleBtn = document.getElementById('chat-toggle-btn');
-            const chatCloseBtn = document.getElementById('chat-close-btn');
-            if (chatToggleBtn && chatCloseBtn) {
-                chatToggleBtn.addEventListener('click', toggleChat);
-                chatCloseBtn.addEventListener('click', toggleChat);
-            }
-
-            const chatSendBtn = document.getElementById('chat-send-btn');
-            const chatInput = document.getElementById('chat-input');
-            if (chatSendBtn && chatInput) {
-                chatSendBtn.addEventListener('click', sendMessage);
-                chatInput.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter') {
-                        sendMessage();
-                        event.preventDefault();
+            // Channel selector click handler
+            const selectorButton = document.getElementById('channel-selector-button');
+            const selectorMenu = document.getElementById('channel-selector-menu');
+            if (selectorButton && selectorMenu) {
+                document.addEventListener('click', function(event) {
+                    if (isChannelSelectorOpen && 
+                        !selectorButton.contains(event.target) && 
+                        !selectorMenu.contains(event.target)) {
+                        isChannelSelectorOpen = false;
+                        selectorMenu.classList.remove('active');
                     }
                 });
             }
-        });
-    </script>
-    <script>
-        const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
-        let i = 0;
 
-        function digitarTexto() {
-            if (i < textoSobre.length) {
-                document.getElementById("texto-sobre").innerHTML += textoSobre.charAt(i);
-                i++;
-                setTimeout(digitarTexto, 50);
+            // Firebase auth state listener
+            if (auth) {
+                auth.onAuthStateChanged(user => {
+                    currentUser = user;
+                    if (user && keyVerified && document.getElementById('player-container').style.display === 'flex') {
+                        loadMessages();
+                    }
+                });
             }
-        }
 
-        window.onload = digitarTexto;
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize chat controls for initial player
+            initChatControls();
+
+            // Text typing effect
+            const textoSobre = "StreamXcellence é um portal sombrio dedicado exclusivamente ao horror.";
+            let i = 0;
+            function digitarTexto() {
+                if (i < textoSobre.length) {
+                    const textoSobreElement = document.getElementById("texto-sobre");
+                    if (textoSobreElement) {
+                        textoSobreElement.innerHTML += textoSobre.charAt(i);
+                    }
+                    i++;
+                    setTimeout(digitarTexto, 50);
+                }
+            }
+            digitarTexto();
+
+            // Block message overlay
             setTimeout(() => {
-                const overlay = document.createElement("div");
-                overlay.id = "block-message";
-                overlay.style.position = "absolute";
-                overlay.style.top = 0;
-                overlay.style.left = 0;
-                overlay.style.width = "100%";
-                overlay.style.height = "100%";
-                overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
-                overlay.style.zIndex = 6666;
-                overlay.style.display = "flex";
-                overlay.style.flexDirection = "column";
-                overlay.style.alignItems = "center";
-                overlay.style.justifyContent = "center";
-                overlay.style.color = "white";
-                overlay.style.fontFamily = "sans-serif";
-                overlay.style.padding = "10px";
-                overlay.innerHTML = `
-                    <h2 style="margin-bottom: 10px;">Atenção!</h2>
-                    <p style="font-size: 18px; max-width: 400px; text-align: center;">
-                        Você atravessou o portal... e agora não há mais volta.
-                        Sombras sussurram seu nome. A próxima cena só começa com o seu <strong>login.</strong>.
-                    </p>
-                `;
                 const playerContainer = document.querySelector('#live-player');
                 if (playerContainer) {
+                    const overlay = document.createElement("div");
+                    overlay.id = "block-message";
+                    overlay.style.position = "absolute";
+                    overlay.style.top = 0;
+                    overlay.style.left = 0;
+                    overlay.style.width = "100%";
+                    overlay.style.height = "100%";
+                    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.85)";
+                    overlay.style.zIndex = 6666;
+                    overlay.style.display = "flex";
+                    overlay.style.flexDirection = "column";
+                    overlay.style.alignItems = "center";
+                    overlay.style.justifyContent = "center";
+                    overlay.style.color = "white";
+                    overlay.style.fontFamily = "sans-serif";
+                    overlay.style.padding = "10px";
+                    overlay.innerHTML = `
+                        <h2 style="margin-bottom: 10px;">Atenção!</h2>
+                        <p style="font-size: 18px; max-width: 400px; text-align: center;">
+                            Você atravessou o portal... e agora não há mais volta.
+                            Sombras sussurram seu nome. A próxima cena só começa com o seu <strong>login.</strong>.
+                        </p>
+                    `;
                     playerContainer.style.position = "relative";
                     playerContainer.appendChild(overlay);
                 }
             }, 40000);
-        });
-    </script>
-    <script>
-        const audioFiles = [
-            "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
-            "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
-            "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
-        ];
 
-        function playRandomAudio() {
+            // Audio notification
+            const audioFiles = [
+                "https://mcdn.podbean.com/mf/download/wry9kewzr2sbwray/esse_HORROR_EFFECTS.mp3",
+                "https://mcdn.podbean.com/mf/download/s6mn42zxhgf2pjtw/Text_to_Speech_Scary_Version.mp3",
+                "https://mcdn.podbean.com/mf/download/vcckkdiuz6rpenr8/Text2222_Edited_Sombrio.mp3",
+            ];
+
+            function playRandomAudio() {
+                const notification = document.querySelector('.notification');
+                const audio = document.getElementById('ghostAudio');
+                if (notification) notification.style.display = 'none';
+                const randomIndex = Math.floor(Math.random() * audioFiles.length);
+                if (audio) {
+                    audio.src = audioFiles[randomIndex];
+                    audio.play().catch(error => {
+                        console.log("Erro ao tocar áudio:", error);
+                    });
+                }
+            }
+
             const notification = document.querySelector('.notification');
-            const audio = document.getElementById('ghostAudio');
-            notification.style.display = 'none';
-            const randomIndex = Math.floor(Math.random() * audioFiles.length);
-            audio.src = audioFiles[randomIndex];
-            audio.play().catch(error => {
-                console.log("Erro ao tocar áudio:", error);
-            });
-        }
-
-        setTimeout(() => {
-            document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
-        }, 1000);
+            if (notification) {
+                setTimeout(() => {
+                    notification.style.animation = 'slideIn 1s ease forwards';
+                }, 1000);
+            }
+        });
     </script>
 </body>
 </html>
