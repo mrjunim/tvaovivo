@@ -1226,9 +1226,7 @@ display: flex;
                 top: 20px;
             }
         }
-		
-		
-		/* Estilos para o chat (mantidos da resposta anterior) */
+		/* Estilos para o chat */
         .chat-container {
             position: fixed;
             top: 0;
@@ -1242,7 +1240,6 @@ display: flex;
             z-index: 1000;
             box-shadow: -5px 0 15px rgba(255, 0, 0, 0.3);
             transition: transform 0.3s ease;
-            transform: translateX(100%);
         }
 
         .chat-container.active {
@@ -1313,9 +1310,11 @@ display: flex;
             padding: 15px;
             background: rgba(20, 20, 20, 0.9);
             border-top: 1px solid rgba(255, 0, 0, 0.5);
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .chat-input {
+        .chat-input, .chat-peer-id-input {
             flex: 1;
             padding: 10px;
             border: 1px solid rgba(255, 0, 0, 0.5);
@@ -1324,15 +1323,14 @@ display: flex;
             color: #fff;
             font-size: 0.9em;
             outline: none;
-            margin-right: 10px;
         }
 
-        .chat-input:focus {
+        .chat-input:focus, .chat-peer-id-input:focus {
             border-color: #ff1a1a;
             box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
         }
 
-        .chat-send-btn {
+        .chat-send-btn, .chat-connect-btn {
             padding: 10px 15px;
             border: none;
             border-radius: 8px;
@@ -1343,12 +1341,12 @@ display: flex;
             transition: all 0.3s ease;
         }
 
-        .chat-send-btn:hover {
+        .chat-send-btn:hover, .chat-connect-btn:hover {
             background: linear-gradient(135deg, #cc0000, #ff1a1a);
             box-shadow: 0 5px 10px rgba(255, 26, 26, 0.4);
         }
 
-        .chat-send-btn:active {
+        .chat-send-btn:active, .chat-connect-btn:active {
             transform: scale(0.95);
         }
 
@@ -1446,11 +1444,11 @@ display: flex;
                 font-size: 0.8em;
             }
 
-            .chat-input {
+            .chat-input, .chat-peer-id-input {
                 font-size: 0.8em;
             }
 
-            .chat-send-btn {
+            .chat-send-btn, .chat-connect-btn {
                 padding: 8px 12px;
                 font-size: 0.8em;
             }
@@ -1492,7 +1490,6 @@ display: flex;
                 font-size: 0.9em;
             }
         }
-		
     </style>
 </head>
 <body>
@@ -1551,14 +1548,8 @@ display: flex;
         <div class="player twitch-player" id="player">
             <div id="twitch-embed"></div>
         </div>
-        <div class="channel-info">
-            <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
-            <div>
-                <div class="channel-name">StreamXcellence</div>
-                <span class="live-indicator">AO VIVO</span>
-            </div>
-        </div>
-		<div id="chat-key-modal" class="modal" role="dialog" aria-labelledby="chat-key-title" aria-hidden="true">
+		<!-- Modal para inserir a chave da sala -->
+    <div id="chat-key-modal" class="modal" role="dialog" aria-labelledby="chat-key-title" aria-hidden="true">
         <div id="chat-key-modal-content">
             <span class="close-modal" onclick="closeChatKeyModal()" aria-label="Fechar">×</span>
             <h2 id="chat-key-title">Entrar no Chat Sombrio</h2>
@@ -1571,17 +1562,28 @@ display: flex;
             <button type="button" id="chat-key-join-btn" onclick="joinChatRoom()" class="btn-primary">Entrar na Sala</button>
         </div>
     </div>
-		<div id="chat-container" class="chat-container" role="dialog" aria-label="Chat ao vivo">
+
+    <!-- Container do chat -->
+    <div id="chat-container" class="chat-container" role="dialog" aria-label="Chat ao vivo">
         <div class="chat-header">
             <h3>Chat Sombrio</h3>
             <button class="chat-toggle-btn" onclick="toggleChat()">×</button>
         </div>
         <div class="chat-messages" id="chat-messages"></div>
         <div class="chat-input-container">
+            <input type="text" id="chat-peer-id-input" class="chat-peer-id-input" placeholder="ID do outro usuário (para teste)" aria-label="ID do outro usuário"/>
+            <button class="chat-connect-btn" onclick="connectToPeer()">Conectar</button>
             <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem"/>
             <button class="chat-send-btn" onclick="sendMessage()">Enviar</button>
         </div>
     </div>
+        <div class="channel-info">
+            <img src="https://i.imgur.com/QsrJDbX.png" alt="Logo do canal" class="channel-logo">
+            <div>
+                <div class="channel-name">StreamXcellence</div>
+                <span class="live-indicator">AO VIVO</span>
+            </div>
+        </div>
         <div id="quality-menu" class="quality-menu"></div>
         <div class="player-controls">
             <div class="controls-left">
@@ -2593,6 +2595,224 @@ document.addEventListener('contextmenu', function(e) {
     }, 40000); // 40 segundos
   });     
 </script>
+
+
+<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script>
+        // Variáveis globais para o chat
+        let peer = null;
+        let connections = [];
+        let userId = null;
+        let roomKey = null;
+        let chatOpen = false;
+
+        // Função para mostrar notificações (já existe no seu código)
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            container.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Função para abrir o modal de chave da sala
+        function openChatKeyModal() {
+            document.getElementById('chat-key-modal').style.display = 'flex';
+            const chatKeyInput = document.getElementById('chat-key-input');
+            chatKeyInput.value = '';
+            chatKeyInput.focus();
+        }
+
+        // Função para fechar o modal de chave da sala
+        function closeChatKeyModal() {
+            document.getElementById('chat-key-modal').style.display = 'none';
+            document.getElementById('chat-key-error-message').textContent = '';
+        }
+
+        // Função para entrar na sala de chat
+        function joinChatRoom() {
+            const chatKeyInput = document.getElementById('chat-key-input').value.trim();
+            const errorMessage = document.getElementById('chat-key-error-message');
+            if (!chatKeyInput) {
+                errorMessage.textContent = 'Por favor, digite uma chave da sala.';
+                return;
+            }
+
+            roomKey = chatKeyInput.toLowerCase().replace(/\s+/g, '-');
+            initChat();
+            closeChatKeyModal();
+            showNotification('Conectado à sala: ' + roomKey, 'success');
+        }
+
+        // Inicializar o chat
+        function initChat() {
+            if (!roomKey) {
+                showNotification('Nenhuma chave de sala definida.', 'error');
+                return;
+            }
+
+            // Gerar um ID único para o usuário
+            userId = `${roomKey}-user-${Math.random().toString(36).substr(2, 9)}`;
+            peer = new Peer(userId, {
+                host: '/', // Usa o servidor PeerJS padrão
+                path: '/peerjs',
+                secure: true
+            });
+
+            peer.on('open', (id) => {
+                console.log('Peer ID:', id);
+                showNotification(`Seu ID: ${id}. Compartilhe para conectar!`, 'info');
+                document.getElementById('chat-container').classList.add('active');
+                chatOpen = true;
+            });
+
+            peer.on('connection', (conn) => {
+                setupConnection(conn);
+                connections.push(conn);
+                showNotification('Novo usuário conectado!', 'success');
+            });
+
+            peer.on('error', (err) => {
+                console.error('Erro no PeerJS:', err);
+                showNotification(`Erro: ${err.type}. Tente novamente.`, 'error');
+            });
+        }
+
+        // Configurar uma conexão
+        function setupConnection(conn) {
+            conn.on('data', (data) => {
+                addMessage(data.message, 'received', data.sender);
+            });
+
+            conn.on('close', () => {
+                showNotification('Um usuário saiu da sala.', 'info');
+                connections = connections.filter(c => c !== conn);
+            });
+
+            conn.on('error', (err) => {
+                console.error('Erro na conexão:', err);
+            });
+        }
+
+        // Conectar a um peer específico (para teste)
+        function connectToPeer() {
+            const peerId = document.getElementById('chat-peer-id-input').value.trim();
+            if (!peerId) {
+                showNotification('Digite o ID do outro usuário.', 'error');
+                return;
+            }
+
+            const conn = peer.connect(peerId);
+            conn.on('open', () => {
+                connections.push(conn);
+                setupConnection(conn);
+                showNotification(`Conectado a ${peerId}`, 'success');
+            });
+
+            conn.on('error', (err) => {
+                console.error('Erro ao conectar:', err);
+                showNotification('Erro ao conectar ao usuário.', 'error');
+            });
+        }
+
+        // Enviar mensagem para todos na sala
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+            if (connections.length === 0) {
+                showNotification('Nenhum usuário conectado na sala.', 'info');
+                return;
+            }
+
+            // Adicionar a mensagem enviada localmente
+            addMessage(message, 'sent', userId);
+
+            // Enviar a mensagem para todos os usuários conectados
+            const data = { sender: userId, message: message };
+            connections.forEach(conn => {
+                if (conn.open) {
+                    conn.send(data);
+                }
+            });
+            input.value = '';
+        }
+
+        // Adicionar mensagem ao chat
+        function addMessage(message, type, sender) {
+            const messages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = `chat-message ${type}`;
+            messageElement.textContent = `${sender}: ${message}`;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // Alternar visibilidade do chat
+        function toggleChat() {
+            const chatContainer = document.getElementById('chat-container');
+            chatOpen = !chatOpen;
+            if (chatOpen) {
+                chatContainer.classList.add('active');
+            } else {
+                chatContainer.classList.remove('active');
+            }
+        }
+
+        // Modificar verifyKey para abrir o modal do chat após verificação
+        const originalVerifyKey = verifyKey;
+        verifyKey = function() {
+            originalVerifyKey();
+            if (keyVerified) {
+                openChatKeyModal();
+            }
+        };
+
+        // Adicionar eventos
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tecla Enter para chave da sala
+            document.getElementById('chat-key-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    joinChatRoom();
+                }
+            });
+
+            // Tecla Enter para mensagem
+            document.getElementById('chat-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Tecla Enter para conectar a peer
+            document.getElementById('chat-peer-id-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    connectToPeer();
+                }
+            });
+
+            // Fechar modal/chat ao clicar fora
+            document.addEventListener('click', (event) => {
+                const chatContainer = document.getElementById('chat-container');
+                const chatToggleBtn = document.querySelector('.chat-toggle-btn');
+                const chatKeyModal = document.getElementById('chat-key-modal');
+                const chatKeyModalContent = document.getElementById('chat-key-modal-content');
+
+                if (chatOpen && !chatContainer.contains(event.target) && !chatToggleBtn.contains(event.target)) {
+                    toggleChat();
+                }
+
+                if (chatKeyModal.style.display === 'flex' && !chatKeyModalContent.contains(event.target)) {
+                    closeChatKeyModal();
+                }
+            });
+        });
+    </script>
+
+
 <script>
         // Lista de URLs de áudios (adicione mais URLs conforme necessário)
         const audioFiles = [
@@ -2624,200 +2844,5 @@ document.addEventListener('contextmenu', function(e) {
             document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
         }, 1000);
     </script>
-	
-	
-	<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-    <script>
-        // Variáveis globais para o chat
-        let peer = null;
-        let connections = [];
-        let userId = null;
-        let roomKey = null;
-        let chatOpen = false;
-
-        // Função para abrir o modal de chave da sala
-        function openChatKeyModal() {
-            document.getElementById('chat-key-modal').style.display = 'flex';
-            const chatKeyInput = document.getElementById('chat-key-input');
-            chatKeyInput.value = '';
-            chatKeyInput.focus();
-        }
-
-        // Função para fechar o modal de chave da sala
-        function closeChatKeyModal() {
-            document.getElementById('chat-key-modal').style.display = 'none';
-            document.getElementById('chat-key-error-message').textContent = '';
-        }
-
-        // Função para entrar na sala de chat
-        function joinChatRoom() {
-            const chatKeyInput = document.getElementById('chat-key-input').value.trim();
-            const errorMessage = document.getElementById('chat-key-error-message');
-            if (!chatKeyInput) {
-                errorMessage.textContent = 'Por favor, digite uma chave da sala.';
-                return;
-            }
-
-            roomKey = chatKeyInput.toLowerCase().replace(/\s+/g, '-'); // Normaliza a chave
-            initChat();
-            closeChatKeyModal();
-            showNotification('Conectado à sala: ' + roomKey, 'success');
-        }
-
-        // Inicializar o chat
-        function initChat() {
-            if (!roomKey) {
-                showNotification('Nenhuma chave de sala definida.', 'error');
-                return;
-            }
-
-            // Gerar um ID único para o usuário
-            userId = 'user-' + Math.random().toString(36).substr(2, 9);
-            peer = new Peer(`${roomKey}-${userId}`, {
-                host: 'peerjs-server.herokuapp.com',
-                port: 443,
-                secure: true
-            });
-
-            peer.on('open', (id) => {
-                console.log('Peer ID:', id);
-                // Conectar a outros peers na mesma sala
-                discoverPeersInRoom();
-            });
-
-            peer.on('connection', (conn) => {
-                setupConnection(conn);
-                connections.push(conn);
-            });
-
-            peer.on('error', (err) => {
-                console.error('Erro no PeerJS:', err);
-                showNotification('Erro ao iniciar o chat. Tente novamente.', 'error');
-            });
-
-            // Mostrar o chat
-            document.getElementById('chat-container').classList.add('active');
-            chatOpen = true;
-        }
-
-        // Descobrir outros peers na mesma sala
-        function discoverPeersInRoom() {
-            // Para simplificar, tentamos conectar a IDs previsíveis na mesma sala
-            // Em produção, você pode usar um servidor de sinalização para listar peers
-            for (let i = 0; i < 10; i++) {
-                const testPeerId = `${roomKey}-user-${i}`;
-                if (testPeerId !== peer.id) {
-                    const conn = peer.connect(testPeerId);
-                    conn.on('open', () => {
-                        connections.push(conn);
-                        setupConnection(conn);
-                        showNotification('Conectado a um usuário na sala.', 'success');
-                    });
-                    conn.on('error', (err) => {
-                        console.log('Erro ao conectar ao peer:', testPeerId);
-                    });
-                }
-            }
-        }
-
-        // Configurar uma conexão
-        function setupConnection(conn) {
-            conn.on('data', (data) => {
-                addMessage(data.message, 'received', data.sender);
-            });
-
-            conn.on('close', () => {
-                showNotification('Um usuário saiu da sala.', 'info');
-                connections = connections.filter(c => c !== conn);
-            });
-        }
-
-        // Enviar mensagem para todos na sala
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            if (!message || connections.length === 0) {
-                if (connections.length === 0) {
-                    showNotification('Nenhum usuário conectado na sala.', 'info');
-                }
-                return;
-            }
-
-            // Adicionar a mensagem enviada localmente
-            addMessage(message, 'sent', userId);
-
-            // Enviar a mensagem para todos os usuários conectados
-            const data = { sender: userId, message: message };
-            connections.forEach(conn => {
-                if (conn.open) {
-                    conn.send(data);
-                }
-            });
-            input.value = '';
-        }
-
-        // Adicionar mensagem ao chat
-        function addMessage(message, type, sender) {
-            const messages = document.getElementById('chat-messages');
-            const messageElement = document.createElement('div');
-            messageElement.className = `chat-message ${type}`;
-            messageElement.textContent = `${sender}: ${message}`;
-            messages.appendChild(messageElement);
-            messages.scrollTop = messages.scrollHeight; // Auto-scroll
-        }
-
-        // Alternar visibilidade do chat
-        function toggleChat() {
-            const chatContainer = document.getElementById('chat-container');
-            chatOpen = !chatOpen;
-            if (chatOpen) {
-                chatContainer.classList.add('active');
-            } else {
-                chatContainer.classList.remove('active');
-            }
-        }
-
-        // Modificar verifyKey para abrir o modal do chat após verificação
-        const originalVerifyKey = verifyKey;
-        verifyKey = function() {
-            originalVerifyKey();
-            if (keyVerified) {
-                openChatKeyModal();
-            }
-        };
-
-        // Adicionar evento de tecla Enter para o input de chave
-        document.getElementById('chat-key-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                joinChatRoom();
-            }
-        });
-
-        // Adicionar evento de tecla Enter para o input de mensagem
-        document.getElementById('chat-input').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        // Fechar chat/modal ao clicar fora
-        document.addEventListener('click', (event) => {
-            const chatContainer = document.getElementById('chat-container');
-            const chatToggleBtn = document.querySelector('.chat-toggle-btn');
-            const chatKeyModal = document.getElementById('chat-key-modal');
-            const chatKeyModalContent = document.getElementById('chat-key-modal-content');
-
-            if (chatOpen && !chatContainer.contains(event.target) && !chatToggleBtn.contains(event.target)) {
-                toggleChat();
-            }
-
-            if (chatKeyModal.style.display === 'flex' && !chatKeyModalContent.contains(event.target)) {
-                closeChatKeyModal();
-            }
-        });
-    </script>
-	
-	
-	
 </body>
 </html>
