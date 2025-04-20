@@ -15,10 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        /* Apenas CSS alterado ou adicionado para o chat */
-		
-		/* Estilos originais mantidos intactos */
-        :root {
+	
+	 :root {
+            --error-color: #ff5555;
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
             --secondary-color: #0084ff;
@@ -1228,15 +1227,8 @@ display: flex;
                 top: 20px;
             }
         }
-		
-        :root {
-            --primary-color: #7367f0;
-            --primary-hover: #5e50ee;
-            --text-color: #f8f8f8;
-            --text-muted: #b4b7bd;
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
+	
+        /* Apenas CSS alterado ou adicionado para o chat */
         #player-container {
             flex-direction: row;
         }
@@ -1278,6 +1270,7 @@ display: flex;
             display: flex;
             align-items: center;
             gap: 5px;
+            flex-wrap: wrap;
         }
 
         .chat-header h3 #peer-id {
@@ -1287,6 +1280,19 @@ display: flex;
             max-width: 150px;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: color 0.2s;
+        }
+
+        .chat-header h3 #peer-id:hover {
+            color: var(--primary-hover);
+        }
+
+        .chat-header #peer-error {
+            color: var(--error-color);
+            font-size: 12px;
+            font-weight: 400;
+            margin: 0;
+            display: none;
         }
 
         .chat-peer-input {
@@ -1419,6 +1425,10 @@ display: flex;
                 max-width: 120px;
             }
 
+            .chat-header #peer-error {
+                font-size: 11px;
+            }
+
             .chat-peer-id,
             .chat-connect-btn {
                 font-size: 11px;
@@ -1518,6 +1528,7 @@ display: flex;
         <div id="chat-container" class="chat-container">
             <div class="chat-header">
                 <h3>Chat Geral (Seu ID: <span id="peer-id">Carregando...</span>)</h3>
+                <p id="peer-error"></p>
                 <div class="chat-peer-input">
                     <input type="text" id="peer-id-input" class="chat-peer-id" placeholder="ID do outro usuário" aria-label="ID do outro usuário">
                     <button class="chat-connect-btn" onclick="connectToPeer()">Conectar</button>
@@ -2130,69 +2141,117 @@ display: flex;
             // Verificar se o site está rodando em um servidor
             if (window.location.protocol === 'file:') {
                 showNotification('Erro: O chat requer um servidor HTTP/HTTPS. Execute o site em um servidor.', 'error');
-                document.getElementById('peer-id').textContent = 'Erro: Servidor necessário';
+                const peerError = document.getElementById('peer-error');
+                peerError.textContent = 'Erro: Execute o site em um servidor HTTP/HTTPS';
+                peerError.style.display = 'block';
+                document.getElementById('peer-id').textContent = 'Erro';
                 return;
             }
 
-            // Configurar PeerJS com opções explícitas
-            peer = new Peer({
-                host: '0.peerjs.com',
-                port: 443,
-                path: '/',
-                secure: true,
-                debug: 3 // Nível máximo de depuração
-            });
+            // Verificar compatibilidade do navegador
+            if (!window.RTCPeerConnection) {
+                showNotification('Erro: Seu navegador não suporta WebRTC. Use Chrome, Firefox ou Edge.', 'error');
+                const peerError = document.getElementById('peer-error');
+                peerError.textContent = 'Erro: Navegador não suporta WebRTC';
+                peerError.style.display = 'block';
+                document.getElementById('peer-id').textContent = 'Erro';
+                return;
+            }
 
-            peer.on('open', (id) => {
-                console.log('Peer ID gerado:', id);
-                const peerIdElement = document.getElementById('peer-id');
-                if (peerIdElement) {
-                    peerIdElement.textContent = id;
-                    // Adicionar funcionalidade de copiar ID ao clicar
-                    peerIdElement.onclick = () => {
-                        navigator.clipboard.writeText(id).then(() => {
-                            showNotification('ID copiado para a área de transferência!', 'success');
-                        }).catch(err => {
-                            console.error('Erro ao copiar ID:', err);
-                            showNotification('Erro ao copiar ID', 'error');
-                        });
-                    };
-                }
-                showNotification('Seu ID de chat: ' + id, 'info');
-            });
+            // Lista de servidores PeerJS para tentar
+            const servers = [
+                { host: '0.peerjs.com', port: 443, path: '/', secure: true },
+                { host: 'peerjs.herokudns.com', port: 9000, path: '/', secure: false }
+            ];
 
-            peer.on('connection', (conn) => {
-                console.log('Nova conexão recebida de:', conn.peer);
-                connections.push(conn);
-                conn.on('data', (data) => {
-                    console.log('Mensagem recebida:', data);
-                    receiveMessage(data);
-                });
-                conn.on('open', () => {
-                    console.log('Conexão estabelecida com:', conn.peer);
-                    showNotification('Conectado a ' + conn.peer, 'success');
-                });
-                conn.on('close', () => {
-                    console.log('Conexão fechada com:', conn.peer);
-                    connections = connections.filter(c => c !== conn);
-                    showNotification('Desconectado de ' + conn.peer, 'info');
-                });
-                conn.on('error', (err) => {
-                    console.error('Erro na conexão com', conn.peer, ':', err);
-                    showNotification('Erro na conexão com ' + conn.peer, 'error');
-                });
-            });
+            let currentServerIndex = 0;
+            let retryCount = 0;
+            const maxRetries = 3;
 
-            peer.on('error', (err) => {
-                console.error('Erro no PeerJS:', err);
-                document.getElementById('peer-id').textContent = 'Erro: Falha na conexão';
-                showNotification('Erro no chat: ' + err.type, 'error');
-            });
+            function tryConnect() {
+                const server = servers[currentServerIndex];
+                console.log(`Tentando conectar ao servidor PeerJS: ${server.host}:${server.port}`);
 
-            peer.on('disconnected', () => {
-                console.log('Desconectado do servidor PeerJS. Tentando reconectar...');
-                peer.reconnect();
-            });
+                peer = new Peer({
+                    host: server.host,
+                    port: server.port,
+                    path: server.path,
+                    secure: server.secure,
+                    debug: 3
+                });
+
+                peer.on('open', (id) => {
+                    console.log('Peer ID gerado:', id);
+                    const peerIdElement = document.getElementById('peer-id');
+                    if (peerIdElement) {
+                        peerIdElement.textContent = id;
+                        peerIdElement.onclick = () => {
+                            navigator.clipboard.writeText(id).then(() => {
+                                showNotification('ID copiado para a área de transferência!', 'success');
+                            }).catch(err => {
+                                console.error('Erro ao copiar ID:', err);
+                                showNotification('Erro ao copiar ID', 'error');
+                            });
+                        };
+                    }
+                    const peerError = document.getElementById('peer-error');
+                    peerError.style.display = 'none';
+                    showNotification('Seu ID de chat: ' + id, 'info');
+                });
+
+                peer.on('connection', (conn) => {
+                    console.log('Nova conexão recebida de:', conn.peer);
+                    connections.push(conn);
+                    conn.on('data', (data) => {
+                        console.log('Mensagem recebida:', data);
+                        receiveMessage(data);
+                    });
+                    conn.on('open', () => {
+                        console.log('Conexão estabelecida com:', conn.peer);
+                        showNotification('Conectado a ' + conn.peer, 'success');
+                    });
+                    conn.on('close', () => {
+                        console.log('Conexão fechada com:', conn.peer);
+                        connections = connections.filter(c => c !== conn);
+                        showNotification('Desconectado de ' + conn.peer, 'info');
+                    });
+                    conn.on('error', (err) => {
+                        console.error('Erro na conexão com', conn.peer, ':', err);
+                        showNotification('Erro na conexão com ' + conn.peer, 'error');
+                    });
+                });
+
+                peer.on('error', (err) => {
+                    console.error('Erro no PeerJS:', err);
+                    const peerError = document.getElementById('peer-error');
+                    peerError.textContent = `Erro: Falha na conexão (${err.type})`;
+                    peerError.style.display = 'block';
+                    document.getElementById('peer-id').textContent = 'Erro';
+
+                    // Tentar próximo servidor ou retry
+                    if (retryCount < maxRetries) {
+                        retryCount++;
+                        console.log(`Tentativa ${retryCount}/${maxRetries} falhou. Tentando novamente...`);
+                        setTimeout(tryConnect, 2000);
+                    } else if (currentServerIndex < servers.length - 1) {
+                        currentServerIndex++;
+                        retryCount = 0;
+                        console.log('Mudando para o próximo servidor...');
+                        setTimeout(tryConnect, 2000);
+                    } else {
+                        showNotification('Erro: Não foi possível conectar ao servidor de chat. Tente novamente mais tarde.', 'error');
+                        peerError.textContent = 'Erro: Não foi possível conectar. Verifique sua rede.';
+                    }
+                });
+
+                peer.on('disconnected', () => {
+                    console.log('Desconectado do servidor PeerJS. Tentando reconectar...');
+                    peer.reconnect();
+                });
+            }
+
+            // Iniciar a primeira tentativa
+            tryConnect();
 
             document.getElementById('chat-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
@@ -2207,6 +2266,10 @@ display: flex;
             }
             if (peerId === peer.id) {
                 showNotification('Você não pode conectar ao seu próprio ID', 'error');
+                return;
+            }
+            if (!peer || peer.disconnected) {
+                showNotification('Erro: Não conectado ao servidor de chat. Tente novamente.', 'error');
                 return;
             }
             console.log('Tentando conectar ao peer:', peerId);
@@ -2236,6 +2299,10 @@ display: flex;
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
             if (!message) return;
+            if (!peer || peer.disconnected) {
+                showNotification('Erro: Não conectado ao servidor de chat.', 'error');
+                return;
+            }
             const data = { username, message, timestamp: new Date().toLocaleTimeString() };
             console.log('Enviando mensagem:', data);
             connections.forEach(conn => {
