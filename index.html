@@ -1227,268 +1227,269 @@ display: flex;
             }
         }
 		/* Estilos para o chat */
-        .chat-container {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 300px;
-            height: 100vh;
-            background: rgba(20, 20, 20, 0.95);
-            border-left: 2px solid rgba(255, 0, 0, 0.5);
-            display: none;
-            flex-direction: column;
-            z-index: 1000;
-            box-shadow: -5px 0 15px rgba(255, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-        }
+.chat-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(20, 20, 20, 0.95);
+    border-left: 2px solid rgba(255, 0, 0, 0.5);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    box-shadow: -5px 0 15px rgba(255, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
 
-        .chat-container.active {
-            display: flex;
-            transform: translateX(0);
-        }
+.chat-container.active {
+    display: flex;
+    transform: translateX(0);
+}
 
-        .chat-header {
-            padding: 15px;
-            background: rgba(40, 40, 40, 0.9);
-            border-bottom: 1px solid rgba(255, 0, 0, 0.5);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+.chat-header {
+    padding: 15px;
+    background: rgba(40, 40, 40, 0.9);
+    border-bottom: 1px solid rgba(255, 0, 0, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .chat-header h3 {
-            font-family: 'Nosifer', cursive;
-            color: #ff1a1a;
-            font-size: 1.2em;
-            text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
-        }
+.chat-header h3 {
+    font-family: 'Nosifer', cursive;
+    color: #ff1a1a;
+    font-size: 1.2em;
+    text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
+}
 
-        .chat-toggle-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
+.chat-toggle-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
 
-        .chat-toggle-btn:hover {
-            color: #ff1a1a;
-        }
+.chat-toggle-btn:hover {
+    color: #ff1a1a;
+}
 
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: rgba(30, 30, 30, 0.8);
-        }
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: rgba(30, 30, 30, 0.8);
+}
 
-        .chat-message {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
+.chat-message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    max-width: 80%;
+    word-wrap: break-word;
+}
 
-        .chat-message.sent {
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
-            color: white;
-            margin-left: auto;
-            text-align: right;
-        }
+.chat-message.sent {
+    background: linear-gradient(135deg, #ff1a1a, #cc0000);
+    color: white;
+    margin-left: auto;
+    text-align: right;
+}
 
-        .chat-message.received {
-            background: rgba(40, 50, 70, 0.8);
-            color: #fff;
-            margin-right: auto;
-        }
+.chat-message.received {
+    background: rgba(40, 50, 70, 0.8);
+    color: #fff;
+    margin-right: auto;
+}
 
-        .chat-input-container {
-            display: flex;
-            padding: 15px;
-            background: rgba(20, 20, 20, 0.9);
-            border-top: 1px solid rgba(255, 0, 0, 0.5);
-        }
+.chat-input-container {
+    display: flex;
+    padding: 15px;
+    background: rgba(20, 20, 20, 0.9);
+    border-top: 1px solid rgba(255, 0, 0, 0.5);
+}
 
-        .chat-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid rgba(255, 0, 0, 0.5);
-            border-radius: 8px;
-            background: rgba(30, 30, 30, 0.8);
-            color: #fff;
-            font-size: 0.9em;
-            outline: none;
-            margin-right: 10px;
-        }
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    border-radius: 8px;
+    background: rgba(30, 30, 30, 0.8);
+    color: #fff;
+    font-size: 0.9em;
+    outline: none;
+    margin-right: 10px;
+}
 
-        .chat-input:focus {
-            border-color: #ff1a1a;
-            box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
-        }
+.chat-input:focus {
+    border-color: #ff1a1a;
+    box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
+}
 
-        .chat-send-btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
-            color: white;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+.chat-send-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ff1a1a, #cc0000);
+    color: white;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-        .chat-send-btn:hover {
-            background: linear-gradient(135deg, #cc0000, #ff1a1a);
-            box-shadow: 0 5px 10px rgba(255, 26, 26, 0.4);
-        }
+.chat-send-btn:hover {
+    background: linear-gradient(135deg, #cc0000, #ff1a1a);
+    box-shadow: 0 5px 10px rgba(255, 26, 26, 0.4);
+}
 
-        .chat-send-btn:active {
-            transform: scale(0.95);
-        }
+.chat-send-btn:active {
+    transform: scale(0.95);
+}
 
-        /* Estilos para o modal de chave da sala */
-        #chat-key-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            justify-content: center;
-            align-items: center;
-            z-index: 11000;
-        }
+/* Estilos para o modal de chave da sala */
+#chat-key-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+    z-index: 11000;
+}
 
-        #chat-key-modal-content {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
-            border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            padding: 35px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+#chat-key-modal-content {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    padding: 35px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-        #chat-key-modal-content h2 {
-            color: #ff1a1a;
-            font-family: 'Nosifer', cursive;
-            font-size: 1.6em;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
-        }
+#chat-key-modal-content h2 {
+    color: #ff1a1a;
+    font-family: 'Nosifer', cursive;
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
+}
 
-        #chat-key-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 0, 0, 0.5);
-            border-radius: 8px;
-            background: rgba(30, 30, 30, 0.8);
-            color: #fff;
-            font-size: 1em;
-            outline: none;
-        }
+#chat-key-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 0, 0, 0.5);
+    border-radius: 8px;
+    background: rgba(30, 30, 30, 0.8);
+    color: #fff;
+    font-size: 1em;
+    outline: none;
+}
 
-        #chat-key-input:focus {
-            border-color: #ff1a1a;
-            box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
-        }
+#chat-key-input:focus {
+    border-color: #ff1a1a;
+    box-shadow: 0 0 10px rgba(255, 26, 26, 0.5);
+}
 
-        #chat-key-error-message {
-            color: #ea5455;
-            font-size: 0.9em;
-            margin-bottom: 10px;
-            min-height: 20px;
-        }
+#chat-key-error-message {
+    color: #ea5455;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    min-height: 20px;
+}
 
-        #chat-key-join-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #ff1a1a, #cc0000);
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+#chat-key-join-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ff1a1a, #cc0000);
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-        #chat-key-join-btn:hover {
-            background: linear-gradient(135deg, #cc0000, #ff1a1a);
-            box-shadow: 0 8px 15px rgba(255, 26, 26, 0.4);
-            transform: translateY(-2px);
-        }
+#chat-key-join-btn:hover {
+    background: linear-gradient(135deg, #cc0000, #ff1a1a);
+    box-shadow: 0 8px 15px rgba(255, 26, 26, 0.4);
+    transform: translateY(-2px);
+}
 
-        #chat-key-join-btn:active {
-            transform: scale(0.98);
-        }
+#chat-key-join-btn:active {
+    transform: scale(0.98);
+}
 
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .chat-container {
-                width: 250px;
-            }
+/* Responsividade para o chat */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 250px;
+    }
 
-            .chat-header h3 {
-                font-size: 1em;
-            }
+    .chat-header h3 {
+        font-size: 1em;
+    }
 
-            .chat-message {
-                font-size: 0.8em;
-            }
+    .chat-message {
+        font-size: 0.8em;
+    }
 
-            .chat-input {
-                font-size: 0.8em;
-            }
+    .chat-input {
+        font-size: 0.8em;
+    }
 
-            .chat-send-btn {
-                padding: 8px 12px;
-                font-size: 0.8em;
-            }
-        }
+    .chat-send-btn {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+}
 
-        @media (max-width: 576px) {
-            .chat-container {
-                width: 100%;
-                max-width: 300px;
-                height: 50vh;
-                top: auto;
-                bottom: 0;
-                border-left: none;
-                border-top: 2px solid rgba(255, 0, 0, 0.5);
-                transform: translateY(100%);
-            }
+@media (max-width: 576px) {
+    .chat-container {
+        width: 100%;
+        max-width: 300px;
+        height: 50vh;
+        top: auto;
+        bottom: 0;
+        border-left: none;
+        border-top: 2px solid rgba(255, 0, 0, 0.5);
+        transform: translateY(100%);
+    }
 
-            .chat-container.active {
-                transform: translateY(0);
-            }
+    .chat-container.active {
+        transform: translateY(0);
+    }
 
-            .chat-messages {
-                max-height: calc(50vh - 100px);
-            }
+    .chat-messages {
+        max-height: calc(50vh - 100px);
+    }
 
-            #chat-key-modal-content {
-                padding: 20px;
-            }
+    #chat-key-modal-content {
+        padding: 20px;
+    }
 
-            #chat-key-modal-content h2 {
-                font-size: 1.3em;
-            }
+    #chat-key-modal-content h2 {
+        font-size: 1.3em;
+    }
 
-            #chat-key-input {
-                font-size: 0.9em;
-            }
+    #chat-key-input {
+        font-size: 0.9em;
+    }
 
-            #chat-key-join-btn {
-                font-size: 0.9em;
-            }
-        }
+    #chat-key-join-btn {
+        font-size: 0.9em;
+    }
+}
+		
     </style>
 </head>
 <body>
@@ -1543,34 +1544,7 @@ display: flex;
 
     </main>
 
-    <div id="player-container" aria-live="polite">
-	<!-- Modal para inserir a chave da sala -->
-    <div id="chat-key-modal" class="modal" role="dialog" aria-labelledby="chat-key-title" aria-hidden="true">
-        <div id="chat-key-modal-content">
-            <span class="close-modal" onclick="closeChatKeyModal()" aria-label="Fechar">×</span>
-            <h2 id="chat-key-title">Entrar no Chat Sombrio</h2>
-            <p>Digite a chave da sala para conversar com outros usuários</p>
-            <div class="input-group">
-                <label for="chat-key-input" class="sr-only">Chave da sala</label>
-                <input type="text" id="chat-key-input" placeholder="Digite a chave da sala" aria-label="Chave da sala" autocomplete="off" required/>
-            </div>
-            <div class="error-message" id="chat-key-error-message" role="alert" aria-live="assertive"></div>
-            <button type="button" id="chat-key-join-btn" onclick="joinChatRoom()" class="btn-primary">Entrar na Sala</button>
-        </div>
-    </div>
-
-    <!-- Container do chat -->
-    <div id="chat-container" class="chat-container" role="dialog" aria-label="Chat ao vivo">
-        <div class="chat-header">
-            <h3>Chat Sombrio</h3>
-            <button class="chat-toggle-btn" onclick="toggleChat()">×</button>
-        </div>
-        <div class="chat-messages" id="chat-messages"></div>
-        <div class="chat-input-container">
-            <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem"/>
-            <button class="chat-send-btn" onclick="sendMessage()">Enviar</button>
-        </div>
-    </div>
+   <div id="player-container" aria-live="polite">
         <div class="player twitch-player" id="player">
             <div id="twitch-embed"></div>
         </div>
@@ -1593,6 +1567,18 @@ display: flex;
             <div class="controls-right">
                 <button id="quality-btn" class="control-btn">⚙️</button>
                 <button id="fullscreen-btn" class="control-btn">⛶</button>
+            </div>
+        </div>
+        <!-- Container do chat -->
+        <div id="chat-container" class="chat-container" role="dialog" aria-label="Chat ao vivo">
+            <div class="chat-header">
+                <h3>Chat Sombrio</h3>
+                <button class="chat-toggle-btn" onclick="toggleChat()">×</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem"/>
+                <button class="chat-send-btn" onclick="sendMessage()">Enviar</button>
             </div>
         </div>
     </div>
@@ -1648,7 +1634,162 @@ display: flex;
             <button type="button" onclick="verificarChaveCanais()" class="btn-primary">Acessar Canais</button>
         </div>
     </div>
+	
+	<!-- Modal para inserir a chave da sala -->
+    <div id="chat-key-modal" class="modal" role="dialog" aria-labelledby="chat-key-title" aria-hidden="true">
+        <div id="chat-key-modal-content">
+            <span class="close-modal" onclick="closeChatKeyModal()" aria-label="Fechar">×</span>
+            <h2 id="chat-key-title">Entrar no Chat Sombrio</h2>
+            <p>Digite a chave da sala para conversar com outros usuários</p>
+            <div class="input-group">
+                <label for="chat-key-input" class="sr-only">Chave da sala</label>
+                <input type="text" id="chat-key-input" placeholder="Digite a chave da sala" aria-label="Chave da sala" autocomplete="off" required/>
+            </div>
+            <div class="error-message" id="chat-key-error-message" role="alert" aria-live="assertive"></div>
+            <button type="button" id="chat-key-join-btn" onclick="joinChatRoom()" class="btn-primary">Entrar na Sala</button>
+        </div>
+    </div>
+<!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSFTNJzKhfdzu0QVyN3LX2kbwXTUekGyM",
+            authDomain: "streamxcellence-3827d.firebaseapp.com",
+            projectId: "streamxcellence-3827d",
+            storageBucket: "streamxcellence-3827d.firebasestorage.app",
+            messagingSenderId: "651394479752",
+            appId: "1:651394479752:web:b392b2fef29c40e606113d",
+            measurementId: "G-TVM6L1T7G0"
+        };
 
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Variáveis globais para o chat
+        let userId = null;
+        let roomKey = null;
+        let chatOpen = false;
+        const MAX_MESSAGES = 100;
+
+        // Função para sanitizar mensagens
+        function sanitizeMessage(message) {
+            const div = document.createElement('div');
+            div.textContent = message;
+            return div.innerHTML;
+        }
+
+        // Função para abrir o modal de chave da sala
+        function openChatKeyModal() {
+            const modal = document.getElementById('chat-key-modal');
+            modal.style.display = 'flex';
+            const chatKeyInput = document.getElementById('chat-key-input');
+            chatKeyInput.value = '';
+            chatKeyInput.focus();
+        }
+
+        // Função para fechar o modal de chave da sala
+        function closeChatKeyModal() {
+            const modal = document.getElementById('chat-key-modal');
+            modal.style.display = 'none';
+            document.getElementById('chat-key-error-message').textContent = '';
+        }
+
+        // Função para entrar na sala de chat
+        function joinChatRoom() {
+            const chatKeyInput = document.getElementById('chat-key-input').value.trim();
+            const errorMessage = document.getElementById('chat-key-error-message');
+            if (!chatKeyInput) {
+                errorMessage.textContent = 'Por favor, digite uma chave da sala.';
+                return;
+            }
+
+            roomKey = chatKeyInput.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+            userId = 'user-' + Math.random().toString(36).substr(2, 9);
+            initChat();
+            closeChatKeyModal();
+            showNotification('Conectado à sala: ' + roomKey, 'success');
+        }
+
+        // Inicializar o chat
+        function initChat() {
+            if (!roomKey || !userId) {
+                showNotification('Erro: Chave da sala ou usuário não definido.', 'error');
+                return;
+            }
+
+            const chatRef = db.ref(`chat_rooms/${roomKey}/messages`);
+
+            chatRef.orderByChild('timestamp').limitToLast(MAX_MESSAGES).on('child_added', (snapshot) => {
+                const message = snapshot.val();
+                if (message && message.sender && message.text) {
+                    addMessage(message.text, message.sender === userId ? 'sent' : 'received', message.sender);
+                }
+            });
+
+            chatRef.once('value', (snapshot) => {
+                const messages = snapshot.val();
+                if (messages) {
+                    const messageKeys = Object.keys(messages);
+                    if (messageKeys.length > MAX_MESSAGES) {
+                        const keysToRemove = messageKeys.slice(0, messageKeys.length - MAX_MESSAGES);
+                        keysToRemove.forEach(key => chatRef.child(key).remove());
+                    }
+                }
+            });
+
+            document.getElementById('chat-container').classList.add('active');
+            chatOpen = true;
+        }
+
+        // Enviar mensagem
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message || !roomKey) {
+                showNotification('Digite uma mensagem ou entre em uma sala.', 'error');
+                return;
+            }
+
+            const sanitizedMessage = sanitizeMessage(message);
+            const chatRef = db.ref(`chat_rooms/${roomKey}/messages`);
+            chatRef.push({
+                sender: userId,
+                text: sanitizedMessage,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).catch((err) => {
+                console.error('Erro ao enviar mensagem:', err);
+                showNotification('Erro ao enviar mensagem. Tente novamente.', 'error');
+            });
+
+            input.value = '';
+        }
+
+        // Adicionar mensagem ao chat
+        function addMessage(message, type, sender) {
+            const messages = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = `chat-message ${type}`;
+            messageElement.textContent = `${sender}: ${message}`;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        // Alternar visibilidade do chat
+        function toggleChat() {
+            const chatContainer = document.getElementById('chat-container');
+            chatOpen = !chatOpen;
+            if (chatOpen) {
+                chatContainer.classList.add('active');
+            } else {
+                chatContainer.classList.remove('active');
+            }
+        }
+		</script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
@@ -2622,211 +2763,6 @@ document.addEventListener('contextmenu', function(e) {
         setTimeout(() => {
             document.querySelector('.notification').style.animation = 'slideIn 1s ease forwards';
         }, 1000);
-    </script>
-	
-
-	<!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-    <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyBSFTNJzKhfdzu0QVyN3LX2kbwXTUekGyM",
-            authDomain: "streamxcellence-3827d.firebaseapp.com",
-            projectId: "streamxcellence-3827d",
-            storageBucket: "streamxcellence-3827d.firebasestorage.app",
-            messagingSenderId: "651394479752",
-            appId: "1:651394479752:web:b392b2fef29c40e606113d",
-            measurementId: "G-TVM6L1T7G0"
-        };
-
-        // Inicializar Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        // Variáveis globais para o chat
-        let userId = null;
-        let roomKey = null;
-        let chatOpen = false;
-        const MAX_MESSAGES = 100; // Limite de mensagens por sala
-
-        // Função para mostrar notificações (deve existir no seu código original)
-        function showNotification(message, type = 'info') {
-            const container = document.getElementById('notification-container') || document.createElement('div');
-            if (!container.id) {
-                container.id = 'notification-container';
-                document.body.appendChild(container);
-            }
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            container.appendChild(notification);
-            setTimeout(() => {
-                notification.remove();
-            }, 5000);
-        }
-
-        // Função para sanitizar mensagens
-        function sanitizeMessage(message) {
-            const div = document.createElement('div');
-            div.textContent = message;
-            return div.innerHTML;
-        }
-
-        // Função para abrir o modal de chave da sala
-        function openChatKeyModal() {
-            const modal = document.getElementById('chat-key-modal');
-            modal.style.display = 'flex';
-            const chatKeyInput = document.getElementById('chat-key-input');
-            chatKeyInput.value = '';
-            chatKeyInput.focus();
-        }
-
-        // Função para fechar o modal de chave da sala
-        function closeChatKeyModal() {
-            const modal = document.getElementById('chat-key-modal');
-            modal.style.display = 'none';
-            document.getElementById('chat-key-error-message').textContent = '';
-        }
-
-        // Função para entrar na sala de chat
-        function joinChatRoom() {
-            const chatKeyInput = document.getElementById('chat-key-input').value.trim();
-            const errorMessage = document.getElementById('chat-key-error-message');
-            if (!chatKeyInput) {
-                errorMessage.textContent = 'Por favor, digite uma chave da sala.';
-                return;
-            }
-
-            roomKey = chatKeyInput.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-            userId = 'user-' + Math.random().toString(36).substr(2, 9);
-            initChat();
-            closeChatKeyModal();
-            showNotification('Conectado à sala: ' + roomKey, 'success');
-        }
-
-        // Inicializar o chat
-        function initChat() {
-            if (!roomKey || !userId) {
-                showNotification('Erro: Chave da sala ou usuário não definido.', 'error');
-                return;
-            }
-
-            // Referência à sala no Realtime Database
-            const chatRef = db.ref(`chat_rooms/${roomKey}/messages`);
-
-            // Escutar novas mensagens
-            chatRef.orderByChild('timestamp').limitToLast(MAX_MESSAGES).on('child_added', (snapshot) => {
-                const message = snapshot.val();
-                if (message && message.sender && message.text) {
-                    addMessage(message.text, message.sender === userId ? 'sent' : 'received', message.sender);
-                }
-            });
-
-            // Limpar mensagens antigas para manter o limite
-            chatRef.once('value', (snapshot) => {
-                const messages = snapshot.val();
-                if (messages) {
-                    const messageKeys = Object.keys(messages);
-                    if (messageKeys.length > MAX_MESSAGES) {
-                        const keysToRemove = messageKeys.slice(0, messageKeys.length - MAX_MESSAGES);
-                        keysToRemove.forEach(key => chatRef.child(key).remove());
-                    }
-                }
-            });
-
-            // Mostrar o chat
-            document.getElementById('chat-container').classList.add('active');
-            chatOpen = true;
-        }
-
-        // Enviar mensagem
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const message = input.value.trim();
-            if (!message || !roomKey) {
-                showNotification('Digite uma mensagem ou entre em uma sala.', 'error');
-                return;
-            }
-
-            const sanitizedMessage = sanitizeMessage(message);
-            const chatRef = db.ref(`chat_rooms/${roomKey}/messages`);
-            chatRef.push({
-                sender: userId,
-                text: sanitizedMessage,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            }).catch((err) => {
-                console.error('Erro ao enviar mensagem:', err);
-                showNotification('Erro ao enviar mensagem. Tente novamente.', 'error');
-            });
-
-            input.value = '';
-        }
-
-        // Adicionar mensagem ao chat
-        function addMessage(message, type, sender) {
-            const messages = document.getElementById('chat-messages');
-            const messageElement = document.createElement('div');
-            messageElement.className = `chat-message ${type}`;
-            messageElement.textContent = `${sender}: ${message}`;
-            messages.appendChild(messageElement);
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        // Alternar visibilidade do chat
-        function toggleChat() {
-            const chatContainer = document.getElementById('chat-container');
-            chatOpen = !chatOpen;
-            if (chatOpen) {
-                chatContainer.classList.add('active');
-            } else {
-                chatContainer.classList.remove('active');
-            }
-        }
-
-        // Modificar verifyKey para abrir o modal do chat após verificação
-        let keyVerified = false; // Placeholder, substitua pela sua lógica
-        const originalVerifyKey = typeof verifyKey === 'function' ? verifyKey : function() {};
-        verifyKey = function() {
-            originalVerifyKey();
-            keyVerified = true; // Simule verificação para testes
-            if (keyVerified) {
-                openChatKeyModal();
-            }
-        };
-
-        // Adicionar eventos
-        document.addEventListener('DOMContentLoaded', () => {
-            // Tecla Enter para chave da sala
-            document.getElementById('chat-key-input').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    joinChatRoom();
-                }
-            });
-
-            // Tecla Enter para mensagem
-            document.getElementById('chat-input').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-
-            // Fechar modal/chat ao clicar fora
-            document.addEventListener('click', (event) => {
-                const chatContainer = document.getElementById('chat-container');
-                const chatToggleBtn = document.querySelector('.chat-toggle-btn');
-                const chatKeyModal = document.getElementById('chat-key-modal');
-                const chatKeyModalContent = document.getElementById('chat-key-modal-content');
-
-                if (chatOpen && !chatContainer.contains(event.target) && !chatToggleBtn.contains(event.target)) {
-                    toggleChat();
-                }
-
-                if (chatKeyModal.style.display === 'flex' && !chatKeyModalContent.contains(event.target)) {
-                    closeChatKeyModal();
-                }
-            });
-        });
     </script>
 </body>
 </html>
