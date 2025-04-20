@@ -1634,8 +1634,8 @@ display: flex;
             <button type="button" onclick="verificarChaveCanais()" class="btn-primary">Acessar Canais</button>
         </div>
     </div>
-	
-	<!-- Modal para inserir a chave da sala -->
+
+    <!-- Modal para inserir a chave da sala -->
     <div id="chat-key-modal" class="modal" role="dialog" aria-labelledby="chat-key-title" aria-hidden="true">
         <div id="chat-key-modal-content">
             <span class="close-modal" onclick="closeChatKeyModal()" aria-label="Fechar">×</span>
@@ -1649,6 +1649,7 @@ display: flex;
             <button type="button" id="chat-key-join-btn" onclick="joinChatRoom()" class="btn-primary">Entrar na Sala</button>
         </div>
     </div>
+
 <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
@@ -1685,15 +1686,18 @@ display: flex;
 
         // Função para abrir o modal de chave da sala
         function openChatKeyModal() {
+            console.log('Abrindo modal de chave da sala');
             const modal = document.getElementById('chat-key-modal');
             modal.style.display = 'flex';
             const chatKeyInput = document.getElementById('chat-key-input');
             chatKeyInput.value = '';
             chatKeyInput.focus();
+            document.getElementById('chat-key-error-message').textContent = '';
         }
 
         // Função para fechar o modal de chave da sala
         function closeChatKeyModal() {
+            console.log('Fechando modal de chave da sala');
             const modal = document.getElementById('chat-key-modal');
             modal.style.display = 'none';
             document.getElementById('chat-key-error-message').textContent = '';
@@ -1701,15 +1705,18 @@ display: flex;
 
         // Função para entrar na sala de chat
         function joinChatRoom() {
+            console.log('Tentando entrar na sala de chat');
             const chatKeyInput = document.getElementById('chat-key-input').value.trim();
             const errorMessage = document.getElementById('chat-key-error-message');
             if (!chatKeyInput) {
                 errorMessage.textContent = 'Por favor, digite uma chave da sala.';
+                console.log('Chave da sala vazia');
                 return;
             }
 
             roomKey = chatKeyInput.toLowerCase().replace(/[^a-z0-9-]/g, '-');
             userId = 'user-' + Math.random().toString(36).substr(2, 9);
+            console.log('Chave da sala:', roomKey, 'UserID:', userId);
             initChat();
             closeChatKeyModal();
             showNotification('Conectado à sala: ' + roomKey, 'success');
@@ -1717,8 +1724,10 @@ display: flex;
 
         // Inicializar o chat
         function initChat() {
+            console.log('Inicializando chat');
             if (!roomKey || !userId) {
                 showNotification('Erro: Chave da sala ou usuário não definido.', 'error');
+                console.error('Erro: roomKey ou userId não definido');
                 return;
             }
 
@@ -1727,8 +1736,12 @@ display: flex;
             chatRef.orderByChild('timestamp').limitToLast(MAX_MESSAGES).on('child_added', (snapshot) => {
                 const message = snapshot.val();
                 if (message && message.sender && message.text) {
+                    console.log('Nova mensagem recebida:', message);
                     addMessage(message.text, message.sender === userId ? 'sent' : 'received', message.sender);
                 }
+            }, (error) => {
+                console.error('Erro ao ouvir mensagens:', error);
+                showNotification('Erro ao carregar mensagens do chat.', 'error');
             });
 
             chatRef.once('value', (snapshot) => {
@@ -1742,16 +1755,21 @@ display: flex;
                 }
             });
 
-            document.getElementById('chat-container').classList.add('active');
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.classList.add('active');
+            chatContainer.style.display = 'flex';
             chatOpen = true;
+            console.log('Chat container ativado');
         }
 
         // Enviar mensagem
         function sendMessage() {
+            console.log('Enviando mensagem');
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
             if (!message || !roomKey) {
                 showNotification('Digite uma mensagem ou entre em uma sala.', 'error');
+                console.log('Mensagem vazia ou sala não definida');
                 return;
             }
 
@@ -1761,6 +1779,8 @@ display: flex;
                 sender: userId,
                 text: sanitizedMessage,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                console.log('Mensagem enviada com sucesso');
             }).catch((err) => {
                 console.error('Erro ao enviar mensagem:', err);
                 showNotification('Erro ao enviar mensagem. Tente novamente.', 'error');
@@ -1771,6 +1791,7 @@ display: flex;
 
         // Adicionar mensagem ao chat
         function addMessage(message, type, sender) {
+            console.log('Adicionando mensagem ao chat:', message, type, sender);
             const messages = document.getElementById('chat-messages');
             const messageElement = document.createElement('div');
             messageElement.className = `chat-message ${type}`;
@@ -1781,15 +1802,22 @@ display: flex;
 
         // Alternar visibilidade do chat
         function toggleChat() {
+            console.log('Alternando visibilidade do chat');
             const chatContainer = document.getElementById('chat-container');
             chatOpen = !chatOpen;
             if (chatOpen) {
                 chatContainer.classList.add('active');
+                chatContainer.style.display = 'flex';
             } else {
                 chatContainer.classList.remove('active');
+                chatContainer.style.display = 'none';
             }
+            console.log('Chat open:', chatOpen);
         }
+		
 		</script>
+		
+		
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
     <script>
