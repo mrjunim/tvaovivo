@@ -15,8 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=Creepster&family=Nosifer&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-	
-	/* Estilos originais mantidos intactos */
+        /* Apenas CSS alterado ou adicionado para o chat */
+		
+		/* Estilos originais mantidos intactos */
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -1227,8 +1228,7 @@ display: flex;
                 top: 20px;
             }
         }
-	
-        /* Apenas CSS alterado ou adicionado para o chat */
+		
         :root {
             --primary-color: #7367f0;
             --primary-hover: #5e50ee;
@@ -1262,31 +1262,43 @@ display: flex;
         }
 
         .chat-header {
-            padding: 10px;
+            padding: 12px;
             background: rgba(15, 23, 42, 0.8);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .chat-header h3 {
             color: var(--text-color);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chat-header h3 #peer-id {
+            font-size: 12px;
+            color: var(--primary-color);
+            cursor: pointer;
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .chat-peer-input {
             display: flex;
-            gap: 5px;
+            gap: 6px;
         }
 
         .chat-peer-id {
             flex: 1;
             padding: 8px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            border-radius: 6px;
             background: rgba(40, 50, 70, 0.5);
             color: white;
             font-size: 12px;
@@ -1298,11 +1310,11 @@ display: flex;
         }
 
         .chat-connect-btn {
-            padding: 8px 12px;
+            padding: 8px 10px;
             background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
             transition: background 0.2s;
@@ -1402,9 +1414,15 @@ display: flex;
                 font-size: 14px;
             }
 
+            .chat-header h3 #peer-id {
+                font-size: 11px;
+                max-width: 120px;
+            }
+
             .chat-peer-id,
             .chat-connect-btn {
                 font-size: 11px;
+                padding: 6px;
             }
 
             .chat-message {
@@ -2109,12 +2127,40 @@ display: flex;
         }
 
         function initChat() {
-            peer = new Peer();
+            // Verificar se o site está rodando em um servidor
+            if (window.location.protocol === 'file:') {
+                showNotification('Erro: O chat requer um servidor HTTP/HTTPS. Execute o site em um servidor.', 'error');
+                document.getElementById('peer-id').textContent = 'Erro: Servidor necessário';
+                return;
+            }
+
+            // Configurar PeerJS com opções explícitas
+            peer = new Peer({
+                host: '0.peerjs.com',
+                port: 443,
+                path: '/',
+                secure: true,
+                debug: 3 // Nível máximo de depuração
+            });
+
             peer.on('open', (id) => {
                 console.log('Peer ID gerado:', id);
-                document.getElementById('peer-id').textContent = id;
+                const peerIdElement = document.getElementById('peer-id');
+                if (peerIdElement) {
+                    peerIdElement.textContent = id;
+                    // Adicionar funcionalidade de copiar ID ao clicar
+                    peerIdElement.onclick = () => {
+                        navigator.clipboard.writeText(id).then(() => {
+                            showNotification('ID copiado para a área de transferência!', 'success');
+                        }).catch(err => {
+                            console.error('Erro ao copiar ID:', err);
+                            showNotification('Erro ao copiar ID', 'error');
+                        });
+                    };
+                }
                 showNotification('Seu ID de chat: ' + id, 'info');
             });
+
             peer.on('connection', (conn) => {
                 console.log('Nova conexão recebida de:', conn.peer);
                 connections.push(conn);
@@ -2136,10 +2182,18 @@ display: flex;
                     showNotification('Erro na conexão com ' + conn.peer, 'error');
                 });
             });
+
             peer.on('error', (err) => {
                 console.error('Erro no PeerJS:', err);
-                showNotification('Erro na conexão do chat: ' + err.type, 'error');
+                document.getElementById('peer-id').textContent = 'Erro: Falha na conexão';
+                showNotification('Erro no chat: ' + err.type, 'error');
             });
+
+            peer.on('disconnected', () => {
+                console.log('Desconectado do servidor PeerJS. Tentando reconectar...');
+                peer.reconnect();
+            });
+
             document.getElementById('chat-input').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
@@ -2155,7 +2209,8 @@ display: flex;
                 showNotification('Você não pode conectar ao seu próprio ID', 'error');
                 return;
             }
-            const conn = peer.connect(peerId);
+            console.log('Tentando conectar ao peer:', peerId);
+            const conn = peer.connect(peerId, { reliable: true });
             conn.on('open', () => {
                 console.log('Conexão estabelecida com:', peerId);
                 connections.push(conn);
