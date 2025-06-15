@@ -1226,6 +1226,25 @@ display: flex;
                 top: 20px;
             }
         }
+		.viewer-count {
+    margin-top: 15px;
+    font-size: 1em;
+    color: #ff1a1a; /* Vermelho sangue para combinar com o tema */
+    font-family: 'Nosifer', cursive; /* Fonte assustadora */
+    text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    animation: pulse 2s infinite;
+}
+
+#viewer-number {
+    font-weight: 700;
+    background: rgba(40, 40, 40, 0.8);
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 0, 0, 0.5);
+}
     </style>
 </head>
 <body>
@@ -1253,6 +1272,8 @@ display: flex;
                 <button type="button" id="view-guide-button" onclick="openProgramacaoModal()" class="btn-info">Ver guia de programação</button>
             </div>
             <div class="error-message" id="error-message" role="alert" aria-live="assertive"></div>
+			<div class="viewer-count" id="viewer-count" role="status" aria-live="polite">
+    <span id="viewer-number">0</span> espectadores online</div>
 			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
     <audio id="ghostAudio"></audio>
         </section>
@@ -1373,6 +1394,48 @@ display: flex;
         let videoPlayer = null;
         let canaisData = [];
         let isChannelSelectorOpen = false;
+
+
+// Simulação de WebSocket para contagem de espectadores
+function initializeViewerCount() {
+    const viewerNumber = document.getElementById('viewer-number');
+    let viewers = Math.floor(Math.random() * 100) + 50; // Valor inicial aleatório entre 50 e 150
+
+    // Atualiza o contador inicialmente
+    viewerNumber.textContent = viewers;
+
+    // Simula atualizações em tempo real
+    setInterval(() => {
+        // Variação aleatória de -5 a +5
+        const variation = Math.floor(Math.random() * 11) - 5;
+        viewers = Math.max(0, viewers + variation); // Evita números negativos
+        viewerNumber.textContent = viewers;
+    }, 5000); // Atualiza a cada 5 segundos
+
+    // Opcional: Conectar a um WebSocket real se disponível
+    /*
+    const ws = new WebSocket('wss://seu-servidor-websocket');
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.viewers !== undefined) {
+            viewerNumber.textContent = data.viewers;
+        }
+    };
+    ws.onopen = () => {
+        console.log('Conectado ao WebSocket para contagem de espectadores');
+    };
+    ws.onerror = (error) => {
+        console.error('Erro no WebSocket:', error);
+    };
+    ws.onclose = () => {
+        console.log('WebSocket desconectado, tentando reconectar...');
+        setTimeout(initializeViewerCount, 10000); // Tenta reconectar após 10 segundos
+    };
+    */
+}
+
+// Inicializa a contagem de espectadores ao carregar a página
+document.addEventListener('DOMContentLoaded', initializeViewerCount);
 
         function playVideo(videoElement) {
             videoElement.play().catch(error => {
