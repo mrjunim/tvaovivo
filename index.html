@@ -1245,8 +1245,34 @@ display: flex;
     border-radius: 8px;
     border: 1px solid rgba(255, 0, 0, 0.5);
 }
+.live-notification {
+        max-width: 650px;
+        width: 100%;
+        position: relative;
+    }
 
- .live-player-message {
+    #live-player {
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* Maintain 16:9 aspect ratio */
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #live-twitch-embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 12px;
+    }
+
+    .live-player-message {
         position: absolute;
         bottom: 0;
         left: 0;
@@ -1263,25 +1289,21 @@ display: flex;
         display: none;
     }
 
-    #live-player.paused iframe {
+    #live-player.paused #live-twitch-embed {
         filter: brightness(0.3);
     }
 
-    #live-player iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-radius: 12px;
-        pointer-events: none;
-    }
-
     @media (max-width: 768px) {
+        .live-notification {
+            max-width: 100%;
+        }
+
         .live-player-message {
             font-size: 14px;
             padding: 8px;
         }
 
-        #live-player iframe {
+        #live-twitch-embed {
             border-radius: 8px;
         }
     }
@@ -1292,10 +1314,12 @@ display: flex;
             padding: 6px;
         }
 
-        #live-player iframe {
+        #live-twitch-embed {
             border-radius: 6px;
         }
     }
+
+
     </style>
 </head>
 <body>
@@ -1342,10 +1366,12 @@ display: flex;
             <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
     </div>
-    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo do canal lourimarcos">
-    <div id="live-twitch-embed"></div>
-    <div class="live-player-message" id="live-player-message" style="display: none;">Faça login ou compre acesso para continuar</div>
-</div>
+    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
+        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
+            <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+    </div>
 </section>
 
     </main>
