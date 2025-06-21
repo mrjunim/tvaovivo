@@ -1246,43 +1246,28 @@ display: flex;
     border: 1px solid rgba(255, 0, 0, 0.5);
 }
 
-   .mini-tv-container {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 220px;
-        height: 140px;
-        background: rgba(20, 20, 20, 0.9);
-        border: 2px solid rgba(139, 0, 0, 0.5);
-        border-radius: 12px;
-        box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-        z-index: 5;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        transition: all 0.3s ease;
-    }
-
-    .mini-tv-message {
+ .live-player-message {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(135deg, #ff1a1a, #cc0000);
         color: #fff;
-        font-size: 14px;
+        font-size: 16px;
         font-family: 'Poppins', sans-serif;
-        background: rgba(40, 40, 40, 0.8);
         padding: 10px;
         text-align: center;
         text-shadow: 1px 1px 5px rgba(255, 0, 0, 0.7);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        cursor: pointer;
+        z-index: 10;
+        display: none;
     }
 
-    .mini-tv-player {
-        flex: 1;
-        position: relative;
-        overflow: hidden;
+    #live-player.paused iframe {
+        filter: brightness(0.3);
     }
 
-    .mini-tv-player iframe {
+    #live-player iframe {
         width: 100%;
         height: 100%;
         border: none;
@@ -1290,44 +1275,24 @@ display: flex;
         pointer-events: none;
     }
 
-    .mini-tv-container.paused .mini-tv-player {
-        filter: brightness(0.3);
-    }
-
-    .mini-tv-container.paused .mini-tv-message {
-        cursor: pointer;
-        background: linear-gradient(135deg, #ff1a1a, #cc0000);
-        color: #fff;
-    }
-
     @media (max-width: 768px) {
-        .mini-tv-container {
-            width: 180px;
-            height: 120px;
-        }
-
-        .mini-tv-message {
-            font-size: 12px;
+        .live-player-message {
+            font-size: 14px;
             padding: 8px;
         }
 
-        .mini-tv-player iframe {
+        #live-player iframe {
             border-radius: 8px;
         }
     }
 
     @media (max-width: 576px) {
-        .mini-tv-container {
-            width: 140px;
-            height: 90px;
-        }
-
-        .mini-tv-message {
-            font-size: 10px;
+        .live-player-message {
+            font-size: 12px;
             padding: 6px;
         }
 
-        .mini-tv-player iframe {
+        #live-player iframe {
             border-radius: 6px;
         }
     }
@@ -1377,12 +1342,10 @@ display: flex;
             <span id="guide-text-duplicate">Carregando guia...</span>
         </div>
     </div>
-    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo">
-        <video id="live-video" autoplay loop muted playsinline controls="false" preload="auto">
-            <source src="https://i.imgur.com/0bWbKTA.mp4" type="video/mp4">
-            Seu navegador não suporta o elemento de vídeo.
-        </video>
-    </div>
+    <div class="player" id="live-player" aria-label="Prévia do conteúdo ao vivo do canal lourimarcos">
+    <div id="live-twitch-embed"></div>
+    <div class="live-player-message" id="live-player-message" style="display: none;">Faça login ou compre acesso para continuar</div>
+</div>
 </section>
 
     </main>
@@ -1491,64 +1454,6 @@ display: flex;
 
   gtag('config', 'G-LKSX0LXSMF');
 
-
-    function initializeMiniTv() {
-        const miniTvContainer = document.getElementById('mini-tv-container');
-        const miniTvMessage = document.getElementById('mini-tv-message');
-        let miniPlayer;
-
-        // Initialize Twitch player for mini TV
-        if (document.getElementById('mini-twitch-embed')) {
-            miniPlayer = new Twitch.Player('mini-twitch-embed', {
-                channel: 'lourimarcos',
-                width: '100%',
-                height: '100%',
-                controls: false,
-                autoplay: true,
-                muted: true,
-                parent: [window.location.hostname]
-            });
-
-            miniPlayer.addEventListener(Twitch.Player.READY, () => {
-                miniPlayer.setMuted(true);
-                miniPlayer.setVolume(0);
-                miniPlayer.play();
-                showNotification('Mini TV iniciada com o canal lourimarcos', 'info');
-            });
-
-            miniPlayer.addEventListener(Twitch.Player.OFFLINE, () => {
-                miniTvMessage.textContent = 'Canal lourimarcos está offline';
-                miniTvContainer.classList.add('paused');
-                miniTvMessage.style.cursor = 'default';
-                showNotification('O canal lourimarcos está offline', 'error');
-            });
-
-            // Pause after 30 seconds and show login/purchase message
-            setTimeout(() => {
-                miniPlayer.pause();
-                miniTvContainer.classList.add('paused');
-                miniTvMessage.textContent = 'Faça login ou compre acesso para continuar';
-                miniTvMessage.style.cursor = 'pointer';
-                miniTvMessage.addEventListener('click', () => {
-                    document.getElementById('modal').style.display = 'flex';
-                });
-            }, 30000);
-        }
-    }
-
-    // Initialize mini TV when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        initializeMiniTv();
-    });
-
-    // Update verifyKey to hide mini TV on successful login
-    const originalVerifyKey = verifyKey; // Preserve original function
-    function verifyKey() {
-        originalVerifyKey();
-        if (keyVerified) {
-            document.getElementById('mini-tv-container').style.display = 'none';
-        }
-    }
 
 // Simulação de WebSocket para contagem de espectadores
 function initializeViewerCount() {
@@ -1823,28 +1728,99 @@ document.addEventListener('DOMContentLoaded', initializeViewerCount);
         }
 
     function createLiveNotificationPlayer() {
-    const liveVideo = document.getElementById('live-video');
-    if (liveVideo) {
-        liveVideo.autoplay = true; // Garante reprodução automática
-        liveVideo.loop = true; // Mantém o loop
-        liveVideo.muted = true; // Garante que o vídeo esteja mudo
-        liveVideo.controls = false; // Remove controles
-        liveVideo.playsinline = true; // Garante reprodução inline em dispositivos móveis
-        liveVideo.volume = 0; // Define volume como 0 por segurança
-        playVideo(liveVideo); // Tenta reproduzir o vídeo automaticamente
-        liveVideo.addEventListener('error', (e) => {
-            console.error('Erro ao carregar o vídeo ao vivo:', e);
-            showNotification('Erro ao carregar o vídeo ao vivo', 'error');
-        });
-        // Garante que o vídeo permaneça mudo mesmo após eventos
-        liveVideo.addEventListener('volumechange', () => {
-            if (!liveVideo.muted) {
-                liveVideo.muted = true;
-                liveVideo.volume = 0;
+        console.log('Inicializando Live Notification Player com Twitch...');
+        const livePlayerContainer = document.getElementById('live-player');
+        const livePlayerMessage = document.getElementById('live-player-message');
+        let livePlayer;
+
+        if (!livePlayerContainer) {
+            console.error('Contêiner live-player não encontrado!');
+            if (typeof showNotification === 'function') {
+                showNotification('Erro ao inicializar o player', 'error');
             }
-        });
+            return;
+        }
+
+        if (document.getElementById('live-twitch-embed')) {
+            console.log('Configurando Twitch Player para lourimarcos...');
+            try {
+                livePlayer = new Twitch.Player('live-twitch-embed', {
+                    channel: 'lourimarcos',
+                    width: '100%',
+                    height: '100%',
+                    controls: false,
+                    autoplay: true,
+                    muted: true,
+                    parent: [window.location.hostname, 'localhost']
+                });
+
+                livePlayer.addEventListener(Twitch.Player.READY, () => {
+                    console.log('Live Player Twitch pronto');
+                    livePlayer.setMuted(true);
+                    livePlayer.setVolume(0);
+                    livePlayer.play();
+                    if (typeof showNotification === 'function') {
+                        showNotification('Exibindo transmissão ao vivo do canal lourimarcos', 'info');
+                    }
+                });
+
+                livePlayer.addEventListener(Twitch.Player.OFFLINE, () => {
+                    console.log('Canal lourimarcos offline');
+                    livePlayerContainer.classList.add('paused');
+                    livePlayerMessage.textContent = 'Canal lourimarcos está offline';
+                    livePlayerMessage.style.display = 'block';
+                    livePlayerMessage.style.cursor = 'default';
+                    if (typeof showNotification === 'function') {
+                        showNotification('O canal lourimarcos está offline', 'error');
+                    }
+                });
+
+                // Pause after 30 seconds and show login/purchase message
+                setTimeout(() => {
+                    console.log('Pausando Live Player após 30 segundos');
+                    livePlayer.pause();
+                    livePlayerContainer.classList.add('paused');
+                    livePlayerMessage.style.display = 'block';
+                    livePlayerMessage.addEventListener('click', () => {
+                        const modal = document.getElementById('modal');
+                        if (modal) {
+                            modal.style.display = 'flex';
+                            console.log('Modal de acesso aberto');
+                        } else {
+                            console.error('Modal com id="modal" não encontrado');
+                        }
+                    });
+                }, 30000);
+            } catch (error) {
+                console.error('Erro ao inicializar Twitch Player:', error);
+                if (typeof showNotification === 'function') {
+                    showNotification('Erro ao carregar o player ao vivo', 'error');
+                }
+            }
+        } else {
+            console.error('Elemento live-twitch-embed não encontrado!');
+        }
     }
-}
+
+    // Ensure the player initializes on page load
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        createLiveNotificationPlayer();
+    } else {
+        document.addEventListener('DOMContentLoaded', createLiveNotificationPlayer);
+    }
+
+    // Update verifyKey to hide live player on successful login
+    const originalVerifyKey = typeof verifyKey === 'function' ? verifyKey : function() {};
+    function verifyKey() {
+        originalVerifyKey();
+        if (keyVerified) {
+            const liveNotification = document.getElementById('live-notification');
+            if (liveNotification) {
+                liveNotification.style.display = 'none';
+                console.log('Live Notification Player ocultado após login');
+            }
+        }
+    }
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
