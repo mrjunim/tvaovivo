@@ -1,49 +1,63 @@
-Título: 
-Sinopse: 
-Horário: 🔴
+Título:  O Iluminado (1980)
+Sinopse: Escritor enlouquece em hotel isolado sob influência sobrenatural.
+Horário: 🔴 20/06 – 22:30	 ---  20/06 – 00:55	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: M3GAN (2022)	
+Sinopse: Boneca robótica cria vínculo mortal com uma menina.
+Horário: 🔴00:55	 02:35	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: O Exorcista (1973)	
+Sinopse: Menina é possuída por entidade demoníaca; exorcismo é a única esperança.
+Horário: 🔴 02:35	 --- 04:50	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: A Morte do Demônio: A Ascensão (2023)	
+Sinopse: Entidade demoníaca aterroriza irmãs em prédio isolado.
+Horário: 🔴04:50	 -- 06:25	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: Halloween – A Noite do Terror (1978)	
+Sinopse: Michael Myers retorna para matar na noite de Halloween.
+Horário: 🔴06:25	--- 08:05	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: A Entidade (2012)	
+Sinopse: Escritor encontra vídeos de assassinatos sobrenaturais.
+Horário: 🔴08:05	  ---- 09:55	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: O Massacre da Serra Elétrica (1974)	
+Sinopse: Jovens caem nas mãos de família canibal.
+Horário: 🔴09:55	 --- 11:25	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: Fale Comigo (2023)	
+Sinopse: Jovens invocam espíritos com mão embalsamada.
+Horário: 🔴11:25	 --- 13:05	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: O Chamado (2002)	
+Sinopse: Fita amaldiçoada mata quem a assiste em 7 dias.
+Horário: 🔴13:05	 ---- 15:00	
 Imagem Capa: 
 
-Título: 
-Sinopse: 
-Horário: 🔴
+Título: Pearl (2022)	
+Sinopse: Jovem sonha com fama mas carrega desejos sombrios.
+Horário: 🔴18:20	---- 20:00	
 Imagem Capa: 
+
+Título: Terrifier 2 (2022)	
+Sinopse: Palhaço Art retorna ainda mais sádico.
+Horário: 🔴21:50	 ---- 00:05	
+Imagem Capa: 
+
+
+Título: Hereditário (2018)	
+Sinopse: Família enfrenta forças ocultas após morte da matriarca.
+Horário: 🔴00:05	---- 02:15	
+Imagem Capa: 
+
+
+
