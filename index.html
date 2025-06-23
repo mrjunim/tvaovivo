@@ -1319,6 +1319,66 @@ display: flex;
         }
     }
 
+ .cast-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: rgba(20, 20, 20, 0.9);
+        border: 2px solid rgba(139, 0, 0, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1000;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    }
+
+    .cast-button:hover {
+        background: rgba(40, 40, 40, 0.9);
+        border-color: #ff1a1a;
+        transform: scale(1.1);
+    }
+
+    .cast-button svg {
+        stroke: #ff1a1a;
+        transition: stroke 0.3s ease;
+    }
+
+    .cast-button:hover svg {
+        stroke: #fff;
+    }
+
+    @media (max-width: 768px) {
+        .cast-button {
+            width: 36px;
+            height: 36px;
+            top: 15px;
+            right: 15px;
+        }
+
+        .cast-button svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .cast-button {
+            width: 32px;
+            height: 32px;
+            top: 10px;
+            right: 10px;
+        }
+
+        .cast-button svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
 
     </style>
 </head>
@@ -1352,7 +1412,13 @@ display: flex;
 			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
     <audio id="ghostAudio"></audio>
         </section>
-
+<button id="cast-button" class="cast-button" aria-label="Transmitir para dispositivos compatíveis" title="Transmitir o player principal">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 20h2a2 2 0 0 1 2 2v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2a2 2 0 0 1 2-2h2"></path>
+        <path d="M2 16a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6"></path>
+        <path d="M2 12a10 10 0 0 1 10-10h2a10 10 0 0 1 10 10"></path>
+    </svg>
+</button>
 <section class="live-notification" id="live-notification">
     <div id="sobre">
         <h3>Sobre o StreamXcellence</h3>
@@ -1536,6 +1602,41 @@ document.addEventListener('DOMContentLoaded', initializeViewerCount);
                 notification.remove();
             }, 3000);
         }
+
+    function initializeCastButton() {
+        console.log('Inicializando botão de transmissão...');
+        const castButton = document.getElementById('cast-button');
+
+        if (!castButton) {
+            console.error('Botão de transmissão não encontrado!');
+            if (typeof showNotification === 'function') {
+                showNotification('Erro ao inicializar o botão de transmissão', 'error');
+            }
+            return;
+        }
+
+        castButton.addEventListener('click', () => {
+            console.log('Botão de transmissão clicado');
+            try {
+                if (typeof showNotification === 'function') {
+                    showNotification('Clique em "Transmitir..." no menu de três pontos do Chrome para transmitir o player', 'info');
+                } else {
+                    alert('Clique em "Transmitir..." no menu de três pontos do Chrome para transmitir o player');
+                }
+            } catch (error) {
+                console.error('Erro ao tentar transmitir:', error);
+                if (typeof showNotification === 'function') {
+                    showNotification('Erro ao iniciar transmissão. Verifique a rede ou permissões', 'error');
+                }
+            }
+        });
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        initializeCastButton();
+    } else {
+        document.addEventListener('DOMContentLoaded', initializeCastButton);
+    }
 
         function updateQualityMenu() {
             const qualityMenu = document.getElementById('quality-menu');
