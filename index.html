@@ -1647,6 +1647,30 @@ let castSession = null;
         };
     }
 
+
+// Extend verifyKey to show cast button after login
+    const originalVerifyKey = verifyKey;
+    verifyKey = function() {
+        originalVerifyKey();
+        if (keyVerified) {
+            const castButton = document.getElementById('cast-button');
+            if (castButton) {
+                castButton.style.display = 'flex';
+                console.log('Botão de transmissão exibido após login');
+                initializeCastButton();
+            }
+        }
+    };
+
+    // Hide cast button initially
+    document.addEventListener('DOMContentLoaded', () => {
+        const castButton = document.getElementById('cast-button');
+        if (castButton && !keyVerified) {
+            castButton.style.display = 'none';
+        }
+    });
+
+
 // Simulação de WebSocket para contagem de espectadores
 function initializeViewerCount() {
     const viewerNumber = document.getElementById('viewer-number');
