@@ -1529,6 +1529,7 @@ display: flex;
             <button type="button" onclick="verificarChaveCanais()" class="btn-primary">Acessar Canais</button>
         </div>
     </div>
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://player.twitch.tv/js/embed/v1.js"></script>
@@ -1554,8 +1555,6 @@ display: flex;
   gtag('js', new Date());
 
   gtag('config', 'G-LKSX0LXSMF');
-
-
 
 let castSession = null;
 
@@ -1669,7 +1668,6 @@ let castSession = null;
             castButton.style.display = 'none';
         }
     });
-
 // Simulação de WebSocket para contagem de espectadores
 function initializeViewerCount() {
     const viewerNumber = document.getElementById('viewer-number');
