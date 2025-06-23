@@ -1648,28 +1648,6 @@ let castSession = null;
     }
 
 
-// Extend verifyKey to show cast button after login
-    const originalVerifyKey = verifyKey;
-    verifyKey = function() {
-        originalVerifyKey();
-        if (keyVerified) {
-            const castButton = document.getElementById('cast-button');
-            if (castButton) {
-                castButton.style.display = 'flex';
-                console.log('Botão de transmissão exibido após login');
-                initializeCastButton();
-            }
-        }
-    };
-
-    // Hide cast button initially
-    document.addEventListener('DOMContentLoaded', () => {
-        const castButton = document.getElementById('cast-button');
-        if (castButton && !keyVerified) {
-            castButton.style.display = 'none';
-        }
-    });
-
 
 // Simulação de WebSocket para contagem de espectadores
 function initializeViewerCount() {
@@ -2025,18 +2003,28 @@ document.addEventListener('DOMContentLoaded', initializeViewerCount);
         document.addEventListener('DOMContentLoaded', createLiveNotificationPlayer);
     }
 
-    // Update verifyKey to hide live player on successful login
-    const originalVerifyKey = typeof verifyKey === 'function' ? verifyKey : function() {};
-    function verifyKey() {
+     // Extend verifyKey to show cast button after login
+    const originalVerifyKey = verifyKey;
+    verifyKey = function() {
         originalVerifyKey();
         if (keyVerified) {
-            const liveNotification = document.getElementById('live-notification');
-            if (liveNotification) {
-                liveNotification.style.display = 'none';
-                console.log('Live Notification Player ocultado após login');
+            const castButton = document.getElementById('cast-button');
+            if (castButton) {
+                castButton.style.display = 'flex';
+                console.log('Botão de transmissão exibido após login');
+                initializeCastButton();
             }
         }
-    }
+    };
+	
+	 // Hide cast button initially
+    document.addEventListener('DOMContentLoaded', () => {
+        const castButton = document.getElementById('cast-button');
+        if (castButton && !keyVerified) {
+            castButton.style.display = 'none';
+        }
+    });
+	
 
         function loadProgramacao() {
             fetch('https://mrjunim.github.io/tvaovivo/guia_de_programacao.txt')
