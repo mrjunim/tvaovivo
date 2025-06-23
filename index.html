@@ -1318,9 +1318,8 @@ display: flex;
             border-radius: 6px;
         }
     }
-
- .cast-button {
-        position: fixed;
+.cast-button {
+        position: absolute;
         top: 20px;
         right: 20px;
         width: 40px;
@@ -1332,9 +1331,15 @@ display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        z-index: 1000;
+        z-index: 1001; /* Above player, below modals */
         transition: all 0.3s ease;
         box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        font-family: 'Poppins', sans-serif;
+        opacity: 0;
+    }
+
+    #player-container:hover .cast-button {
+        opacity: 1;
     }
 
     .cast-button:hover {
@@ -1350,6 +1355,10 @@ display: flex;
 
     .cast-button:hover svg {
         stroke: #fff;
+    }
+
+    .cast-button.casting svg {
+        stroke: #28c76f; /* Green when casting */
     }
 
     @media (max-width: 768px) {
@@ -1412,13 +1421,7 @@ display: flex;
 			<div class="notification" onclick="playRandomAudio()"> 📞Você recebeu uma mensagem de voz do além! Clique para ouvir</div>
     <audio id="ghostAudio"></audio>
         </section>
-<button id="cast-button" class="cast-button" aria-label="Transmitir para dispositivos compatíveis" title="Transmitir o player principal">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M2 20h2a2 2 0 0 1 2 2v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2a2 2 0 0 1 2-2h2"></path>
-        <path d="M2 16a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6"></path>
-        <path d="M2 12a10 10 0 0 1 10-10h2a10 10 0 0 1 10 10"></path>
-    </svg>
-</button>
+
 <section class="live-notification" id="live-notification">
     <div id="sobre">
         <h3>Sobre o StreamXcellence</h3>
@@ -1442,6 +1445,14 @@ display: flex;
 
     <div id="player-container" aria-live="polite">
         <div class="player twitch-player" id="player">
+		<button id="cast-button" class="cast-button" aria-label="Transmitir para dispositivos compatíveis" title="Transmitir para dispositivos compatíveis" style="display: none;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 20h2a2 2 0 0 1 2 2v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2a2 2 0 0 1 2-2h2"></path>
+        <path d="M2 16a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6"></path>
+        <path d="M2 12a10 10 0 0 1 10-10h2a10 10 0 0 1 10 10"></path>
+    </svg>
+</button>
+
             <div id="twitch-embed"></div>
         </div>
         <div class="channel-info">
@@ -1545,6 +1556,120 @@ display: flex;
   gtag('config', 'G-LKSX0LXSMF');
 
 
+
+let castSession = null;
+
+    function initializeCastButton() {
+        console.log('Inicializando botão de transmissão...');
+        const castButton = document.getElementById('cast-button');
+
+        if (!castButton) {
+            console.error('Botão de transmissão não encontrado!');
+            showNotification('Erro ao inicializar o botão de transmissão', 'error');
+            return;
+        }
+
+        // Hide button in non-Chrome browsers
+        if (!window.chrome || !window.chrome.cast || !navigator.userAgent.includes('Chrome')) {
+            console.log('Navegador não suporta Google Cast, ocultando botão');
+            castButton.style.display = 'none';
+            return;
+        }
+
+        // Initialize Cast API
+        window['__onGCastApiAvailable'] = function(isAvailable) {
+            if (isAvailable) {
+                console.log('API do Google Cast disponível');
+                const castContext = cast.framework.CastContext.getInstance();
+                castContext.setOptions({
+                    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+                    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+                });
+
+                // Update button state based on session
+                castContext.addEventListener(
+                    cast.framework.CastContextEventType.SESSION_STATE_CHANGED,
+                    function(event) {
+                        switch (event.sessionState) {
+                            case cast.framework.SessionState.SESSION_STARTED:
+                            case cast.framework.SessionState.SESSION_RESUMED:
+                                castSession = castContext.getCurrentSession();
+                                castButton.classList.add('casting');
+                                showNotification('Transmissão iniciada', 'success');
+                                break;
+                            case cast.framework.SessionState.SESSION_ENDED:
+                                castSession = null;
+                                castButton.classList.remove('casting');
+                                showNotification('Transmissão encerrada', 'info');
+                                break;
+                        }
+                    }
+                );
+
+                // Button click to show device selection dialog
+                castButton.addEventListener('click', () => {
+                    console.log('Botão de transmissão clicado');
+                    try {
+                        castContext.requestSession().then(() => {
+                            castSession = castContext.getCurrentSession();
+                            const mediaInfo = new chrome.cast.media.MediaInfo(
+                                'https://player.twitch.tv/?channel=lourimarcos&parent=' + window.location.hostname,
+                                'application/x-mpegURL'
+                            );
+                            const request = new chrome.cast.media.LoadRequest(mediaInfo);
+                            castSession.loadMedia(request).then(
+                                () => {
+                                    console.log('Mídia carregada com sucesso');
+                                    showNotification('Transmitindo para dispositivo', 'success');
+                                },
+                                (error) => {
+                                    console.error('Erro ao carregar mídia:', error);
+                                    showNotification('Erro ao transmitir. Verifique a rede ou dispositivo', 'error');
+                                }
+                            );
+                        }).catch((error) => {
+                            console.error('Erro ao iniciar sessão:', error);
+                            if (error === chrome.cast.ErrorCode.CANCEL) {
+                                showNotification('Seleção de dispositivo cancelada', 'info');
+                            } else {
+                                showNotification('Erro ao encontrar dispositivos. Verifique a rede ou permissões', 'error');
+                            }
+                        });
+                    } catch (error) {
+                        console.error('Erro geral no Cast:', error);
+                        showNotification('Erro ao iniciar transmissão. Tente novamente', 'error');
+                    }
+                });
+            } else {
+                console.error('API do Google Cast não disponível');
+                castButton.style.display = 'none';
+                showNotification('Transmissão não suportada neste navegador', 'error');
+            }
+        };
+    }
+
+    // Extend verifyKey to show cast button after login
+    const originalVerifyKey = verifyKey;
+    verifyKey = function() {
+        originalVerifyKey();
+        if (keyVerified) {
+            const castButton = document.getElementById('cast-button');
+            if (castButton) {
+                castButton.style.display = 'flex';
+                console.log('Botão de transmissão exibido após login');
+                initializeCastButton();
+            }
+        }
+    };
+
+    // Hide cast button initially
+    document.addEventListener('DOMContentLoaded', () => {
+        const castButton = document.getElementById('cast-button');
+        if (castButton && !keyVerified) {
+            castButton.style.display = 'none';
+        }
+    });
+
 // Simulação de WebSocket para contagem de espectadores
 function initializeViewerCount() {
     const viewerNumber = document.getElementById('viewer-number');
@@ -1602,41 +1727,6 @@ document.addEventListener('DOMContentLoaded', initializeViewerCount);
                 notification.remove();
             }, 3000);
         }
-
-    function initializeCastButton() {
-        console.log('Inicializando botão de transmissão...');
-        const castButton = document.getElementById('cast-button');
-
-        if (!castButton) {
-            console.error('Botão de transmissão não encontrado!');
-            if (typeof showNotification === 'function') {
-                showNotification('Erro ao inicializar o botão de transmissão', 'error');
-            }
-            return;
-        }
-
-        castButton.addEventListener('click', () => {
-            console.log('Botão de transmissão clicado');
-            try {
-                if (typeof showNotification === 'function') {
-                    showNotification('Clique em "Transmitir..." no menu de três pontos do Chrome para transmitir o player', 'info');
-                } else {
-                    alert('Clique em "Transmitir..." no menu de três pontos do Chrome para transmitir o player');
-                }
-            } catch (error) {
-                console.error('Erro ao tentar transmitir:', error);
-                if (typeof showNotification === 'function') {
-                    showNotification('Erro ao iniciar transmissão. Verifique a rede ou permissões', 'error');
-                }
-            }
-        });
-    }
-
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        initializeCastButton();
-    } else {
-        document.addEventListener('DOMContentLoaded', initializeCastButton);
-    }
 
         function updateQualityMenu() {
             const qualityMenu = document.getElementById('quality-menu');
